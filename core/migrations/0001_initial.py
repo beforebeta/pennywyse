@@ -9,43 +9,51 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         # Adding model 'Category'
-        db.create_table('web_category', (
+        db.create_table('core_category', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('code', self.gf('django.db.models.fields.CharField')(db_index=True, max_length=255, null=True, blank=True)),
             ('name', self.gf('django.db.models.fields.CharField')(db_index=True, max_length=255, null=True, blank=True)),
             ('description', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
         ))
-        db.send_create_signal('web', ['Category'])
+        db.send_create_signal('core', ['Category'])
 
         # Adding model 'DealType'
-        db.create_table('web_dealtype', (
+        db.create_table('core_dealtype', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('code', self.gf('django.db.models.fields.CharField')(db_index=True, max_length=255, null=True, blank=True)),
             ('name', self.gf('django.db.models.fields.CharField')(db_index=True, max_length=255, null=True, blank=True)),
             ('description', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
         ))
-        db.send_create_signal('web', ['DealType'])
+        db.send_create_signal('core', ['DealType'])
 
         # Adding model 'Merchant'
-        db.create_table('web_merchant', (
+        db.create_table('core_merchant', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('ref_id', self.gf('django.db.models.fields.CharField')(max_length=255, db_index=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255, db_index=True)),
         ))
-        db.send_create_signal('web', ['Merchant'])
+        db.send_create_signal('core', ['Merchant'])
 
         # Adding model 'CouponNetwork'
-        db.create_table('web_couponnetwork', (
+        db.create_table('core_couponnetwork', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255, db_index=True)),
         ))
-        db.send_create_signal('web', ['CouponNetwork'])
+        db.send_create_signal('core', ['CouponNetwork'])
+
+        # Adding model 'Country'
+        db.create_table('core_country', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('code', self.gf('django.db.models.fields.CharField')(max_length=255, db_index=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=255, db_index=True)),
+        ))
+        db.send_create_signal('core', ['Country'])
 
         # Adding model 'Coupon'
-        db.create_table('web_coupon', (
+        db.create_table('core_coupon', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('ref_id', self.gf('django.db.models.fields.CharField')(max_length=255, db_index=True)),
-            ('merchant', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['web.Merchant'])),
+            ('merchant', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['core.Merchant'])),
             ('description', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
             ('restriction', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
             ('code', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
@@ -55,87 +63,120 @@ class Migration(SchemaMigration):
             ('directlink', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
             ('skimlinks', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
             ('status', self.gf('django.db.models.fields.CharField')(db_index=True, max_length=255, null=True, blank=True)),
+            ('lastupdated', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
+            ('created', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
+            ('price', self.gf('django.db.models.fields.FloatField')(default=0)),
+            ('listprice', self.gf('django.db.models.fields.FloatField')(default=0)),
+            ('discount', self.gf('django.db.models.fields.FloatField')(default=0)),
+            ('percent', self.gf('django.db.models.fields.IntegerField')(default=0)),
         ))
-        db.send_create_signal('web', ['Coupon'])
+        db.send_create_signal('core', ['Coupon'])
 
         # Adding M2M table for field categories on 'Coupon'
-        db.create_table('web_coupon_categories', (
+        db.create_table('core_coupon_categories', (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('coupon', models.ForeignKey(orm['web.coupon'], null=False)),
-            ('category', models.ForeignKey(orm['web.category'], null=False))
+            ('coupon', models.ForeignKey(orm['core.coupon'], null=False)),
+            ('category', models.ForeignKey(orm['core.category'], null=False))
         ))
-        db.create_unique('web_coupon_categories', ['coupon_id', 'category_id'])
+        db.create_unique('core_coupon_categories', ['coupon_id', 'category_id'])
 
         # Adding M2M table for field dealtypes on 'Coupon'
-        db.create_table('web_coupon_dealtypes', (
+        db.create_table('core_coupon_dealtypes', (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('coupon', models.ForeignKey(orm['web.coupon'], null=False)),
-            ('dealtype', models.ForeignKey(orm['web.dealtype'], null=False))
+            ('coupon', models.ForeignKey(orm['core.coupon'], null=False)),
+            ('dealtype', models.ForeignKey(orm['core.dealtype'], null=False))
         ))
-        db.create_unique('web_coupon_dealtypes', ['coupon_id', 'dealtype_id'])
+        db.create_unique('core_coupon_dealtypes', ['coupon_id', 'dealtype_id'])
+
+        # Adding M2M table for field countries on 'Coupon'
+        db.create_table('core_coupon_countries', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('coupon', models.ForeignKey(orm['core.coupon'], null=False)),
+            ('country', models.ForeignKey(orm['core.country'], null=False))
+        ))
+        db.create_unique('core_coupon_countries', ['coupon_id', 'country_id'])
 
 
     def backwards(self, orm):
         # Deleting model 'Category'
-        db.delete_table('web_category')
+        db.delete_table('core_category')
 
         # Deleting model 'DealType'
-        db.delete_table('web_dealtype')
+        db.delete_table('core_dealtype')
 
         # Deleting model 'Merchant'
-        db.delete_table('web_merchant')
+        db.delete_table('core_merchant')
 
         # Deleting model 'CouponNetwork'
-        db.delete_table('web_couponnetwork')
+        db.delete_table('core_couponnetwork')
+
+        # Deleting model 'Country'
+        db.delete_table('core_country')
 
         # Deleting model 'Coupon'
-        db.delete_table('web_coupon')
+        db.delete_table('core_coupon')
 
         # Removing M2M table for field categories on 'Coupon'
-        db.delete_table('web_coupon_categories')
+        db.delete_table('core_coupon_categories')
 
         # Removing M2M table for field dealtypes on 'Coupon'
-        db.delete_table('web_coupon_dealtypes')
+        db.delete_table('core_coupon_dealtypes')
+
+        # Removing M2M table for field countries on 'Coupon'
+        db.delete_table('core_coupon_countries')
 
 
     models = {
-        'web.category': {
+        'core.category': {
             'Meta': {'object_name': 'Category'},
             'code': ('django.db.models.fields.CharField', [], {'db_index': 'True', 'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'db_index': 'True', 'max_length': '255', 'null': 'True', 'blank': 'True'})
         },
-        'web.coupon': {
+        'core.country': {
+            'Meta': {'object_name': 'Country'},
+            'code': ('django.db.models.fields.CharField', [], {'max_length': '255', 'db_index': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'db_index': 'True'})
+        },
+        'core.coupon': {
             'Meta': {'object_name': 'Coupon'},
-            'categories': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['web.Category']", 'symmetrical': 'False'}),
+            'categories': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['core.Category']", 'symmetrical': 'False'}),
             'code': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
-            'dealtypes': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['web.DealType']", 'symmetrical': 'False'}),
+            'countries': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['core.Country']", 'symmetrical': 'False'}),
+            'created': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
+            'dealtypes': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['core.DealType']", 'symmetrical': 'False'}),
             'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'directlink': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'discount': ('django.db.models.fields.FloatField', [], {'default': '0'}),
             'end': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'lastupdated': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'link': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
-            'merchant': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['web.Merchant']"}),
+            'listprice': ('django.db.models.fields.FloatField', [], {'default': '0'}),
+            'merchant': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['core.Merchant']"}),
+            'percent': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
+            'price': ('django.db.models.fields.FloatField', [], {'default': '0'}),
             'ref_id': ('django.db.models.fields.CharField', [], {'max_length': '255', 'db_index': 'True'}),
             'restriction': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'skimlinks': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'start': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'status': ('django.db.models.fields.CharField', [], {'db_index': 'True', 'max_length': '255', 'null': 'True', 'blank': 'True'})
         },
-        'web.couponnetwork': {
+        'core.couponnetwork': {
             'Meta': {'object_name': 'CouponNetwork'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'db_index': 'True'})
         },
-        'web.dealtype': {
+        'core.dealtype': {
             'Meta': {'object_name': 'DealType'},
             'code': ('django.db.models.fields.CharField', [], {'db_index': 'True', 'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'db_index': 'True', 'max_length': '255', 'null': 'True', 'blank': 'True'})
         },
-        'web.merchant': {
+        'core.merchant': {
             'Meta': {'object_name': 'Merchant'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'db_index': 'True'}),
@@ -143,4 +184,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['web']
+    complete_apps = ['core']
