@@ -52,9 +52,9 @@ class Coupon(models.Model):
     """
     #Our proprietary coupon ID - especially useful in identifying deals that are delivered more than once because they have changed.
     ref_id          = models.CharField(max_length=255, db_index=True)
-    merchant        = models.ForeignKey(Merchant)
-    categories      = models.ManyToManyField(Category)
-    dealtypes       = models.ManyToManyField(DealType)
+    merchant        = models.ForeignKey(Merchant, blank=True, null=True)
+    categories      = models.ManyToManyField(Category, blank=True, null=True)
+    dealtypes       = models.ManyToManyField(DealType, blank=True, null=True)
     #The main description text the merchant describes the deal with. May be have been modified to fix typos.
     description     = models.TextField(blank=True, null=True)
     #Any information the merchant provides regarding any restrictions relating to how the coupon can be redeemed. May have been modified to fix typos.
@@ -69,7 +69,7 @@ class Coupon(models.Model):
     status          = models.CharField(max_length=255, blank=True, null=True, db_index=True)
     lastupdated     = models.DateTimeField(blank=True, null=True)
     created         = models.DateTimeField(blank=True, null=True)
-    countries       = models.ManyToManyField(Country)
+    countries       = models.ManyToManyField(Country, blank=True, null=True)
     price           = models.FloatField(default=0)
     listprice       = models.FloatField(default=0)
     discount        = models.FloatField(default=0)
