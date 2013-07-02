@@ -1,0 +1,9 @@
+*.jpg
+*.jpeg
+*.pyc
+.DS_Store
+*.log
+./migrations
+core/migrations
+.pydevproject
+
