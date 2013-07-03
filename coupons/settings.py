@@ -1,12 +1,21 @@
 # Django settings for coupons project.
+import os
 from basesettings import *
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+IMAGE_LOCAL_COPY_DIR_NO_PREFIX = 'static/img/local/'
+IMAGE_LOCAL_COPY_DIR = 'static/img/local/'
+
+try: os.makedirs(IMAGE_LOCAL_COPY_DIR)
+except: pass
+
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
+
+WEBSITE_NAME = 'FYISavings'
 
 MANAGERS = ADMINS
 
@@ -69,9 +78,7 @@ STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    # Put strings here, like "/home/html/static" or "C:/www/django/static".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
+"./static/",
 )
 
 # List of finder classes that know how to find static files in
@@ -92,6 +99,11 @@ TEMPLATE_LOADERS = (
 #     'django.template.loaders.eggs.Loader',
 )
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+    "web.context_processors.base",
+    "django.contrib.auth.context_processors.auth"
+)
+
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -108,6 +120,7 @@ ROOT_URLCONF = 'coupons.urls'
 WSGI_APPLICATION = 'coupons.wsgi.application'
 
 TEMPLATE_DIRS = (
+    'templates/',
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -122,7 +135,9 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'south',
-    'core'
+    'core',
+    'web',
+    'websvcs'
 )
 
 # A sample logging configuration. The only tangible logging

@@ -1,0 +1,111 @@
+/* ==========================================================================
+   Styles for min-width: 67.5em (1080px)
+   ========================================================================== */
+
+/* GENERAL */
+
+.row {
+  max-width: 60em; /* 960px */
+}
+
+.input, a {
+  -webkit-transition: 0.3s;
+  -moz-transition: 0.3s;
+  -ms-transition: 0.3s;
+  -o-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.filter-days a {
+  -webkit-transition: none;
+  -moz-transition: none;
+  -ms-transition: none;
+  -o-transition: none;
+  transition: none;
+}
+
+
+/* HEADER */
+
+.top-wrap {
+  /* margin-bottom: 20px; */
+}
+.top-wrap .logo {
+  margin-top: 0;
+  text-align: left;
+}
+.main-menu {
+  display: block;
+  margin: 3px 0 0;
+}
+.main-menu > li {
+  position: relative;
+}
+
+.main-menu > li.current > a {
+    color: #F45435;
+    font-weight: bold;
+}
+
+.select-main-menu {
+  display: none !important;
+}
+.account .input {
+  display: inline-block;
+  height: 2.154em;
+  padding-right: 1em;
+  padding-left: 1em;
+  padding-top: 0.35em !important;
+}
+.account .input:first-child {
+  margin-right: 8px;
+}
+.icon.plus:before {
+  content: "+";
+  margin-right: 4px;
+}
+.menu-browse .sub a {
+  -webkit-transition: background-color 0.2s;
+  -moz-transition: background-color 0.2s;
+  -ms-transition: background-color 0.2s;
+  -o-transition: background-color 0.2s;
+  transition: background-color 0.2s;
+}
+.menu-browse .input .label {
+  padding-left: 20%;
+}
+.menu-browse .input:after {
+  right: 20%;
+}
+
+
+/* sliders */
+.flex-direction-nav a {
+  top: 50%;
+  margin: -12px 0 0;
+}
+a.flex-prev {
+  left: -33px;
+}
+a.flex-next {
+  right: -33px;
+}
+.flexslider.white a.flex-prev {
+  left: -43px;
+}
+.flexslider.white a.flex-next {
+  right: -43px;
+}
+
+.popular-companies-list .count-bullet {
+  display: inherit;
+}
+.company-box .splitter-right {
+  border-right-width: 0;
+}
+.company-box .splitter-left {
+  border-left-width: 1px;
+}
+.company-box .dark-bg h3 {
+  margin-top: 15px;
+}
