@@ -2,6 +2,7 @@ import datetime
 from django.contrib.auth.models import User
 from django.db import models
 import uuid
+from picklefield.fields import PickledObjectField
 
 class ImageStore(models.Model):
     remote_url = models.CharField(max_length=255, db_index=True)
@@ -61,3 +62,21 @@ class ShortenedURL(models.Model):
 
 ShortenedURL_IDENTIFIER = '#SHORT-'
 
+##################################################################
+# Email Subscriptions
+##################################################################
+
+class EmailSubscription(models.Model):
+    app         = models.CharField(max_length=255, db_index=True)
+    session_key = models.CharField(max_length=255, db_index=True)
+    email       = models.CharField(max_length=255, db_index=True)
+    first_name  = models.CharField(max_length=255, null=True, blank=True)
+    last_name   = models.CharField(max_length=255, null=True, blank=True)
+    full_name   = models.CharField(max_length=255, null=True, blank=True)
+    context     = PickledObjectField(default={})
+
+    date_added = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
+    last_modified = models.DateTimeField(auto_now=True, auto_now_add=True)
+
+    def __unicode__(self):  # Python 3: def __str__(self):
+        return "%s %s" % (self.app, self.email)

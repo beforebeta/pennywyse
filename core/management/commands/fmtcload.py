@@ -1,10 +1,12 @@
 from optparse import make_option
 from BeautifulSoup import BeautifulStoneSoup
-from datetime import datetime
+import datetime
 from django.core.management.base import BaseCommand
 from django.conf import settings
 import requests
 from core.models import DealType, Category, Coupon, Merchant, Country
+from web.models import FeaturedCoupon, NewCoupon, PopularCoupon
+import HTMLParser
 
 class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
@@ -27,45 +29,89 @@ def section(message):
     print message
     print "*"*60
 
+def unescape_html(html):
+    return HTMLParser.HTMLParser().unescape(html)
+
 def refresh_deal_types():
     section("Loading Deal Types")
     data = requests.get("http://services.formetocoupon.com/getTypes?key=%s" % settings.FMTC_ACCESS_KEY)
-    data = BeautifulStoneSoup(data.content)
+    content = data.content
+    open("Deal_Types_Content_%s" % datetime.datetime.now().strftime('%b-%d-%I%M%p-%G'), "w").write(content)
+    data = BeautifulStoneSoup(content)
     for type in data.findAll("type"):
         code = type.filter.text
         name = type.find("name").text
+        print "\t%s,%s" % (code,name)
+        if DealType.objects.filter(code=code).count() > 0:
+            continue
         DealType.objects.filter(code=code).delete()
         DealType(code=code,name=name,description=name).save()
-        print "\t%s,%s" % (code,name)
 
 def refresh_categories():
     section("Loading Categories")
     data = requests.get("http://services.formetocoupon.com/getCategories?key=%s" % settings.FMTC_ACCESS_KEY)
-    data = BeautifulStoneSoup(data.content)
+    content = data.content
+    open("Categories_Content_%s" % datetime.datetime.now().strftime('%b-%d-%I%M%p-%G'), "w").write(content)
+    data = BeautifulStoneSoup(content)
     for cat in data.findAll("category"):
         ref_id = cat.find("id").text
-        code = cat.filter.text
-        name = cat.find("name").text
+        code = unescape_html(cat.filter.text)
+        name = unescape_html(cat.find("name").text)
         parent = cat.find("parent").text
         if parent:
             parent=Category.objects.get(code=parent)
         else:
             parent=None
-        Category.objects.filter(code=code).delete()
-        Category(ref_id=ref_id,code=code,name=name,parent=parent).save()
+        if Category.objects.filter(code=code).count() > 1:
+            print "WARNING: Multiple categories with the same code: ", code
+        try:
+            existing_category = Category.objects.get(code=code)
+            existing_category.ref_id = ref_id
+            existing_category.name=name
+            existing_category.parent=parent
+            existing_category.save()
+        except:
+            Category(ref_id=ref_id,code=code,name=name,parent=parent).save()
         print "\t%s,%s" % (code,name)
+
+def refresh_merchants():
+    section("Loading Merchants")
+    data = requests.get("http://services.formetocoupon.com/getMerchants?key=%s" % settings.FMTC_ACCESS_KEY)
+    content = data.content
+    open("Merchants_Content_%s" % datetime.datetime.now().strftime('%b-%d-%I%M%p-%G'), "w").write(content)
+    data = BeautifulStoneSoup(content)
+    for merchant in data.findAll("merchant"):
+        name = unescape_html(merchant.find("name").text)
+        id = merchant.find("id").text
+        print "\t%s,%s" % (id,name)
+        link = merchant.link.text
+        skimlinks = merchant.skimlinks.text
+        homepageurl = merchant.homepageurl.text
+        model = None
+        try:
+            model = Merchant.objects.get(ref_id = id)
+        except:
+            model = Merchant()
+        model.ref_id = id
+        model.name = name
+        model.directlink = homepageurl
+        model.skimlinks = skimlinks
+        model.link = homepageurl
+        model.save()
 
 def get_dt(dt_str):
     if dt_str:
         dt = dt_str[:dt_str.rfind(" ")]
         if dt:
-            return datetime.strptime(dt, "%Y-%m-%d %H:%M")
+            return datetime.datetime.strptime(dt, "%Y-%m-%d %H:%M")
     return None
 
 def refresh_deals():
     section("Loading Deals/Coupons")
     data = requests.get("http://services.formetocoupon.com/getDeals?key=%s" % settings.FMTC_ACCESS_KEY)
-    data = BeautifulStoneSoup(data.content)
+    content = data.content
+    open("Deals_Content_%s" % datetime.datetime.now().strftime('%b-%d-%I%M%p-%G'), "w").write(content)
+    data = BeautifulStoneSoup(content)
     for deal in data.findAll("item"):
         id = deal.couponid.text
         coupon=None
@@ -94,9 +140,9 @@ def refresh_deals():
         for dealtype in deal.dealtypes.findAll("type"):
             coupon.dealtypes.add(DealType.objects.get(code=dealtype.text))
 
-        coupon.description = deal.label.text
-        coupon.restrictions = deal.restrictions.text
-        coupon.code = deal.couponcode.text
+        coupon.description = unescape_html(deal.label.text)
+        coupon.restrictions = unescape_html(deal.restrictions.text)
+        coupon.code = unescape_html(deal.couponcode.text)
 
         coupon.start = get_dt(deal.startdate.text)
         coupon.end = get_dt(deal.enddate.text)
@@ -128,7 +174,24 @@ def refresh_deals():
 
         coupon.save()
 
+
+def setup_web_coupons():
+    if FeaturedCoupon.objects.all().count()<=0:
+        FeaturedCoupon(coupon=Merchant.objects.get(name="best buy").get_top_coupon()).save()
+        FeaturedCoupon(coupon=Merchant.objects.get(name="sears").get_top_coupon()).save()
+        FeaturedCoupon(coupon=Merchant.objects.get(name="target").get_top_coupon()).save()
+
+    if NewCoupon.objects.all().count()<=0:
+        for coupon in Coupon.objects.get_new_coupons(8):
+            NewCoupon(coupon=coupon).save()
+
+    if PopularCoupon.objects.all().count()<=0:
+        for coupon in Coupon.objects.get_popular_coupons(8):
+            PopularCoupon(coupon=coupon).save()
+
 def load():
     refresh_deal_types()
     refresh_categories()
+    refresh_merchants()
     refresh_deals()
+    setup_web_coupons()

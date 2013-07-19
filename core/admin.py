@@ -1,4 +1,9 @@
 from django.contrib import admin
-from core.models import Coupon
+from core.models import Coupon, Category, Merchant
 
-admin.site.register(Coupon)
+class CouponAdmin(admin.ModelAdmin):
+    search_fields = ['description',"short_desc", "merchant__name"]
+
+admin.site.register(Coupon, CouponAdmin)
+admin.site.register(Category)
+admin.site.register(Merchant)

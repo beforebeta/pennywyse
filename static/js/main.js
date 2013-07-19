@@ -64,22 +64,23 @@ $(function() {
   });
 
   // popular companies
-  $('.popular-companies').flexslider({
-    animation: "slide",
-    itemWidth: 134,
-    itemMargin: 0,
-    minItems: 2,
-    maxItems: 7
-  });
+//  $('.popular-companies').flexslider({
+//    animation: "slide",
+//    itemWidth: 134,
+//    itemMargin: 0,
+//    minItems: 2,
+//    maxItems: 7
+//  });
 
    // popular companies
-  $('.items-carousel').flexslider({
-    animation: "slide",
-    itemWidth: 240,
-    itemMargin: 0,
-    minItems: 1,
-    maxItems: 4
-  });
+//  $('.items-carousel').flexslider({
+//    animation: "slide",
+//    itemWidth: 240,
+//    itemMargin: 0,
+//    minItems: 1,
+//    maxItems: 4
+////    slideshow: false
+//  });
 
    // testimonials
   $('.testimonials-box').flexslider({
@@ -97,8 +98,21 @@ $(function() {
     } else if (!$(this).is(':checked') && $(this).parent().hasClass('checked')) {
       $(this).parent().removeClass('checked');
     }
+      try{
+          $("#filter_form").submit();
+      }catch(e){}
   });
 
+  $("#clear_categories").click(function(e){
+      e.preventDefault();
+      try{
+          $('.checklist input').prop('checked', false);
+          try{
+              $("#filter_form").submit();
+          }catch(e){}
+      }catch(e){console.log(e);}
+      return false;
+  });
 
   // days filter slider
 
@@ -119,17 +133,86 @@ $(function() {
   $('.filter-days .info .end').text( end + ( end > 1 ? ' days' : ' day' ) );
 
 
+    //setup support for csrf
+    $(document).ajaxSend(function(event, xhr, settings) {
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        function sameOrigin(url) {
+            // url could be relative or scheme relative or absolute
+            var host = document.location.host; // host + port
+            var protocol = document.location.protocol;
+            var sr_origin = '//' + host;
+            var origin = protocol + sr_origin;
+            // Allow absolute or scheme relative URLs to same origin
+            return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+                (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+                // or any other URL that isn't scheme relative or absolute i.e relative.
+                !(/^(\/\/|http:|https:).*/.test(url));
+        }
+        function safeMethod(method) {
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
 
+        if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
+            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+        }
+    });
 
-
-
-
-
-
-
-
-
-
-
+    $('body').on('click', '#subscribe_button', function(e){
+        var $this = $(this);
+        var full_name = $('#subscribe_full_name').val();
+        var email = $('#subscribe_email').val();
+        var $subscribe_bar = $("#subscribe_bar");
+        var $row = $("#subscribe_bar_row");
+        e.preventDefault();
+        try{
+            if(full_name.length<2){
+                alert("Please enter your name");
+                return false;
+            } else {
+                if( (email.length<2) ||  (email.indexOf("@")<0) || (email.indexOf(".")<0)) {
+                    alert("Please enter a valid email address");
+                } else {
+                    $.ajax({
+                        type: "POST",
+                        data: {'full_name':full_name, 'email':email},
+                        url: '/a/subscribe',
+                        cache: false,
+                        dataType: "json",
+                        success: function(response, textStatus) {
+                            if(response["status"] == "0") {
+                                alert(response["text"]);
+                            } else {
+                                $this.val("Thank You");
+                                $this.removeClass("blue");
+                                $this.addClass("dark");
+                                $this.attr("disabled","disabled");
+                            }
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            try{
+                                console.log(textStatus);
+                                console.log(errorThrown);
+                            } catch(e){}
+                        }
+                    });
+                }
+            };
+        } catch(e){}
+        return false;
+    });
 
 });

@@ -6,7 +6,9 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, Http404
 import requests
+from core.util import url2path, encode_uri_component
 from websvcs.models import ShortenedURL, ImageStore
+import websvcs.img.util as img_util
 
 IMAGE_ANONYMOUS_USER = 'c1948057b92a427894cd0868af339704'
 
@@ -25,7 +27,6 @@ def _get_image(user, image_url, specific_height=-1, specific_width=-1):
         local_copy = os.path.join(settings.IMAGE_LOCAL_COPY_DIR, filename)
         local_url = os.path.join(settings.IMAGE_LOCAL_COPY_DIR_NO_PREFIX, filename)
         file_saved_path = local_copy
-
 
         if height == -1:
             #ensure exists
@@ -52,9 +53,11 @@ def _get_image(user, image_url, specific_height=-1, specific_width=-1):
         else:
             img_util.resize(src_image_pointer, (specific_width, specific_height), True, local_copy)
 
-        s3_url = s3.upload(file_saved_path)
+#        s3_url = s3.upload(file_saved_path)
+
         #store reference in imagestore
-        img = ImageStore(remote_url=image_url, local_url=s3_url, source_user=user, height=height, width=width)
+#        img = ImageStore(remote_url=image_url, local_url=s3_url, source_user=user, height=height, width=width)
+        img = ImageStore(remote_url=image_url, local_url="/%s" % local_url, source_user=user, height=height, width=width)
         img.save()
         return img
 
@@ -122,14 +125,14 @@ def _get_image(user, image_url, specific_height=-1, specific_width=-1):
         original_image.local_url = _download_temp_image(image_url, requests.get(image_url), -1, -1)
 
     if specific_height == specific_width == -1:
-        os.remove(os.path.join(settings.IMAGE_LOCAL_COPY_DIR, original_image.local_url[1:].split('/')[-1]))
+#        os.remove(os.path.join(settings.IMAGE_LOCAL_COPY_DIR, original_image.local_url[1:].split('/')[-1]))
         return original_image
     else:
         #required image is not available
         #resize original image to required image
         resized_image = _download_image_to_local(image_url, os.path.join(settings.IMAGE_LOCAL_COPY_DIR, original_image.local_url[1:].split('/')[-1]), specific_height, specific_width)
-        os.remove(os.path.join(settings.IMAGE_LOCAL_COPY_DIR, resized_image.local_url[1:].split('/')[-1]))
-        os.remove(os.path.join(settings.IMAGE_LOCAL_COPY_DIR, original_image.local_url[1:].split('/')[-1]))
+#        os.remove(os.path.join(settings.IMAGE_LOCAL_COPY_DIR, resized_image.local_url[1:].split('/')[-1]))
+#        os.remove(os.path.join(settings.IMAGE_LOCAL_COPY_DIR, original_image.local_url[1:].split('/')[-1]))
         return resized_image
 
 def image(request, image_url):
@@ -167,3 +170,4 @@ def image_resize(request, image_url, height, width):
     except:
         pass
     return HttpResponseRedirect(_get_image(request.user, image_url, int(height), int(width)).local_url)
+

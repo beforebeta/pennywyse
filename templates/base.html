@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+
+    {# Place favicon.ico and apple-touch-icon.png in the root directory #}
+
+    <link rel="stylesheet" href="/static/css/normalize.css">
+    <link rel="stylesheet" href="/static/css/foundation.css">
+    {# <link href='http://fonts.googleapis.com/css?family=Ubuntu:400,300,700' rel='stylesheet' type='text/css'> #}
+    <link rel="stylesheet" href="/static/css/ubuntu.css">
+    <link rel="stylesheet" href="/static/css/flexslider.css">
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="/static/css/mq-32.css" media="screen and (min-width: 32.5em)" />
+    <link rel="stylesheet" href="/static/css/mq-48.css" media="screen and (min-width: 48em)" />
+    <link rel="stylesheet" href="/static/css/mq-67.css" media="screen and (min-width: 67.5em)" />
+
+    <!--[if (lt IE 9)&(!IEMobile)]>
+    <link rel="stylesheet" href="/static/css/foundation-ie8.css">
+    <link rel="stylesheet" href="/static/css/mq-32.css"/>
+    <link rel="stylesheet" href="/static/css/mq-48.css"/>
+    <link rel="stylesheet" href="/static/css/mq-67.css"/>
+    <![endif]-->
+
+    <script src="/static/js/vendor/modernizr-2.6.2.min.js"></script>
+</head>
+<body>
+<!--[if lt IE 7]>
+<p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+<![endif]-->
+
+<div class="page home">
+
+    <header role="banner" class="cf">
+
+        <div class="top-wrap">
+            <div class="row">
+                <div class="large-3 columns">
+                    <div class="logo" style="padding-top:5px;">
+                        <a href="/">{{ WEBSITE_NAME }}</a>
+                    </div>
+                </div>
+                <form action="/search/">
+                    <div class="large-7 columns">
+                        <label class="search-box">
+                            <input name="q" type="text" class="input field primary" placeholder="Search for coupons, companies or brands" style="background:none repeat scroll 0 0 #FFFFFF;" {% block search_query %}{% endblock %}>
+                            <a href="#" class="icon clear ir" id="clear-sb">Clear</a>
+                        </label>
+                    </div>
+                    <div class="large-2 columns">
+                        <input type="submit" class="input button primary red" value="Search">
+                    </div>
+                </form>
+
+                <!--<nav class="large-10 columns">-->
+
+                    <!--<ul class="rr main-menu">-->
+                        <!--<li class="current"><a href="index.html">Home</a></li>-->
+                        <!--<li><a href="blog.html">Blog</a></li>-->
+                        <!--<li>-->
+                            <!--<a href="search-results.html">Extra</a>-->
+                            <!--<ul>-->
+                                <!--<li><a href="company.html">Company</a></li>-->
+                                <!--<li><a href="404.html">404 page</a></li>-->
+                                <!--<li><a href="no-results.html">No results</a></li>-->
+                                <!--<li><a href="search-results.html">Search results</a></li>-->
+                            <!--</ul>-->
+                        <!--</li>-->
+                        <!--<li><a href="coupons.html">Coupons</a></li>-->
+                        <!--<li><a href="post.html">Post</a></li>-->
+                    <!--</ul>-->
+                <!--</nav>-->
+                <!--<div class="large-3 columns">-->
+                    <!--<div class="account cf">-->
+                        <!--<a href="#" class="input button blue tertiary icon plus">Join us</a>-->
+                        <!--<a href="#" class="input button transparent tertiary">Log in</a>-->
+                    <!--</div>-->
+                <!--</div>-->
+            </div>
+        </div>
+
+        {% block header_block %}
+        {% endblock %}
+
+        {% if SHOW_NEWSLETTER_SUBSCRIPTION_BAR %}
+        <div class="newsletter-wrap stripe-white" id="subscribe_bar">
+            <div class="row" id="subscribe_bar_row">
+                <form action="#">
+                    <div class="large-4 columns">
+                        <h3>Subscribe for exclusive offers</h3>
+                    </div>
+                    <div class="small-4 large-3 columns">
+                        <input type="text" class="input field primary" placeholder="Enter Your Name" id="subscribe_full_name">
+                    </div>
+                    <div class="small-4 large-3 columns">
+                        <input type="text" class="input field primary" placeholder="Enter Your E-mail" id="subscribe_email">
+                    </div>
+                    <div class="small-3 large-2 columns">
+                        <input type="submit" class="input button primary blue" value="Subscribe" id="subscribe_button">
+                    </div>
+                </form>
+            </div>
+        </div>
+        {% endif %}
+
+        <!--<div class="search-wrap stripe-white">-->
+            <!--<div class="row">-->
+                <!--<form action="search-results.html">-->
+                    <!--<div class="small-6 large-10 columns">-->
+                        <!--<label class="search-box">-->
+                            <!--<input type="text" class="input field primary" placeholder="Search listing">-->
+                            <!--<a href="#" class="icon clear ir" id="clear-sb">Clear</a>-->
+                        <!--</label>-->
+                    <!--</div>-->
+                    <!--<div class="small-3 large-2 columns">-->
+                        <!--<input type="submit" class="input button primary red" value="Search">-->
+                    <!--</div>-->
+                <!--</form>-->
+            <!--</div>-->
+        <!--</div>-->
+
+    </header>
+
+    {% block main %}
+    {% endblock %}
+
+    <footer role="contentinfo">
+
+
+        <div class="stripe-regular">
+            <div class="row">
+                <div class="column">
+                    <h2>Popular Companies</h2>
+                </div>
+            </div>
+            <div class="row collapse">
+                <div class="column">
+                    <!--<div class="popular-companies flexslider">-->
+                    <!--<ul class="rr slides">-->
+                    <div class="popular-companies flexslider">
+                        <ul class="rr slides">
+
+                            {% for pop_company in pop_companies %}
+                            <li style="margin: 10px;">
+                                <!--display:table-cell;vertical-align:middle;height:114px;width:114px;-->
+                                <a href="/coupons/{{ pop_company.name_slug }}/{{ pop_company.id }}" class="wrapper-5 small" style="display:table-cell;vertical-align:middle;height:114px;width:114px;text-align: center;">
+                                    <img src="{{ pop_company.get_image }}" alt="" style="max-height:88px;max-width:88px;">
+                                </a>
+                            </li>
+                            {% endfor %}
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stripe-dark pre-footer-wrap">
+            <div class="row">
+                <div class="large-4 columns">
+                    <h3 class="alt">About</h3>
+                    <p>
+                        {{ WEBSITE_NAME }} is one of the leading coupon markest places in the world. We have hundreds of thousands of coupons from many of the biggest retailers in the world. Use one of our coupons and save money on each purchase.
+                    </p>
+                </div>
+                <div class="small-6 large-4 large-offset-1 columns">
+                    <!--<h3 class="alt">Recent Tweets</h3>-->
+                    <!--<div class="tweet">-->
+                    <!--<p>-->
+                    <!--Couponizer is a multi-purpose PSD template. Created by #bestwebsoft - hand-made websites from great guys http://t.co/HXvWw-->
+                    <!--</p>-->
+                    <!--<a href="#" class="posted">posted 5 minutes ago</a>-->
+                    <!--</div>-->
+                </div>
+                <nav class="small-6 large-2 large-offset-1 columns">
+                    <h3 class="alt">Menu</h3>
+                    <ul class="rr footer-menu">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/privacy-and-terms/">Terms &amp; Conditions</a></li>
+                        <li><a href="/privacy-and-terms/">Privacy Policy</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <div class="stripe-darker footer-wrap">
+            <div class="row">
+                <div class="large-3 columns">
+                    <div class="logo">
+                        <a href="#">{{ WEBSITE_NAME }}</a>
+                    </div>
+                </div>
+                <div class="large-6 columns">
+                    <div class="copyright">Copyright &copy; 2013, {{ WEBSITE_NAME }}. All rights reserved.</div>
+                </div>
+                <div class="large-3 columns">
+                    <ul class="rr social">
+                        <li><a href="#" class="ir tw">Twitter</a></li>
+                        <li><a href="#" class="ir in">LinkedIn</a></li>
+                        <li><a href="#" class="ir fb">Facebook</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </footer>
+
+</div>
+
+    <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> -->
+    <script>window.jQuery || document.write('<script src="/static/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+    <script src="/static/js/plugins.js"></script>
+    <script src="/static/js/main.js"></script>
+</body>
+</html>

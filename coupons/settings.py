@@ -15,7 +15,7 @@ ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
 
-WEBSITE_NAME = 'FYISavings'
+WEBSITE_NAME = 'pennywyse'
 
 MANAGERS = ADMINS
 
@@ -134,6 +134,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
+    'django.contrib.humanize',
     'south',
     'core',
     'web',
@@ -168,3 +169,14 @@ LOGGING = {
         },
     }
 }
+
+DEFAULT_IMAGE = "http://beta.fyisavings.com/blog/wp-content/uploads/2013/03/fyiSavingsLogo.png"
+
+APP_NAME = "COUPONS_APP"
+APPEND_SLASH=True
+################
+#   WEBSVCS
+################
+
+SVCS_SECRET_KEY = "a59bbf62-d332-471b-b8d3-494a97065fa1"
+SVCS_HOST = "http://127.0.0.1:8000"

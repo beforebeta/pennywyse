@@ -465,9 +465,10 @@ p.text.small {
 .stripe-white {
   background: #fff;
   padding: 25px 0;
-  border: 1px solid #cecece;
-  -webkit-box-shadow:  0px 1px 1px 0px rgba(0, 0, 0, 0.1);
-          box-shadow:  0px 1px 1px 0px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid #cecece;
+  border-top: 1px solid #cecece;
+  /*-webkit-box-shadow:  0px 1px 1px 0px rgba(0, 0, 0, 0.1);*/
+          /*box-shadow:  0px 1px 1px 0px rgba(0, 0, 0, 0.1);*/
 }
 .stripe-white.big {
   padding: 40px 0;
@@ -584,10 +585,10 @@ aside .video-box {
 .flexslider {
   position: relative;
 }
-.flexslider img {
-  max-width: 100% !important;
-  width: inherit !important;
-}
+/*.flexslider img {*/
+  /*max-width: 100% !important;*/
+  /*width: inherit !important;*/
+/*}*/
 .flex-control-nav {
   display: none;
 }
@@ -692,7 +693,8 @@ a.flex-next {
   margin-bottom: 18px;
 }
 .items-carousel .slides .item-thumb {
-  margin: 5px 10px;
+  /*margin: 5px 10px;*/
+    margin: 10px;
 }
 
 /* items landscape */
@@ -759,7 +761,7 @@ header[role="banner"] {
   z-index: 1000;
 }
 .logo {
-  font-size: 1.313em;
+  font-size: 1.7em;
   font-weight: 700;
   text-align: center;
   text-transform: uppercase;
@@ -1057,9 +1059,9 @@ header[role="banner"] {
 
 .sidebar-list {
   border-top: 1px dashed #dcdcdc;
-  border-bottom: 1px dashed #dcdcdc;
+  /*border-bottom: 1px dashed #dcdcdc;*/
   padding-top: 4px !important;
-  padding-bottom: 4px !important;
+  /*padding-bottom: 4px !important;*/
 }
 .sidebar-list a {
   font-size: 0.813em;
@@ -1587,4 +1589,23 @@ footer .social .fb {
     h3 {
         page-break-after: avoid;
     }
+}
+
+
+/*
+AS Customizations
+*/
+.prodimg {
+    height: 110px;
+    text-align: center;
+}
+
+.prodimg img{
+    max-height: 110px;
+    max-width: 178px;
+    text-align: center;
+}
+
+h6 a:hover {
+    text-decoration: underline;
 }
