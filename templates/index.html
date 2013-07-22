@@ -16,7 +16,7 @@
                             <div class="content">
                               <p class="caption">
                                 {{ coupon.coupon.description }}
-                                <a href="coupons.html" class="ir icon tag">Learn more</a>
+                                <a href="coupons.html" class="ir icon tag">Learn More</a>
                               </p>
                               <figure>
                                 <img src="{{ coupon.coupon.merchant.get_image }}" alt="" style="max-height: 100px">
@@ -52,19 +52,19 @@
                   <div class="items-carousel flexslider">
                     <ul class="rr slides">
 
-                        {% for new_coupon in new_coupons %}
+                        {% for coupon in new_coupons %}
                         <li>
-                            <div class="wrapper-3 item-thumb"  data-rid="{{ new_coupon.ref_id }}">
+                            <div class="wrapper-3 item-thumb"  data-rid="{{ coupon.ref_id }}">
                                 <div class="top">
                                     <figure class="prodimg">
-                                        <img src="{{ new_coupon.get_image }}" alt="" style="display:normal">
+                                        <img src="{{ coupon.get_image }}" alt="" style="display:normal">
                                     </figure>
-                                    <h2 class="alt" style="max-height: 45px; overflow: hidden;"><a href="#">{{ new_coupon.description }}</a></h2>
+                                    <h2 class="alt" style="max-height: 45px; overflow: hidden;"><a target="_blank" href="/coupon/{{ coupon.merchant.name_slug }}/{{ coupon.desc_slug }}/{{ coupon.id }}/">{{ coupon.description }}</a></h2>
                                 </div>
                                 <div class="bottom">
-                                    <p class="value secondary">{{ new_coupon.short_desc }}</p>
-                                    <h6><a href="/coupons/{{ new_coupon.merchant.name_slug }}/">{{ new_coupon.merchant.name }}</a></h6>
-                                    <a href="#" class="input button red secondary">Learn more</a>
+                                    <p class="value secondary">{{ coupon.short_desc }}</p>
+                                    <h6><a href="/coupons/{{ coupon.merchant.name_slug }}/">{{ coupon.merchant.name }}</a></h6>
+                                    <a href="/coupon/{{ coupon.merchant.name_slug }}/{{ coupon.desc_slug }}/{{ coupon.id }}/" target="_blank" class="input button red secondary">Learn more</a>
                                 </div>
                             </div>
                         </li>
@@ -87,19 +87,19 @@
                   <div class="items-carousel flexslider">
                     <ul class="rr slides">
 
-                        {% for pop_coupon in pop_coupons %}
+                        {% for coupon in pop_coupons %}
                         <li>
-                            <div class="wrapper-3 item-thumb" data-rid="{{ pop_coupon.ref_id }}">
+                            <div class="wrapper-3 item-thumb" data-rid="{{ coupon.ref_id }}">
                                 <div class="top">
                                     <figure class="prodimg">
-                                        <img src="{{ pop_coupon.get_image }}" alt="" style="display:normal">
+                                        <img src="{{ coupon.get_image }}" alt="" style="display:normal">
                                     </figure>
-                                    <h2 class="alt" style="max-height: 45px; overflow: hidden;"><a href="#">{{ pop_coupon.description }}</a></h2>
+                                    <h2 class="alt" style="max-height: 45px; overflow: hidden;"><a target="_blank" href="/coupon/{{ coupon.merchant.name_slug }}/{{ coupon.desc_slug }}/{{ coupon.id }}/">{{ coupon.description }}</a></h2>
                                 </div>
                                 <div class="bottom">
-                                    <p class="value secondary">{{ pop_coupon.short_desc }}</p>
-                                    <h6><a href="/coupons/{{ new_coupon.merchant.name_slug }}/">{{ pop_coupon.merchant.name }}</a></h6>
-                                    <a href="#" class="input button red secondary">Learn more</a>
+                                    <p class="value secondary">{{ coupon.short_desc }}</p>
+                                    <h6><a href="/coupons/{{ coupon.merchant.name_slug }}/">{{ coupon.merchant.name }}</a></h6>
+                                    <a target="_blank" href="/coupon/{{ coupon.merchant.name_slug }}/{{ coupon.desc_slug }}/{{ coupon.id }}/" class="input button red secondary">Learn More</a>
                                 </div>
                             </div>
                         </li>

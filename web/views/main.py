@@ -1,10 +1,12 @@
 # Create your views here.
+from django.contrib.sites.models import get_current_site
 from django.db.models.query_utils import Q
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 from django.template.defaultfilters import slugify
 from django.views.decorators.csrf import ensure_csrf_cookie
 from core.models import Coupon, Merchant
+from core.util import encode_uri_component
 from web.models import FeaturedCoupon, NewCoupon, PopularCoupon, ShortenedURLComponent
 import math
 from django.core.paginator import Paginator
@@ -79,7 +81,7 @@ def coupons_for_company(request, company_name, company_id=-1, current_page=1, ca
                         ), 10)
     if current_page > pages.num_pages:
         current_page=pages.num_pages
-    context = {
+    context={
         "merchant"              : merchant,
         "pages"                 : range(1, pages.num_pages+1),
         "current_page"          : int(current_page),
@@ -93,6 +95,27 @@ def coupons_for_company(request, company_name, company_id=-1, current_page=1, ca
         context["comma_categories"] = ShortenedURLComponent.objects.shorten_url_component(comma_categories).shortened_url
 
     return render_response("company.html", request, context)
+
+@ensure_csrf_cookie
+def open_coupon(request, company_name, coupon_label, coupon_id):
+    logo_url = "/"
+    back_url = "/"
+    try:
+        logo_url = request.META["HTTP_REFERER"]
+        back_url = logo_url
+        if "localhost" not in logo_url and "pennywyse.com" not in logo_url:
+            logo_url="/"
+    except:
+        pass
+    context={
+        "coupon"        : Coupon.objects.get(id=coupon_id),
+        "logo_url"      : logo_url,
+        "back_url"      : back_url,
+        "path"          : encode_uri_component("%s://%s%s" % ("http", "www.pennywyse.com", request.path))
+#        "path"          : encode_uri_component("%s://%s%s" % ("http", "www.pennywyse.com", "/"))
+    }
+    print context["path"]
+    return render_response("open_coupon.html",request, context)
 
 @ensure_csrf_cookie
 def privacy(request):

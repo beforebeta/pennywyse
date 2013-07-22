@@ -164,11 +164,11 @@ li.input {
 .input.button {  
   color: #fff;
   font-weight: 700;
-  text-transform: uppercase;
+  /*text-transform: uppercase;*/
   text-align: center;
 }
 .input.field {
-  font-weight: 300;
+  /*font-weight: 300;*/
   color: #9d9d9d;
   font-size: 0.875em;
   padding-right: 0.9em;
@@ -764,7 +764,7 @@ header[role="banner"] {
   font-size: 1.7em;
   font-weight: 700;
   text-align: center;
-  text-transform: uppercase;
+  /*text-transform: uppercase;*/
 }
 .main-menu,
 .popular-companies-list {

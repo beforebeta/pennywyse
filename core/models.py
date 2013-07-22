@@ -252,6 +252,8 @@ class Coupon(models.Model):
     image           = models.TextField(blank=True, null=True)
     short_desc      = models.CharField(max_length=50, default="COUPON")
 
+    desc_slug       = models.CharField(max_length=175, default="COUPON")
+
     date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
     last_modified   = models.DateTimeField(auto_now=True, auto_now_add=True)
 
@@ -333,6 +335,7 @@ class Coupon(models.Model):
                 self.description = self.description[:-1]
             #Hierarchy for setting short desc
             self.short_desc = self.create_short_desc()
+            self.desc_slug = slugify(self.description)[:175]
         super(Coupon, self).save(*args, **kwargs)
         try:
             if not self.image:
