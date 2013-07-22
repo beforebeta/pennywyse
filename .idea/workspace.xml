@@ -94,7 +94,7 @@
       <file leaf-file-name="image.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/websvcs/views/image.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="101" column="31" selection-start="4290" selection-end="4290" vertical-scroll-proportion="0.5864662">
+            <state line="12" column="54" selection-start="414" selection-end="414" vertical-scroll-proportion="0.2706767">
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -768,7 +768,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/websvcs/views/image.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="101" column="31" selection-start="4290" selection-end="4290" vertical-scroll-proportion="0.5864662">
+        <state line="12" column="54" selection-start="414" selection-end="414" vertical-scroll-proportion="0.2706767">
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>

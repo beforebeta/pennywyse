@@ -10,7 +10,7 @@ from core.util import url2path, encode_uri_component, print_stack_trace
 from websvcs.models import ShortenedURL, ImageStore
 import websvcs.img.util as img_util
 
-IMAGE_ANONYMOUS_USER = 'c1948057b92a427894cd0868af339704'
+IMAGE_ANONYMOUS_USER = 'c1948057b92a427894cd0868af3397'
 
 def _get_image(user, image_url, specific_height=-1, specific_width=-1):
     """
