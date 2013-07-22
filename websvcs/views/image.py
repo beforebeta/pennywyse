@@ -6,7 +6,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, Http404
 import requests
-from core.util import url2path, encode_uri_component
+from core.util import url2path, encode_uri_component, print_stack_trace
 from websvcs.models import ShortenedURL, ImageStore
 import websvcs.img.util as img_util
 
@@ -98,6 +98,7 @@ def _get_image(user, image_url, specific_height=-1, specific_width=-1):
         try:
             user = User.objects.get(username=IMAGE_ANONYMOUS_USER)
         except:
+            print_stack_trace()
             user = User.objects.create_user(username=IMAGE_ANONYMOUS_USER, email='beforebeta+anonymousfysavings@gmail.com', password=IMAGE_ANONYMOUS_USER)
 
     image_url = urllib.unquote_plus(image_url)
