@@ -14,3 +14,7 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
     )
 
+IMAGE_LOCAL_COPY_DIR = '/root/public_html/pennywyse/static/img/local/'
+
+try: os.makedirs(IMAGE_LOCAL_COPY_DIR)
+except: pass

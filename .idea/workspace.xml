@@ -26,22 +26,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="image.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/websvcs/views/image.py">
+      <file leaf-file-name="prodsettings.py" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/coupons/prodsettings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="6" column="31" selection-start="160" selection-end="160" vertical-scroll-proportion="0.0">
+            <state line="20" column="0" selection-start="554" selection-end="554" vertical-scroll-proportion="0.41322315">
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="models.py" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/websvcs/models.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="18" column="60" selection-start="743" selection-end="743" vertical-scroll-proportion="0.37190083">
-              <folding>
-                <element signature="e#0#15#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -66,12 +55,12 @@
         <option value="$PROJECT_DIR$/launch.wsgi" />
         <option value="$PROJECT_DIR$/templates/open_coupon.html" />
         <option value="$PROJECT_DIR$/pennywyse.com" />
-        <option value="$PROJECT_DIR$/coupons/prodsettings.py" />
-        <option value="$PROJECT_DIR$/coupons/basesettings.py" />
         <option value="$PROJECT_DIR$/websvcs/views/image.py" />
         <option value="$PROJECT_DIR$/websvcs/admin.pyu.py" />
         <option value="$PROJECT_DIR$/websvcs/admin.py" />
         <option value="$PROJECT_DIR$/websvcs/models.py" />
+        <option value="$PROJECT_DIR$/coupons/basesettings.py" />
+        <option value="$PROJECT_DIR$/coupons/prodsettings.py" />
       </list>
     </option>
   </component>
@@ -176,21 +165,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="web" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
               <option name="myItemId" value="coupons" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="coupons" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="core" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -470,32 +445,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/coupons/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="0" selection-start="76" selection-end="76" vertical-scroll-proportion="0.06198347">
-          <folding>
-            <element signature="e#39#48#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pennywyse.com">
       <provider selected="true" editor-type-id="text-editor">
         <state line="8" column="30" selection-start="324" selection-end="324" vertical-scroll-proportion="0.16528925">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coupons/basesettings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="108" column="0" selection-start="3575" selection-end="3575" vertical-scroll-proportion="0.33608815">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coupons/prodsettings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="0" selection-start="430" selection-end="430" vertical-scroll-proportion="0.3305785">
           <folding />
         </state>
       </provider>
@@ -552,10 +504,19 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/coupons/basesettings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="15" column="0" selection-start="179" selection-end="275" vertical-scroll-proportion="0.30991736">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/websvcs/views/image.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="31" selection-start="160" selection-end="160" vertical-scroll-proportion="0.0">
-          <folding />
+        <state line="56" column="0" selection-start="2369" selection-end="2369" vertical-scroll-proportion="0.67321175">
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -565,6 +526,22 @@
           <folding>
             <element signature="e#0#15#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/coupons/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="35" selection-start="112" selection-end="112" vertical-scroll-proportion="0.08264463">
+          <folding>
+            <element signature="e#39#48#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/coupons/prodsettings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="20" column="0" selection-start="554" selection-end="554" vertical-scroll-proportion="0.41322315">
+          <folding />
         </state>
       </provider>
     </entry>
