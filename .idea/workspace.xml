@@ -37,7 +37,6 @@
       <list>
         <option value="$PROJECT_DIR$/static/js/main.js" />
         <option value="$PROJECT_DIR$/launch.wsgi.py" />
-        <option value="$PROJECT_DIR$/coupons/settings.py" />
         <option value="$PROJECT_DIR$/install.txt" />
         <option value="$PROJECT_DIR$/launch.wsgi" />
         <option value="$PROJECT_DIR$/templates/open_coupon.html" />
@@ -51,6 +50,7 @@
         <option value="$PROJECT_DIR$/coupons/prodsettings.py" />
         <option value="$PROJECT_DIR$/websvcs/views/subscriptions.py" />
         <option value="$PROJECT_DIR$/web/views/ajax.py" />
+        <option value="$PROJECT_DIR$/coupons/settings.py" />
       </list>
     </option>
   </component>
@@ -503,15 +503,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/coupons/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="35" selection-start="112" selection-end="112" vertical-scroll-proportion="0.08264463">
-          <folding>
-            <element signature="e#39#48#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/coupons/prodsettings.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="20" column="0" selection-start="550" selection-end="550" vertical-scroll-proportion="0.41322315">
@@ -550,6 +541,15 @@
       <provider selected="true" editor-type-id="text-editor">
         <state line="187" column="0" selection-start="5850" selection-end="5850" vertical-scroll-proportion="0.8553719">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/coupons/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="35" selection-start="112" selection-end="112" vertical-scroll-proportion="0.08264463">
+          <folding>
+            <element signature="e#39#48#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
