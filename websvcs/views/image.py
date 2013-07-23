@@ -154,7 +154,7 @@ def image(request, image_url):
             image_url = 'https://' + image_url[7:]
     except:
         pass
-    return HttpResponseRedirect(_get_image(request.user, image_url).local_url)
+    return HttpResponseRedirect("http://www.pennywyse.com"+_get_image(request.user, image_url).local_url)
 
 def image_resize(request, image_url, height, width):
     """
@@ -170,5 +170,5 @@ def image_resize(request, image_url, height, width):
             image_url = 'https://' + image_url[7:]
     except:
         pass
-    return HttpResponseRedirect(_get_image(request.user, image_url, int(height), int(width)).local_url)
+    return HttpResponseRedirect("http://www.pennywyse.com"+_get_image(request.user, image_url, int(height), int(width)).local_url)
 
