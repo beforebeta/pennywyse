@@ -26,22 +26,13 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="settings.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/coupons/settings.py">
+      <file leaf-file-name="launch.wsgi" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/launch.wsgi">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="3" column="0" selection-start="76" selection-end="76" vertical-scroll-proportion="0.0">
+            <state line="2" column="22" selection-start="43" selection-end="43" vertical-scroll-proportion="0.041322313">
               <folding>
-                <element signature="e#39#48#0" expanded="true" />
+                <element signature="e#0#9#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="prodsettings.py" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/coupons/prodsettings.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="5" column="21" selection-start="140" selection-end="140" vertical-scroll-proportion="0.10330579">
-              <folding />
             </state>
           </provider>
         </entry>
@@ -67,11 +58,11 @@
         <option value="$PROJECT_DIR$/web/context_processors.py" />
         <option value="$PROJECT_DIR$/static/js/main.js" />
         <option value="$PROJECT_DIR$/launch.wsgi.py" />
-        <option value="$PROJECT_DIR$/launch.wsgi" />
         <option value="$PROJECT_DIR$/coupons/basesettings.py" />
         <option value="$PROJECT_DIR$/coupons/settings.py" />
         <option value="$PROJECT_DIR$/install.txt" />
         <option value="$PROJECT_DIR$/coupons/prodsettings.py" />
+        <option value="$PROJECT_DIR$/launch.wsgi" />
       </list>
     </option>
   </component>
@@ -486,15 +477,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/launch.wsgi">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="53" selection-start="214" selection-end="214" vertical-scroll-proportion="0.12396694">
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/coupons/basesettings.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="70" column="0" selection-start="2107" selection-end="2305" vertical-scroll-proportion="0.37190083">
@@ -502,19 +484,28 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/coupons/prodsettings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="21" selection-start="140" selection-end="140" vertical-scroll-proportion="0.10330579">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/coupons/settings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="0" selection-start="76" selection-end="76" vertical-scroll-proportion="0.0">
+        <state line="3" column="0" selection-start="76" selection-end="76" vertical-scroll-proportion="0.06198347">
           <folding>
             <element signature="e#39#48#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/coupons/prodsettings.py">
+    <entry file="file://$PROJECT_DIR$/launch.wsgi">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="21" selection-start="140" selection-end="140" vertical-scroll-proportion="0.10330579">
-          <folding />
+        <state line="2" column="22" selection-start="43" selection-end="43" vertical-scroll-proportion="0.041322313">
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
