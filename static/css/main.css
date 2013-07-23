@@ -748,7 +748,7 @@ a.flex-next {
 /* HEADER */
 
 header[role="banner"] {
-  background: url("../img/bg.jpg") repeat-x center 0 #525252;
+  background: url("/static/img/bg.jpg") repeat-x center 0 #525252;
 }
 .top-wrap {
   background: #464646;
