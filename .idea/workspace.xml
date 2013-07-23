@@ -26,13 +26,22 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="launch.wsgi" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="launch.wsgi" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/launch.wsgi">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="2" column="22" selection-start="43" selection-end="43" vertical-scroll-proportion="0.041322313">
+            <state line="2" column="22" selection-start="43" selection-end="43" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="prodsettings.py" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/coupons/prodsettings.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="16" column="0" selection-start="428" selection-end="428" vertical-scroll-proportion="0.3305785">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -61,8 +70,8 @@
         <option value="$PROJECT_DIR$/coupons/basesettings.py" />
         <option value="$PROJECT_DIR$/coupons/settings.py" />
         <option value="$PROJECT_DIR$/install.txt" />
-        <option value="$PROJECT_DIR$/coupons/prodsettings.py" />
         <option value="$PROJECT_DIR$/launch.wsgi" />
+        <option value="$PROJECT_DIR$/coupons/prodsettings.py" />
       </list>
     </option>
   </component>
@@ -477,20 +486,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/coupons/basesettings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="70" column="0" selection-start="2107" selection-end="2305" vertical-scroll-proportion="0.37190083">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coupons/prodsettings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="21" selection-start="140" selection-end="140" vertical-scroll-proportion="0.10330579">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/coupons/settings.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="3" column="0" selection-start="76" selection-end="76" vertical-scroll-proportion="0.06198347">
@@ -502,10 +497,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/launch.wsgi">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="22" selection-start="43" selection-end="43" vertical-scroll-proportion="0.041322313">
+        <state line="2" column="22" selection-start="43" selection-end="43" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/coupons/basesettings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="133" column="0" selection-start="4231" selection-end="4475" vertical-scroll-proportion="0.95592284">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/coupons/prodsettings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="16" column="0" selection-start="428" selection-end="428" vertical-scroll-proportion="0.3305785">
+          <folding />
         </state>
       </provider>
     </entry>
