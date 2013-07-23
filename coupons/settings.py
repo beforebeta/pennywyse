@@ -107,7 +107,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 PREPEND_WWW=True
 
 MIDDLEWARE_CLASSES = (
-    'django.middleware.gzip import GZipMiddleware',
+    'django.middleware.gzip.GZipMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
