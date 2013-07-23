@@ -5,7 +5,6 @@ def base(request):
     context = {
         'WEBSITE_NAME': settings.WEBSITE_NAME
     }
-
     #check newsletter subscription
     if "key" in request.session:
         key = request.session["key"]

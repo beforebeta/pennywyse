@@ -35,6 +35,7 @@ def email_subscribe(request):
         try: e.context = request.POST["context"]
         except: pass
         e.save()
+        print request.POST
         return HttpResponse('1')
     except:
         print_stack_trace()
