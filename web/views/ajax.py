@@ -10,7 +10,6 @@ from django.core.exceptions import ValidationError
 def post_message(url, data):
     data["SECRET_KEY"] = settings.SVCS_SECRET_KEY
     r = requests.post("%s%s" % (settings.SVCS_HOST, url), data=data)
-    print "STATUS", r.status_code
     return r.status_code
 
 def validate_email(email):
