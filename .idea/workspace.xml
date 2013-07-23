@@ -37,19 +37,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="prodsettings.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="prodsettings.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/coupons/prodsettings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="5" column="0" selection-start="110" selection-end="110" vertical-scroll-proportion="0.10330579">
+            <state line="16" column="0" selection-start="430" selection-end="430" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="basesettings.py" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="basesettings.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/coupons/basesettings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="79" column="23" selection-start="2681" selection-end="2681" vertical-scroll-proportion="0.0">
+            <state line="110" column="0" selection-start="3594" selection-end="3594" vertical-scroll-proportion="0.37741047">
               <folding />
             </state>
           </provider>
@@ -83,13 +83,13 @@
         <option value="$PROJECT_DIR$/web/context_processors.py" />
         <option value="$PROJECT_DIR$/static/js/main.js" />
         <option value="$PROJECT_DIR$/launch.wsgi.py" />
-        <option value="$PROJECT_DIR$/coupons/basesettings.py" />
         <option value="$PROJECT_DIR$/coupons/settings.py" />
         <option value="$PROJECT_DIR$/install.txt" />
         <option value="$PROJECT_DIR$/launch.wsgi" />
         <option value="$PROJECT_DIR$/templates/open_coupon.html" />
         <option value="$PROJECT_DIR$/pennywyse.com" />
         <option value="$PROJECT_DIR$/coupons/prodsettings.py" />
+        <option value="$PROJECT_DIR$/coupons/basesettings.py" />
       </list>
     </option>
   </component>
@@ -494,13 +494,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/coupons/basesettings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="79" column="23" selection-start="2681" selection-end="2681" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pennywyse.com">
       <provider selected="true" editor-type-id="text-editor">
         <state line="8" column="30" selection-start="324" selection-end="324" vertical-scroll-proportion="0.16528925">
@@ -517,7 +510,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/coupons/prodsettings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="0" selection-start="110" selection-end="110" vertical-scroll-proportion="0.10330579">
+        <state line="16" column="0" selection-start="430" selection-end="430" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/coupons/basesettings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="110" column="0" selection-start="3594" selection-end="3594" vertical-scroll-proportion="0.37741047">
           <folding />
         </state>
       </provider>

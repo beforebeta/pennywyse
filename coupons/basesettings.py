@@ -107,7 +107,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.auth.context_processors.auth"
     )
 
-PREPEND_WWW=True
+#PREPEND_WWW=True
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.gzip.GZipMiddleware',
