@@ -29,7 +29,7 @@
       <file leaf-file-name="settings.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/coupons/settings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="117" column="1" selection-start="4038" selection-end="4038" vertical-scroll-proportion="0.0">
+            <state line="127" column="50" selection-start="4366" selection-end="4366" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="e#39#48#0" expanded="true" />
               </folding>
@@ -37,12 +37,32 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="context_processors.py" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/web/context_processors.py">
+      <file leaf-file-name="main.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/static/js/main.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="17" column="0" selection-start="554" selection-end="554" vertical-scroll-proportion="0.35123968">
+            <state line="191" column="43" selection-start="6101" selection-end="6101" vertical-scroll-proportion="0.73140496">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="main.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/web/views/main.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="110" column="59" selection-start="4614" selection-end="4614" vertical-scroll-proportion="-51.153847">
               <folding>
-                <element signature="e#0#32#0" expanded="true" />
+                <element signature="e#26#82#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="urls.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/coupons/urls.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="37" column="36" selection-start="1779" selection-end="1779" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="e#0#51#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -58,7 +78,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/templates/privacy.html" />
         <option value="$PROJECT_DIR$/templates/search-results.html" />
         <option value="$PROJECT_DIR$/coupons/urls.py" />
         <option value="$PROJECT_DIR$/core/models.py" />
@@ -74,6 +93,7 @@
         <option value="$PROJECT_DIR$/static/css/main.css" />
         <option value="$PROJECT_DIR$/coupons/settings.py" />
         <option value="$PROJECT_DIR$/web/context_processors.py" />
+        <option value="$PROJECT_DIR$/static/js/main.js" />
       </list>
     </option>
   </component>
@@ -245,22 +265,8 @@
               <option name="myItemId" value="static" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-          </PATH>
-          <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="coupons" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="coupons" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="static" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="img" />
+              <option name="myItemId" value="js" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -275,10 +281,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="static" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="css" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -540,34 +542,6 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/templates/company.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="131" column="32" selection-start="6771" selection-end="6771" vertical-scroll-proportion="-9.666667">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/static/css/coupon_frame.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="158" column="0" selection-start="3558" selection-end="3558" vertical-scroll-proportion="0.6694215">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/websvcs/img/util.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="41" column="11" selection-start="1328" selection-end="1328" vertical-scroll-proportion="0.65909094">
-          <folding>
-            <element signature="e#0#12#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/static/img/bg.jpg">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="22" selection-start="22" selection-end="22" vertical-scroll-proportion="0.0">
@@ -626,15 +600,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/views/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="114" column="93" selection-start="4886" selection-end="4886" vertical-scroll-proportion="0.73140496">
-          <folding>
-            <element signature="e#26#82#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/open_coupon.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="57" column="0" selection-start="2942" selection-end="2942" vertical-scroll-proportion="1.2409289">
@@ -642,21 +607,64 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/web/context_processors.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="18" column="18" selection-start="573" selection-end="573" vertical-scroll-proportion="0.37190083">
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/websvcs/views/subscriptions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="39" column="27" selection-start="1367" selection-end="1367" vertical-scroll-proportion="0.8057851">
+          <folding>
+            <element signature="e#0#27#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/views/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="110" column="59" selection-start="4614" selection-end="4614" vertical-scroll-proportion="-51.153847">
+          <folding>
+            <element signature="e#26#82#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/coupons/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="37" column="36" selection-start="1779" selection-end="1779" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="e#0#51#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/views/ajax.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="23" column="4" selection-start="671" selection-end="671" vertical-scroll-proportion="0.4752066">
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/coupons/settings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="117" column="1" selection-start="4038" selection-end="4038" vertical-scroll-proportion="0.0">
+        <state line="127" column="50" selection-start="4366" selection-end="4366" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="e#39#48#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/context_processors.py">
+    <entry file="file://$PROJECT_DIR$/static/js/main.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="0" selection-start="554" selection-end="554" vertical-scroll-proportion="0.35123968">
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
+        <state line="191" column="43" selection-start="6101" selection-end="6101" vertical-scroll-proportion="0.73140496">
+          <folding />
         </state>
       </provider>
     </entry>

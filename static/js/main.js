@@ -189,7 +189,7 @@ $(function() {
                     $.ajax({
                         type: "POST",
                         data: {'full_name':full_name, 'email':email},
-                        url: '/a/subscribe',
+                        url: '/a/subscribe/',
                         cache: false,
                         dataType: "json",
                         success: function(response, textStatus) {
