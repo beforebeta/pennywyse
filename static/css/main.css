@@ -1613,6 +1613,6 @@ h6 a:hover {
 
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
     .item-thumb {
-        width: 285px !important;
+        width: 290px !important;
     }
 }
