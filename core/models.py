@@ -320,13 +320,13 @@ class Coupon(models.Model):
         return "coupon"
 
     def create_image(self):
-        if self.categories.count()>0:
-            if self.categories.exclude(name="apparel").count()>0:
-                return self.categories.exclude(name="apparel")[0].image
-            else:
-                return self.categories.all()[0].image
         if self.merchant:
             return self.merchant.image
+#            if self.categories.count()>0:
+#                if self.categories.exclude(name="apparel").count()>0:
+#                    return self.categories.exclude(name="apparel")[0].image
+#                else:
+#                    return self.categories.all()[0].image
         return settings.DEFAULT_IMAGE
 
     def save(self, *args, **kwargs):

@@ -44,7 +44,7 @@
                                     <div class="col-right">
                                       <p class="value primary">{{ merchant.get_coupon_count }}</p>
                                       <h4>coupons</h4>
-                                      <a href="#" class="input button red secondary responsive">See coupons</a>
+                                      <a href="/coupons/{{ merchant.name_slug }}/{{ merchant.id }}/" class="input button red secondary responsive">See coupons</a>
                                     </div>
                                   </div>
                                 </div>
@@ -69,7 +69,7 @@
                               </div>
                               <div class="large-5 small-8 columns">
                                 <div class="col-middle">
-                                    <h2 class="alt"><a href="#">{{ coupon.description }}</a></h2>
+                                    <h2 class="alt"><a href="/coupon/{{ coupon.merchant.name_slug }}/{{ coupon.desc_slug }}/{{ coupon.id }}/">{{ coupon.description }}</a></h2>
                                     <p class="text secondary">
                                         {{ coupon.merchant.name }}: {{ coupon.description }}
                                         {% if coupon.end %}
@@ -82,7 +82,7 @@
                                     <div class="col-right">
                                         <p class="value secondary">{{ coupon.short_desc }}</p>
                                         <h6>&nbsp;</h6>
-                                        <a href="#" class="input button red secondary responsive">Use Coupon</a>
+                                        <a href="/coupon/{{ coupon.merchant.name_slug }}/{{ coupon.desc_slug }}/{{ coupon.id }}/" class="input button red secondary responsive">Use Coupon</a>
                                     </div>
                                 </div>
                             </div>

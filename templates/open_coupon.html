@@ -4,6 +4,9 @@
     <meta charset="utf-8">
     <title>{{ WEBSITE_NAME }}: Coupons from {{ coupon.merchant.name }} - {{ coupon.description }}</title>
     <script>window.jQuery || document.write('<script src="/static/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+
+    <link rel="stylesheet" href="/static/css/normalize.css">
+    <link rel="stylesheet" href="/static/css/foundation.css">
     <link href="/static/css/coupon_frame.css" media="screen" rel="stylesheet" type="text/css" />
 
     <script>
@@ -38,21 +41,42 @@
     <!--fjs.parentNode.insertBefore(js, fjs);-->
 <!--}(document, 'script', 'facebook-jssdk'));</script>-->
 <div id="header-bar">
-    <a class="site-loopback" href="/">{{ WEBSITE_NAME }}</a>
 
-    <p class="coupon-data">
-        Coupon from {{ coupon.merchant.name }}: {{ coupon.description }}. {% if coupon.code %}Use coupon code <span class="tag">{{ coupon.code }}</span>{% else %}<strong>No code necessary</strong>.{% endif %}
-    </p>
+    <div class="row">
+        <div class="large-2 small-12 columns">
+            <div class="logo">
+                <a href="/">{{ WEBSITE_NAME }}</a>
+            </div>
+        </div>
+        <div class="large-8 small-12 columns">
+            <div class="coupon-data-container">
+                <p class="coupon-data">
+                    Coupon from {{ coupon.merchant.name }}: {{ coupon.description }}. {% if coupon.code %}Use coupon code <span class="tag">{{ coupon.code }}</span>{% else %}<strong>No code necessary</strong>.{% endif %}
+                </p>
+            </div>
+        </div>
+        <div class="large-2 small-12 columns">
+            <p class="meta-data">
+                <a class="purchase" href="{{ back_url }}">&lt;&lt; Back</a>
+                <a class="close" href="{{ coupon.skimlinks }}">X Remove</a>
+            </p>
+        </div>
+    </div>
+    <!--<a class="site-loopback" href="/">{{ WEBSITE_NAME }}</a>-->
 
-    <!--<iframe src="//www.facebook.com/plugins/like.php?href={{ path }}&amp;send=false&amp;layout=button_count&amp;width=450&amp;show_faces=false&amp;font&amp;colorscheme=light&amp;action=like&amp;height=21&amp;appId=405821766193456" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:21px;" allowTransparency="true"></iframe>-->
-    <!--<iframe src="//www.facebook.com/plugins/like.php?href={{ path }}&amp;send=false&amp;layout=button_count&amp;width=450&amp;show_faces=false&amp;font&amp;colorscheme=light&amp;action=like&amp;height=21&amp;appId=405821766193456" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:21px;" allowTransparency="true"></iframe>-->
+    <!--<p class="coupon-data">-->
+        <!--Coupon from {{ coupon.merchant.name }}: {{ coupon.description }}. {% if coupon.code %}Use coupon code <span class="tag">{{ coupon.code }}</span>{% else %}<strong>No code necessary</strong>.{% endif %}-->
+    <!--</p>-->
 
-    <!--<div class="fb-like" data-href="http://www.pennywyse.com" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false" data-font="arial"></div>-->
+    <!--&lt;!&ndash;<iframe src="//www.facebook.com/plugins/like.php?href={{ path }}&amp;send=false&amp;layout=button_count&amp;width=450&amp;show_faces=false&amp;font&amp;colorscheme=light&amp;action=like&amp;height=21&amp;appId=405821766193456" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:21px;" allowTransparency="true"></iframe>&ndash;&gt;-->
+    <!--&lt;!&ndash;<iframe src="//www.facebook.com/plugins/like.php?href={{ path }}&amp;send=false&amp;layout=button_count&amp;width=450&amp;show_faces=false&amp;font&amp;colorscheme=light&amp;action=like&amp;height=21&amp;appId=405821766193456" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:21px;" allowTransparency="true"></iframe>&ndash;&gt;-->
 
-    <p class="meta-data">
-        <a class="purchase" href="{{ back_url }}">&lt;&lt; Go Back</a>
-        <a class="close" href="{{ coupon.skimlinks }}">X Remove Bar</a>
-    </p>
+    <!--&lt;!&ndash;<div class="fb-like" data-href="http://www.pennywyse.com" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false" data-font="arial"></div>&ndash;&gt;-->
+
+    <!--<p class="meta-data">-->
+        <!--<a class="purchase" href="{{ back_url }}">&lt;&lt; Go Back</a>-->
+        <!--<a class="close" href="{{ coupon.skimlinks }}">X Remove Bar</a>-->
+    <!--</p>-->
 
 </div>
 

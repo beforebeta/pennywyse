@@ -1,32 +1,45 @@
-html body
-{
-    width:100%;
-    height:100%;
-    padding:0;
-    margin:0;
-    overflow:hidden;
-    font-family:arial;
-    font-size:10px;
-    color:#FFFFFF;
-    background-color:#446CB3;
-    border-bottom:1px solid #304C8E;
-}
+/*html body*/
+/*{*/
+    /*width:100%;*/
+    /*height:100%;*/
+    /*padding:0;*/
+    /*margin:0;*/
+    /*overflow:hidden;*/
+    /*font-family:arial;*/
+    /*font-size:10px;*/
+    /*color:#FFFFFF;*/
+    /*background-color:#446CB3;*/
+    /*border-bottom:1px solid #304C8E;*/
+/*}*/
 
 #header-bar
 {
+    background-color:#446CB3;
+
     border-bottom:1px solid #304C8E;
-    height:60px;
+    /*height:60px;*/
     z-index:100;
-    line-height:60px;
+    /*line-height:60px;*/
     margin-bottom:1px;
 }
-
+.logo {
+    font-size: 1.4em;
+    font-weight: 700;
+    text-align: center;
+    text-transform: uppercase;
+    line-height:60px;
+    margin-top: 5px;
+}
+.logo a {
+    text-decoration: none;
+    color: #FFFFFF;
+}
 #header-bar a.site-loopback
 {
     display:block;
     margin-top:1px;
     margin-left:10px;
-    float:left;
+    /*float:left;*/
     background-repeat:no-repeat;
     background-position:left top;
     font-size: 2em;
@@ -74,20 +87,26 @@ html body
     /*height:52px;*/
 /*}*/
 
-#header-bar p.coupon-data
-{
-    padding:0;
-    margin-top: 10px;
-    margin-left: 10px;
-    margin-right: 10px;
-    margin-bottom: 10px;
-    float:left;
-    font-size: 1.3em;
-    display:inline;
-    border: 1px dashed #FFFFFF;
-    line-height: 40px;
+div.coupon-data-container {
+    padding-top: 10px;
     padding-left: 10px;
     padding-right: 10px;
+    padding-bottom: 10px;
+    border: 1px dashed #FFFFFF;
+    min-height:30px;
+    margin-top:10px;
+    margin-bottom: 10px;
+}
+
+#header-bar p.coupon-data
+{
+    /*float:left;*/
+    font-size: 0.9em;
+    display:inline;
+    line-height: 25px;
+    /*padding-left: 10px;*/
+    color: #FFFFFF;
+    /*padding-right: 10px;*/
 }
 
 #header-bar p.coupon-data span.tag {
@@ -95,53 +114,41 @@ html body
     border-radius: 4px 4px 4px 4px;
     color: #FFFFFF;
     padding: 5px;
-    font-size: 1.3em;
+    font-size: 1em;
 }
 
-#header-bar p.meta-data
+p.meta-data
 {
     padding:0;
-    margin: 0px 10px 0px 0px;
-    float:right;
-    font-size: 1.1em;
+    margin: 5px 10px 0px 0px;
+    /*float:right;*/
+    font-size: 0.6em;
+    text-align: center;
+    line-height:60px;
 }
 
-#header-bar p.meta-data p
+p.meta-data p
 {
     display:inline;
     margin:0;
 }
 
-#header-bar p.meta-data a
+p.meta-data a.purchase {
+    border-right: 1px solid #FFFFFF;
+    margin-right: 10px;
+    padding-right: 10px;
+}
+
+p.meta-data a
 {
     text-decoration:none;
     color:#FFFFFF;
 }
 
-#header-bar p.meta-data a.purchase
-{
-    margin-right:10px;
-    border-right:1px solid #FFFFFF;
-    padding-right:10px;
-}
-
-#header-bar p.meta-data a:hover,#header-bar p.meta-data a.activated
+p.meta-data a:hover,#header-bar p.meta-data a.activated
 {
     /*color: #4DC6AE;*/
     text-decoration: underline;
-}
-
-#header-bar span.preview
-{
-    display:none;
-    color:#d2d1d0;
-    font-size:13px;
-    letter-spacing:1px;
-    text-decoration:none;
-    margin-left:10px;
-    padding-left:20px;
-    background:transparent url(http://1.envato-static.com/assets/activeden/right-slide-18b3859151400a023c7b73416ec4f81c.png) no-repeat 0 1px;
-    font-family:"Helvetica Neue",Arial,sans-serif;
 }
 
 #header-bar div.close-header
@@ -149,7 +156,7 @@ html body
     width:40px;
     margin-left:5px;
     height:52px;
-    float:right;
+
 }
 
 #header-bar div.close-header a#close-button:hover,#header-bar div.close-header a#close-button.activated
