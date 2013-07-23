@@ -26,12 +26,23 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="settings.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="settings.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/coupons/settings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="127" column="50" selection-start="4366" selection-end="4366" vertical-scroll-proportion="0.74380165">
+            <state line="117" column="1" selection-start="4038" selection-end="4038" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="e#39#48#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="context_processors.py" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/web/context_processors.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="17" column="0" selection-start="554" selection-end="554" vertical-scroll-proportion="0.35123968">
+              <folding>
+                <element signature="e#0#32#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -47,7 +58,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/web/views/search.py" />
         <option value="$PROJECT_DIR$/templates/privacy.html" />
         <option value="$PROJECT_DIR$/templates/search-results.html" />
         <option value="$PROJECT_DIR$/coupons/urls.py" />
@@ -63,6 +73,7 @@
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/static/css/main.css" />
         <option value="$PROJECT_DIR$/coupons/settings.py" />
+        <option value="$PROJECT_DIR$/web/context_processors.py" />
       </list>
     </option>
   </component>
@@ -529,13 +540,6 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/templates/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="101" column="55" selection-start="4704" selection-end="4704" vertical-scroll-proportion="-12.458333">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/company.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="131" column="32" selection-start="6771" selection-end="6771" vertical-scroll-proportion="-9.666667">
@@ -640,9 +644,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/coupons/settings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="127" column="50" selection-start="4366" selection-end="4366" vertical-scroll-proportion="0.74380165">
+        <state line="117" column="1" selection-start="4038" selection-end="4038" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="e#39#48#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/context_processors.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="17" column="0" selection-start="554" selection-end="554" vertical-scroll-proportion="0.35123968">
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
           </folding>
         </state>
       </provider>

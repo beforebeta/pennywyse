@@ -13,5 +13,7 @@ def base(request):
             context["SHOW_NEWSLETTER_SUBSCRIPTION_BAR"] = False
         else:
             context["SHOW_NEWSLETTER_SUBSCRIPTION_BAR"] = True
+    else:
+        context["SHOW_NEWSLETTER_SUBSCRIPTION_BAR"] = True
 
     return context
