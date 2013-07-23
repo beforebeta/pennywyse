@@ -15,6 +15,9 @@ class ImageStore(models.Model):
     date_added = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True, auto_now_add=True)
 
+    def __unicode__(self):  # Python 3: def __str__(self):
+        return "%s -> %s" % (self.remote_url, self.local_url)
+
     def save(self, *args, **kwargs):
         if self.remote_url:
             if ShortenedURL.objects.should_shorten_url(self.remote_url):
