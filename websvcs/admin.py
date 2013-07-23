@@ -1,4 +1,4 @@
 from django.contrib import admin
-from websvcs.models import EmailSubscription
+from websvcs.models import ImageStore
 
-admin.site.register(EmailSubscription)
+admin.site.register(ImageStore)
