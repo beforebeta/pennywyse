@@ -82,4 +82,7 @@ class EmailSubscription(models.Model):
     last_modified = models.DateTimeField(auto_now=True, auto_now_add=True)
 
     def __unicode__(self):  # Python 3: def __str__(self):
+        return "%s, %s, %s" % (self.app, self.email, self.full_name)
+
+    def __unicode__(self):  # Python 3: def __str__(self):
         return "%s %s" % (self.app, self.email)
