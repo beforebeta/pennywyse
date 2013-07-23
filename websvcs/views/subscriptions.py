@@ -10,6 +10,7 @@ from websvcs.models import EmailSubscription
 def auth_check(func):
     @wraps(func, assigned=available_attrs(func))
     def inner(request, *args, **kwargs):
+        print "IN WEBSVCS"
         if "SECRET_KEY" not in request.POST:
             return HttpResponseBadRequest()
         if request.POST["SECRET_KEY"] != settings.SVCS_SECRET_KEY:
@@ -35,7 +36,6 @@ def email_subscribe(request):
         try: e.context = request.POST["context"]
         except: pass
         e.save()
-        print request.POST
         return HttpResponse('1')
     except:
         print_stack_trace()

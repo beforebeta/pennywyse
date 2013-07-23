@@ -2,7 +2,7 @@ from basesettings import *
 
 base_dir = "/root/public_html/pennywyse/"
 
-SVCS_HOST = "http://www.pennywyse.com"
+SVCS_HOST = "http://pennywyse.com"
 
 #MEDIA_ROOT = '%sstatic/'% base_dir
 #MEDIA_URL = '/static/'
