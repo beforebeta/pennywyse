@@ -588,6 +588,7 @@ select {
   .micro-block-grid-12 > li {
     width: 8.33333%;
     padding: 0 10px 10px; }
+
     /* .micro-block-grid-12 > li:nth-of-type(12n+1) {
       clear: both; } */
 }
