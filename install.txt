@@ -45,7 +45,7 @@ pip install mysql-python
 
 pip install requests
 
-
+https://www.digitalocean.com/community/articles/using-mod_wsgi-to-serve-applications-on-ubuntu-12-04
 
 
 
