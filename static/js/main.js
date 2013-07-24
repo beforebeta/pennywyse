@@ -1,9 +1,5 @@
 $(function() {
 
-  try{
-      $("#main_slider").fadeIn();
-  }catch(e){}
-
   // main menu responsive
   $('.main-menu').mobileMenu({
     defaultText: 'Navigate to...',
