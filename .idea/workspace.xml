@@ -35,19 +35,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="base.html" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="base.html" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/templates/base.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="221" column="31" selection-start="10651" selection-end="10651" vertical-scroll-proportion="-138.125">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="index.html" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/templates/index.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="4" column="41" selection-start="94" selection-end="94" vertical-scroll-proportion="0.08708273">
+            <state line="37" column="0" selection-start="2087" selection-end="2087" vertical-scroll-proportion="0.8055152">
               <folding />
             </state>
           </provider>
@@ -85,9 +76,9 @@
         <option value="$PROJECT_DIR$/core/models.py" />
         <option value="$PROJECT_DIR$/templates/open_coupon.html" />
         <option value="$PROJECT_DIR$/static/css/coupon_frame.css" />
-        <option value="$PROJECT_DIR$/templates/base.html" />
         <option value="$PROJECT_DIR$/static/js/main.js" />
         <option value="$PROJECT_DIR$/templates/index.html" />
+        <option value="$PROJECT_DIR$/templates/base.html" />
       </list>
     </option>
   </component>
@@ -564,16 +555,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/base.html">
+    <entry file="file://$PROJECT_DIR$/templates/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="221" column="31" selection-start="10651" selection-end="10651" vertical-scroll-proportion="-138.125">
+        <state line="4" column="41" selection-start="94" selection-end="94" vertical-scroll-proportion="0.08708273">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/index.html">
+    <entry file="file://$PROJECT_DIR$/templates/base.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="41" selection-start="94" selection-end="94" vertical-scroll-proportion="0.08708273">
+        <state line="37" column="0" selection-start="2087" selection-end="2087" vertical-scroll-proportion="0.8055152">
           <folding />
         </state>
       </provider>
