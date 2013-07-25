@@ -26,10 +26,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="base.html" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="base.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/base.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="56" column="66" selection-start="3057" selection-end="3057" vertical-scroll-proportion="0.24963716">
+            <state line="67" column="26" selection-start="3877" selection-end="3877" vertical-scroll-proportion="-14.041667">
               <folding />
             </state>
           </provider>
@@ -55,10 +55,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main.css" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="main.css" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/static/css/main.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="760" column="14" selection-start="12410" selection-end="12410" vertical-scroll-proportion="0.0">
+            <state line="760" column="14" selection-start="12410" selection-end="12410" vertical-scroll-proportion="0.1707989">
               <folding />
             </state>
           </provider>
@@ -569,16 +569,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/static/css/main.css">
+    <entry file="file://$PROJECT_DIR$/templates/base.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="760" column="14" selection-start="12410" selection-end="12410" vertical-scroll-proportion="0.0">
+        <state line="67" column="26" selection-start="3877" selection-end="3877" vertical-scroll-proportion="-14.041667">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/base.html">
+    <entry file="file://$PROJECT_DIR$/static/css/main.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="56" column="66" selection-start="3057" selection-end="3057" vertical-scroll-proportion="0.24963716">
+        <state line="760" column="14" selection-start="12410" selection-end="12410" vertical-scroll-proportion="0.1707989">
           <folding />
         </state>
       </provider>
