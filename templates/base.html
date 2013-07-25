@@ -16,8 +16,8 @@
 
     <link rel="stylesheet" href="/static/css/normalize.css">
     <link rel="stylesheet" href="/static/css/foundation.css">
-    {# <link href='http://fonts.googleapis.com/css?family=Ubuntu:400,300,700' rel='stylesheet' type='text/css'> #}
-    <link rel="stylesheet" href="/static/css/ubuntu.css">
+    <link href='http://fonts.googleapis.com/css?family=Ubuntu:400,300,700' rel='stylesheet' type='text/css'>
+    {# <!--<link rel="stylesheet" href="/static/css/ubuntu.css">--> #}
     <link rel="stylesheet" href="/static/css/flexslider.css">
     <link rel="stylesheet" href="/static/css/main.css">
     <link rel="stylesheet" href="/static/css/mq-32.css" media="screen and (min-width: 32.5em)" />
@@ -32,7 +32,7 @@
     <![endif]-->
 
     <script src="/static/js/vendor/modernizr-2.6.2.min.js"></script>
-    <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> -->
+    {# <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> --> #}
     <script>window.jQuery || document.write('<script src="/static/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
     <script src="/static/js/plugins.js"></script>
 
@@ -53,7 +53,7 @@
                         <a href="/">{{ WEBSITE_NAME }}</a>
                     </div>
                 </div>
-                <form action="/search/">
+                <form action="/search/" id="search_form">
                     <div class="large-7 columns">
                         <label class="search-box">
                             <input name="q" type="text" class="input field primary" placeholder="Search for coupons or companies" style="background:none repeat scroll 0 0 #FFFFFF;" {% block search_query %}{% endblock %}>
@@ -65,30 +65,6 @@
                     </div>
                 </form>
 
-                <!--<nav class="large-10 columns">-->
-
-                    <!--<ul class="rr main-menu">-->
-                        <!--<li class="current"><a href="index.html">Home</a></li>-->
-                        <!--<li><a href="blog.html">Blog</a></li>-->
-                        <!--<li>-->
-                            <!--<a href="search-results.html">Extra</a>-->
-                            <!--<ul>-->
-                                <!--<li><a href="company.html">Company</a></li>-->
-                                <!--<li><a href="404.html">404 page</a></li>-->
-                                <!--<li><a href="no-results.html">No results</a></li>-->
-                                <!--<li><a href="search-results.html">Search results</a></li>-->
-                            <!--</ul>-->
-                        <!--</li>-->
-                        <!--<li><a href="coupons.html">Coupons</a></li>-->
-                        <!--<li><a href="post.html">Post</a></li>-->
-                    <!--</ul>-->
-                <!--</nav>-->
-                <!--<div class="large-3 columns">-->
-                    <!--<div class="account cf">-->
-                        <!--<a href="#" class="input button blue tertiary icon plus">Join us</a>-->
-                        <!--<a href="#" class="input button transparent tertiary">Log in</a>-->
-                    <!--</div>-->
-                <!--</div>-->
             </div>
         </div>
 
@@ -116,22 +92,6 @@
         </div>
         {% endif %}
 
-        <!--<div class="search-wrap stripe-white">-->
-            <!--<div class="row">-->
-                <!--<form action="search-results.html">-->
-                    <!--<div class="small-6 large-10 columns">-->
-                        <!--<label class="search-box">-->
-                            <!--<input type="text" class="input field primary" placeholder="Search listing">-->
-                            <!--<a href="#" class="icon clear ir" id="clear-sb">Clear</a>-->
-                        <!--</label>-->
-                    <!--</div>-->
-                    <!--<div class="small-3 large-2 columns">-->
-                        <!--<input type="submit" class="input button primary red" value="Search">-->
-                    <!--</div>-->
-                <!--</form>-->
-            <!--</div>-->
-        <!--</div>-->
-
     </header>
 
     {% block main %}
@@ -148,14 +108,11 @@
             </div>
             <div class="row collapse">
                 <div class="column">
-                    <!--<div class="popular-companies flexslider">-->
-                    <!--<ul class="rr slides">-->
                     <div class="popular-companies flexslider">
                         <ul class="rr slides">
 
                             {% for pop_company in pop_companies %}
                             <li style="margin: 10px;">
-                                <!--display:table-cell;vertical-align:middle;height:114px;width:114px;-->
                                 <a href="/coupons/{{ pop_company.name_slug }}/{{ pop_company.id }}" class="wrapper-5 small" style="display:table-cell;vertical-align:middle;height:114px;width:114px;text-align: center;">
                                     <img src="{{ pop_company.get_image }}" alt="" style="max-height:88px;max-width:88px;">
                                 </a>
@@ -177,13 +134,7 @@
                     </p>
                 </div>
                 <div class="small-6 large-4 large-offset-1 columns">
-                    <!--<h3 class="alt">Recent Tweets</h3>-->
-                    <!--<div class="tweet">-->
-                    <!--<p>-->
-                    <!--Couponizer is a multi-purpose PSD template. Created by #bestwebsoft - hand-made websites from great guys http://t.co/HXvWw-->
-                    <!--</p>-->
-                    <!--<a href="#" class="posted">posted 5 minutes ago</a>-->
-                    <!--</div>-->
+
                 </div>
                 <nav class="small-6 large-2 large-offset-1 columns">
                     <h3 class="alt">Menu</h3>
@@ -221,5 +172,29 @@
 </div>
 
     <script src="/static/js/main.js"></script>
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-42711247-1', 'pennywyse.com');
+        ga('send', 'pageview');
+    </script>
+    <script type="text/javascript">
+        var clicky_site_ids = clicky_site_ids || [];
+        clicky_site_ids.push(100637453);
+        (function() {
+            var s = document.createElement('script');
+            s.type = 'text/javascript';
+            s.async = true;
+            s.src = '//static.getclicky.com/js';
+            ( document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0] ).appendChild( s );
+        })();
+    </script>
+    <script type="text/javascript">(function(e,b){if(!b.__SV){var a,f,i,g;window.mixpanel=b;a=e.createElement("script");a.type="text/javascript";a.async=!0;a.src=("https:"===e.location.protocol?"https:":"http:")+'//cdn.mxpnl.com/libs/mixpanel-2.2.min.js';f=e.getElementsByTagName("script")[0];f.parentNode.insertBefore(a,f);b._i=[];b.init=function(a,e,d){function f(b,h){var a=h.split(".");2==a.length&&(b=b[a[0]],h=a[1]);b[h]=function(){b.push([h].concat(Array.prototype.slice.call(arguments,0)))}}var c=b;"undefined"!==
+        typeof d?c=b[d]=[]:d="mixpanel";c.people=c.people||[];c.toString=function(b){var a="mixpanel";"mixpanel"!==d&&(a+="."+d);b||(a+=" (stub)");return a};c.people.toString=function(){return c.toString(1)+".people (stub)"};i="disable track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config people.set people.set_once people.increment people.append people.track_charge people.clear_charges people.delete_user".split(" ");for(g=0;g<i.length;g++)f(c,i[g]);
+    b._i.push([a,e,d])};b.__SV=1.2}})(document,window.mixpanel||[]);
+    mixpanel.init("3d3d512c8e3abb7052561dcaa0187132");</script>
 </body>
 </html>
