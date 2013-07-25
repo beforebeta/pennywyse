@@ -215,10 +215,10 @@ $(function() {
         return false;
     });
 
-    $("#search_form").on("submit", function(e){
-       try{
-           mixpanel.track("Search");
-       }catch(e){}
-    });
+//    $("#search_form").on("submit", function(e){
+//       try{
+//           mixpanel.track("Search");
+//       }catch(e){}
+//    });
 
 });
