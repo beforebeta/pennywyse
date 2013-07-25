@@ -25,55 +25,7 @@
     <favorites_list name="coupons" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="base.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/base.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="183" column="0" selection-start="8265" selection-end="8734" vertical-scroll-proportion="-14.958333">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="main.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/static/js/main.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="221" column="0" selection-start="7157" selection-end="7231" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="search-results.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/search-results.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="116" column="18" selection-start="5764" selection-end="5764" vertical-scroll-proportion="-16.833334">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="fmtcload.py" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/core/management/commands/fmtcload.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="181" column="31" selection-start="6650" selection-end="6650" vertical-scroll-proportion="1.516529">
-              <folding>
-                <element signature="e#0#32#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="__init__.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/util/__init__.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="38" column="0" selection-start="1279" selection-end="1279" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf />
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -88,17 +40,17 @@
         <option value="$PROJECT_DIR$/coupons/settings.py" />
         <option value="$PROJECT_DIR$/static/css/mq-32.css" />
         <option value="$PROJECT_DIR$/static/css/foundation.css" />
-        <option value="$PROJECT_DIR$/static/css/main.css" />
         <option value="$PROJECT_DIR$/core/models.py" />
         <option value="$PROJECT_DIR$/templates/open_coupon.html" />
         <option value="$PROJECT_DIR$/templates/index.html" />
         <option value="$PROJECT_DIR$/templates/no-results.html" />
         <option value="$PROJECT_DIR$/static/css/coupon_frame.css" />
-        <option value="$PROJECT_DIR$/templates/base.html" />
         <option value="$PROJECT_DIR$/static/js/main.js" />
         <option value="$PROJECT_DIR$/templates/search-results.html" />
         <option value="$PROJECT_DIR$/core/util/__init__.py" />
         <option value="$PROJECT_DIR$/core/management/commands/fmtcload.py" />
+        <option value="$PROJECT_DIR$/static/css/main.css" />
+        <option value="$PROJECT_DIR$/templates/base.html" />
       </list>
     </option>
   </component>
@@ -219,6 +171,38 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="coupons" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="coupons" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="css" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="coupons" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="coupons" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="coupons" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -444,14 +428,14 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1" y="22" width="1440" height="874" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3293919" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32934928" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.1492109" sideWeight="0.6706507" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.1492109" sideWeight="0.6706507" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
@@ -520,20 +504,6 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/static/css/ubuntu.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/static/css/mq-0.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/static/css/normalize.css">
       <provider selected="true" editor-type-id="text-editor">
         <state line="36" column="56" selection-start="609" selection-end="611" vertical-scroll-proportion="0.33285713">
@@ -551,13 +521,6 @@
     <entry file="file://$PROJECT_DIR$/templates/company.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="123" column="70" selection-start="6232" selection-end="6313" vertical-scroll-proportion="0.7503629">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/static/css/main.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="141" column="23" selection-start="2519" selection-end="2519" vertical-scroll-proportion="-0.41322315">
           <folding />
         </state>
       </provider>
@@ -590,49 +553,72 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/coupons/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="e#39#48#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/coupons/basesettings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="174" column="14" selection-start="5648" selection-end="5648" vertical-scroll-proportion="1.516529">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/templates/base.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="183" column="0" selection-start="8265" selection-end="8734" vertical-scroll-proportion="-14.958333">
+        <state line="20" column="0" selection-start="1123" selection-end="1123" vertical-scroll-proportion="0.43541363">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/css/main.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="107" column="20" selection-start="2095" selection-end="2095" vertical-scroll-proportion="0.35674933">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/static/js/main.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="221" column="0" selection-start="7157" selection-end="7231" vertical-scroll-proportion="0.0">
+        <state line="221" column="0" selection-start="7157" selection-end="7231" vertical-scroll-proportion="0.89669424">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/search-results.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="116" column="18" selection-start="5764" selection-end="5764" vertical-scroll-proportion="-16.833334">
+        <state line="116" column="18" selection-start="5764" selection-end="5764" vertical-scroll-proportion="0.58635706">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/util/__init__.py">
+    <entry file="file://$PROJECT_DIR$/core/management/commands/fmtcload.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="38" column="0" selection-start="1279" selection-end="1279" vertical-scroll-proportion="0.0">
-          <folding />
+        <state line="79" column="98" selection-start="2935" selection-end="2935" vertical-scroll-proportion="1.6322314">
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="38" column="55" selection-start="1473" selection-end="1473" vertical-scroll-proportion="0.799439">
+        <state line="22" column="32" selection-start="657" selection-end="657" vertical-scroll-proportion="-1.713885">
           <folding>
             <element signature="e#0#13#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/management/commands/fmtcload.py">
+    <entry file="file://$PROJECT_DIR$/core/util/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="181" column="31" selection-start="6650" selection-end="6650" vertical-scroll-proportion="1.516529">
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
+        <state line="39" column="4" selection-start="1284" selection-end="1284" vertical-scroll-proportion="0.661157">
+          <folding />
         </state>
       </provider>
     </entry>
