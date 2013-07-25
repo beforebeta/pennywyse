@@ -53,10 +53,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="fmtcload.py" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="fmtcload.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/core/management/commands/fmtcload.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="106" column="15" selection-start="3871" selection-end="3871" vertical-scroll-proportion="0.0">
+            <state line="181" column="31" selection-start="6650" selection-end="6650" vertical-scroll-proportion="1.516529">
               <folding>
                 <element signature="e#0#32#0" expanded="true" />
               </folding>
@@ -64,19 +64,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="models.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/models.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="5" column="62" selection-start="205" selection-end="205" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="__init__.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="__init__.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/util/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="37" column="0" selection-start="1245" selection-end="1245" vertical-scroll-proportion="0.56060606">
+            <state line="38" column="0" selection-start="1279" selection-end="1279" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -92,7 +83,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/coupons/prodsettings.py" />
         <option value="$PROJECT_DIR$/websvcs/views/subscriptions.py" />
         <option value="$PROJECT_DIR$/web/views/ajax.py" />
         <option value="$PROJECT_DIR$/coupons/settings.py" />
@@ -108,6 +98,7 @@
         <option value="$PROJECT_DIR$/static/js/main.js" />
         <option value="$PROJECT_DIR$/templates/search-results.html" />
         <option value="$PROJECT_DIR$/core/util/__init__.py" />
+        <option value="$PROJECT_DIR$/core/management/commands/fmtcload.py" />
       </list>
     </option>
   </component>
@@ -620,26 +611,28 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/management/commands/fmtcload.py">
+    <entry file="file://$PROJECT_DIR$/core/util/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="106" column="15" selection-start="3871" selection-end="3871" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
+        <state line="38" column="0" selection-start="1279" selection-end="1279" vertical-scroll-proportion="0.0">
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="62" selection-start="205" selection-end="205" vertical-scroll-proportion="0.0">
-          <folding />
+        <state line="38" column="55" selection-start="1473" selection-end="1473" vertical-scroll-proportion="0.799439">
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/util/__init__.py">
+    <entry file="file://$PROJECT_DIR$/core/management/commands/fmtcload.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="37" column="0" selection-start="1245" selection-end="1245" vertical-scroll-proportion="0.56060606">
-          <folding />
+        <state line="181" column="31" selection-start="6650" selection-end="6650" vertical-scroll-proportion="1.516529">
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

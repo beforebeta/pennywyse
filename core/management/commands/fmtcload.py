@@ -5,6 +5,7 @@ from django.core.management.base import BaseCommand
 from django.conf import settings
 import requests
 from core.models import DealType, Category, Coupon, Merchant, Country
+from core.util import print_stack_trace
 from web.models import FeaturedCoupon, NewCoupon, PopularCoupon
 import HTMLParser
 
@@ -81,23 +82,26 @@ def refresh_merchants():
     open("Merchants_Content_%s" % datetime.datetime.now().strftime('%b-%d-%I%M%p-%G'), "w").write(content)
     data = BeautifulStoneSoup(content)
     for merchant in data.findAll("merchant"):
-        name = unescape_html(merchant.find("name").text)
-        id = merchant.find("id").text
-        print "\t%s,%s" % (id,name)
-        link = merchant.link.text
-        skimlinks = merchant.skimlinks.text
-        homepageurl = merchant.homepageurl.text
-        model = None
         try:
-            model = Merchant.objects.get(ref_id = id)
+            name = unescape_html(merchant.find("name").text)
+            id = merchant.find("id").text
+            print "\t%s,%s" % (id,name)
+            link = merchant.link.text
+            skimlinks = merchant.skimlinks.text
+            homepageurl = merchant.homepageurl.text
+            model = None
+            try:
+                model = Merchant.objects.get(ref_id = id)
+            except:
+                model = Merchant()
+            model.ref_id = id
+            model.name = name
+            model.directlink = homepageurl
+            model.skimlinks = skimlinks
+            model.link = homepageurl
+            model.save()
         except:
-            model = Merchant()
-        model.ref_id = id
-        model.name = name
-        model.directlink = homepageurl
-        model.skimlinks = skimlinks
-        model.link = homepageurl
-        model.save()
+            print_stack_trace()
 
 def get_dt(dt_str):
     if dt_str:
@@ -113,67 +117,69 @@ def refresh_deals():
     open("Deals_Content_%s" % datetime.datetime.now().strftime('%b-%d-%I%M%p-%G'), "w").write(content)
     data = BeautifulStoneSoup(content)
     for deal in data.findAll("item"):
-        id = deal.couponid.text
-        coupon=None
         try:
-            coupon = Coupon.objects.get(ref_id = id)
-        except:
-            coupon=Coupon(ref_id=id)
-            coupon.save()
-
-        merchant_name = deal.merchantname.text
-        merchantid = deal.merchantid.text
-        merchant=None
-
-        try:
-            merchant = Merchant.objects.get(ref_id=merchantid)
-        except:
-            merchant=Merchant(ref_id=merchantid, name=merchant_name)
-            merchant.save()
-        coupon.merchant=merchant
-
-        coupon.categories.clear()
-        for category in deal.findAll("category"):
-            coupon.categories.add(Category.objects.get(code=category.text))
-
-        coupon.dealtypes.clear()
-        for dealtype in deal.dealtypes.findAll("type"):
-            coupon.dealtypes.add(DealType.objects.get(code=dealtype.text))
-
-        coupon.description = unescape_html(deal.label.text)
-        coupon.restrictions = unescape_html(deal.restrictions.text)
-        coupon.code = unescape_html(deal.couponcode.text)
-
-        coupon.start = get_dt(deal.startdate.text)
-        coupon.end = get_dt(deal.enddate.text)
-        coupon.lastupdated = get_dt(deal.lastupdated.text)
-        coupon.created = get_dt(deal.created.text)
-
-        coupon.link = deal.link.text
-        coupon.directlink = deal.directlink.text
-        coupon.skimlinks = deal.skimlinks.text
-        coupon.status = deal.status.text
-
-        coupon.countries.clear()
-
-        for country in deal.findAll("country"):
-            c=None
+            id = deal.couponid.text
+            coupon=None
             try:
-                c=Country.objects.get(code=country.text)
+                coupon = Coupon.objects.get(ref_id = id)
             except:
-                c=Country(code=country.text,name=country.text)
-                c.save()
-            coupon.countries.add(c)
+                coupon=Coupon(ref_id=id)
+                coupon.save()
 
-        coupon.price = deal.price.text
-        coupon.discount = deal.discount.text
-        coupon.listprice = deal.listprice.text
-        coupon.percent = deal.percent.text
+            merchant_name = deal.merchantname.text
+            merchantid = deal.merchantid.text
+            merchant=None
 
-        coupon.image = deal.image.text
+            try:
+                merchant = Merchant.objects.get(ref_id=merchantid)
+            except:
+                merchant=Merchant(ref_id=merchantid, name=merchant_name)
+                merchant.save()
+            coupon.merchant=merchant
 
-        coupon.save()
+            coupon.categories.clear()
+            for category in deal.findAll("category"):
+                coupon.categories.add(Category.objects.get(code=category.text))
 
+            coupon.dealtypes.clear()
+            for dealtype in deal.dealtypes.findAll("type"):
+                coupon.dealtypes.add(DealType.objects.get(code=dealtype.text))
+
+            coupon.description = unescape_html(deal.label.text)
+            coupon.restrictions = unescape_html(deal.restrictions.text)
+            coupon.code = unescape_html(deal.couponcode.text)
+
+            coupon.start = get_dt(deal.startdate.text)
+            coupon.end = get_dt(deal.enddate.text)
+            coupon.lastupdated = get_dt(deal.lastupdated.text)
+            coupon.created = get_dt(deal.created.text)
+
+            coupon.link = deal.link.text
+            coupon.directlink = deal.directlink.text
+            coupon.skimlinks = deal.skimlinks.text
+            coupon.status = deal.status.text
+
+            coupon.countries.clear()
+
+            for country in deal.findAll("country"):
+                c=None
+                try:
+                    c=Country.objects.get(code=country.text)
+                except:
+                    c=Country(code=country.text,name=country.text)
+                    c.save()
+                coupon.countries.add(c)
+
+            coupon.price = deal.price.text
+            coupon.discount = deal.discount.text
+            coupon.listprice = deal.listprice.text
+            coupon.percent = deal.percent.text
+
+            coupon.image = deal.image.text
+
+            coupon.save()
+        except:
+            print_stack_trace()
 
 def setup_web_coupons():
     if FeaturedCoupon.objects.all().count()<=0:
