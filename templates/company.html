@@ -38,7 +38,7 @@
                                       {#                                      <!--{% for category in merchant.get_coupon_categories %}-->                                        <!--{{ category.name }} Coupons{% if forloop.last %}{% else %},{% endif %}--><!--{% endfor %}-->#}
                                       </p>
                                     </div>
-                                    <a class="input button blue secondary responsive fixed" href="{{ merchant.skimlinks }}" target="_blank">Visit Store</a>
+                                    <a class="input button green secondary responsive fixed" href="{{ merchant.skimlinks }}" target="_blank">Visit Store</a>
                                   </div>
                                 </div>
                               </div>
@@ -99,7 +99,7 @@
                   <div class="coupons-wrapper">
                     <div class="row">
                       <div class="large-12 columns">
-                        <h2>Coupons <span class="alt">by</span> <a href="/coupons/{{ merchant.name_slug }}/{{ merchant.id }}">{{ merchant.name }}</a> <span>- {{ num_coupons }} of {{ total_coupon_count }} coupons</span></h2>
+                        <h2>Coupons <span class="alt">by</span> <a href="/coupons/{{ merchant.name_slug }}/{{ merchant.id }}/">{{ merchant.name }}</a> <span>- {{ num_coupons }} of {{ total_coupon_count }} coupons</span></h2>
                       </div>
                       <!--<div class="large-4 columns">-->
                         <!--<div class="ui-links sort-items">-->
@@ -134,7 +134,7 @@
                             <div class="col-right">
                               <p class="value secondary">{{ coupon.short_desc }}</p>
                               <h6>&nbsp;</h6>
-                              <a target="_blank" href="/coupon/{{ coupon.merchant.name_slug }}/{{ coupon.desc_slug }}/{{ coupon.id }}/" class="input button red secondary responsive">Use Coupon</a>
+                              <a target="_blank" href="/coupon/{{ coupon.merchant.name_slug }}/{{ coupon.desc_slug }}/{{ coupon.id }}/" class="input button green secondary responsive">Use Coupon</a>
                             </div>
                           </div>
                         </div>

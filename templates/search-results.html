@@ -2,7 +2,7 @@
 {% load humanize %}
 {% block header_block %}
 
-<h1 class="text-center">Search Results: <span style="text-transform: none;">{{ query }}</span></h1>
+<h1 class="text-center" xmlns="http://www.w3.org/1999/html">Search Results: <span style="text-transform: none;">{{ query }}</span></h1>
 
 
 {% endblock %}  {# header_block #}
@@ -44,7 +44,7 @@
                                     <div class="col-right">
                                       <p class="value primary">{{ merchant.get_coupon_count }}</p>
                                       <h4>coupons</h4>
-                                      <a href="/coupons/{{ merchant.name_slug }}/{{ merchant.id }}/" class="input button red secondary responsive">See coupons</a>
+                                      <a href="/coupons/{{ merchant.name_slug }}/{{ merchant.id }}/" class="input button green secondary responsive">See coupons</a>
                                     </div>
                                   </div>
                                 </div>
@@ -63,9 +63,11 @@
                           <li class="wrapper-3">
                             <div class="row">
                               <div class="large-4 small-12 columns">
-                                  <figure>
-                                      <img src="{{ coupon.merchant.get_image }}" alt="" style="display:normal;max-height: 110px;">
-                                  </figure>
+                                  <a href="/coupons/{{ coupon.merchant.name_slug }}/{{ coupon.merchant.id }}/">
+                                      <figure>
+                                          <img src="{{ coupon.merchant.get_image }}" alt="" style="display:normal;max-height: 110px;">
+                                      </figure>
+                                  </a>
                               </div>
                               <div class="large-5 small-8 columns">
                                 <div class="col-middle">
@@ -82,7 +84,7 @@
                                     <div class="col-right">
                                         <p class="value secondary">{{ coupon.short_desc }}</p>
                                         <h6>&nbsp;</h6>
-                                        <a href="/coupon/{{ coupon.merchant.name_slug }}/{{ coupon.desc_slug }}/{{ coupon.id }}/" class="input button red secondary responsive">Use Coupon</a>
+                                        <a href="/coupon/{{ coupon.merchant.name_slug }}/{{ coupon.desc_slug }}/{{ coupon.id }}/" class="input button green secondary responsive">Use Coupon</a>
                                     </div>
                                 </div>
                             </div>
