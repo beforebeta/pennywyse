@@ -44,10 +44,39 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="search-results.html" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="search-results.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/search-results.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="127" column="9" selection-start="5934" selection-end="5934" vertical-scroll-proportion="0.8258346">
+            <state line="116" column="18" selection-start="5764" selection-end="5764" vertical-scroll-proportion="-16.833334">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="fmtcload.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/management/commands/fmtcload.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="106" column="15" selection-start="3871" selection-end="3871" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="e#0#32#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="models.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/models.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="5" column="62" selection-start="205" selection-end="205" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="__init__.py" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/core/util/__init__.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="37" column="0" selection-start="1245" selection-end="1245" vertical-scroll-proportion="0.56060606">
               <folding />
             </state>
           </provider>
@@ -63,7 +92,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/web/context_processors.py" />
         <option value="$PROJECT_DIR$/coupons/prodsettings.py" />
         <option value="$PROJECT_DIR$/websvcs/views/subscriptions.py" />
         <option value="$PROJECT_DIR$/web/views/ajax.py" />
@@ -79,6 +107,7 @@
         <option value="$PROJECT_DIR$/templates/base.html" />
         <option value="$PROJECT_DIR$/static/js/main.js" />
         <option value="$PROJECT_DIR$/templates/search-results.html" />
+        <option value="$PROJECT_DIR$/core/util/__init__.py" />
       </list>
     </option>
   </component>
@@ -500,13 +529,6 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/static/css/mq-32.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="0" selection-start="296" selection-end="296" vertical-scroll-proportion="0.22727273">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/static/css/ubuntu.css">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
@@ -532,24 +554,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state line="77" column="4" selection-start="970" selection-end="973" vertical-scroll-proportion="0.33285713">
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/management/commands/fmtcload.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="106" column="15" selection-start="3871" selection-end="3871" vertical-scroll-proportion="-1.0041323">
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="266" column="0" selection-start="12926" selection-end="12926" vertical-scroll-proportion="0.100981764">
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -611,7 +615,30 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/search-results.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="127" column="9" selection-start="5934" selection-end="5934" vertical-scroll-proportion="0.8258346">
+        <state line="116" column="18" selection-start="5764" selection-end="5764" vertical-scroll-proportion="-16.833334">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/management/commands/fmtcload.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="106" column="15" selection-start="3871" selection-end="3871" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="62" selection-start="205" selection-end="205" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/util/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="37" column="0" selection-start="1245" selection-end="1245" vertical-scroll-proportion="0.56060606">
           <folding />
         </state>
       </provider>

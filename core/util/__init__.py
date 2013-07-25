@@ -25,17 +25,17 @@ def print_stack_trace():
     print '-'*60
 
 def get_first_google_image_result(query_string):
-    print "$"*10, "Google Search for ", query_string
-    try:
-        #specific mappings
-        if query_string.lower() == "apparel":
-            return "http://apparelcyclopedia.com/wp-content/uploads/2013/04/american-apparel-clothing-fashion-store-sweaters-Favim.com-64206.jpg"
-        url = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=" + encode_uri_component(query_string.replace("-"," "))
-        j = json.loads(requests.get(url, headers={'User-agent': 'Mozilla/5.0'}).content)
-        return j["responseData"]["results"][0]["unescapedUrl"]
-    except:
-        print_stack_trace()
-        return settings.DEFAULT_IMAGE
+#    print "$"*10, "Google Search for ", query_string
+#    try:
+#        #specific mappings
+#        if query_string.lower() == "apparel":
+#            return "http://apparelcyclopedia.com/wp-content/uploads/2013/04/american-apparel-clothing-fashion-store-sweaters-Favim.com-64206.jpg"
+#        url = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=" + encode_uri_component(query_string.replace("-"," "))
+#        j = json.loads(requests.get(url, headers={'User-agent': 'Mozilla/5.0'}).content)
+#        return j["responseData"]["results"][0]["unescapedUrl"]
+#    except:
+#        print_stack_trace()
+    return settings.DEFAULT_IMAGE
 
 def get_description_tag_from_url(url):
     data = requests.get(url, headers={'User-agent': 'Mozilla/5.0'}).content
