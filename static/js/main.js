@@ -173,22 +173,22 @@ $(function() {
 
     $('body').on('click', '#subscribe_button', function(e){
         var $this = $(this);
-        var full_name = $('#subscribe_full_name').val();
+//        var full_name = $('#subscribe_full_name').val();
         var email = $('#subscribe_email').val();
         var $subscribe_bar = $("#subscribe_bar");
         var $row = $("#subscribe_bar_row");
         e.preventDefault();
         try{
-            if(full_name.length<2){
-                alert("Please enter your name");
-                return false;
-            } else {
+//            if(full_name.length<2){
+//                alert("Please enter your name");
+//                return false;
+//            } else {
                 if( (email.length<2) ||  (email.indexOf("@")<0) || (email.indexOf(".")<0)) {
                     alert("Please enter a valid email address");
                 } else {
                     $.ajax({
                         type: "POST",
-                        data: {'full_name':full_name, 'email':email},
+                        data: {'full_name':email, 'email':email},
                         url: '/a/subscribe/',
                         cache: false,
                         dataType: "json",
@@ -210,7 +210,7 @@ $(function() {
                         }
                     });
                 }
-            };
+//            };
         } catch(e){}
         return false;
     });

@@ -26,13 +26,22 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="models.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="models.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="138" column="37" selection-start="5556" selection-end="5556" vertical-scroll-proportion="0.54698455">
+            <state line="347" column="14" selection-start="15771" selection-end="15771" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="main.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/static/js/main.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="190" column="32" selection-start="6030" selection-end="6030" vertical-scroll-proportion="0.40082645">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -49,7 +58,6 @@
       <list>
         <option value="$PROJECT_DIR$/templates/no-results.html" />
         <option value="$PROJECT_DIR$/static/css/coupon_frame.css" />
-        <option value="$PROJECT_DIR$/static/js/main.js" />
         <option value="$PROJECT_DIR$/core/util/__init__.py" />
         <option value="$PROJECT_DIR$/core/management/commands/fmtcload.py" />
         <option value="$PROJECT_DIR$/static/css/mq-48.css" />
@@ -61,8 +69,9 @@
         <option value="$PROJECT_DIR$/templates/base.html" />
         <option value="$PROJECT_DIR$/coupons/prodsettings.py" />
         <option value="$PROJECT_DIR$/prodmanage.py" />
-        <option value="$PROJECT_DIR$/core/models.py" />
         <option value="$PROJECT_DIR$/coupons/basesettings.py" />
+        <option value="$PROJECT_DIR$/core/models.py" />
+        <option value="$PROJECT_DIR$/static/js/main.js" />
       </list>
     </option>
   </component>
@@ -136,7 +145,11 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="coupons" />
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="js" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -150,7 +163,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="core" />
+              <option name="myItemId" value="static" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -398,13 +411,6 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/templates/company.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="101" column="125" selection-start="5092" selection-end="5092" vertical-scroll-proportion="0.021770682">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/search-results.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="65" column="94" selection-start="3281" selection-end="3281" vertical-scroll-proportion="0.021770682">
@@ -513,10 +519,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="138" column="37" selection-start="5556" selection-end="5556" vertical-scroll-proportion="0.54698455">
+        <state line="347" column="14" selection-start="15771" selection-end="15771" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/js/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="190" column="32" selection-start="6030" selection-end="6030" vertical-scroll-proportion="0.40082645">
+          <folding />
         </state>
       </provider>
     </entry>

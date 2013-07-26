@@ -139,7 +139,6 @@ class Merchant(models.Model):
                         # logo exists
                         self.image = settings.BASE_URL_NO_APPENDED_SLASH + "/" + logo_path
                     except:
-                        print_stack_trace()
                         self.image = get_descriptive_image(self.name + " logo")
         if not self.description:
             self.description = get_description(self)
