@@ -128,10 +128,10 @@ class Merchant(models.Model):
         if not self.image:
             if self.ref_id:
                 try:
-                    logo_path = "/static/img/logos/%s.gif" % self.ref_id
+                    logo_path = "static/img/logos/%s.gif" % self.ref_id
                     with open(os.path.join(settings.BASE_DIR,logo_path)): pass
                     # logo exists
-                    self.image = settings.BASE_URL_NO_APPENDED_SLASH + logo_path
+                    self.image = settings.BASE_URL_NO_APPENDED_SLASH + "/" + logo_path
                 except:
                     print_stack_trace()
                     self.image = get_descriptive_image(self.name + " logo")
