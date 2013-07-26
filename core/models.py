@@ -132,7 +132,8 @@ class Merchant(models.Model):
                     with open(os.path.join(settings.BASE_DIR,logo_path)): pass
                     # logo exists
                     self.image = settings.BASE_URL_NO_APPENDED_SLASH + logo_path
-                except IOError:
+                except:
+                    print_stack_trace()
                     self.image = get_descriptive_image(self.name + " logo")
         if not self.description:
             self.description = get_description(self)
