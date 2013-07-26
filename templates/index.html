@@ -118,8 +118,14 @@
           </div>
 
 {% endblock %}
-          
-          
-          
+
+{% block end_of_body %}
+<script type="text/javascript">
+    try{
+        mixpanel.track("Visit");
+    }catch(e){}
+</script>
+{% endblock %}
+
 
 
