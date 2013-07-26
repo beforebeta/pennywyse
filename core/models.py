@@ -133,8 +133,14 @@ class Merchant(models.Model):
                     # logo exists
                     self.image = settings.BASE_URL_NO_APPENDED_SLASH + "/" + logo_path
                 except:
-                    print_stack_trace()
-                    self.image = get_descriptive_image(self.name + " logo")
+                    try:
+                        logo_path = "static/img/logos/%s.jpg" % self.ref_id
+                        with open(os.path.join(settings.BASE_DIR,logo_path)): pass
+                        # logo exists
+                        self.image = settings.BASE_URL_NO_APPENDED_SLASH + "/" + logo_path
+                    except:
+                        print_stack_trace()
+                        self.image = get_descriptive_image(self.name + " logo")
         if not self.description:
             self.description = get_description(self)
         self.name_slug = slugify(self.name)

@@ -178,7 +178,7 @@ LOGGING = {
         }
 }
 
-DEFAULT_IMAGE = "http://beta.fyisavings.com/blog/wp-content/uploads/2013/03/fyiSavingsLogo.png"
+DEFAULT_IMAGE = "http://pennywyse.com/static/img/favicon.png"
 
 APP_NAME = "COUPONS_APP"
 APPEND_SLASH=True
