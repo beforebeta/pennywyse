@@ -9,17 +9,26 @@ class FeaturedCoupon(models.Model):
     date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
     last_modified   = models.DateTimeField(auto_now=True, auto_now_add=True)
 
+    def __unicode__(self):  # Python 3: def __str__(self):
+        return str(coupon)
+
 class NewCoupon(models.Model):
     coupon = models.ForeignKey(Coupon)
 
     date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
     last_modified   = models.DateTimeField(auto_now=True, auto_now_add=True)
 
+    def __unicode__(self):  # Python 3: def __str__(self):
+        return str(coupon)
+
 class PopularCoupon(models.Model):
     coupon = models.ForeignKey(Coupon)
 
     date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
     last_modified   = models.DateTimeField(auto_now=True, auto_now_add=True)
+
+    def __unicode__(self):  # Python 3: def __str__(self):
+        return str(coupon)
 
 class ShortenedURLComponentManager(models.Manager):
     def shorten_url_component(self, original_url):
