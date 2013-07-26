@@ -26,21 +26,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="models.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/models.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="347" column="14" selection-start="15771" selection-end="15771" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="e#0#9#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="main.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/static/js/main.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="190" column="32" selection-start="6030" selection-end="6030" vertical-scroll-proportion="0.40082645">
+            <state line="196" column="31" selection-start="6347" selection-end="6347" vertical-scroll-proportion="0.29752067">
               <folding />
             </state>
           </provider>
@@ -519,7 +508,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="347" column="14" selection-start="15771" selection-end="15771" vertical-scroll-proportion="0.0">
+        <state line="347" column="14" selection-start="15771" selection-end="15771" vertical-scroll-proportion="0.4740533">
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
@@ -528,7 +517,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/static/js/main.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="190" column="32" selection-start="6030" selection-end="6030" vertical-scroll-proportion="0.40082645">
+        <state line="196" column="31" selection-start="6347" selection-end="6347" vertical-scroll-proportion="0.29752067">
           <folding />
         </state>
       </provider>
