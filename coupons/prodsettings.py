@@ -1,6 +1,6 @@
 from basesettings import *
 
-base_dir = "/root/public_html/pennywyse/"
+BASE_DIR = "/root/public_html/pennywyse/"
 BASE_URL_NO_APPENDED_SLASH = "http://pennywyse.com"
 SVCS_HOST = "http://pennywyse.com"
 

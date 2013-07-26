@@ -29,7 +29,7 @@
       <file leaf-file-name="models.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/core/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="133" column="80" selection-start="5304" selection-end="5304" vertical-scroll-proportion="0.3997195">
+            <state line="139" column="51" selection-start="5594" selection-end="5594" vertical-scroll-proportion="0.5259467">
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -573,23 +573,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/coupons/prodsettings.py">
+    <entry file="file://$PROJECT_DIR$/coupons/basesettings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="51" selection-start="121" selection-end="121" vertical-scroll-proportion="0.06198347">
+        <state line="6" column="0" selection-start="88" selection-end="88" vertical-scroll-proportion="0.12396694">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/coupons/basesettings.py">
+    <entry file="file://$PROJECT_DIR$/coupons/prodsettings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="26" selection-start="277" selection-end="303" vertical-scroll-proportion="0.2892562">
+        <state line="20" column="0" selection-start="601" selection-end="601" vertical-scroll-proportion="0.41322315">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="133" column="80" selection-start="5304" selection-end="5304" vertical-scroll-proportion="0.3997195">
+        <state line="139" column="51" selection-start="5594" selection-end="5594" vertical-scroll-proportion="0.5259467">
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
