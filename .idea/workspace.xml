@@ -26,10 +26,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="basesettings.py" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/coupons/basesettings.py">
+      <file leaf-file-name="prodsettings.py" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/coupons/prodsettings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="8" column="5" selection-start="143" selection-end="148" vertical-scroll-proportion="0.16528925">
+            <state line="2" column="13" selection-start="41" selection-end="41" vertical-scroll-proportion="0.041322313">
               <folding />
             </state>
           </provider>
@@ -489,16 +489,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/coupons/prodsettings.py">
+    <entry file="file://$PROJECT_DIR$/coupons/basesettings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="0" selection-start="28" selection-end="28" vertical-scroll-proportion="0.041322313">
+        <state line="10" column="0" selection-start="143" selection-end="179" vertical-scroll-proportion="0.20661157">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/coupons/basesettings.py">
+    <entry file="file://$PROJECT_DIR$/coupons/prodsettings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="5" selection-start="143" selection-end="148" vertical-scroll-proportion="0.16528925">
+        <state line="2" column="13" selection-start="41" selection-end="41" vertical-scroll-proportion="0.041322313">
           <folding />
         </state>
       </provider>
