@@ -30,15 +30,15 @@ def get_description(model):
 #######################################################################################################################
 
 class Category(models.Model):
-    ref_id          = models.CharField(max_length=255, db_index=True)
+    ref_id          = models.CharField(max_length=255, db_index=True, blank=True, null=True)
     code            = models.CharField(max_length=255,blank=True, null=True, db_index=True)
     name            = models.CharField(max_length=255,blank=True, null=True, db_index=True)
     description     = models.CharField(max_length=255,blank=True, null=True)
     parent          = models.ForeignKey("Category", blank=True, null=True)
-    image           = models.TextField()
+    image           = models.TextField(blank=True, null=True)
 
     date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
-    last_modified   = models.DateTimeField(auto_now=True, auto_now_add=True)
+    last_modified   = models.DateTimeField(default=datetime.datetime.now(), auto_now=True, auto_now_add=True)
 
     def save(self, *args, **kwargs):
         if not self.image:
@@ -60,7 +60,7 @@ class DealType(models.Model):
     description     = models.CharField(max_length=255,blank=True, null=True)
 
     date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
-    last_modified   = models.DateTimeField(auto_now=True, auto_now_add=True)
+    last_modified   = models.DateTimeField(default=datetime.datetime.now(), auto_now=True, auto_now_add=True)
 
     def __unicode__(self):  # Python 3: def __str__(self):
         return "%s %s" % (self.code, self.name)
@@ -77,12 +77,12 @@ class MerchantManager(models.Manager):
         return Merchant.objects.exclude(coupon__isnull=True)[:how_many]
 
 class Merchant(models.Model):
-    ref_id          = models.CharField(max_length=255, db_index=True)
-    name            = models.CharField(max_length=255, db_index=True)
-    name_slug       = models.CharField(max_length=255, db_index=True)
-    image           = models.TextField()
+    ref_id          = models.CharField(max_length=255, db_index=True, blank=True, null=True)
+    name            = models.CharField(max_length=255, db_index=True, blank=True, null=True)
+    name_slug       = models.CharField(max_length=255, db_index=True, blank=True, null=True)
+    image           = models.TextField(blank=True, null=True)
 
-    description     = models.TextField() #loaded from the target link
+    description     = models.TextField(blank=True, null=True) #loaded from the target link
     coupon_count    = models.IntegerField(default=0)
 
     link            = models.TextField(blank=True, null=True)
@@ -90,7 +90,7 @@ class Merchant(models.Model):
     skimlinks       = models.TextField(blank=True, null=True)
 
     date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
-    last_modified   = models.DateTimeField(auto_now=True, auto_now_add=True)
+    last_modified   = models.DateTimeField(default=datetime.datetime.now(), auto_now=True, auto_now_add=True)
 
     objects = MerchantManager()
 
@@ -160,10 +160,10 @@ class Merchant(models.Model):
 #######################################################################################################################
 
 class CouponNetwork(models.Model):
-    name            = models.CharField(max_length=255, db_index=True)
+    name            = models.CharField(max_length=255, db_index=True, blank=True, null=True)
 
     date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
-    last_modified   = models.DateTimeField(auto_now=True, auto_now_add=True)
+    last_modified   = models.DateTimeField(default=datetime.datetime.now(), auto_now=True, auto_now_add=True)
 
 #######################################################################################################################
 #
@@ -176,7 +176,7 @@ class Country(models.Model):
     name            = models.CharField(max_length=255, db_index=True)
 
     date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
-    last_modified   = models.DateTimeField(auto_now=True, auto_now_add=True)
+    last_modified   = models.DateTimeField(default=datetime.datetime.now(), auto_now=True, auto_now_add=True)
 
     def __unicode__(self):  # Python 3: def __str__(self):
         return "%s %s" % (self.code, self.name)
@@ -245,7 +245,7 @@ class Coupon(models.Model):
     Percent      (Product Discount Percent, not applied to all deals)
     """
     #Our proprietary coupon ID - especially useful in identifying deals that are delivered more than once because they have changed.
-    ref_id          = models.CharField(max_length=255, db_index=True)
+    ref_id          = models.CharField(max_length=255, db_index=True, blank=True, null=True)
     merchant        = models.ForeignKey(Merchant, blank=True, null=True)
     categories      = models.ManyToManyField(Category, blank=True, null=True)
     dealtypes       = models.ManyToManyField(DealType, blank=True, null=True)
@@ -274,7 +274,7 @@ class Coupon(models.Model):
     desc_slug       = models.CharField(max_length=175, default="COUPON")
 
     date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
-    last_modified   = models.DateTimeField(auto_now=True, auto_now_add=True)
+    last_modified   = models.DateTimeField(default=datetime.datetime.now(), auto_now=True, auto_now_add=True)
 
     objects = CouponManager()
 
