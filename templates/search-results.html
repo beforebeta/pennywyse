@@ -125,7 +125,9 @@
 {% block end_of_body %}
 <script type="text/javascript">
 try{
-   mixpanel.track("Search");
+   mixpanel.track("Search", {
+       "query" : "{{ query }}"
+   });
 }catch(e){}
 </script>
 {% endblock %}
