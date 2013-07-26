@@ -40,7 +40,7 @@
       <file leaf-file-name="models.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/core/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="37" column="60" selection-start="1469" selection-end="1469" vertical-scroll-proportion="0.50490886">
+            <state line="86" column="0" selection-start="3758" selection-end="3758" vertical-scroll-proportion="0.56802243">
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -87,7 +87,6 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1" />
     <option name="y" value="22" />
     <option name="width" value="1440" />
     <option name="height" value="874" />
@@ -373,7 +372,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1" y="22" width="1440" height="874" extended-state="6" />
+    <frame x="0" y="22" width="1440" height="874" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3293919" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -567,7 +566,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="37" column="60" selection-start="1469" selection-end="1469" vertical-scroll-proportion="0.50490886">
+        <state line="86" column="0" selection-start="3758" selection-end="3758" vertical-scroll-proportion="0.56802243">
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
