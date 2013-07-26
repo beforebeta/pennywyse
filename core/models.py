@@ -83,7 +83,7 @@ class Merchant(models.Model):
     image           = models.TextField(blank=True, null=True)
 
     description     = models.TextField(blank=True, null=True) #loaded from the target link
-#    coupon_count    = models.IntegerField(default=0)
+    coupon_count    = models.IntegerField(default=0)
 
     link            = models.TextField(blank=True, null=True)
     directlink      = models.TextField(blank=True, null=True)
