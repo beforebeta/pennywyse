@@ -52,14 +52,15 @@
                 <div class="column">
                   <div class="items-carousel flexslider">
                     <ul class="rr slides">
-
                         {% for coupon in new_coupons %}
                         <li>
                             <div class="wrapper-3 item-thumb"  data-rid="{{ coupon.ref_id }}">
                                 <div class="top">
-                                    <figure class="prodimg">
-                                        <img src="{{ coupon.get_image }}" alt="" style="display:normal">
-                                    </figure>
+                                    <a href="/coupons/{{ coupon.merchant.name_slug }}/{{ coupon.merchant.id }}/">
+                                        <figure class="prodimg">
+                                            <img src="{{ coupon.get_image }}" alt="{{ coupon.description }}" style="display:normal">
+                                        </figure>
+                                    </a>
                                     <h2 class="alt" style="max-height: 45px; overflow: hidden;"><a target="_blank" href="/coupon/{{ coupon.merchant.name_slug }}/{{ coupon.desc_slug }}/{{ coupon.id }}/">{{ coupon.description }}</a></h2>
                                 </div>
                                 <div class="bottom">
@@ -92,9 +93,11 @@
                         <li>
                             <div class="wrapper-3-alt item-thumb" data-rid="{{ coupon.ref_id }}">
                                 <div class="top">
-                                    <figure class="prodimg">
-                                        <img src="{{ coupon.get_image }}" alt="" style="display:normal">
-                                    </figure>
+                                    <a href="/coupons/{{ coupon.merchant.name_slug }}/{{ coupon.merchant.id }}/">
+                                        <figure class="prodimg">
+                                            <img src="{{ coupon.get_image }}" alt="{{ coupon.description }}" style="display:normal">
+                                        </figure>
+                                    </a>
                                     <h2 class="alt" style="max-height: 45px; overflow: hidden;"><a target="_blank" href="/coupon/{{ coupon.merchant.name_slug }}/{{ coupon.desc_slug }}/{{ coupon.id }}/">{{ coupon.description }}</a></h2>
                                 </div>
                                 <div class="bottom">
