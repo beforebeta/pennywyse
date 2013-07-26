@@ -87,7 +87,7 @@ def coupons_for_company(request, company_name, company_id=-1, current_page=1, ca
         "current_page"          : int(current_page),
         "coupons"               : pages.page(current_page).object_list,
         "num_coupons"           : pages.count,
-        "total_coupon_count"    : merchant.get_coupon_count()
+        "total_coupon_count"    : merchant.coupon_count
     }
     context["coupon_categories"] = coupon_categories
 

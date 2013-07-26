@@ -195,9 +195,14 @@ def setup_web_coupons():
         for coupon in Coupon.objects.get_popular_coupons(8):
             PopularCoupon(coupon=coupon).save()
 
+def refresh_calcualted_fields():
+    for m in Merchant.objects.all():
+        m.refresh_coupon_count()
+
 def load():
     refresh_deal_types()
     refresh_categories()
     refresh_merchants()
     refresh_deals()
     setup_web_coupons()
+    refresh_calcualted_fields()

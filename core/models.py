@@ -83,6 +83,7 @@ class Merchant(models.Model):
     image           = models.TextField()
 
     description     = models.TextField() #loaded from the target link
+    coupon_count    = models.IntegerField(default=0)
 
     link            = models.TextField(blank=True, null=True)
     directlink      = models.TextField(blank=True, null=True)
@@ -123,6 +124,10 @@ class Merchant(models.Model):
 
     def get_image(self):
         return get_directed_image(self)
+
+    def refresh_coupon_count(self):
+        self.coupon_count = self.get_coupon_count()
+        self.save()
 
     def save(self, *args, **kwargs):
         if not self.image:

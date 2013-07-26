@@ -42,7 +42,7 @@
                                   </div>
                                   <div class="large-3 small-4 columns">
                                     <div class="col-right">
-                                      <p class="value primary">{{ merchant.get_coupon_count }}</p>
+                                      <p class="value primary">{{ merchant.coupon_count }}</p>
                                       <h4>coupons</h4>
                                       <a href="/coupons/{{ merchant.name_slug }}/{{ merchant.id }}/" class="input button green secondary responsive">See coupons</a>
                                     </div>
@@ -104,7 +104,7 @@
                         <ul class="rr inne sidebar-list popular-companies-list">
                             {% for merchant in relevant_merchants %}
                             <li class="cf">
-                                <a href="/coupons/{{ merchant.name_slug }}/">{{ merchant.name }} <span class="count-bullet">{{ merchant.get_coupon_count }}</span></a>
+                                <a href="/coupons/{{ merchant.name_slug }}/">{{ merchant.name }} <span class="count-bullet">{{ merchant.coupon_count }}</span></a>
                             </li>
                             {% endfor %}
                         </ul>
