@@ -169,7 +169,7 @@ li.input {
 }
 .input.field {
   /*font-weight: 300;*/
-  color: #9d9d9d;
+  color: #000;
   font-size: 0.875em;
   padding-right: 0.9em;
   padding-left: 0.9em;
@@ -179,16 +179,16 @@ li.input {
   color: #525252;
 }
 .input.field::-webkit-input-placeholder {
-   color: #9d9d9d;
+   color: #000;
 }
 .input.field:-moz-placeholder { Firefox 18-
-   color: #9d9d9d;
+   color: #000;
 }
 .input.field::-moz-placeholder {  Firefox 19+
-   color: #9d9d9d;
+   color: #000;
 }
 .input.field:-ms-input-placeholder {  
-   color: #9d9d9d;
+   color: #000;
 }
 .input.field,
 .input.border {
@@ -388,8 +388,8 @@ h2.alt a:hover {
   text-decoration: none;
 }
 h3 {
-  font-size: 0.938em;
-  text-transform: uppercase;
+  font-size: 1.05em;
+  text-transform: none;
   color: #525252;
 }
 h3.white {
@@ -802,13 +802,15 @@ header[role="banner"] {
     background: #446CB3;
   color: #fff;
   text-transform: uppercase;
-  padding: 23px 0;
+  /*padding: 23px 0;*/
+    padding-top:20px;
+    padding-bottom: 10px;
   max-height: 450px;
   position: relative;
   z-index: 1000;
 }
 .logo {
-  font-size: 1.7em;
+  font-size: 33px;
   font-weight: 700;
   text-align: center;
   /*text-transform: uppercase;*/
@@ -862,7 +864,7 @@ header[role="banner"] {
   line-height: 1.2em;
 }
 .main-slider .caption {
-  font-size: 0.938em;
+  font-size: 1.2em;
 }
 .main-slider figure {
   text-align: center;

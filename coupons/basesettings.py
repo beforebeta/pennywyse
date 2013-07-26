@@ -18,7 +18,7 @@ ADMINS = (
 # ('Your Name', 'your_email@example.com'),
 )
 
-WEBSITE_NAME = 'pennywyse'
+WEBSITE_NAME = 'PennyWyse'
 
 MANAGERS = ADMINS
 
