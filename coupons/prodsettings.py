@@ -2,6 +2,7 @@ from basesettings import *
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
+ALLOWED_HOSTS = ["pennywyse.com","www.pennywyse.com"]
 
 BASE_DIR = "/root/public_html/pennywyse/"
 BASE_URL_NO_APPENDED_SLASH = "http://pennywyse.com"
