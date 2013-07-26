@@ -4,11 +4,11 @@ BASE_DIR = "/root/public_html/pennywyse/"
 BASE_URL_NO_APPENDED_SLASH = "http://pennywyse.com"
 SVCS_HOST = "http://pennywyse.com"
 
-#MEDIA_ROOT = '%sstatic/'% base_dir
+#MEDIA_ROOT = '%sstatic/'% BASE_DIR
 #MEDIA_URL = '/static/'
 
 TEMPLATE_DIRS = (
-    '%stemplates/' % base_dir,
+    '%stemplates/' % BASE_DIR,
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
