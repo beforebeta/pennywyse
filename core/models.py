@@ -1,3 +1,4 @@
+import os
 import urllib
 import datetime
 from django.conf import settings
@@ -125,7 +126,14 @@ class Merchant(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.image:
-            self.image = get_descriptive_image(self.name + " logo")
+            if self.ref_id:
+                try:
+                    logo_path = "/static/img/logos%s.gif" % self.ref_id
+                    with open(os.path.join(settings.base_dir,logo_path)): pass
+                    # logo exists
+                    self.image = settings.BASE_URL_NO_APPENDED_SLASH + logo_path
+                except IOError:
+                    self.image = get_descriptive_image(self.name + " logo")
         if not self.description:
             self.description = get_description(self)
         self.name_slug = slugify(self.name)

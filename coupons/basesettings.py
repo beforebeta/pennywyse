@@ -4,6 +4,7 @@ __author__ = 'amrish'
 
 FMTC_ACCESS_KEY = '43a787c3f5f2cf2f675cbf86aff6a33b'
 
+base_dir = "/Users/amrish/Dropbox/workspace/coupons/"
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -11,6 +12,7 @@ TEMPLATE_DEBUG = DEBUG
 IMAGE_LOCAL_COPY_DIR_NO_PREFIX = 'static/img/local/'
 IMAGE_LOCAL_COPY_DIR = 'static/img/local/'
 
+BASE_URL_NO_APPENDED_SLASH = "http://localhost:8002"
 try: os.makedirs(IMAGE_LOCAL_COPY_DIR)
 except: pass
 
