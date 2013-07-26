@@ -38,6 +38,10 @@
     <script>window.jQuery || document.write('<script src="/static/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
     <script src="/static/js/plugins.js"></script>
 
+    {% block fbtags %}
+        <meta property="og:image" content="http://pennywyse.com/static/img/fbog.png"/>
+    {% endblock %}
+
 </head>
 <body>
 <!--[if lt IE 7]>
