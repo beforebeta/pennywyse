@@ -22,7 +22,7 @@ def render_response(template_file, request, context={}):
 @ensure_csrf_cookie
 def index(request):
     context = {}
-    context["featured_coupons"] = random.shuffle(list(FeaturedCoupon.objects.all()[:10]))
+    context["featured_coupons"] = FeaturedCoupon.objects.all()[:10]
     context["new_coupons"] = [Coupon.objects.get(id=nc.coupon_id) for nc in NewCoupon.objects.all().order_by("-date_added")[:8]]
     context["pop_coupons"] = [Coupon.objects.get(id=pc.coupon_id) for pc in PopularCoupon.objects.all().order_by("-date_added")[:8]]
     return render_response("index.html", request, context)
