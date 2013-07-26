@@ -29,7 +29,7 @@
       <file leaf-file-name="models.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/core/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="135" column="39" selection-start="5368" selection-end="5368" vertical-scroll-proportion="0.44179523">
+            <state line="130" column="34" selection-start="5073" selection-end="5073" vertical-scroll-proportion="0.33660588">
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -589,7 +589,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="135" column="39" selection-start="5368" selection-end="5368" vertical-scroll-proportion="0.44179523">
+        <state line="130" column="34" selection-start="5073" selection-end="5073" vertical-scroll-proportion="0.33660588">
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
