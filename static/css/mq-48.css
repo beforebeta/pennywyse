@@ -43,7 +43,8 @@ h1, h2, h3, h4, h5, h6 {
   margin-right: 0;
 }
 .main-slider-wrap {
-  background: none;
+  /*background: none;*/
+    background: #33495F;
 }
 .main-slider {
   padding-top: 50px;

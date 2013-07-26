@@ -1,6 +1,7 @@
 import re
 
 from django.db.models import Q
+from django.http import HttpResponseRedirect
 from core.models import Merchant, Coupon
 from web.views.main import render_response
 
@@ -43,17 +44,19 @@ def search_model(model, query, fields):
     return model.objects.filter(entry_query).order_by('-date_added')
 
 def search(request):
-    context={}
-    query = request.GET.get("q","").strip()
-    context["query"] = query
-    merchants = search_model(Merchant, query, ["name"])[:5]
-    coupons = search_model(Coupon, query, ["description"])[:10]
+    try:
+        context={}
+        query = request.GET.get("q","").strip()
+        context["query"] = query
+        merchants = search_model(Merchant, query, ["name"])[:5]
+        coupons = search_model(Coupon, query, ["description"])[:10]
 
-    context["merchants"] = merchants
-    context["coupons"] = coupons
-    context["relevant_merchants"] = Merchant.objects.filter(id__in=list(set([c.merchant_id for c in coupons])))
-    return render_response(template_file="search-results.html", request=request, context=context)
-
+        context["merchants"] = merchants
+        context["coupons"] = coupons
+        context["relevant_merchants"] = Merchant.objects.filter(id__in=list(set([c.merchant_id for c in coupons])))
+        return render_response(template_file="search-results.html", request=request, context=context)
+    except:
+        return HttpResponseRedirect("/")
 #def search(request):
 #    query_string = ''
 #    found_entries = None

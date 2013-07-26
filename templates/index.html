@@ -7,20 +7,21 @@
                 <div class="column">
                   <div class="main-slider flexslider white">
                     <ul class="slides">
-
                         {% for coupon in featured_coupons %}
                       <li>
-                        <p class="h1">{{ coupon.coupon.short_desc }} at {{ coupon.coupon.merchant.name }}</p>
+                        <p class="h1"><a href="/coupons/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.merchant.id }}/">{{ coupon.coupon.short_desc }} at {{ coupon.coupon.merchant.name }}</a></p>
                         <div class="row">
                           <div class="large-8 columns large-centered">
                             <div class="content">
                               <p class="caption">
-                                {{ coupon.coupon.description }}
-                                <a href="coupons.html" class="ir icon tag">Learn More</a>
+                                  <a href="/coupon/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.desc_slug }}/{{ coupon.coupon.id }}/">{{ coupon.coupon.description }}</a>
+                                <a href="/coupon/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.desc_slug }}/{{ coupon.coupon.id }}/" class="ir icon tag">Learn More</a>
                               </p>
-                              <figure>
-                                <img src="{{ coupon.coupon.merchant.get_image }}" alt="" style="max-height: 100px">
-                              </figure>
+                                <a href="/coupons/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.merchant.id }}/">
+                                  <figure>
+                                    <img src="{{ coupon.coupon.merchant.get_image }}" alt="{{ coupon.coupon.merchant.name }}" style="max-height: 100px">
+                                  </figure>
+                                </a>
                             </div>
                           </div>
                         </div>
@@ -64,7 +65,7 @@
                                 <div class="bottom">
                                     <p class="value secondary">{{ coupon.short_desc }}</p>
                                     <h6><a href="/coupons/{{ coupon.merchant.name_slug }}/">{{ coupon.merchant.name }}</a></h6>
-                                    <a href="/coupon/{{ coupon.merchant.name_slug }}/{{ coupon.desc_slug }}/{{ coupon.id }}/" target="_blank" class="input button red secondary">Learn more</a>
+                                    <a href="/coupon/{{ coupon.merchant.name_slug }}/{{ coupon.desc_slug }}/{{ coupon.id }}/" target="_blank" class="input button green secondary">Learn more</a>
                                 </div>
                             </div>
                         </li>
@@ -89,7 +90,7 @@
 
                         {% for coupon in pop_coupons %}
                         <li>
-                            <div class="wrapper-3 item-thumb" data-rid="{{ coupon.ref_id }}">
+                            <div class="wrapper-3-alt item-thumb" data-rid="{{ coupon.ref_id }}">
                                 <div class="top">
                                     <figure class="prodimg">
                                         <img src="{{ coupon.get_image }}" alt="" style="display:normal">
@@ -99,7 +100,7 @@
                                 <div class="bottom">
                                     <p class="value secondary">{{ coupon.short_desc }}</p>
                                     <h6><a href="/coupons/{{ coupon.merchant.name_slug }}/">{{ coupon.merchant.name }}</a></h6>
-                                    <a target="_blank" href="/coupon/{{ coupon.merchant.name_slug }}/{{ coupon.desc_slug }}/{{ coupon.id }}/" class="input button red secondary">Learn More</a>
+                                    <a target="_blank" href="/coupon/{{ coupon.merchant.name_slug }}/{{ coupon.desc_slug }}/{{ coupon.id }}/" class="input button green secondary">Learn More</a>
                                 </div>
                             </div>
                         </li>
