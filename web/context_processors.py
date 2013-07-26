@@ -3,7 +3,9 @@ from websvcs.models import EmailSubscription
 
 def base(request):
     context = {
-        'WEBSITE_NAME': settings.WEBSITE_NAME
+        'WEBSITE_NAME'  : settings.WEBSITE_NAME,
+        "BASE_URL_NO_APPENDED_SLASH" : settings.BASE_URL_NO_APPENDED_SLASH,
+        "CURRENT_URL"   : "%s%s" % (settings.BASE_URL_NO_APPENDED_SLASH, request.get_full_path())
     }
     #check newsletter subscription
     if "key" in request.session:
