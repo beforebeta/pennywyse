@@ -146,7 +146,8 @@ INSTALLED_APPS = (
     'south',
     'core',
     'web',
-    'websvcs'
+    'websvcs',
+    'ads'
     )
 
 # A sample logging configuration. The only tangible logging

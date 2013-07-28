@@ -39,15 +39,22 @@
     <meta property="og:title" content="{{ coupon.merchant.name }}: {{ coupon.description }}. A Hand Verified Coupon Code for {{ coupon.merchant.name }} from PennyWyse."/>
     <meta property="og:url" content="{{ CURRENT_URL }}"/>
     {% endblock %}
+    <script type="text/javascript">
+        var fb_param = {};
+        fb_param.pixel_id = '6009205747101';
+        fb_param.value = '0.00';
+        fb_param.currency = 'USD';
+        (function(){
+            var fpw = document.createElement('script');
+            fpw.async = true;
+            fpw.src = '//connect.facebook.net/en_US/fp.js';
+            var ref = document.getElementsByTagName('script')[0];
+            ref.parentNode.insertBefore(fpw, ref);
+        })();
+    </script>
+    <noscript><img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/offsite_event.php?id=6009205747101&amp;value=0&amp;currency=USD" /></noscript>
+</head>
 <body>
-<!--<div id="fb-root"></div>-->
-<!--<script>(function(d, s, id) {-->
-    <!--var js, fjs = d.getElementsByTagName(s)[0];-->
-    <!--if (d.getElementById(id)) return;-->
-    <!--js = d.createElement(s); js.id = id;-->
-    <!--js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=405821766193456";-->
-    <!--fjs.parentNode.insertBefore(js, fjs);-->
-<!--}(document, 'script', 'facebook-jssdk'));</script>-->
 <div id="header-bar">
 
     <div class="row">
@@ -70,22 +77,6 @@
             </p>
         </div>
     </div>
-    <!--<a class="site-loopback" href="/">{{ WEBSITE_NAME }}</a>-->
-
-    <!--<p class="coupon-data">-->
-        <!--Coupon from {{ coupon.merchant.name }}: {{ coupon.description }}. {% if coupon.code %}Use coupon code <span class="tag">{{ coupon.code }}</span>{% else %}<strong>No code necessary</strong>.{% endif %}-->
-    <!--</p>-->
-
-    <!--&lt;!&ndash;<iframe src="//www.facebook.com/plugins/like.php?href={{ path }}&amp;send=false&amp;layout=button_count&amp;width=450&amp;show_faces=false&amp;font&amp;colorscheme=light&amp;action=like&amp;height=21&amp;appId=405821766193456" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:21px;" allowTransparency="true"></iframe>&ndash;&gt;-->
-    <!--&lt;!&ndash;<iframe src="//www.facebook.com/plugins/like.php?href={{ path }}&amp;send=false&amp;layout=button_count&amp;width=450&amp;show_faces=false&amp;font&amp;colorscheme=light&amp;action=like&amp;height=21&amp;appId=405821766193456" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:21px;" allowTransparency="true"></iframe>&ndash;&gt;-->
-
-    <!--&lt;!&ndash;<div class="fb-like" data-href="http://www.pennywyse.com" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false" data-font="arial"></div>&ndash;&gt;-->
-
-    <!--<p class="meta-data">-->
-        <!--<a class="purchase" href="{{ back_url }}">&lt;&lt; Go Back</a>-->
-        <!--<a class="close" href="{{ coupon.skimlinks }}">X Remove Bar</a>-->
-    <!--</p>-->
-
 </div>
 
 <iframe id="preview-frame" src="{{ coupon.skimlinks }}" name="preview-frame" frameborder="0" noresize="noresize">
