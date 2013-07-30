@@ -200,6 +200,9 @@ $(function() {
                                 $this.removeClass("blue");
                                 $this.addClass("dark");
                                 $this.attr("disabled","disabled");
+                                try{
+                                    mixpanel.track("Email Subscribe");
+                                }catch(e){}
                             }
                         },
                         error: function (XMLHttpRequest, textStatus, errorThrown) {
