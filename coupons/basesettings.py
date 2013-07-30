@@ -112,6 +112,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 #PREPEND_WWW=True
 
 MIDDLEWARE_CLASSES = (
+    'web.middleware.WebMiddleware',
     'django.middleware.gzip.GZipMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
