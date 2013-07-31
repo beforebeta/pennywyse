@@ -29,7 +29,7 @@
       <file leaf-file-name="middleware.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/web/middleware.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="4" column="70" selection-start="173" selection-end="173" vertical-scroll-proportion="0.08264463">
+            <state line="4" column="16" selection-start="119" selection-end="119" vertical-scroll-proportion="0.08264463">
               <folding />
             </state>
           </provider>
@@ -45,7 +45,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/coupons/urls.py" />
         <option value="$PROJECT_DIR$/web/admin.py" />
         <option value="$PROJECT_DIR$/web/models.py" />
         <option value="$PROJECT_DIR$/web/views/main.py" />
@@ -61,6 +60,7 @@
         <option value="$PROJECT_DIR$/static/js/main.js" />
         <option value="$PROJECT_DIR$/coupons/basesettings.py" />
         <option value="$PROJECT_DIR$/web/middleware.py" />
+        <option value="$PROJECT_DIR$/refresh.sh" />
       </list>
     </option>
   </component>
@@ -117,34 +117,6 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="coupons" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="coupons" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="coupons" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="coupons" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="web" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="coupons" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="coupons" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="coupons" />
@@ -395,11 +367,6 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/templates/company.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="204" column="0" selection-start="9731" selection-end="9981" vertical-scroll-proportion="0.8693759" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/management/commands/fmtcload.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="15" column="24" selection-start="0" selection-end="7568" vertical-scroll-proportion="0.30991736" />
@@ -476,9 +443,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/refresh.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="21" selection-start="68" selection-end="68" vertical-scroll-proportion="0.041322313">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/web/middleware.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="70" selection-start="173" selection-end="173" vertical-scroll-proportion="0.08264463">
+        <state line="4" column="16" selection-start="119" selection-end="119" vertical-scroll-proportion="0.08264463">
           <folding />
         </state>
       </provider>
