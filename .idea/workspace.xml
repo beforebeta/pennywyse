@@ -26,10 +26,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="middleware.py" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/web/middleware.py">
+      <file leaf-file-name="fmtcload.py" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/core/management/commands/fmtcload.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="4" column="16" selection-start="119" selection-end="119" vertical-scroll-proportion="0.08264463">
+            <state line="179" column="25" selection-start="6602" selection-end="6602" vertical-scroll-proportion="0.2768595">
               <folding />
             </state>
           </provider>
@@ -45,7 +45,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/web/admin.py" />
         <option value="$PROJECT_DIR$/web/models.py" />
         <option value="$PROJECT_DIR$/web/views/main.py" />
         <option value="$PROJECT_DIR$/templates/base.html" />
@@ -55,12 +54,13 @@
         <option value="$PROJECT_DIR$/coupons/management/commands/__init__.py" />
         <option value="$PROJECT_DIR$/coupons/management/commands/fbads.py" />
         <option value="$PROJECT_DIR$/common/facebook.py" />
-        <option value="$PROJECT_DIR$/ads/management/commands/fbads.py" />
         <option value="$PROJECT_DIR$/templates/open_coupon.html" />
         <option value="$PROJECT_DIR$/static/js/main.js" />
         <option value="$PROJECT_DIR$/coupons/basesettings.py" />
         <option value="$PROJECT_DIR$/web/middleware.py" />
         <option value="$PROJECT_DIR$/refresh.sh" />
+        <option value="$PROJECT_DIR$/ads/management/commands/fbads.py" />
+        <option value="$PROJECT_DIR$/core/management/commands/fmtcload.py" />
       </list>
     </option>
   </component>
@@ -95,16 +95,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope">
-        <subPane subId="Project Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -121,6 +111,84 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="coupons" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="coupons" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="coupons" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="coupons" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="coupons" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="management" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="coupons" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="coupons" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="management" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="commands" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="coupons" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="coupons" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="common" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scope">
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -297,7 +365,7 @@
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.15781923" sideWeight="0.6706507" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16212338" sideWeight="0.6706507" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
@@ -367,11 +435,6 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/core/management/commands/fmtcload.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="24" selection-start="0" selection-end="7568" vertical-scroll-proportion="0.30991736" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ads/management/commands/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
@@ -380,11 +443,6 @@
     <entry file="file://$PROJECT_DIR$/coupons/settings.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ads/management/commands/fbads.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="39" column="29" selection-start="1085" selection-end="1085" vertical-scroll-proportion="0.45454547" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/common/facebook.py">
@@ -424,35 +482,39 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/coupons/basesettings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="146" column="12" selection-start="4896" selection-end="4896" vertical-scroll-proportion="2.086777">
-          <folding />
-        </state>
+        <state line="146" column="12" selection-start="4896" selection-end="4896" vertical-scroll-proportion="2.086777" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/web/context_processors.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="18" selection-start="749" selection-end="749" vertical-scroll-proportion="0.37190083">
-          <folding />
-        </state>
+        <state line="19" column="18" selection-start="749" selection-end="749" vertical-scroll-proportion="0.37190083" />
       </provider>
     </entry>
     <entry file="file:///Library/Python/2.7/site-packages/django/contrib/sessions/backends/base.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="188" column="8" selection-start="6018" selection-end="6018" vertical-scroll-proportion="0.27134988">
-          <folding />
-        </state>
+        <state line="188" column="8" selection-start="6018" selection-end="6018" vertical-scroll-proportion="0.27134988" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/refresh.sh">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="21" selection-start="68" selection-end="68" vertical-scroll-proportion="0.041322313">
-          <folding />
-        </state>
+        <state line="2" column="21" selection-start="68" selection-end="68" vertical-scroll-proportion="0.041322313" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ads/management/commands/fbads.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="70" column="18" selection-start="2133" selection-end="2133" vertical-scroll-proportion="0.69008267" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/web/middleware.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="16" selection-start="119" selection-end="119" vertical-scroll-proportion="0.08264463">
+        <state line="4" column="34" selection-start="127" selection-end="137" vertical-scroll-proportion="0.08264463">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/management/commands/fmtcload.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="179" column="25" selection-start="6602" selection-end="6602" vertical-scroll-proportion="0.2768595">
           <folding />
         </state>
       </provider>

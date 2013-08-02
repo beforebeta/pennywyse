@@ -182,6 +182,7 @@ def refresh_deals():
             print_stack_trace()
 
 def setup_web_coupons():
+    section("Setup Web Coupons")
     if FeaturedCoupon.objects.all().count()<=0:
         FeaturedCoupon(coupon=Merchant.objects.get(name="best buy").get_top_coupon()).save()
         FeaturedCoupon(coupon=Merchant.objects.get(name="sears").get_top_coupon()).save()
@@ -195,7 +196,8 @@ def setup_web_coupons():
         for coupon in Coupon.objects.get_popular_coupons(8):
             PopularCoupon(coupon=coupon).save()
 
-def refresh_calcualted_fields():
+def refresh_calculated_fields():
+    section("Refresh Calculated Fields")
     for m in Merchant.objects.all():
         m.refresh_coupon_count()
 
@@ -205,4 +207,4 @@ def load():
     refresh_merchants()
     refresh_deals()
     setup_web_coupons()
-    refresh_calcualted_fields()
+    refresh_calculated_fields()

@@ -42,6 +42,7 @@ def get_data(args):
 def analyse_response_data(response_data, object):
     likes = []
     comments = []
+    names = []
     for posts in response_data:
         for post in posts["data"]:
             if "likes" in post:
@@ -52,12 +53,22 @@ def analyse_response_data(response_data, object):
                     comments.append(comment["from"])
     flikes = open("%s_likes" % str(object),"w")
     fcomments = open("%s_comments" % str(object),"w")
+    fnames = open("%s_names" % str(object),"w")
+
+    for el in likes:
+        names.append(el["name"])
+    for el in comments:
+        names.append(el["name"])
+    for name in list(set(names)):
+        fnames.write("%s\n" % name)
+
     likes = list(set([l["id"] for l in likes]))
     comments = list(set([c["id"] for c in comments]))
     for like_id in likes:
         flikes.write("%s\n" % like_id)
     for comment_id in comments:
         fcomments.write("%s\n" % comment_id)
+    fnames.close()
     flikes.close()
     fcomments.close()
 
