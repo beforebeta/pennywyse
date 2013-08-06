@@ -25,6 +25,7 @@
     <link rel="stylesheet" href="/static/css/mq-32.css" media="screen and (min-width: 32.5em)" />
     <link rel="stylesheet" href="/static/css/mq-48.css" media="screen and (min-width: 48em)" />
     <link rel="stylesheet" href="/static/css/mq-67.css" media="screen and (min-width: 67.5em)" />
+    <link rel="stylesheet" href="/static/css/header.css">
 
     <!--[if (lt IE 9)&(!IEMobile)]>
     <link rel="stylesheet" href="/static/css/foundation-ie8.css">
@@ -53,54 +54,10 @@
 <div class="page home">
 
     <header role="banner" class="cf">
-
-        <div class="top-wrap">
-            <div class="row">
-                <div class="large-3 columns" style="line-height:2em;">
-                    <div class="logo">
-                        <a style="text-transform: none;" href="/">{{ WEBSITE_NAME }}</a><span style="font-style:normal;font-size:30px;">™</span>
-                    </div>
-                    <span style="text-transform: none;font-size:15px;font-style:italic;font-family:'Times New Roman'">Hand Verified Coupon Codes</span>
-                </div>
-                <form action="/search/" id="search_form">
-                    <div class="large-7 columns">
-                        <label class="search-box">
-                            <input name="q" type="text" class="input field primary" placeholder="Search over 50,000+ coupons from 6,000+ stores" style="background:none repeat scroll 0 0 #FFFFFF;" {% block search_query %}{% endblock %}>
-                            <a href="#" class="icon clear ir" id="clear-sb">Clear</a>
-                        </label>
-                    </div>
-                    <div class="large-2 columns">
-                        <input type="submit" class="input button primary green" value="Search">
-                    </div>
-                </form>
-
-            </div>
-        </div>
-
-        {% block header_block %}
-        {% endblock %}
-
-        {% if SHOW_NEWSLETTER_SUBSCRIPTION_BAR %}
-        <div class="newsletter-wrap stripe-white" id="subscribe_bar">
-            <div class="row" id="subscribe_bar_row">
-                <form action="#">
-                    <div class="large-7 columns">
-                        <h3>Subscribe Now and Be The First To Know About Exclusive Deals!</h3>
-                    </div>
-                    <!--<div class="small-4 large-3 columns">-->
-                        <!--<input type="text" class="input field primary" placeholder="Enter Your Name" id="subscribe_full_name">-->
-                    <!--</div>-->
-                    <div class="small-4 large-3 columns">
-                        <input type="text" class="input field primary" placeholder="Enter Your E-mail" id="subscribe_email">
-                    </div>
-                    <div class="small-3 large-2 columns">
-                        <input type="submit" class="input button primary blue" value="Subscribe" id="subscribe_button">
-                    </div>
-                </form>
-            </div>
-        </div>
-        {% endif %}
-
+      {% include 'layouts/_header.html' %}
+      {% block header_block %}
+      {% endblock %}
+      {% include 'layouts/_newsletter_subscription_bar.html' %}
     </header>
 
     {% block main %}
