@@ -32,7 +32,7 @@ DATABASES = {
         'PASSWORD': 'dbuser',                  # Not used with sqlite3.
         'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '8001',                      # Set to empty string for default. Not used with sqlite3.
-        'STORAGE_ENGINE': 'MyISAM'
+        'DEFAULT_STORAGE_ENGINE': 'MyISAM'
     }
 }
 

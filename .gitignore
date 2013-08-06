@@ -3,9 +3,6 @@ static/img/local/*.jpg
 *.pyc
 .DS_Store
 *.log
-./migrations
-core/migrations
-web/migrations
-websvcs/migrations
+**/migrations/*
 .pydevproject
 
