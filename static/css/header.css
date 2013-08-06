@@ -16,9 +16,14 @@ div.top-wrap {
   display: block;
   margin-left: auto;
   margin-right: auto;
+  width: 210px;
+}
+
+.top-wrap .catch-phrase span {
   width: 185px;
+  display: block;
   text-transform: none;
-  text-align: center;
+  text-align: left;
   font-size:15px;
   font-style:italic;
   font-family:'Times New Roman'
