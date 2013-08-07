@@ -6,7 +6,7 @@ from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 from django.template.defaultfilters import slugify
 from django.views.decorators.csrf import ensure_csrf_cookie
-from core.models import Coupon, Merchant
+from core.models import Category, Coupon, Merchant
 from core.util import encode_uri_component
 from web.models import FeaturedCoupon, NewCoupon, PopularCoupon, ShortenedURLComponent
 import math
@@ -122,3 +122,10 @@ def open_coupon(request, company_name, coupon_label, coupon_id):
 @ensure_csrf_cookie
 def privacy(request):
     return render_response("privacy.html", request, {})
+
+@ensure_csrf_cookie
+def categories(request):
+    context={
+        "categories"        : sorted(Category.objects.all(), key=lambda category: category.name)
+    }
+    return render_response("categories.html", request, context)

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block fbtags %}
+    <meta property="og:image" content="{{ BASE_URL_NO_APPENDED_SLASH }}{{ merchant.get_image }}"/>
+    <meta property="og:title" content="Hand Verified Coupon Codes for {{ merchant.name }} from PennyWyse"/>
+    <meta property="og:url" content="{{ CURRENT_URL }}"/>
+{% endblock %}
+
+{% block main %}
+<div role="main">
+  <section class="row category-index">
+    <ul class='categories-list rr'>
+      {% for category in categories %}
+        <li class='category'><a href='#'>{{ category.name }}</a></li>
+      {% endfor %}
+    </ul>
+  </section>
+</div>
+
+{% endblock %} {# main #}

@@ -1666,3 +1666,21 @@ h6 a:hover {
         width: 300px !important;
     }
 }
+
+ul.categories-list.rr {
+  list-style-type: none;
+  overflow: visible;
+  margin-left: 5px;
+}
+ul.categories-list.rr li.category {
+  display: inline-block;
+  margin: 5px;
+}
+ul.categories-list.rr li.category a {
+  display: block;
+  text-align: center;
+  height: 50px;
+  width: 225px;
+  padding-top: 12.5px;
+  background: #4da1e9;
+}
