@@ -161,11 +161,25 @@ li.input {
   width: 100%;
   cursor: pointer;
 }
-.input.button {  
+.input.button {
   color: #fff;
   font-weight: 700;
-  /*text-transform: uppercase;*/
   text-align: center;
+}
+.top-tab {
+  background: #8a8a8a;
+  font-size: 0.875em;
+  border: 0;
+  display: block;
+  color: #fff;
+  font-weight: 700;
+  text-align: center;
+  -webkit-border-top-left-radius: 3px;
+  -moz-border-top-left-radius: 3px;
+  border-top-left-radius: 3px;
+  -webkit-border-top-right-radius: 3px;
+  -moz-border-top-right-radius: 3px;
+  border-top-right-radius: 3px;
 }
 .input.field {
   /*font-weight: 300;*/
@@ -187,7 +201,7 @@ li.input {
 .input.field::-moz-placeholder {  Firefox 19+
    color: #000;
 }
-.input.field:-ms-input-placeholder {  
+.input.field:-ms-input-placeholder {
    color: #000;
 }
 .input.field,
@@ -238,11 +252,11 @@ li.input {
   opacity: 0.5;
   filter: alpha(opacity=50);
 }
-.input.primary { 
+.input.primary {
   height: 3.429em;
 }
 a.input.primary {
-  padding-top: 1em; 
+  padding-top: 1em;
 }
 a.input.primary.border {
   padding-top: 0.8em;
@@ -318,11 +332,11 @@ h1, h2, h3, h4, h5, h6 {
 .stripe-dark h4,
 .stripe-dark h5,
 .stripe-dark h6,
-.stripe-darker h1, 
-.stripe-darker h2, 
+.stripe-darker h1,
+.stripe-darker h2,
 .stripe-darker h3,
-.stripe-darker h4, 
-.stripe-darker h5, 
+.stripe-darker h4,
+.stripe-darker h5,
 .stripe-darker h6 {
   color: #fff;
 }
@@ -881,7 +895,7 @@ header[role="banner"] {
 .search-wrap {
   border-top-color: #fff;
   margin-top: 0;
-} 
+}
 .search-box {
   position: relative;
   display: block;
@@ -1004,7 +1018,7 @@ header[role="banner"] {
 
 /* days filter */
 
-.filter-days {  
+.filter-days {
   font-size: 0.813em;
   color: #7b7b7b;
   margin: 1.8em 0;
@@ -1050,7 +1064,7 @@ header[role="banner"] {
 
 
 
-/* checklist */ 
+/* checklist */
 
 .checklist {
   font-size: 0.813em;
