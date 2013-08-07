@@ -148,7 +148,8 @@ INSTALLED_APPS = (
     'core',
     'web',
     'websvcs',
-    'ads'
+    'ads',
+    'pipeline'
     )
 
 # A sample logging configuration. The only tangible logging
@@ -192,3 +193,16 @@ APPEND_SLASH=True
 SVCS_SECRET_KEY = "a59bbf62-d332-471b-b8d3-494a97065fa1"
 
 DEVELOPER_KEY = "00a1be63fcdf4cc39b9fa1c4c9e021ed990814ac740758b6eae34a9f71c27e8352950d4c5e37628f33690375a200ded9ffb2bcbe93e1f13a0525ea77c6fe52a719/4ac6543f61948191feb8b0db8b6ce4052d813140eaec8e9404c448f634ae7c530005b86783dad215c136a0f4fdf4ecf8d27390fda73847e7fba5c512b1b72849"
+
+
+# django-pipeline settings: http://django-pipeline.readthedocs.org/en/latest/installation.html
+STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+PIPELINE_COMPILERS = (
+  'pipeline.compilers.sass.SASSCompiler',
+)
+PIPLINE_CSS = { 
+    'static': {
+        'source_filenames': ('sass/*.scss'),
+        'output_filename': 'css/master.css'
+        }
+    }
