@@ -166,21 +166,6 @@ li.input {
   font-weight: 700;
   text-align: center;
 }
-.top-tab {
-  background: #8a8a8a;
-  font-size: 0.875em;
-  border: 0;
-  display: block;
-  color: #fff;
-  font-weight: 700;
-  text-align: center;
-  -webkit-border-top-left-radius: 3px;
-  -moz-border-top-left-radius: 3px;
-  border-top-left-radius: 3px;
-  -webkit-border-top-right-radius: 3px;
-  -moz-border-top-right-radius: 3px;
-  border-top-right-radius: 3px;
-}
 .input.field {
   /*font-weight: 300;*/
   color: #000;
@@ -231,10 +216,10 @@ li.input {
 .input.red:hover {
   background: #d84225;
 }
-.input.blue {
+.blue {
   background: #4da1e9;
 }
-.input.blue:hover {
+.blue:hover {
   background: #3c89cb;
 }
 .input.dark {
