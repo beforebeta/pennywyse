@@ -57,3 +57,9 @@ div.top-wrap {
   float: right;
   display: inline-block;
 }
+
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+  .top-wrap .row.browse {
+    margin-top: 10px;
+  }
+}
