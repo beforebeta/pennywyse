@@ -126,6 +126,6 @@ def privacy(request):
 @ensure_csrf_cookie
 def categories(request):
     context={
-        "categories"        : sorted(Category.objects.all(), key=lambda category: category.name)
+        "categories"        : sorted(Category.objects.filter(parent=None), key=lambda category: category.name)
     }
     return render_response("categories.html", request, context)

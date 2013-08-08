@@ -1675,12 +1675,68 @@ ul.categories-list.rr {
 ul.categories-list.rr li.category {
   display: inline-block;
   margin: 5px;
+  position: relative;
 }
-ul.categories-list.rr li.category a {
+ul.categories-list.rr li.category > a {
   display: block;
   text-align: center;
   height: 50px;
   width: 225px;
   padding-top: 12.5px;
-  background: #4da1e9;
+  background: #fff;
+  border: 1px solid #ccc;
+}
+ul.categories-list.rr li.category .subcategories {
+  display: none;
+  position: absolute;
+
+  width: 225px;
+  background: #fff;
+  top: 40px;
+  z-index: 100;
+
+  border: solid 1px #ccc;
+  border-top-style: none;
+  -webkit-border-bottom-left-radius: 3px;
+  -moz-border-bottom-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+  -webkit-border-bottom-right-radius: 3px;
+  -moz-border-bottom-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+  font-size: 0px;
+}
+ul.categories-list.rr li.category:hover .subcategories {
+  position: absolute;
+  display: block;
+  border-top: solid 1px #ccc;
+}
+
+ul.categories-list.rr li.category .subcategories .subcategory {
+  display: inline-block;
+  width: 111px;
+  height: 40px;
+  border-bottom: solid 1px #ccc;
+}
+ul.categories-list.rr li.category .subcategories .subcategory:nth-child(2n+1) {
+  border-right: solid 1px #ccc;
+}
+
+ul.categories-list.rr li.category .subcategories .subcategory a {
+  margin: 0px;
+  font-size: 12px;
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  height: 40px;
+  width: 110px;
+}
+
+.round3 {
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+
+div.centering {
+  display: table;
 }

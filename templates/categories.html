@@ -12,7 +12,18 @@
   <section class="row category-index">
     <ul class='categories-list rr'>
       {% for category in categories %}
-        <li class='category'><a href='#'>{{ category.name }}</a></li>
+        <li class='category'>
+          <a class='round3' href='#'>{{ category.name }}</a>
+            {% if category.category_set.all.exists %}
+              <div class='subcategories'>
+                {% for subcat in category.category_set.all %}
+                <div class='subcategory'><div class='centering'>
+                    <a href='#'>{{ subcat.name }}</a>
+                </div></div>
+                {% endfor %}
+              </div>
+            {% endif %}
+        </li>
       {% endfor %}
     </ul>
   </section>
