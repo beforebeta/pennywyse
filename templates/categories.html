@@ -18,7 +18,7 @@
       <ul class='categories-list rr'>
         {% for category in categories %}
           <li class='category'>
-            <a class='round3' href='#'>
+            <a class='round3' href='/categories/{{ category.code }}'>
               {{ category.name }}
             {% if category.category_set.all.exists %}
                 <span class='arrow-down'/>
@@ -26,7 +26,7 @@
               <div class='subcategories'>
                 {% for subcat in category.category_set.all %}
                 <div class='subcategory'><div class='centering'>
-                  <a href='#'>{{ subcat.name }}</a>
+                    <a href='/categories/{{ subcat.code }}'>{{ subcat.name }}</a>
                 </div></div>
                 {% endfor %}
               </div>

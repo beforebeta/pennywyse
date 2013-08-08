@@ -132,7 +132,6 @@ def open_coupon(request, company_name, coupon_label, coupon_id):
         "logo_url"      : logo_url,
         "back_url"      : back_url,
         "path"          : encode_uri_component("%s://%s%s" % ("http", "www.pennywyse.com", request.path))
-#        "path"          : encode_uri_component("%s://%s%s" % ("http", "www.pennywyse.com", "/"))
     }
     print context["path"]
     return render_response("open_coupon.html",request, context)
@@ -150,16 +149,17 @@ def categories(request):
     return render_response("categories.html", request, context)
 
 @ensure_csrf_cookie
-def category(request, category_name, current_page=1, category_ids=-1):
+def category(request, category_code, current_page=1, category_ids=-1):
     selected_cat_ids = category_ids
     if selected_cat_ids != -1:
         selected_cat_ids = ShortenedURLComponent.objects.get_original_url(selected_cat_ids)
     merchant=None
     current_page = int(current_page)
-    category = Category.objects.get(name=category_name)
+    category = Category.objects.get(code=category_code)
     selected_categories = ""
     if selected_cat_ids == -1:
-        selected_categories = ",".join(set([str(x["categories__id"]) for x in category.coupon_set.all().values("categories__id") if x["categories__id"]]))
+        all_categories = [str(x["categories__id"]) for x in category.coupon_set.all().values("categories__id") if x["categories__id"]]
+        selected_categories = ",".join(set(all_categories))
     else:
         selected_categories = selected_cat_ids
     comma_categories = selected_categories
