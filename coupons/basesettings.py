@@ -8,7 +8,7 @@ __author__ = 'amrish'
 
 FMTC_ACCESS_KEY = '43a787c3f5f2cf2f675cbf86aff6a33b'
 
-BASE_DIR = "/Users/amrish/Dropbox/workspace/coupons/"
+BASE_DIR = "/app/coupons/"
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -30,12 +30,14 @@ MANAGERS = ADMINS
 
 if os.environ.has_key('DATABASE_URL'):
   url = urlparse.urlparse(os.environ['DATABASE_URL'])
-  DATABASES['default'] = {
-    'NAME':     url.path[1:],
-    'USER':     url.username,
-    'PASSWORD': url.password,
-    'HOST':     url.hostname,
-    'PORT':     url.port,
+  DATABASES = {
+    'default': {
+      'NAME':     url.path[1:],
+      'USER':     url.username,
+      'PASSWORD': url.password,
+      'HOST':     url.hostname,
+      'PORT':     url.port,
+    }
   }
   if url.scheme == 'postgres':
     DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
