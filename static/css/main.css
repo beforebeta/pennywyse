@@ -1696,7 +1696,7 @@ ul.categories-list.rr li.category .subcategories {
 
   width: 225px;
   background: #fff;
-  top: 40px;
+  top: 45px;
   z-index: 100;
 
   border: solid 1px #ccc;
@@ -1717,20 +1717,22 @@ ul.categories-list.rr li.category:hover .subcategories {
 
 ul.categories-list.rr li.category .subcategories .subcategory {
   display: inline-block;
-  width: 111px;
+  width: 112px;
   height: 40px;
   border-bottom: solid 1px #ccc;
 }
 ul.categories-list.rr li.category .subcategories .subcategory:nth-child(2n+1) {
+  width: 111px;
   border-right: solid 1px #ccc;
 }
 
 ul.categories-list.rr li.category .subcategories .subcategory a {
   margin: 0px;
+  padding: 5px;
   font-size: 12px;
   display: table-cell;
   vertical-align: middle;
-  text-align: center;
+  text-align: left;
   height: 40px;
   width: 110px;
 }
