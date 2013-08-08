@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block header_block %}
+  <h1 class="text-center">Coupons For {{ category.name }}</h1>
+{% endblock %}  {# header_block #}
+
+{% block fbtags %}
+  <meta property="og:title" content="Hand Verified Coupon Codes for {{ categories.name }} from PennyWyse"/>
+  <meta property="og:url" content="{{ CURRENT_URL }}"/>
+{% endblock %}
+
+{% block main %}
+<div role="main">
+  <div class="stripe-regular" style="border-bottom: 2px solid #DDDDDD">
+    <section class="company-box">
+      <div class="row">
+        <div class="column">
+          <div class="wrapper-3 tertiary">
+            <div class="row collapse">
+              <div class="large-8 columns">
+                <div class="splitter-right">
+                  <div class="inner">
+                    <div class="row collapse">
+                      <div class="large-4 columns"> </div>
+                      <div class="large-8 columns">
+                        <div class="space-left">
+                          <h2 class="alt" style="font-size:2em;"><a href="/coupons/{{ category.name }}/">{{ category.name }}</a></h2>
+                          <div class="text-content">
+                            <p>{{ category.description }}
+                            {#                                      <!--{% for category in merchant.get_coupon_categories %}-->                                        <!--{{ category.name }} Coupons{% if forloop.last %}{% else %},{% endif %}--><!--{% endfor %}-->#}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="large-4 columns">
+                <div class="splitter-left">
+                  <div class="inner dark-bg">
+                    <div class="row">
+                      <div class="large-6 columns text-center">
+                        <h3>Total Coupons</h3>
+                      </div>
+                      <div class="large-6 columns">
+                        <div class="coupons-count">
+                          <p class="value primary">{{ num_coupons }}</p>
+                          <h4>coupons</h4>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div class="row">
+      <div class="large-9 columns">
+        <div class="coupons-wrapper">
+          <div class="row">
+            <div class="large-12 columns">
+              <h2>Coupons <span class="alt">by</span> <a href="/coupons/{{ merchant.name_slug }}/{{ merchant.id }}/">{{ merchant.name }}</a> <span>- {{ num_coupons }} of {{ total_coupon_count }} coupons</span></h2>
+            </div>
+          </div>
+          <ul class="rr items-landscape">
+            {% for coupon in coupons %}
+            <li class="wrapper-3">
+              <div class="row">
+                <div class="large-4 small-12 columns">
+                  <figure>
+                      <img src="{{ coupon.get_image }}" alt="" style="display:normal;max-height: 110px;">
+                  </figure>
+                </div>
+                <div class="large-5 small-8 columns">
+                  <div class="col-middle">
+                    <h2 class="alt"><a target="_blank" href="/coupon/{{ coupon.merchant.name_slug }}/{{ coupon.desc_slug }}/{{ coupon.id }}/">{{ coupon.description }}</a></h2>
+                    <p class="text secondary">
+                      {{ coupon.merchant.name }}: {{ coupon.description }}
+                        {% if coupon.end %}
+                        <br /><br />Offer ends: {{ coupon.end|naturalday }}
+                        {% endif %}
+                    </p>
+                  </div>
+                </div>
+                <div class="large-3 small-4 columns">
+                  <div class="col-right">
+                    <p class="value secondary">{{ coupon.short_desc }}</p>
+                    <h6>&nbsp;</h6>
+                    <a target="_blank" href="/coupon/{{ coupon.merchant.name_slug }}/{{ coupon.desc_slug }}/{{ coupon.id }}/" class="input button green secondary responsive">Use Coupon</a>
+                  </div>
+                </div>
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <ul class="rr pagination">
+          {% for page in pages %}
+              <li style="width: 55px;text-align: center;" {% if current_page = page %}class="current"{% endif %}>
+                  <a style="padding:10px 0px;" href="/coupons/{{ merchant.name_slug }}/{{ merchant.id }}/page/{{ page }}/{% if comma_categories %}categories/{{ comma_categories }}/{% endif %}">{{ page }}</a>
+              </li>
+          {% endfor %}
+        </ul>
+
+      </div>
+
+      <aside class="large-3 columns main-sidebar bg">
+
+          <div class="wrapper-3 secondary block">
+              <h2 class="alt inner">Filter Coupons</h2>
+
+              <h5 class="inner">Categories &nbsp;(<a id="clear_categories" href="">clear</a>)</h5>
+
+              <ul class="rr inner checklist">
+                  <form method="POST" action="/coupons/{{ merchant.name_slug }}/{{ merchant.id }}/page/1/" id="filter_form">
+                      {% csrf_token %}
+                      {% for category in coupon_categories %}
+                      <li class="cf">
+                              <label>
+                                  <span class="checkbox"><input name="{{ category.category.id}}" type="checkbox" {% if category.active %}checked="checked"{% endif %}></span>
+                                  <span>{{ category.category.name }}</span>
+                              </label>
+                              {#<!--<p class="rr count-bullet">56</p>-->#}
+                      </li>
+                      {% endfor %}
+                  </form>
+              </ul>
+          </div>
+      </aside>
+    </div>
+  </div>
+</div>
+
+{% endblock %} {# main #}
+
+{% block end_of_body %}
+<script type="text/javascript">
+    try{
+        mixpanel.track("Company", {
+            "company" : "{{ merchant.name_slug }}",
+            "id"      : "{{ merchant.id }}"
+        });
+    }catch(e){}
+</script>
+{% endblock %}

@@ -148,3 +148,56 @@ def categories(request):
     }
     set_active_tab('category', context)
     return render_response("categories.html", request, context)
+
+@ensure_csrf_cookie
+def category(request, category_name, current_page=1, category_ids=-1):
+    selected_cat_ids = category_ids
+    if selected_cat_ids != -1:
+        selected_cat_ids = ShortenedURLComponent.objects.get_original_url(selected_cat_ids)
+    merchant=None
+    current_page = int(current_page)
+    category = Category.objects.get(name=category_name)
+    selected_categories = ""
+    if selected_cat_ids == -1:
+        selected_categories = ",".join(set([str(x["categories__id"]) for x in category.coupon_set.all().values("categories__id") if x["categories__id"]]))
+    else:
+        selected_categories = selected_cat_ids
+    comma_categories = selected_categories
+    try:
+        selected_categories=[int(s) for s in selected_categories.split(",") if s]
+    except:
+        selected_categories=[]
+    all_categories = category.get_coupon_categories()
+    coupon_categories = []
+    for coup_cat in all_categories:
+        coupon_categories.append({
+            "category"  : coup_cat,
+            "active"    : _search(coup_cat.id, selected_categories, lambda a,b:a==b)
+        })
+
+    pages = Paginator(
+                        list(
+                                set(
+                                    category.get_coupons().filter(
+                                        Q(categories__id__in=selected_categories) |
+                                        Q(categories__id__isnull=True)
+                                    )
+                                )
+                        ), 10)
+    if current_page > pages.num_pages:
+        current_page=pages.num_pages
+    context={
+        "category"              : category,
+        "pages"                 : range(1, pages.num_pages+1),
+        "current_page"          : int(current_page),
+        "coupons"               : pages.page(current_page).object_list,
+        "num_coupons"           : pages.count,
+        "total_coupon_count"    : category.get_coupon_count(),
+        "coupon_categories"     : coupon_categories
+    }
+    set_active_tab('category', context)
+
+    if len(all_categories) != len(selected_categories):
+        context["comma_categories"] = ShortenedURLComponent.objects.shorten_url_component(comma_categories).shortened_url
+
+    return render_response("category.html", request, context)
