@@ -8,7 +8,8 @@ __author__ = 'amrish'
 
 FMTC_ACCESS_KEY = '43a787c3f5f2cf2f675cbf86aff6a33b'
 
-BASE_DIR = "/app/coupons/"
+#BASE_DIR = "/app/coupons/"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -41,8 +42,9 @@ if os.environ.has_key('DATABASE_URL'):
   }
   if url.scheme == 'postgres':
     DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
-  if url.scheme == 'mysql':
+  if url.scheme == 'mysql2':
     DATABASES['default']['ENGINE'] = 'django.db.backends.mysql'
+    DATABASES['default']['DEFAULT_STORAGE_ENGINE'] = 'MyISAM'
 else:
   DATABASES = {
       'default': {
@@ -50,12 +52,20 @@ else:
           'NAME': 'coupons',                      # Or path to database file if using sqlite3.
           'USER': 'dbuser',                      # Not used with sqlite3.
           'PASSWORD': 'dbuser',                  # Not used with sqlite3.
-          'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
-          'PORT': '8001',                      # Set to empty string for default. Not used with sqlite3.
+          'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+          'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
           'DEFAULT_STORAGE_ENGINE': 'MyISAM'
       }
   }
+  # DATABASES = {
+  #     'default': {
+  #         'ENGINE': 'django.db.backends.sqlite3',
+  #         'NAME': 'coupons',
+  #     }
+  # }
 
+SOUTH_DATABASE_ADAPTERS = {'default':'django.db.backends.mysql'}
+#SOUTH_DATABASE_ADAPTERS = {'default':'django.db.backends.sqlite3'}
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -167,7 +177,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'django.contrib.humanize',
-    'south',
+    #'south',
     'core',
     'web',
     'websvcs',

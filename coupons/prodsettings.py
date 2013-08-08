@@ -4,7 +4,7 @@ DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 ALLOWED_HOSTS = ["pennywyse.com","www.pennywyse.com"]
 
-BASE_DIR = "/root/public_html/pennywyse/"
+BASE_DIR = "/app/"
 BASE_URL_NO_APPENDED_SLASH = "http://pennywyse.com"
 SVCS_HOST = "http://pennywyse.com"
 
@@ -18,7 +18,7 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
     )
 
-IMAGE_LOCAL_COPY_DIR = '/root/public_html/pennywyse/static/img/local/'
+IMAGE_LOCAL_COPY_DIR = '/app/static/img/local/'
 
 try: os.makedirs(IMAGE_LOCAL_COPY_DIR)
 except: pass
