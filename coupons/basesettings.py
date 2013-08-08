@@ -1,5 +1,9 @@
 import os
 
+import sys, urlparse
+urlparse.uses_netloc.append('postgres')
+urlparse.uses_netloc.append('mysql')
+
 __author__ = 'amrish'
 
 FMTC_ACCESS_KEY = '43a787c3f5f2cf2f675cbf86aff6a33b'
@@ -17,24 +21,39 @@ try: os.makedirs(IMAGE_LOCAL_COPY_DIR)
 except: pass
 
 ADMINS = (
-# ('Your Name', 'your_email@example.com'),
+  ('Jacob Friis Saxberg', 'jacob@webcom.dk'),
 )
 
 WEBSITE_NAME = 'PennyWyse'
 
 MANAGERS = ADMINS
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'coupons',                      # Or path to database file if using sqlite3.
-        'USER': 'dbuser',                      # Not used with sqlite3.
-        'PASSWORD': 'dbuser',                  # Not used with sqlite3.
-        'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '8001',                      # Set to empty string for default. Not used with sqlite3.
-        'DEFAULT_STORAGE_ENGINE': 'MyISAM'
-    }
-}
+if os.environ.has_key('DATABASE_URL'):
+  url = urlparse.urlparse(os.environ['DATABASE_URL'])
+  DATABASES['default'] = {
+    'NAME':     url.path[1:],
+    'USER':     url.username,
+    'PASSWORD': url.password,
+    'HOST':     url.hostname,
+    'PORT':     url.port,
+  }
+  if url.scheme == 'postgres':
+    DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
+  if url.scheme == 'mysql':
+    DATABASES['default']['ENGINE'] = 'django.db.backends.mysql'
+else:
+  DATABASES = {
+      'default': {
+          'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+          'NAME': 'coupons',                      # Or path to database file if using sqlite3.
+          'USER': 'dbuser',                      # Not used with sqlite3.
+          'PASSWORD': 'dbuser',                  # Not used with sqlite3.
+          'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
+          'PORT': '8001',                      # Set to empty string for default. Not used with sqlite3.
+          'DEFAULT_STORAGE_ENGINE': 'MyISAM'
+      }
+  }
+
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
