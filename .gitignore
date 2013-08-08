@@ -1,7 +1,8 @@
-static/img/local/*.jpg
+#static/img/local/*.jpg
 *.jpeg
 *.pyc
 .DS_Store
 *.log
 .pydevproject
 
+static
