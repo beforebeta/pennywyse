@@ -1,5 +1,6 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
+
 admin.autodiscover()
 
 # Uncomment the next two lines to enable the admin:
@@ -56,6 +57,10 @@ urlpatterns += patterns('web.views.email',
     url(r'^emailB$', 'email_b'),
     url(r'^emailC$', 'email_c'),
     url(r'^emailD$', 'email_d')
+)
+
+urlpatterns += patterns('django.contrib.staticfiles.views',
+    url(r'^static/(?P<path>.*)$', 'serve'),
 )
 
 handler404 = 'web.views.main.index'

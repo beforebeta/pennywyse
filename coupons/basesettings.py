@@ -110,7 +110,8 @@ STATIC_ROOT = 'img'
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
-STATIC_URL = '/static/'
+#STATIC_URL = '/static/'
+STATIC_URL = 'http://d2nixvjj44pjq8.cloudfront.net/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
