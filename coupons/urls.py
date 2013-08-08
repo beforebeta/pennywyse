@@ -60,7 +60,8 @@ urlpatterns += patterns('web.views.email',
 )
 
 urlpatterns += patterns('django.contrib.staticfiles.views',
-    url(r'^static/(?P<path>.*)$', 'serve'),
+    #url(r'^static/(?P<path>.*)$', 'serve'),
+    url(r'^(?P<path>.*)$', 'serve'),
 )
 
 handler404 = 'web.views.main.index'

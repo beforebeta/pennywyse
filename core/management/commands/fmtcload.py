@@ -37,7 +37,7 @@ def refresh_deal_types():
     section("Loading Deal Types")
     data = requests.get("http://services.formetocoupon.com/getTypes?key=%s" % settings.FMTC_ACCESS_KEY)
     content = data.content
-    open("Deal_Types_Content_%s" % datetime.datetime.now().strftime('%b-%d-%I%M%p-%G'), "w").write(content)
+    open(settings.DATA_DIR + "/Deal_Types_Content_%s" % datetime.datetime.now().strftime('%b-%d-%I%M%p-%G'), "w").write(content)
     data = BeautifulStoneSoup(content)
     for type in data.findAll("type"):
         code = type.filter.text
@@ -52,7 +52,7 @@ def refresh_categories():
     section("Loading Categories")
     data = requests.get("http://services.formetocoupon.com/getCategories?key=%s" % settings.FMTC_ACCESS_KEY)
     content = data.content
-    open("Categories_Content_%s" % datetime.datetime.now().strftime('%b-%d-%I%M%p-%G'), "w").write(content)
+    open(settings.DATA_DIR + "/Categories_Content_%s" % datetime.datetime.now().strftime('%b-%d-%I%M%p-%G'), "w").write(content)
     data = BeautifulStoneSoup(content)
     for cat in data.findAll("category"):
         ref_id = cat.find("id").text
@@ -79,7 +79,7 @@ def refresh_merchants():
     section("Loading Merchants")
     data = requests.get("http://services.formetocoupon.com/getMerchants?key=%s" % settings.FMTC_ACCESS_KEY)
     content = data.content
-    open("Merchants_Content_%s" % datetime.datetime.now().strftime('%b-%d-%I%M%p-%G'), "w").write(content)
+    open(settings.DATA_DIR + "/Merchants_Content_%s" % datetime.datetime.now().strftime('%b-%d-%I%M%p-%G'), "w").write(content)
     data = BeautifulStoneSoup(content)
     for merchant in data.findAll("merchant"):
         try:
@@ -114,7 +114,7 @@ def refresh_deals():
     section("Loading Deals/Coupons")
     data = requests.get("http://services.formetocoupon.com/getDeals?key=%s" % settings.FMTC_ACCESS_KEY)
     content = data.content
-    open("Deals_Content_%s" % datetime.datetime.now().strftime('%b-%d-%I%M%p-%G'), "w").write(content)
+    open(settings.DATA_DIR + "/Deals_Content_%s" % datetime.datetime.now().strftime('%b-%d-%I%M%p-%G'), "w").write(content)
     data = BeautifulStoneSoup(content)
     for deal in data.findAll("item"):
         try:
@@ -183,27 +183,22 @@ def refresh_deals():
 
 def setup_web_coupons():
     section("Setup Web Coupons")
-    try:
-        if FeaturedCoupon.objects.all().count()<=0:
+    if FeaturedCoupon.objects.all().count()<=0:
+        try:
             FeaturedCoupon(coupon=Merchant.objects.get(name="best buy").get_top_coupon()).save()
             FeaturedCoupon(coupon=Merchant.objects.get(name="sears").get_top_coupon()).save()
             FeaturedCoupon(coupon=Merchant.objects.get(name="target").get_top_coupon()).save()
-    except:
-        print_stack_trace()
+        except:
+            #print_stack_trace()
+            pass
 
-    try:
-        if NewCoupon.objects.all().count()<=0:
-            for coupon in Coupon.objects.get_new_coupons(8):
-                NewCoupon(coupon=coupon).save()
-    except:
-        print_stack_trace()
+    if NewCoupon.objects.all().count()<=0:
+        for coupon in Coupon.objects.get_new_coupons(8):
+            NewCoupon(coupon=coupon).save()
 
-    try:
-        if PopularCoupon.objects.all().count()<=0:
-            for coupon in Coupon.objects.get_popular_coupons(8):
-                PopularCoupon(coupon=coupon).save()
-    except:
-        print_stack_trace()
+    if PopularCoupon.objects.all().count()<=0:
+        for coupon in Coupon.objects.get_popular_coupons(8):
+            PopularCoupon(coupon=coupon).save()
 
 def refresh_calculated_fields():
     section("Refresh Calculated Fields")

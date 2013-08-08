@@ -8,21 +8,28 @@ __author__ = 'amrish'
 
 FMTC_ACCESS_KEY = '43a787c3f5f2cf2f675cbf86aff6a33b'
 
-#BASE_DIR = "/app/coupons/"
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+DATA_DIR = os.path.join(BASE_DIR, 'data')
+if not os.path.exists(DATA_DIR):
+    os.makedirs(DATA_DIR)
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-IMAGE_LOCAL_COPY_DIR_NO_PREFIX = 'static/img/local/'
-IMAGE_LOCAL_COPY_DIR = 'static/img/local/'
+RAVEN_CONFIG = {
+    'dsn': 'https://3068bc36ec7d4272ad85e90f19e57362:4d3431bd6ed241b382ace93a1b4a4050@app.getsentry.com/11687',
+}
 
-BASE_URL_NO_APPENDED_SLASH = "http://localhost:8002"
-try: os.makedirs(IMAGE_LOCAL_COPY_DIR)
-except: pass
+BASE_URL_NO_APPENDED_SLASH = ""
+
+IMAGE_LOCAL_COPY_DIR_NO_PREFIX = 'static/img/local/'
+IMAGE_LOCAL_COPY_DIR = BASE_DIR + '/' + IMAGE_LOCAL_COPY_DIR_NO_PREFIX
+if not os.path.exists(IMAGE_LOCAL_COPY_DIR):
+    os.makedirs(IMAGE_LOCAL_COPY_DIR)
 
 ADMINS = (
-  ('Jacob Friis Saxberg', 'jacob@webcom.dk'),
+    ('Jacob Friis Saxberg', 'jacob@webcom.dk'),
 )
 
 WEBSITE_NAME = 'PennyWyse'
@@ -106,25 +113,27 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = 'img'
+STATIC_ROOT = '/static/'
+#STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR, os.pardir)) + '/static/'
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
 #STATIC_URL = '/static/'
-STATIC_URL = 'http://d2nixvjj44pjq8.cloudfront.net/'
+#STATIC_URL = 'http://d2nixvjj44pjq8.cloudfront.net/'
+STATIC_URL = '/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    "./static/",
-    )
+    BASE_DIR + "/static/",
+)
 
 # List of finder classes that know how to find static files in
 # various locations.
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
-    )
+    #'django.contrib.staticfiles.finders.DefaultStorageFinder',
+)
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '*-2y8lnpbs9h#$#2o21kr3u7rlld&amp;i+x+5wwsuy3wkmi6ig(9#'
@@ -138,8 +147,9 @@ TEMPLATE_LOADERS = (
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     "web.context_processors.base",
-    "django.contrib.auth.context_processors.auth"
-    )
+    "django.contrib.auth.context_processors.auth",
+    #'django.core.context_processors.static',
+)
 
 #PREPEND_WWW=True
 
@@ -155,7 +165,10 @@ MIDDLEWARE_CLASSES = (
     'tracking.middleware.BannedIPMiddleware'
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     )
+
+INTERNAL_IPS = ('127.0.0.1',)
 
 ROOT_URLCONF = 'coupons.urls'
 
@@ -184,6 +197,9 @@ INSTALLED_APPS = (
     'websvcs',
     'ads',
     'tracking'
+    'raven.contrib.django.raven_compat',
+    #'django_pdb',
+    'debug_toolbar',
     )
 
 # A sample logging configuration. The only tangible logging
@@ -234,3 +250,7 @@ SKIMLINKS_REPORTING_PUBLIC_KEY = "067eada877c2bbc1698a04bdc0c19c0a"
 SVCS_SECRET_KEY = "a59bbf62-d332-471b-b8d3-494a97065fa1"
 
 DEVELOPER_KEY = "00a1be63fcdf4cc39b9fa1c4c9e021ed990814ac740758b6eae34a9f71c27e8352950d4c5e37628f33690375a200ded9ffb2bcbe93e1f13a0525ea77c6fe52a719/4ac6543f61948191feb8b0db8b6ce4052d813140eaec8e9404c448f634ae7c530005b86783dad215c136a0f4fdf4ecf8d27390fda73847e7fba5c512b1b72849"
+
+
+# import warnings
+# warnings.filterwarnings('error', r"DateTimeField received a naive datetime", RuntimeWarning, r'django\.db\.models\.fields')
