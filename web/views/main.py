@@ -14,10 +14,27 @@ from django.core.paginator import Paginator
 
 def build_base_context(request, context):
     context["pop_companies"] = Merchant.objects.get_popular_companies(21)
+    context["coupons_path"] = "/"
+    context["categories_path"] = "/categories"
+    context["companies_path"] = "/companies"
 
 def render_response(template_file, request, context={}):
     build_base_context(request, context)
     return render_to_response(template_file, context, context_instance=RequestContext(request))
+
+def set_active_tab(active_tab, context):
+    if active_tab == "category":
+      context['category_tab_class'] = 'active'
+      context['company_tab_class'] = ''
+      context['coupon_tab_class'] = ''
+    elif active_tab == "company":
+      context['company_tab_class'] = 'active'
+      context['category_tab_class'] = ''
+      context['coupon_tab_class'] = ''
+    else:
+      context['coupon_tab_class'] = 'active'
+      context['company_tab_class'] = ''
+      context['category_tab_class'] = ''
 
 @ensure_csrf_cookie
 def index(request):
@@ -26,6 +43,7 @@ def index(request):
     random.shuffle(context["featured_coupons"])
     context["new_coupons"] = [Coupon.objects.get(id=nc.coupon_id) for nc in NewCoupon.objects.all().order_by("-date_added")[:8]]
     context["pop_coupons"] = [Coupon.objects.get(id=pc.coupon_id) for pc in PopularCoupon.objects.all().order_by("-date_added")[:8]]
+    set_active_tab('coupon', context)
     return render_response("index.html", request, context)
 
 def _search(itm,lst,f):
@@ -128,4 +146,5 @@ def categories(request):
     context={
         "categories"        : sorted(Category.objects.filter(parent=None), key=lambda category: category.name)
     }
+    set_active_tab('category', context)
     return render_response("categories.html", request, context)

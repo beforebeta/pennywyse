@@ -21,14 +21,14 @@
   <div class="row browse">
     <div class="float-left">
       <ul>
-        <li><a class='top-tab blue active'>Coupon Codes</a></li>
+        <li><a class='top-tab blue {{coupon_tab_class}}' href="{{ coupons_path }}">Coupon Codes</a></li>
       </ul>
     </div>
     <div class="float-right">
       <span> Browse by: </span>
       <ul>
-        <li><a class='top-tab blue'>Category</a></li>
-        <li><a class='top-tab blue'>Company</a></li>
+        <li><a class='top-tab blue {{category_tab_class}}' href="{{ categories_path }}">Category</a></li>
+        <li><a class='top-tab blue {{company_tab_class}}'>Company</a></li>
       </ul>
     </div>
   </div>
