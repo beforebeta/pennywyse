@@ -1689,6 +1689,10 @@ ul.categories-list.rr li.category > a {
 ul.categories-list.rr li.category > a:hover {
   background: #ccc;
 }
+ul.categories-list.rr li.category > a span.expansion-hint {
+  color: #ccc;
+  padding-top: 12.5px;
+}
 
 ul.categories-list.rr li.category .subcategories {
   display: none;
@@ -1749,4 +1753,14 @@ ul.categories-list.rr li.category .subcategories .subcategory:hover {
 
 div.centering {
   display: table;
+}
+
+span.arrow-down {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid #ccc;
+  display: inline-block;
+  vertical-align: middle;
 }
