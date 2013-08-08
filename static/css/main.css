@@ -1686,6 +1686,10 @@ ul.categories-list.rr li.category > a {
   background: #fff;
   border: 1px solid #ccc;
 }
+ul.categories-list.rr li.category > a:hover {
+  background: #ccc;
+}
+
 ul.categories-list.rr li.category .subcategories {
   display: none;
   position: absolute;
@@ -1729,6 +1733,10 @@ ul.categories-list.rr li.category .subcategories .subcategory a {
   text-align: center;
   height: 40px;
   width: 110px;
+}
+
+ul.categories-list.rr li.category .subcategories .subcategory:hover {
+  background: #ccc;
 }
 
 .round3 {
