@@ -20,7 +20,7 @@ def get_directed_image(model):
         return settings.DEFAULT_IMAGE
 
 def get_description(model):
-    return '' #hack for speed
+    #return '' #hack for speed
     if not model.directlink:
         if model.name:
             return model.name
