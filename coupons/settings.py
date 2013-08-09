@@ -53,23 +53,23 @@ if os.environ.has_key('DATABASE_URL'):
     DATABASES['default']['ENGINE'] = 'django.db.backends.mysql'
     DATABASES['default']['DEFAULT_STORAGE_ENGINE'] = 'MyISAM'
 else:
-  DATABASES = {
-      'default': {
-          'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-          'NAME': 'coupons',                      # Or path to database file if using sqlite3.
-          'USER': 'dbuser',                      # Not used with sqlite3.
-          'PASSWORD': 'dbuser',                  # Not used with sqlite3.
-          'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-          'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-          'DEFAULT_STORAGE_ENGINE': 'MyISAM'
-      }
-  }
   # DATABASES = {
   #     'default': {
-  #         'ENGINE': 'django.db.backends.sqlite3',
-  #         'NAME': 'coupons',
+  #         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+  #         'NAME': 'coupons',                      # Or path to database file if using sqlite3.
+  #         'USER': 'dbuser',                      # Not used with sqlite3.
+  #         'PASSWORD': 'dbuser',                  # Not used with sqlite3.
+  #         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+  #         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+  #         'DEFAULT_STORAGE_ENGINE': 'MyISAM'
   #     }
   # }
+  DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(DATA_DIR, 'penny.db')
+    }
+  }
 
 #SOUTH_DATABASE_ADAPTERS = {'default':'django.db.backends.mysql'}
 #SOUTH_DATABASE_ADAPTERS = {'default':'django.db.backends.sqlite3'}
