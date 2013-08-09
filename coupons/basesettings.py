@@ -119,6 +119,8 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'tracking.middleware.VisitorTrackingMiddleware',
+    'tracking.middleware.BannedIPMiddleware'
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
     )
@@ -148,7 +150,8 @@ INSTALLED_APPS = (
     'core',
     'web',
     'websvcs',
-    'ads'
+    'ads',
+    'tracking'
     )
 
 # A sample logging configuration. The only tangible logging
@@ -184,6 +187,13 @@ DEFAULT_IMAGE = "http://pennywyse.com/static/img/favicon.png"
 
 APP_NAME = "COUPONS_APP"
 APPEND_SLASH=True
+
+########################################################################
+# Tracking
+
+#Skimlinks Reporting API Keys'
+SKIMLINKS_REPORTING_PRIVATE_KEY = "e7d0c5228bbf4ca56864188e780b2b6d"
+SKIMLINKS_REPORTING_PUBLIC_KEY = "067eada877c2bbc1698a04bdc0c19c0a"
 
 ################
 #   WEBSVCS

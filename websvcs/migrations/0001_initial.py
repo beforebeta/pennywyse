@@ -16,7 +16,7 @@ class Migration(SchemaMigration):
             ('source_user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], blank=True)),
             ('width', self.gf('django.db.models.fields.IntegerField')(default=-1)),
             ('height', self.gf('django.db.models.fields.IntegerField')(default=-1)),
-            ('date_added', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 8, 6, 0, 0), auto_now_add=True, blank=True)),
+            ('date_added', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 8, 7, 0, 0), auto_now_add=True, blank=True)),
             ('last_modified', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, auto_now_add=True, blank=True)),
         ))
         db.send_create_signal(u'websvcs', ['ImageStore'])
@@ -39,7 +39,7 @@ class Migration(SchemaMigration):
             ('last_name', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
             ('full_name', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
             ('context', self.gf('picklefield.fields.PickledObjectField')(default={})),
-            ('date_added', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 8, 6, 0, 0), auto_now_add=True, blank=True)),
+            ('date_added', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 8, 7, 0, 0), auto_now_add=True, blank=True)),
             ('last_modified', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, auto_now_add=True, blank=True)),
         ))
         db.send_create_signal(u'websvcs', ['EmailSubscription'])
@@ -97,7 +97,7 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'EmailSubscription'},
             'app': ('django.db.models.fields.CharField', [], {'max_length': '255', 'db_index': 'True'}),
             'context': ('picklefield.fields.PickledObjectField', [], {'default': '{}'}),
-            'date_added': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 8, 6, 0, 0)', 'auto_now_add': 'True', 'blank': 'True'}),
+            'date_added': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 8, 7, 0, 0)', 'auto_now_add': 'True', 'blank': 'True'}),
             'email': ('django.db.models.fields.CharField', [], {'max_length': '255', 'db_index': 'True'}),
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'full_name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
@@ -108,7 +108,7 @@ class Migration(SchemaMigration):
         },
         u'websvcs.imagestore': {
             'Meta': {'object_name': 'ImageStore'},
-            'date_added': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 8, 6, 0, 0)', 'auto_now_add': 'True', 'blank': 'True'}),
+            'date_added': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 8, 7, 0, 0)', 'auto_now_add': 'True', 'blank': 'True'}),
             'height': ('django.db.models.fields.IntegerField', [], {'default': '-1'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'last_modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'auto_now_add': 'True', 'blank': 'True'}),
