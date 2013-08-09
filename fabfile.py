@@ -1,21 +1,16 @@
 from fabric.api import *
 
-def dev():
-    config.fab_hosts = ['pennywyse.local']
-    config.target_dir = '/Users/jacob/Sites/pennywyse'
-    config.target = 'dev'
-    config.migrate_db = True
+def run_dev():
+    with shell_env(DJANGO_SETTINGS_MODULE='coupons.settings_dev'):
+        local('python manage.py runserver')
 
-def production():
-    config.fab_hosts = ['pennywyse.com']
-    config.target_dir = '/home/sam/'
-    config.target = 'pro'
-    config.migrate_db = True
+def run_staging():
+    with shell_env(DJANGO_SETTINGS_MODULE='coupons.settings_staging'):
+        local('gunicorn coupons.wsgi')
 
+def run_pro():
+    with shell_env(DJANGO_SETTINGS_MODULE='coupons.settings_pro'):
+        local('python manage.py runserver')
 
-@task
-def start():
-    #with prefix('workon pw1'):
-    local('gunicorn wsgi')
-
-#def deploy():
+def deploy_staging():
+    local('git push heroku staging:master')
