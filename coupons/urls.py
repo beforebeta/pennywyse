@@ -67,7 +67,7 @@ urlpatterns += patterns('django.contrib.staticfiles.views',
 # (r'^site_media/(?P<path>.*)$', 'django.views.static.serve',
 #         {'document_root': '/path/to/media'}),
 
-handler404 = 'web.views.main.index'
+#handler404 = 'web.views.main.index'
 
 ########################################################################################
 # WebSvcs
