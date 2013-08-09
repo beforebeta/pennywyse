@@ -60,8 +60,8 @@ urlpatterns += patterns('web.views.email',
 )
 
 urlpatterns += patterns('django.contrib.staticfiles.views',
-    #url(r'^static/(?P<path>.*)$', 'serve'),
-    url(r'^(?P<path>.*)$', 'serve'),
+    url(r'^static/(?P<path>.*)$', 'serve'),
+    #url(r'^(?P<path>.*)$', 'serve'),
 )
 
 # (r'^site_media/(?P<path>.*)$', 'django.views.static.serve',

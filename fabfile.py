@@ -15,7 +15,7 @@ def production():
 
 @task
 def start():
-    with prefix('source ../pennyenv/bin/activate'):
-        local('gunicorn wsgi')
+    #with prefix('workon pw1'):
+    local('gunicorn wsgi')
 
 #def deploy():
