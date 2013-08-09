@@ -1,0 +1,170 @@
+/*html body*/
+/*{*/
+/*width:100%;*/
+/*height:100%;*/
+/*padding:0;*/
+/*margin:0;*/
+/*overflow:hidden;*/
+/*font-family:arial;*/
+/*font-size:10px;*/
+/*color:#FFFFFF;*/
+/*background-color:#446CB3;*/
+/*border-bottom:1px solid #304C8E;*/
+/*}*/
+
+#header-bar {
+    background-color: #446CB3;
+
+    border-bottom: 1px solid #304C8E;
+    /*height:60px;*/
+    z-index: 100;
+    /*line-height:60px;*/
+    margin-bottom: 1px;
+}
+
+.logo {
+    font-size: 1.4em;
+    font-weight: 700;
+    text-align: center;
+    text-transform: uppercase;
+    line-height: 60px;
+    margin-top: 5px;
+}
+
+.logo a {
+    text-decoration: none;
+    color: #FFFFFF;
+}
+
+#header-bar a.site-loopback {
+    display: block;
+    margin-top: 1px;
+    margin-left: 10px;
+    /*float:left;*/
+    background-repeat: no-repeat;
+    background-position: left top;
+    font-size: 2em;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #FFFFFF;
+    /*text-indent:-9999px;*/
+    padding-right: 10px;
+    border-right: 1px solid #FFFFFF;
+}
+
+/*#header-bar .a3docean-preview-logo*/
+/*{*/
+/*background-image:url(http://2.envato-static.com/assets/fullscreen_preview/3docean-purchasethis-038eab829edfb0f37282f2bd74280aef.png);*/
+/*width:270px;*/
+/*height:52px;*/
+/*}*/
+
+/*#header-bar .aactiveden-preview-logo*/
+/*{*/
+/*background-image:url(http://1.envato-static.com/assets/fullscreen_preview/activeden-purchasethis-8a9ef10c2afc74e782dbcef56db69ff2.png);*/
+/*width:270px;*/
+/*height:52px;*/
+/*}*/
+
+/*#header-bar .athemeforest-preview-logo*/
+/*{*/
+/*background-image:url(http://3.envato-static.com/assets/fullscreen_preview/themeforest-purchasethis-71f56a79736ebb0f4a4d6b7dacb7cf80.png);*/
+/*width:270px;*/
+/*height:52px;*/
+/*}*/
+
+/*#header-bar .acodecanyon-preview-logo*/
+/*{*/
+/*background-image:url(http://3.envato-static.com/assets/fullscreen_preview/codecanyon-purchasethis-e27e216cc66d123a96bbe5f51470259f.png);*/
+/*width:270px;*/
+/*height:52px;*/
+/*}*/
+
+/*#header-bar .atutsmarketplace-preview-logo*/
+/*{*/
+/*background-image:url(http://3.envato-static.com/assets/fullscreen_preview/tutsmarketplace-purchasethis-7b74f3394533b1df632e458192b03cab.png);*/
+/*width:270px;*/
+/*height:52px;*/
+/*}*/
+
+div.coupon-data-container {
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    border: 1px dashed #FFFFFF;
+    min-height: 30px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#header-bar p.coupon-data {
+    /*float:left;*/
+    font-size: 0.9em;
+    display: inline;
+    line-height: 25px;
+    /*padding-left: 10px;*/
+    color: #FFFFFF;
+    /*padding-right: 10px;*/
+}
+
+#header-bar p.coupon-data span.tag {
+    background-color: #1ABC9C;
+    border-radius: 4px 4px 4px 4px;
+    color: #FFFFFF;
+    padding: 5px;
+    font-size: 1em;
+}
+
+p.meta-data {
+    padding: 0;
+    margin: 5px 10px 0px 0px;
+    /*float:right;*/
+    font-size: 0.6em;
+    text-align: center;
+    line-height: 60px;
+}
+
+p.meta-data p {
+    display: inline;
+    margin: 0;
+}
+
+p.meta-data a.purchase {
+    border-right: 1px solid #FFFFFF;
+    margin-right: 10px;
+    padding-right: 10px;
+}
+
+p.meta-data a {
+    text-decoration: none;
+    color: #FFFFFF;
+}
+
+p.meta-data a:hover, #header-bar p.meta-data a.activated {
+    /*color: #4DC6AE;*/
+    text-decoration: underline;
+}
+
+#header-bar div.close-header {
+    width: 40px;
+    margin-left: 5px;
+    height: 52px;
+
+}
+
+#header-bar div.close-header a#close-button:hover, #header-bar div.close-header a#close-button.activated {
+    background-position: 0 -16px;
+}
+
+#preview-frame {
+    width: 100%;
+    background-color: #fff;
+}
+
+.fb_iframe_widget {
+    height: 40px;
+    margin-top: 10px;
+    margin-left: 10px;
+}

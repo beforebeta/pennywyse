@@ -5,5 +5,9 @@
 *.log
 .pydevproject
 
-static
+static/*
+coupons/static/img/local
+coupons/static/img/logos
+coupons/static/img/ph
+
 coupons/data
