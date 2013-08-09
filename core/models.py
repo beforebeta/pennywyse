@@ -45,6 +45,20 @@ class Category(models.Model):
             self.image = get_descriptive_image(self.code)
         super(Category, self).save(*args, **kwargs)
 
+    def get_coupons(self):
+        return self.coupon_set.all().order_by("-created")
+
+    def get_coupon_count(self):
+        return self.coupon_set.all().count()
+
+    def get_coupon_categories(self):
+        categories = set()
+        for c in self.coupon_set.all():
+            for cat in c.categories.all():
+                categories.add(cat)
+        categories = sorted(list(categories), key=lambda cat: cat.name)
+        return categories
+
     def __unicode__(self):  # Python 3: def __str__(self):
         return "%s %s" % (self.code, self.name)
 

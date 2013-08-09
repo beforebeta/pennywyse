@@ -1,0 +1,11 @@
+<form method="POST" action="{{ form_path }}" id="filter_form">
+  {% csrf_token %}
+  {% for category in categories %}
+  <li class="cf">
+    <label>
+      <span class="checkbox"><input name="{{ category.category.id}}" type="checkbox" {% if category.active %}checked="checked"{% endif %}></span>
+      <span>{{ category.category.name }}</span>
+    </label>
+  </li>
+  {% endfor %}
+</form>

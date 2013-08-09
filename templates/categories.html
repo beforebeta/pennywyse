@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block fbtags %}
+    <meta property="og:image" content="{{ BASE_URL_NO_APPENDED_SLASH }}{{ merchant.get_image }}"/>
+    <meta property="og:title" content="Hand Verified Coupon Codes for {{ merchant.name }} from PennyWyse"/>
+    <meta property="og:url" content="{{ CURRENT_URL }}"/>
+{% endblock %}
+
+{% block header_block %}
+  <h1 class="text-center">Categories</h1>
+{% endblock %} {# header #}
+
+{% block main %}
+<div class="stripe-regular" style="border-bottom: 2px solid #DDDDDD">
+  <div role="main">
+    <section class="row category-index">
+      <ul class='categories-list rr'>
+        {% for category in categories %}
+          <li class='category'>
+            <a class='round3' href='/categories/{{ category.code }}'>
+              {{ category.name }}
+            {% if category.category_set.all.exists %}
+                <span class='arrow-down'/>
+              </a>
+              <div class='subcategories'>
+                {% for subcat in category.category_set.all %}
+                <div class='subcategory'><div class='centering'>
+                  <a href='/categories/{{ subcat.code }}'>{{ subcat.name }}</a>
+                </div></div>
+                {% endfor %}
+              </div>
+            {% else %}
+              </a>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
+  </div>
+</div>
+{% endblock %} {# main #}
