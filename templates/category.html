@@ -2,13 +2,12 @@
 {% load coupon_extras %}
 
 {% block header_block %}
-  <h1 class="text-center">{{ merchant.name }} Coupons</h1>
+  <h1 class="text-center">Coupons For {{ category.name }}</h1>
 {% endblock %}  {# header_block #}
 
 {% block fbtags %}
-    <meta property="og:image" content="{{ BASE_URL_NO_APPENDED_SLASH }}{{ merchant.get_image }}"/>
-    <meta property="og:title" content="Hand Verified Coupon Codes for {{ merchant.name }} from PennyWyse"/>
-    <meta property="og:url" content="{{ CURRENT_URL }}"/>
+  <meta property="og:title" content="Hand Verified Coupon Codes for {{ categories.name }} from PennyWyse"/>
+  <meta property="og:url" content="{{ CURRENT_URL }}"/>
 {% endblock %}
 
 {% block main %}
@@ -23,21 +22,14 @@
                 <div class="splitter-right">
                   <div class="inner">
                     <div class="row collapse">
-                      <div class="large-4 columns">
-                        <a href="/coupons/{{ merchant.name_slug }}/{{ merchant.id }}/">
-                          <figure>
-                            <img src="{{ merchant.get_image }}" alt="" >
-                          </figure>
-                        </a>
-                      </div>
+                      <div class="large-4 columns"> </div>
                       <div class="large-8 columns">
                         <div class="space-left">
-                          <h2 class="alt" style="font-size:2em;"><a href="/coupons/{{ merchant.name_slug }}/{{ merchant.id }}/">{{ merchant.name }}</a></h2>
+                          <h2 class="alt" style="font-size:2em;"><a href="/coupons/{{ category.name }}/">{{ category.name }}</a></h2>
                           <div class="text-content">
-                            <p>{{ merchant.description }}
+                            <p>{{ category.description }}
                             </p>
                           </div>
-                          <a class="input button green secondary responsive fixed" href="{{ merchant.skimlinks }}" target="_blank">Visit Store</a>
                         </div>
                       </div>
                     </div>
@@ -82,29 +74,19 @@
         </div>
         <ul class="rr pagination">
           {% for page in pages %}
-          <li style="width: 55px;text-align: center;" {% if current_page = page %}class="current"{% endif %}>
-          <a style="padding:10px 0px;" href="/coupons/{{ merchant.name_slug }}/{{ merchant.id }}/page/{{ page }}/{% if comma_categories %}categories/{{ comma_categories }}/{% endif %}">{{ page }}</a>
-          </li>
+            <li style="width: 55px;text-align: center;" {% if current_page = page %}class="current"{% endif %}>
+              <a style="padding:10px 0px;" href="/categories/{{ category.code }}/page/{{ page }}/">{{ page }}</a>
+            </li>
           {% endfor %}
         </ul>
       </div>
       <aside class="large-3 columns main-sidebar bg">
         <div class="wrapper-3 secondary block">
-          <h2 class="alt inner">Filter Coupons</h2>
-          <h5 class="inner">Categories &nbsp;(<a id="clear_categories" href="">clear</a>)</h5>
-          <ul class="rr inner checklist">
-            <form method="POST" action="/coupons/{{ merchant.name_slug }}/{{ merchant.id }}/page/1/" id="filter_form">
-              {% csrf_token %}
-              {% for category in coupon_categories %}
-              <li class="cf">
-              <label>
-                <span class="checkbox"><input name="{{ category.category.id}}" type="checkbox" {% if category.active %}checked="checked"{% endif %}></span>
-                <span>{{ category.category.name }}</span>
-              </label>
-              </li>
-              {% endfor %}
-            </form>
-          </ul>
+            <h2 class="alt inner">Filter Coupons</h2>
+            <h5 class="inner">Categories &nbsp;(<a id="clear_categories" href="">clear</a>)</h5>
+            <ul class="rr inner checklist">
+              {% show_category_filters coupon_categories form_path %}
+            </ul>
         </div>
       </aside>
     </div>

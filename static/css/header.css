@@ -81,6 +81,7 @@ div.top-wrap {
   background: #33495F;
 }
 
+
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
   .top-wrap .row.browse {
     margin-top: 10px;

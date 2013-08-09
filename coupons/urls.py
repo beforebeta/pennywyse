@@ -32,6 +32,11 @@ urlpatterns += patterns('web.views.main',
     url(r'^coupons/(?P<company_name>[a-z0-9-]+)/(?P<company_id>[\d]+)/page/(?P<current_page>[\d]+)/categories/(?P<category_ids>sh_[a-fA-F0-9]+)/$', 'coupons_for_company'),
 
     url(r'^coupon/(?P<company_name>[a-z0-9-]+)/(?P<coupon_label>[a-z0-9-]+)/(?P<coupon_id>[\d]+)/$', 'open_coupon'),
+
+
+    url(r'^categories/(?P<category_code>[A-z0-9-]+)/page/(?P<current_page>[\d]+)/$', 'category'),
+    url(r'^categories/(?P<category_code>[A-z0-9-]+)/$', 'category'),
+    url(r'^categories/$', 'categories'),
 )
 
 urlpatterns += patterns('web.views.ajax',
