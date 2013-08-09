@@ -81,32 +81,17 @@
         </ul>
       </div>
       <aside class="large-3 columns main-sidebar bg">
-
-          <div class="wrapper-3 secondary block">
-              <h2 class="alt inner">Filter Coupons</h2>
-
-              <h5 class="inner">Categories &nbsp;(<a id="clear_categories" href="">clear</a>)</h5>
-
-              <ul class="rr inner checklist">
-                  <form method="POST" action="/coupons/{{ merchant.name_slug }}/{{ merchant.id }}/page/1/" id="filter_form">
-                      {% csrf_token %}
-                      {% for category in coupon_categories %}
-                      <li class="cf">
-                              <label>
-                                  <span class="checkbox"><input name="{{ category.category.id}}" type="checkbox" {% if category.active %}checked="checked"{% endif %}></span>
-                                  <span>{{ category.category.name }}</span>
-                              </label>
-                              {#<!--<p class="rr count-bullet">56</p>-->#}
-                      </li>
-                      {% endfor %}
-                  </form>
-              </ul>
-          </div>
+        <div class="wrapper-3 secondary block">
+            <h2 class="alt inner">Filter Coupons</h2>
+            <h5 class="inner">Categories &nbsp;(<a id="clear_categories" href="">clear</a>)</h5>
+            <ul class="rr inner checklist">
+              {% show_category_filters coupon_categories form_path %}
+            </ul>
+        </div>
       </aside>
     </div>
   </div>
 </div>
-
 {% endblock %} {# main #}
 
 {% block end_of_body %}

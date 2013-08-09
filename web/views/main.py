@@ -1,4 +1,5 @@
 # Create your views here.
+import pdb
 import random
 from django.contrib.sites.models import get_current_site
 from django.db.models.query_utils import Q
@@ -150,21 +151,29 @@ def categories(request):
 
 @ensure_csrf_cookie
 def category(request, category_code, current_page=1, category_ids=-1):
-    selected_cat_ids = category_ids
-    if selected_cat_ids != -1:
-        selected_cat_ids = ShortenedURLComponent.objects.get_original_url(selected_cat_ids)
-    merchant=None
     current_page = int(current_page)
     category = Category.objects.get(code=category_code)
-    selected_categories = ""
-    if selected_cat_ids == -1:
+
+    if category_ids == -1:
         all_categories = [str(x["categories__id"]) for x in category.coupon_set.all().values("categories__id") if x["categories__id"]]
         selected_categories = ",".join(set(all_categories))
     else:
-        selected_categories = selected_cat_ids
+        selected_categories = category_ids
     comma_categories = selected_categories
+
+    if request.POST:
+        category_ids = []
+        for param in request.POST:
+            try:
+                category_ids.append(str(int(param)))
+            except:
+                pass
+        category_ids = ",".join(category_ids)
+    else:
+        category_ids = str(category.id)
+
     try:
-        selected_categories=[int(s) for s in selected_categories.split(",") if s]
+        selected_categories=[int(s) for s in category_ids.split(",") if s]
     except:
         selected_categories=[]
     all_categories = category.get_coupon_categories()
@@ -193,7 +202,8 @@ def category(request, category_code, current_page=1, category_ids=-1):
         "coupons"               : pages.page(current_page).object_list,
         "num_coupons"           : pages.count,
         "total_coupon_count"    : category.get_coupon_count(),
-        "coupon_categories"     : coupon_categories
+        "coupon_categories"     : coupon_categories,
+        "form_path"             : "/categories/{0}/".format(category.code)
     }
     set_active_tab('category', context)
 
