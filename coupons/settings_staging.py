@@ -14,4 +14,4 @@ def show_toolbar(request):
 
 DEBUG_TOOLBAR_CONFIG['SHOW_TOOLBAR_CALLBACK'] = show_toolbar
 
-#STATIC_URL = 'http://d2nixvjj44pjq8.cloudfront.net/static/'
+STATIC_URL = 'http://d2nixvjj44pjq8.cloudfront.net/static/'
