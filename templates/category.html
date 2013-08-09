@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load humanize %}
+{% load coupon_extras %}
 
 {% block header_block %}
   <h1 class="text-center">Coupons For {{ category.name }}</h1>
@@ -68,33 +68,7 @@
           </div>
           <ul class="rr items-landscape">
             {% for coupon in coupons %}
-            <li class="wrapper-3">
-              <div class="row">
-                <div class="large-4 small-12 columns">
-                  <figure>
-                      <img src="{{ coupon.get_image }}" alt="" style="display:normal;max-height: 110px;">
-                  </figure>
-                </div>
-                <div class="large-5 small-8 columns">
-                  <div class="col-middle">
-                    <h2 class="alt"><a target="_blank" href="/coupon/{{ coupon.merchant.name_slug }}/{{ coupon.desc_slug }}/{{ coupon.id }}/">{{ coupon.description }}</a></h2>
-                    <p class="text secondary">
-                      {{ coupon.merchant.name }}: {{ coupon.description }}
-                        {% if coupon.end %}
-                        <br /><br />Offer ends: {{ coupon.end|naturalday }}
-                        {% endif %}
-                    </p>
-                  </div>
-                </div>
-                <div class="large-3 small-4 columns">
-                  <div class="col-right">
-                    <p class="value secondary">{{ coupon.short_desc }}</p>
-                    <h6>&nbsp;</h6>
-                    <a target="_blank" href="/coupon/{{ coupon.merchant.name_slug }}/{{ coupon.desc_slug }}/{{ coupon.id }}/" class="input button green secondary responsive">Use Coupon</a>
-                  </div>
-                </div>
-              </div>
-            </li>
+              {% show_coupon coupon %}
             {% endfor %}
           </ul>
         </div>
