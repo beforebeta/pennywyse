@@ -52,7 +52,6 @@
 <![endif]-->
 
 <div class="page home">
-
     <header role="banner" class="cf">
       {% include 'layouts/_header.html' %}
       {% block header_block %}
@@ -64,8 +63,6 @@
     {% endblock %}
 
     <footer role="contentinfo">
-
-
         <div class="stripe-regular">
             <div class="row">
                 <div class="column">
@@ -76,7 +73,6 @@
                 <div class="column">
                     <div class="popular-companies flexslider">
                         <ul class="rr slides">
-
                             {% for pop_company in pop_companies %}
                             <li style="margin: 10px;">
                                 <a href="/coupons/{{ pop_company.name_slug }}/{{ pop_company.id }}" class="wrapper-5 small" style="display:table-cell;vertical-align:middle;height:114px;width:114px;text-align: center;">
@@ -84,7 +80,6 @@
                                 </a>
                             </li>
                             {% endfor %}
-
                         </ul>
                     </div>
                 </div>
