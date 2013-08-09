@@ -1,9 +1,9 @@
-#static/img/local/*.jpg
-*.jpeg
 *.pyc
 .DS_Store
 *.log
 .pydevproject
+.idea
+.tm_properties
 
 static/*
 coupons/static/img/local
