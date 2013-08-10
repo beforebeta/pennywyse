@@ -1,10 +1,14 @@
 import os
 
 import sys, urlparse
+import datetime
+
 urlparse.uses_netloc.append('postgres')
 urlparse.uses_netloc.append('mysql')
 
 __author__ = 'amrish'
+
+BASE_URL_NO_APPENDED_SLASH = ''
 
 FMTC_ACCESS_KEY = '43a787c3f5f2cf2f675cbf86aff6a33b'
 
@@ -20,8 +24,6 @@ TEMPLATE_DEBUG = DEBUG
 RAVEN_CONFIG = {
     'dsn': 'https://3068bc36ec7d4272ad85e90f19e57362:4d3431bd6ed241b382ace93a1b4a4050@app.getsentry.com/11687',
 }
-
-BASE_URL_NO_APPENDED_SLASH = ""
 
 IMAGE_LOCAL_COPY_DIR_NO_PREFIX = 'static/img/local/'
 IMAGE_LOCAL_COPY_DIR = BASE_DIR + '/' + IMAGE_LOCAL_COPY_DIR_NO_PREFIX
@@ -81,7 +83,8 @@ else:
 # timezone as the operating system.
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
-TIME_ZONE = 'America/Chicago'
+#TIME_ZONE = 'America/Chicago'
+TIME_ZONE = 'GMT'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -101,32 +104,32 @@ USE_L10N = True
 USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
-# Example: "/home/media/media.lawrence.com/media/"
+# Example: '/home/media/media.lawrence.com/media/'
 MEDIA_ROOT = ''
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
-# Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
+# Examples: 'http://media.lawrence.com/media/', 'http://example.com/media/'
 MEDIA_URL = ''
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
-# in apps' "static/" subdirectories and in STATICFILES_DIRS.
-# Example: "/home/media/media.lawrence.com/static/"
-#STATIC_ROOT = '/static/'
-STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR, os.pardir)) + '/static/'
+# in apps' 'static/' subdirectories and in STATICFILES_DIRS.
+# Example: '/home/media/media.lawrence.com/static/'
+#STATIC_ROOT = '/static'
+STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR, os.pardir)) + '/static'
 
 # URL prefix for static files.
-# Example: "http://media.lawrence.com/static/"
+# Example: 'http://media.lawrence.com/static/'
 #STATIC_URL = 'http://d2nixvjj44pjq8.cloudfront.net/'
-STATIC_URL = '/static/'
+#STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, "static"),
+    os.path.join(BASE_DIR, 'static'),
 )
 
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.CachedStaticFilesStorage'
+#STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.CachedStaticFilesStorage'
 
 # List of finder classes that know how to find static files in
 # various locations.
@@ -147,8 +150,8 @@ TEMPLATE_LOADERS = (
     )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
-    "web.context_processors.base",
-    "django.contrib.auth.context_processors.auth",
+    'web.context_processors.base',
+    'django.contrib.auth.context_processors.auth',
 )
 
 #PREPEND_WWW=True
@@ -163,6 +166,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    #'pipeline.middleware.MinifyHTMLMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     )
 
@@ -178,7 +182,7 @@ WSGI_APPLICATION = 'coupons.wsgi.application'
 
 TEMPLATE_DIRS = (
     'templates/',
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+    # Put strings here, like '/home/html/django_templates' or 'C:/www/django/templates'.
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     )
@@ -200,6 +204,7 @@ INSTALLED_APPS = (
     'raven.contrib.django.raven_compat',
     #'django_pdb',
     'debug_toolbar',
+    'pipeline',
     )
 
 # A sample logging configuration. The only tangible logging
@@ -231,19 +236,33 @@ LOGGING = {
         }
 }
 
-DEFAULT_IMAGE = "http://pennywyse.com/static/img/favicon.png"
+DEFAULT_IMAGE = 'http://pennywyse.com/static/img/favicon.png'
 
-APP_NAME = "COUPONS_APP"
+APP_NAME = 'COUPONS_APP'
 APPEND_SLASH=True
 
 ################
 #   WEBSVCS
 ################
 
-SVCS_SECRET_KEY = "a59bbf62-d332-471b-b8d3-494a97065fa1"
+SVCS_SECRET_KEY = 'a59bbf62-d332-471b-b8d3-494a97065fa1'
 
-DEVELOPER_KEY = "00a1be63fcdf4cc39b9fa1c4c9e021ed990814ac740758b6eae34a9f71c27e8352950d4c5e37628f33690375a200ded9ffb2bcbe93e1f13a0525ea77c6fe52a719/4ac6543f61948191feb8b0db8b6ce4052d813140eaec8e9404c448f634ae7c530005b86783dad215c136a0f4fdf4ecf8d27390fda73847e7fba5c512b1b72849"
-
+DEVELOPER_KEY = '00a1be63fcdf4cc39b9fa1c4c9e021ed990814ac740758b6eae34a9f71c27e8352950d4c5e37628f33690375a200ded9ffb2bcbe93e1f13a0525ea77c6fe52a719/4ac6543f61948191feb8b0db8b6ce4052d813140eaec8e9404c448f634ae7c530005b86783dad215c136a0f4fdf4ecf8d27390fda73847e7fba5c512b1b72849'
 
 # import warnings
-# warnings.filterwarnings('error', r"DateTimeField received a naive datetime", RuntimeWarning, r'django\.db\.models\.fields')
+# warnings.filterwarnings('error', r'DateTimeField received a naive datetime', RuntimeWarning, r'django\.db\.models\.fields')
+
+### Static ###
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+STATICFILES_STORAGE = 'coupons.storage.S3PipelineStorage'
+#STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+AWS_STORAGE_BUCKET_NAME = 'pennywyse'
+AWS_HEADERS = {
+    'Cache-Control': 'max-age=31556926, public',
+    'Expires': (datetime.datetime.today() + datetime.timedelta(days=365)).strftime('%a, %d %b %Y %H:%M:%S GMT')
+}
+if DEBUG:
+    STATIC_URL = '//d1094zu9qp7ilj.cloudfront.net/'
+else:
+    STATIC_URL = '/static/'
+

@@ -13,4 +13,8 @@ def run_pro():
         local('python manage.py runserver')
 
 def deploy_staging():
-    local('git push heroku staging:master')
+    branch = local('git rev-parse --abbrev-ref HEAD', capture=True)
+    local('git push heroku %s:master' % branch)
+
+def refresh():
+    local('heroku run python manage.py fmtcload --load')
