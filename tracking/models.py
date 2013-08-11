@@ -19,9 +19,6 @@ CACHE_TYPE = getattr(settings, 'GEOIP_CACHE_TYPE', 4)
 log = logging.getLogger('tracking.models')
 from picklefield.fields import PickledObjectField
 
-class RevenueTracking(models.Model):
-    pass
-
 class VisitorManager(models.Manager):
     def active(self, timeout=None):
         """
@@ -171,3 +168,44 @@ class BannedIP(models.Model):
         ordering = ('ip_address',)
         verbose_name = _('Banned IP')
         verbose_name_plural = _('Banned IPs')
+
+
+class ClickTrack(models.Manager):
+    """ A new instance is created whenever a merchant link is clicked and potential revenue is earned:
+    Two major instances:
+    1. Visit Page Click on the Coupon Page
+    2. Coupon Specific Page"""
+    visitor             = models.ForeignKey(Visitor)
+    # we add some of the fields that are already in visitor because we need to know the exact
+    # values when the click happened and because these values change in the visitor field
+    user_agent          = models.CharField(max_length=255)
+    referrer            = models.CharField(max_length=255)
+    # target url at merchant
+    target_url          = models.CharField(max_length=255)
+    # coupon url or company page url
+    source_url          = models.CharField(max_length=255)
+    source_url_type     = models.CharField(max_length=10) #'COUPON', 'COMPANY'
+
+    date                = models.DateField(default=datetime.today())
+    date_added          = models.DateTimeField(default=datetime.now(), auto_now_add=True)
+    last_modified       = models.DateTimeField(default=datetime.now(), auto_now=True, auto_now_add=True)
+
+class Commission(models.Manager):
+    commissionID        = models.CharField(max_length=255, null=True, blank=True, db_index=True, unique=True)
+    commissionType      = models.CharField(max_length=255, null=True, blank=True)
+    commissionValue     = models.FloatField(default=0) #in dollars
+    currency            = models.CharField(max_length=10, null=True, blank=True)
+    customID            = models.CharField(max_length=50, null=True, blank=True)
+    date                = models.DateField(blank=True, null=True)
+    domainID            = models.CharField(max_length=255, null=True, blank=True)
+    merchantID          = models.CharField(max_length=255, null=True, blank=True)
+    publisherID         = models.CharField(max_length=255, null=True, blank=True)
+    items               = models.IntegerField(default=0)
+    sales               = models.IntegerField(default=0)
+    remoteReferer       = models.TextField(default="")
+    remoteUserAgent     = models.TextField(default="")
+    url                 = models.CharField(max_length=255, null=True, blank=True)
+    domain              = models.CharField(max_length=255, null=True, blank=True)
+    status              = models.CharField(max_length=255, null=True, blank=True)
+
+

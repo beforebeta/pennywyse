@@ -183,23 +183,36 @@ def refresh_deals():
 
 def setup_web_coupons():
     section("Setup Web Coupons")
-    if FeaturedCoupon.objects.all().count()<=0:
-        FeaturedCoupon(coupon=Merchant.objects.get(name="best buy").get_top_coupon()).save()
-        FeaturedCoupon(coupon=Merchant.objects.get(name="sears").get_top_coupon()).save()
-        FeaturedCoupon(coupon=Merchant.objects.get(name="target").get_top_coupon()).save()
+    try:
+        if FeaturedCoupon.objects.all().count()<=0:
+            FeaturedCoupon(coupon=Merchant.objects.get(name="best buy").get_top_coupon()).save()
+            FeaturedCoupon(coupon=Merchant.objects.get(name="sears").get_top_coupon()).save()
+            FeaturedCoupon(coupon=Merchant.objects.get(name="target").get_top_coupon()).save()
+    except:
+        print_stack_trace()
 
-    if NewCoupon.objects.all().count()<=0:
-        for coupon in Coupon.objects.get_new_coupons(8):
-            NewCoupon(coupon=coupon).save()
+    try:
+        if NewCoupon.objects.all().count()<=0:
+            for coupon in Coupon.objects.get_new_coupons(8):
+                NewCoupon(coupon=coupon).save()
+    except:
+        print_stack_trace()
 
-    if PopularCoupon.objects.all().count()<=0:
-        for coupon in Coupon.objects.get_popular_coupons(8):
-            PopularCoupon(coupon=coupon).save()
+    try:
+        if PopularCoupon.objects.all().count()<=0:
+            for coupon in Coupon.objects.get_popular_coupons(8):
+                PopularCoupon(coupon=coupon).save()
+    except:
+        print_stack_trace()
 
 def refresh_calculated_fields():
     section("Refresh Calculated Fields")
     for m in Merchant.objects.all():
-        m.refresh_coupon_count()
+        try:
+            m.refresh_coupon_count()
+        except:
+            print "Error with: ", m.name, m.id
+            print_stack_trace()
 
 def load():
     refresh_deal_types()
