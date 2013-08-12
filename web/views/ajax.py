@@ -71,25 +71,6 @@ def click_track(request):
             merchant = None
 
         merchant_domain = shorten_to_domain(target_url)
-#
-# visitor             = models.ForeignKey(Visitor, null=True, blank=True)
-#     # we add some of the fields that are already in visitor because we need to know the exact
-#     # values when the click happened and because these values change in the visitor field
-#     user_agent          = models.CharField(max_length=255, null=True, blank=True)
-#     referer            = models.CharField(max_length=255, null=True, blank=True)
-#     # target url at merchant
-#     target_url          = models.CharField(max_length=255, null=True, blank=True)
-#     # coupon url or company page url
-#     source_url          = models.CharField(max_length=255, null=True, blank=True)
-#     source_url_type     = models.CharField(max_length=10, null=True, blank=True) #'COUPON', 'COMPANY'
-#     merchant_domain     = models.CharField(max_length=255, null=True, blank=True)
-#
-#     merchant            = models.ForeignKey(Merchant, null=True, blank=True)
-#     coupon              = models.ForeignKey(Coupon, null=True, blank=True)
-#
-#     date                = models.DateField(default=datetime.today())
-#     date_added          = models.DateTimeField(default=datetime.now(), auto_now_add=True)
-#     last_modified       = models.DateTimeField(default=datetime.now(), auto_now=True, auto_now_add=True)
 
         click_track                 = ClickTrack()
         click_track.visitor         = request.visitor
