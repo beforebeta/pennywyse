@@ -298,6 +298,9 @@ class Coupon(models.Model):
     def has_deal_type(self, dealtype_code):
         return True if self.dealtypes.filter(code=dealtype_code).count()>0 else False
 
+    def get_retailer_link(self):
+        return self.skimlinks
+
     def create_short_desc(self):
         try:
             short = self.description.lower()

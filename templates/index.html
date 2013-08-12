@@ -9,13 +9,13 @@
                     <ul class="slides">
                         {% for coupon in featured_coupons %}
                       <li>
-                        <p class="h1"><a href="/coupon/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.desc_slug }}/{{ coupon.coupon.id }}/">{{ coupon.coupon.short_desc }} at {{ coupon.coupon.merchant.name }}</a></p>
+                        <p class="h1"><a target="_blank" rel="comm" href="/coupon/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.desc_slug }}/{{ coupon.coupon.id }}/">{{ coupon.coupon.short_desc }} at {{ coupon.coupon.merchant.name }}</a></p>
                         <div class="row">
                           <div class="large-8 columns large-centered">
                             <div class="content">
                               <p class="caption">
-                                  <a href="/coupon/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.desc_slug }}/{{ coupon.coupon.id }}/">{{ coupon.coupon.description }}</a>
-                                <a href="/coupon/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.desc_slug }}/{{ coupon.coupon.id }}/" class="ir icon tag">Learn More</a>
+                                <a target="_blank" rel="comm" href="/coupon/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.desc_slug }}/{{ coupon.coupon.id }}/">{{ coupon.coupon.description }}</a>
+                                <a target="_blank" rel="comm" href="/coupon/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.desc_slug }}/{{ coupon.coupon.id }}/" class="ir icon tag">Learn More</a>
                               </p>
                                 <a href="/coupons/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.merchant.id }}/">
                                   <figure>

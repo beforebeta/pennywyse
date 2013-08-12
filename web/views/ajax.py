@@ -6,6 +6,12 @@ from django.views.decorators.http import require_POST
 import requests
 from django.core.validators import validate_email as validate_email_validator
 from django.core.exceptions import ValidationError
+from common.url.tldextract import shorten_to_domain
+from core.models import Coupon
+from core.util import print_stack_trace
+from tracking import utils
+from tracking.models import ClickTrack
+
 
 def post_message(url, data):
     data["SECRET_KEY"] = settings.SVCS_SECRET_KEY
@@ -18,6 +24,9 @@ def validate_email(email):
         return True
     except ValidationError:
         return False
+
+def success():
+    return HttpResponse(json.dumps({"status":"1","text":"Success"}))
 
 @require_POST
 def ajax_subscribe(request):
@@ -32,4 +41,68 @@ def ajax_subscribe(request):
         post_data["email"] = request.POST["email"]
         post_data["app"] = settings.APP_NAME
         post_message("/e/subscribe/", post_data)
-        return HttpResponse(json.dumps({"status":"1","text":"Success"}))
+        return success()
+
+
+@require_POST
+def click_track(request):
+    try:
+        source_url_type = ""
+        source_url = ""
+        clicked_link = request.POST["clicked"][:255]
+        referer = utils.u_clean(request.META.get('HTTP_REFERER', 'unknown')[:255])
+        coupon=None
+        merchant=None
+
+        if "/coupon/" in clicked_link:
+            source_url_type = "coupon"
+            if clicked_link.endswith("/"):
+                coupon_id = clicked_link.split("/")[-2] #assumes trailing '/'
+            else:
+                coupon_id = clicked_link.split("/")[-1]
+            source_url = clicked_link
+            coupon = Coupon.objects.get(id=int(coupon_id))
+            merchant = coupon.merchant
+            target_url = coupon.get_retailer_link()
+        else:
+            source_url = referer
+            source_url_type = "company"
+            target_url = clicked_link
+            merchant = None
+
+        merchant_domain = shorten_to_domain(target_url)
+#
+# visitor             = models.ForeignKey(Visitor, null=True, blank=True)
+#     # we add some of the fields that are already in visitor because we need to know the exact
+#     # values when the click happened and because these values change in the visitor field
+#     user_agent          = models.CharField(max_length=255, null=True, blank=True)
+#     referer            = models.CharField(max_length=255, null=True, blank=True)
+#     # target url at merchant
+#     target_url          = models.CharField(max_length=255, null=True, blank=True)
+#     # coupon url or company page url
+#     source_url          = models.CharField(max_length=255, null=True, blank=True)
+#     source_url_type     = models.CharField(max_length=10, null=True, blank=True) #'COUPON', 'COMPANY'
+#     merchant_domain     = models.CharField(max_length=255, null=True, blank=True)
+#
+#     merchant            = models.ForeignKey(Merchant, null=True, blank=True)
+#     coupon              = models.ForeignKey(Coupon, null=True, blank=True)
+#
+#     date                = models.DateField(default=datetime.today())
+#     date_added          = models.DateTimeField(default=datetime.now(), auto_now_add=True)
+#     last_modified       = models.DateTimeField(default=datetime.now(), auto_now=True, auto_now_add=True)
+
+        click_track                 = ClickTrack()
+        click_track.visitor         = request.visitor
+        click_track.user_agent      = request.visitor.user_agent[:255]
+        click_track.referrer        = referer[:255]
+        click_track.target_url      = target_url[:255]
+        click_track.source_url_type = source_url_type[:255]
+        click_track.source_url      = source_url[:255]
+        click_track.merchant        = merchant
+        click_track.coupon          = coupon
+        click_track.merchant_domain = merchant_domain[:255]
+
+        click_track.save()
+    except:
+        print_stack_trace()
+    return success()

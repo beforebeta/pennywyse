@@ -57,7 +57,7 @@ class VisitorTrackingMiddleware(object):
 
     def process_request(self, request):
         # don't process AJAX requests
-        if request.is_ajax(): return
+        # if request.is_ajax(): return
         if request.path.startswith("/s/") or request.path.startswith("/static/") or request.path.startswith("/admin/"):
             return
         # create some useful variables

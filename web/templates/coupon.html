@@ -8,7 +8,7 @@
     </div>
     <div class="large-5 small-8 columns">
       <div class="col-middle">
-        <h2 class="alt"><a target="_blank" href="/coupon/{{ coupon.merchant.name_slug }}/{{ coupon.desc_slug }}/{{ coupon.id }}/">{{ coupon.description }}</a></h2>
+        <h2 class="alt"><a target="_blank" rel="comm" href="/coupon/{{ coupon.merchant.name_slug }}/{{ coupon.desc_slug }}/{{ coupon.id }}/">{{ coupon.description }}</a></h2>
         <p class="text secondary">
           {{ coupon.merchant.name }}: {{ coupon.description }}
             {% if coupon.end %}
@@ -21,7 +21,7 @@
       <div class="col-right">
         <p class="value secondary">{{ coupon.short_desc }}</p>
         <h6>&nbsp;</h6>
-        <a target="_blank" href="/coupon/{{ coupon.merchant.name_slug }}/{{ coupon.desc_slug }}/{{ coupon.id }}/" class="input button green secondary responsive">Use Coupon</a>
+        <a target="_blank" rel="comm" href="/coupon/{{ coupon.merchant.name_slug }}/{{ coupon.desc_slug }}/{{ coupon.id }}/" class="input button green secondary responsive">Use Coupon</a>
       </div>
     </div>
   </div>

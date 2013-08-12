@@ -3,6 +3,7 @@ import logging
 import traceback
 
 from django.contrib.gis.utils import HAS_GEOIP
+from core.models import Merchant, Coupon
 
 if HAS_GEOIP:
     from django.contrib.gis.utils import GeoIP, GeoIPException
@@ -170,27 +171,31 @@ class BannedIP(models.Model):
         verbose_name_plural = _('Banned IPs')
 
 
-class ClickTrack(models.Manager):
+class ClickTrack(models.Model):
     """ A new instance is created whenever a merchant link is clicked and potential revenue is earned:
     Two major instances:
     1. Visit Page Click on the Coupon Page
     2. Coupon Specific Page"""
-    visitor             = models.ForeignKey(Visitor)
+    visitor             = models.ForeignKey(Visitor, null=True, blank=True)
     # we add some of the fields that are already in visitor because we need to know the exact
     # values when the click happened and because these values change in the visitor field
-    user_agent          = models.CharField(max_length=255)
-    referrer            = models.CharField(max_length=255)
+    user_agent          = models.CharField(max_length=255, null=True, blank=True)
+    referer            = models.CharField(max_length=255, null=True, blank=True)
     # target url at merchant
-    target_url          = models.CharField(max_length=255)
+    target_url          = models.CharField(max_length=255, null=True, blank=True)
     # coupon url or company page url
-    source_url          = models.CharField(max_length=255)
-    source_url_type     = models.CharField(max_length=10) #'COUPON', 'COMPANY'
+    source_url          = models.CharField(max_length=255, null=True, blank=True)
+    source_url_type     = models.CharField(max_length=10, null=True, blank=True) #'COUPON', 'COMPANY'
+    merchant_domain     = models.CharField(max_length=255, null=True, blank=True)
+
+    merchant            = models.ForeignKey(Merchant, null=True, blank=True)
+    coupon              = models.ForeignKey(Coupon, null=True, blank=True)
 
     date                = models.DateField(default=datetime.today())
     date_added          = models.DateTimeField(default=datetime.now(), auto_now_add=True)
     last_modified       = models.DateTimeField(default=datetime.now(), auto_now=True, auto_now_add=True)
 
-class Commission(models.Manager):
+class Commission(models.Model):
     commissionID        = models.CharField(max_length=255, null=True, blank=True, db_index=True, unique=True)
     commissionType      = models.CharField(max_length=255, null=True, blank=True)
     commissionValue     = models.FloatField(default=0) #in dollars

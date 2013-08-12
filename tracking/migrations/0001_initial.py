@@ -20,9 +20,15 @@ class Migration(SchemaMigration):
             ('page_views', self.gf('django.db.models.fields.PositiveIntegerField')(default=0)),
             ('session_start', self.gf('django.db.models.fields.DateTimeField')()),
             ('last_update', self.gf('django.db.models.fields.DateTimeField')()),
-            ('acquisition_source', self.gf('django.db.models.fields.CharField')(default='organic', max_length=255)),
-            ('date_added', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 8, 7, 0, 0), auto_now_add=True, blank=True)),
-            ('last_modified', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 8, 7, 0, 0), auto_now=True, auto_now_add=True, blank=True)),
+            ('acquisition_source', self.gf('django.db.models.fields.CharField')(default='direct', max_length=255)),
+            ('acquisition_medium', self.gf('django.db.models.fields.CharField')(default='direct', max_length=255)),
+            ('acquisition_term', self.gf('django.db.models.fields.CharField')(default='direct', max_length=255)),
+            ('acquisition_content', self.gf('django.db.models.fields.CharField')(default='direct', max_length=255)),
+            ('acquisition_campaign', self.gf('django.db.models.fields.CharField')(default='direct', max_length=255)),
+            ('acquisition_gclid', self.gf('django.db.models.fields.CharField')(default='direct', max_length=255)),
+            ('past_acquisition_info', self.gf('picklefield.fields.PickledObjectField')(default=[])),
+            ('date_added', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 8, 11, 0, 0), auto_now_add=True, blank=True)),
+            ('last_modified', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 8, 11, 0, 0), auto_now=True, auto_now_add=True, blank=True)),
         ))
         db.send_create_signal(u'tracking', ['Visitor'])
 
@@ -33,8 +39,8 @@ class Migration(SchemaMigration):
         db.create_table(u'tracking_untrackeduseragent', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('keyword', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('date_added', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 8, 7, 0, 0), auto_now_add=True, blank=True)),
-            ('last_modified', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 8, 7, 0, 0), auto_now=True, auto_now_add=True, blank=True)),
+            ('date_added', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 8, 11, 0, 0), auto_now_add=True, blank=True)),
+            ('last_modified', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 8, 11, 0, 0), auto_now=True, auto_now_add=True, blank=True)),
         ))
         db.send_create_signal(u'tracking', ['UntrackedUserAgent'])
 
@@ -42,8 +48,8 @@ class Migration(SchemaMigration):
         db.create_table(u'tracking_bannedip', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('ip_address', self.gf('django.db.models.fields.IPAddressField')(max_length=15)),
-            ('date_added', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 8, 7, 0, 0), auto_now_add=True, blank=True)),
-            ('last_modified', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 8, 7, 0, 0), auto_now=True, auto_now_add=True, blank=True)),
+            ('date_added', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 8, 11, 0, 0), auto_now_add=True, blank=True)),
+            ('last_modified', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 8, 11, 0, 0), auto_now=True, auto_now_add=True, blank=True)),
         ))
         db.send_create_signal(u'tracking', ['BannedIP'])
 
@@ -101,27 +107,33 @@ class Migration(SchemaMigration):
         },
         u'tracking.bannedip': {
             'Meta': {'ordering': "('ip_address',)", 'object_name': 'BannedIP'},
-            'date_added': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 8, 7, 0, 0)', 'auto_now_add': 'True', 'blank': 'True'}),
+            'date_added': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 8, 11, 0, 0)', 'auto_now_add': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'ip_address': ('django.db.models.fields.IPAddressField', [], {'max_length': '15'}),
-            'last_modified': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 8, 7, 0, 0)', 'auto_now': 'True', 'auto_now_add': 'True', 'blank': 'True'})
+            'last_modified': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 8, 11, 0, 0)', 'auto_now': 'True', 'auto_now_add': 'True', 'blank': 'True'})
         },
         u'tracking.untrackeduseragent': {
             'Meta': {'ordering': "('keyword',)", 'object_name': 'UntrackedUserAgent'},
-            'date_added': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 8, 7, 0, 0)', 'auto_now_add': 'True', 'blank': 'True'}),
+            'date_added': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 8, 11, 0, 0)', 'auto_now_add': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'keyword': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'last_modified': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 8, 7, 0, 0)', 'auto_now': 'True', 'auto_now_add': 'True', 'blank': 'True'})
+            'last_modified': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 8, 11, 0, 0)', 'auto_now': 'True', 'auto_now_add': 'True', 'blank': 'True'})
         },
         u'tracking.visitor': {
             'Meta': {'ordering': "('-last_update',)", 'unique_together': "(('session_key', 'ip_address'),)", 'object_name': 'Visitor'},
-            'acquisition_source': ('django.db.models.fields.CharField', [], {'default': "'organic'", 'max_length': '255'}),
-            'date_added': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 8, 7, 0, 0)', 'auto_now_add': 'True', 'blank': 'True'}),
+            'acquisition_campaign': ('django.db.models.fields.CharField', [], {'default': "'direct'", 'max_length': '255'}),
+            'acquisition_content': ('django.db.models.fields.CharField', [], {'default': "'direct'", 'max_length': '255'}),
+            'acquisition_gclid': ('django.db.models.fields.CharField', [], {'default': "'direct'", 'max_length': '255'}),
+            'acquisition_medium': ('django.db.models.fields.CharField', [], {'default': "'direct'", 'max_length': '255'}),
+            'acquisition_source': ('django.db.models.fields.CharField', [], {'default': "'direct'", 'max_length': '255'}),
+            'acquisition_term': ('django.db.models.fields.CharField', [], {'default': "'direct'", 'max_length': '255'}),
+            'date_added': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 8, 11, 0, 0)', 'auto_now_add': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'ip_address': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
-            'last_modified': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 8, 7, 0, 0)', 'auto_now': 'True', 'auto_now_add': 'True', 'blank': 'True'}),
+            'last_modified': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 8, 11, 0, 0)', 'auto_now': 'True', 'auto_now_add': 'True', 'blank': 'True'}),
             'last_update': ('django.db.models.fields.DateTimeField', [], {}),
             'page_views': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
+            'past_acquisition_info': ('picklefield.fields.PickledObjectField', [], {'default': '[]'}),
             'referrer': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'session_key': ('django.db.models.fields.CharField', [], {'max_length': '40'}),
             'session_start': ('django.db.models.fields.DateTimeField', [], {}),

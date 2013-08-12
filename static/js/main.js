@@ -23,18 +23,6 @@ $(function() {
   });
 
 
-  // main menu indicator
-  // var temp;
-  // $('.main-menu li').hover(function() {
-  //   temp = $(this).parent().children('.current')
-  //   temp.removeClass('current');
-  //   $(this).addClass('current');
-  // }, function() {
-  //   $(this).removeClass('current');
-  //   temp.addClass('current');
-  // });
-
-
   // menu-browse open/close
   var temp2 = $('.menu-browse .input');
   var temp3 = $('.main-menu .submenu-wrap');
@@ -62,25 +50,6 @@ $(function() {
   $('.main-slider').flexslider({
     animation: "slide"
   });
-
-  // popular companies
-//  $('.popular-companies').flexslider({
-//    animation: "slide",
-//    itemWidth: 134,
-//    itemMargin: 0,
-//    minItems: 2,
-//    maxItems: 7
-//  });
-
-   // popular companies
-//  $('.items-carousel').flexslider({
-//    animation: "slide",
-//    itemWidth: 240,
-//    itemMargin: 0,
-//    minItems: 1,
-//    maxItems: 4
-////    slideshow: false
-//  });
 
    // testimonials
   $('.testimonials-box').flexslider({
@@ -218,10 +187,21 @@ $(function() {
         return false;
     });
 
-//    $("#search_form").on("submit", function(e){
-//       try{
-//           mixpanel.track("Search");
-//       }catch(e){}
-//    });
-
+    // Click Tracking
+    $("a[rel=comm]").click(function(e){
+        var url = this.href;
+        try{
+            $.ajax({
+                async: false,
+                type: "POST",
+                url: "/a/clk/",
+                data: {
+                    clicked: url
+                },
+                contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                cache: false
+            });
+        }catch(e){}
+        return true;
+    });
 });
