@@ -27,7 +27,7 @@
     <file path="/urls.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376344316540" ignored="false" />
     <file path="/ajax.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376343494024" ignored="false" />
     <file path="$PROJECT_DIR$/account/models.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376338972963" ignored="false" />
-    <file path="/views.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376406930124" ignored="false" />
+    <file path="/views.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376407214205" ignored="false" />
     <file path="/a.dummy" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376349088040" ignored="false" />
     <file path="/coupon_extras.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376367306687" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -84,7 +84,7 @@
       <file leaf-file-name="views.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tracking/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="86" column="68" selection-start="3115" selection-end="3115" vertical-scroll-proportion="0.81164384">
+            <state line="56" column="31" selection-start="1831" selection-end="1831" vertical-scroll-proportion="0.46917808">
               <folding>
                 <element signature="e#0#53#0" expanded="true" />
               </folding>
@@ -678,7 +678,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tracking/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="86" column="68" selection-start="3115" selection-end="3115" vertical-scroll-proportion="0.81164384">
+        <state line="56" column="31" selection-start="1831" selection-end="1831" vertical-scroll-proportion="0.46917808">
           <folding>
             <element signature="e#0#53#0" expanded="true" />
           </folding>

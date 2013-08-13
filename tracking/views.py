@@ -3,7 +3,7 @@ import json
 import urlparse
 from django.http import HttpResponse
 from common.url.tldextract import shorten_to_domain
-from core.models import Coupon
+from core.models import Coupon, Merchant
 from core.util import print_stack_trace
 from tracking import utils
 from tracking.models import ClickTrack
@@ -50,7 +50,10 @@ def click_track(request):
                 coupon_id = clicked_link.split("/")[-1]
             source_url = clicked_link
             coupon = Coupon.objects.get(id=int(coupon_id))
-            merchant = coupon.merchant
+            try:
+                merchant = Merchant.objects.get(id=coupon.merchant.id)
+            except:
+                merchant = None
             target_url = coupon.get_retailer_link()
         else:
             source_url = referer
