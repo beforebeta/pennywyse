@@ -1,0 +1,147 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:og="http://opengraph.org/schema/"> <head>
+
+<meta property="og:title" content="Five at Five - GIRL - 15.08.12"/>
+<meta property="fb:page_id" content="43929265776" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>WIWT Five at Five (Girl Edition)</title>
+  <style type="text/css">
+    .ExternalClass{display:block !important;}
+    p {
+      margin:0 0 20px!important;
+      font:16px/20px Arial, Helvetica, sans-serif;
+      color:#333;
+    }
+    a {
+      color:#333;
+      text-decoration:underline;
+    }
+    img {
+      border:0;
+      height:auto;
+      line-height:100%;
+      outline:none;
+      text-decoration:none;
+    }
+  </style>
+        <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+            </script>
+            <script type="text/javascript">
+            try {
+                var _gaq = _gaq || [];
+                _gaq.push(["_setAccount", "UA-329148-88"]);
+                _gaq.push(["_setDomainName", ".campaign-archive.com"]);
+                _gaq.push(["_trackPageview"]);
+                _gaq.push(["_setAllowLinker", true]);
+            } catch(err) {console.log(err);}</script>
+                    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script> <link rel="stylesheet" href="http://us2.campaign-archive1.com/css/archivebar-desktop.css" mc:nocompile> <script type="text/javascript" src="http://us2.campaign-archive1.com/js/archivebar-desktop-plugins.js" mc:nocompile></script> <script src="http://downloads.mailchimp.com/ZeroClipboard.min.js" mc:nocompile></script> <script type="text/javascript">
+            $(document).ready(function() {
+                ZeroClipboard.setDefaults({ moviePath: "//downloads.mailchimp.com/ZeroClipboard.07.13.swf", trustedDomains: ['us2.campaign-archive1.com']});
+                var clip = new ZeroClipboard( $('#copyURL') );
+                clip.setHandCursor(true);
+                clip.on('complete', function(client, args) {alert('Copied "'+args.text+'" to your clipboard.');});
+                clip.on('mouseover', function (client) { $('#copyURL').addClass('hover'); });
+                clip.on('mouseout', function (client) { $('#copyURL').removeClass('hover'); });
+
+                $('li.more > a').click(function(){
+                    var toToggle = $($(this).attr('href'));
+                    if(toToggle.is(':visible')){
+                        toToggle.slideUp('fast');
+                        $(this).removeClass('is-active');
+                        if ($('#awesomebar').find('.is-active').length < 1){
+                            $('#awesomebar').removeClass('sub-active');
+                        }
+                    } else {
+                        toToggle.slideDown('fast');
+                        $(this).addClass('is-active');
+                        $('#awesomebar').addClass('sub-active');
+                    }
+                    return false;
+                });
+
+            });
+        </script> <script src="http://us2.campaign-archive1.com/js/mailchimp/fancyzoom.mc.js"></script> <script type="text/javascript">
+    function updateFacebookCommentsCount(num) {
+        $('#campaign-fb-comments-btn span').fadeOut().html(num).fadeIn();
+    }
+</script> <script type="text/javascript">
+    function incrementFacebookLikeCount() {
+        var current = parseInt($('#campaign-fb-like-btn span').html());
+        $('#campaign-fb-like-btn span').fadeOut().html(++current).fadeIn();
+    }
+
+    function getUrlParams(str) {
+        var vars = {}, hash;
+        if (!str) return vars;
+        var hashes = str.slice(str.indexOf('?') + 1).split('&');
+        for(var i = 0; i < hashes.length; i++) {
+            hash = hashes[i].split('=');
+            vars[hash[0]] = hash[1];
+        }
+        return vars;
+    }
+
+    function setupSocialSharingStuffs() {
+        var numSocialElems = $('a[rel=socialproxy]').length;
+        var numSocialInitialized = 0;
+        var urlParams = getUrlParams(window.document.location.href);
+        var paramsToCopy = {'e':true, 'eo':true};
+        $('a[rel=socialproxy]').each(function() {
+            var href = $(this).attr('href');
+            var newHref = decodeURIComponent(href.match(/socialproxy=(.*)/)[1]);
+            // for facebook insanity to work well, it needs to all be run against just campaign-archive
+            newHref = newHref.replace(/campaign-archive(\d)/gi, 'campaign-archive');
+            var newHrefParams = getUrlParams(newHref);
+            for(var param in urlParams) {
+                if ((param in paramsToCopy) && !(param in newHrefParams)) {
+                    newHref += '&' + param + '=' + urlParams[param];
+                }
+            }
+            $(this).attr('href', newHref);
+            if (href.indexOf('facebook-comment') !== -1) {
+                $(this).fancyZoom({"zoom_id": "social-proxy", "width":620, "height":450, "iframe_height": 450});
+            } else {
+                $(this).fancyZoom({"zoom_id": "social-proxy", "width":500, "height":200, "iframe_height": 500});
+            }
+            numSocialInitialized++;
+                    });
+    }
+  if (window.top!=window.self){
+        $(function() {
+          var iframeOffset = $("#archive", window.parent.document).offset();
+          $("a").each(function () {
+              var link = $(this);
+              var href = link.attr("href");
+              if (href && href[0] == "#") {
+                  var name = href.substring(1);
+                  $(this).click(function () {
+                      var nameElement = $("[name='" + name + "']");
+                      var idElement = $("#" + name);
+                      var element = null;
+                      if (nameElement.length > 0) {
+                          element = nameElement;
+                      } else if (idElement.length > 0) {
+                          element = idElement;
+                      }
+
+                      if (element) {
+                          var offset = element.offset();
+                          var height = element.height();
+                          //3 is totally arbitrary, but seems to work best.
+                          window.parent.scrollTo(offset.left, (offset.top + iframeOffset.top - (height*3)) );
+                      }
+
+                      return false;
+                  });
+              }
+          });
+        });
+    }
+</script>  <script type="text/javascript">
+            $(document).ready(function() {
+                setupSocialSharingStuffs();
+            });
+        </script> </head>

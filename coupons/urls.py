@@ -51,6 +51,11 @@ urlpatterns += patterns('web.views.search',
     url(r'^search/$', 'search')
 )
 
+urlpatterns += patterns('web.views.email',
+    url(r'^emailA$', 'email_a'),
+    url(r'^emailB$', 'email_b')
+)
+
 handler404 = 'web.views.main.index'
 
 ########################################################################################
