@@ -1,0 +1,89 @@
+div.top-wrap {
+  padding-bottom: 0px;
+  text-transform: none;
+}
+
+.top-wrap .logo a {
+  text-transform: none;
+}
+
+.top-wrap .logo span {
+  font-style: normal;
+  font-size: 30px;
+}
+
+.top-wrap .catch-phrase {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 210px;
+}
+
+.top-wrap .catch-phrase span {
+  width: 185px;
+  display: block;
+  text-transform: none;
+  text-align: left;
+  font-size:15px;
+  font-style:italic;
+  font-family:'Times New Roman'
+}
+
+.top-wrap .row.browse ul {
+  display: inline-block;
+  list-style-type: none;
+  overflow: visible;
+  margin: 0px;
+  padding: 0px;
+}
+
+.top-wrap .row.browse ul li {
+  display: inline-block;
+  margin-left: 10px;
+}
+
+.top-wrap .row.browse ul li a {
+  padding: 10px;
+  font-weight: lighter;
+}
+
+.float-left {
+  float: left;
+  display: inline-block;
+}
+
+.float-right {
+  margin-right: 10px;
+  float: right;
+  display: inline-block;
+}
+
+.top-tab {
+  font-size: 0.875em;
+  border: 0;
+  display: block;
+  font-weight: 500 !important;
+  text-align: center;
+  -webkit-border-top-left-radius: 3px;
+  -moz-border-top-left-radius: 3px;
+  border-top-left-radius: 3px;
+  -webkit-border-top-right-radius: 3px;
+  -moz-border-top-right-radius: 3px;
+  border-top-right-radius: 3px;
+}
+.top-tab.active {
+  background: #33495F;
+}
+.top-tab.active:hover {
+  background: #33495F;
+}
+.top-tab:active {
+  background: #33495F;
+}
+
+
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+  .top-wrap .row.browse {
+    margin-top: 10px;
+  }
+}
