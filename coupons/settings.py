@@ -253,9 +253,14 @@ DEVELOPER_KEY = '00a1be63fcdf4cc39b9fa1c4c9e021ed990814ac740758b6eae34a9f71c27e8
 # warnings.filterwarnings('error', r'DateTimeField received a naive datetime', RuntimeWarning, r'django\.db\.models\.fields')
 
 ### Static ###
+
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-#STATICFILES_STORAGE = 'coupons.storage.S3PipelineStorage'
-STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+
+if DEBUG:
+    STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+else:
+    STATICFILES_STORAGE = 'coupons.storage.S3PipelineStorage'
+
 AWS_STORAGE_BUCKET_NAME = 'pennywyse'
 AWS_HEADERS = {
     'Cache-Control': 'max-age=31556926, public',
