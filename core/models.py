@@ -4,8 +4,10 @@ import datetime
 import urlparse
 from django.conf import settings
 from django.db import models
+from django.db.models.query_utils import Q
 from django.template.defaultfilters import slugify
 from core.util import print_stack_trace, get_first_google_image_result, get_description_tag_from_url
+from tracking.commission.skimlinks import get_merchant_description
 
 def get_descriptive_image(name):
     return get_first_google_image_result(name)
@@ -167,6 +169,36 @@ class Merchant(models.Model):
 
     def __unicode__(self):  # Python 3: def __str__(self):
         return "%s %s" % (self.ref_id, self.name)
+
+    def skimlinks_description(self):
+        skim_desc = get_merchant_description(self.name_slug)
+        if skim_desc == None:
+          skim_desc = self.description
+        return skim_desc
+
+    def featured_coupon(self):
+        active = self.coupon_set.all().filter(Q(end__gt = datetime.datetime.now()) | Q(end = None))
+        active_codes = active.exclude(code = None)
+        featured = None
+
+        #active w/code and in apparel
+        for coupon in active_codes:
+            if coupon.in_category('apparel'):
+                featured = coupon
+
+        #active w/code NOT in apparel
+        if featured == None and active_codes.exists():
+            featured = active_codes[0]
+
+        #active in apparel W/O code
+        if featured == None and active.exists():
+            for coupon in active:
+                if coupon.in_category('apparel'):
+                    featured = coupon
+            if featured == None:
+                featured = codes[0]
+
+        return featured
 
 #######################################################################################################################
 #
@@ -394,3 +426,5 @@ class Coupon(models.Model):
         else:
             return "%s %s" % (self.ref_id, self.description)
 
+    def in_category(self, category):
+      return category in [c.code for c in self.categories.all()]
