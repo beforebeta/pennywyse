@@ -73,7 +73,22 @@ def click_track(request):
         click_track.coupon          = coupon
         click_track.merchant_domain = merchant_domain[:255]
 
-        click_track.save()
+        try:
+            click_track.save()
+        except:
+            try:
+                print "Visitor ID", click_track.visitor
+                print "User Agent", click_track.user_agent
+                print "Referer", click_track.referer
+                print "target_url", click_track.target_url
+                print "source_url_type", click_track.source_url_type
+                print "merchant", click_track.merchant
+                print "coupon", click_track.coupon
+                print "merchant_domain", click_track.merchant_domain
+                print merchant.name, merchant.id
+            except:
+                pass
+            print_stack_trace()
     except:
         print_stack_trace()
     return success()

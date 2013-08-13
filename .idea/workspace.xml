@@ -27,7 +27,7 @@
     <file path="/urls.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376344316540" ignored="false" />
     <file path="/ajax.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376343494024" ignored="false" />
     <file path="$PROJECT_DIR$/account/models.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376338972963" ignored="false" />
-    <file path="/views.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376344988987" ignored="false" />
+    <file path="/views.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376406930124" ignored="false" />
     <file path="/a.dummy" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376349088040" ignored="false" />
     <file path="/coupon_extras.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376367306687" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -53,10 +53,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="visitor.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="visitor.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tracking/middleware/visitor.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="134" column="9" selection-start="5226" selection-end="5226" vertical-scroll-proportion="0.7010429">
+            <state line="111" column="46" selection-start="4419" selection-end="4419" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="e#0#40#0" expanded="true" />
               </folding>
@@ -81,10 +81,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="views.py" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="views.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tracking/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="59" column="48" selection-start="1903" selection-end="1903" vertical-scroll-proportion="0.0">
+            <state line="86" column="68" selection-start="3115" selection-end="3115" vertical-scroll-proportion="0.81164384">
               <folding>
                 <element signature="e#0#53#0" expanded="true" />
               </folding>
@@ -110,7 +110,6 @@
         <option value="$PROJECT_DIR$/web/views/ajax.py" />
         <option value="$PROJECT_DIR$/coupons/urls.py" />
         <option value="$PROJECT_DIR$/tracking/commission/skimlinks.py" />
-        <option value="$PROJECT_DIR$/tracking/views.py" />
         <option value="$PROJECT_DIR$/tracking/admin.py" />
         <option value="$PROJECT_DIR$/tracking/models.py" />
         <option value="$PROJECT_DIR$/web/views/main.py" />
@@ -118,6 +117,7 @@
         <option value="$PROJECT_DIR$/web/templatetags/coupon_extras.py" />
         <option value="$PROJECT_DIR$/templates/open_coupon.html" />
         <option value="$PROJECT_DIR$/tracking/middleware/visitor.py" />
+        <option value="$PROJECT_DIR$/tracking/views.py" />
       </list>
     </option>
   </component>
@@ -667,20 +667,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tracking/views.py">
+    <entry file="file://$PROJECT_DIR$/tracking/middleware/visitor.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="59" column="48" selection-start="1903" selection-end="1903" vertical-scroll-proportion="0.0">
+        <state line="111" column="46" selection-start="4419" selection-end="4419" vertical-scroll-proportion="0.0">
           <folding>
-            <element signature="e#0#53#0" expanded="true" />
+            <element signature="e#0#40#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tracking/middleware/visitor.py">
+    <entry file="file://$PROJECT_DIR$/tracking/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="134" column="9" selection-start="5226" selection-end="5226" vertical-scroll-proportion="0.7010429">
+        <state line="86" column="68" selection-start="3115" selection-end="3115" vertical-scroll-proportion="0.81164384">
           <folding>
-            <element signature="e#0#40#0" expanded="true" />
+            <element signature="e#0#53#0" expanded="true" />
           </folding>
         </state>
       </provider>
