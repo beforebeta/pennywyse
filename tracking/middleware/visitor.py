@@ -132,7 +132,7 @@ class VisitorTrackingMiddleware(object):
             user = None
 
         # update the tracking information
-        visitor.user = user
+        #visitor.user = user
         visitor.user_agent = user_agent
 
         # if the visitor record is new, or the visitor hasn't been here for
