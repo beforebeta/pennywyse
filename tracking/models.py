@@ -4,6 +4,7 @@ import traceback
 
 from django.contrib.gis.utils import HAS_GEOIP
 from core.models import Merchant, Coupon
+from core.util import print_stack_trace
 
 if HAS_GEOIP:
     from django.contrib.gis.utils import GeoIP, GeoIPException
@@ -37,7 +38,7 @@ class VisitorManager(models.Manager):
 class Visitor(models.Model):
     session_key         = models.CharField(max_length=40)
     ip_address          = models.CharField(max_length=20)
-    user                = models.ForeignKey(User, null=True)
+    user                = models.ForeignKey(User, null=True, blank=True)
     user_agent          = models.CharField(max_length=255)
     referrer            = models.CharField(max_length=255)
     url                 = models.CharField(max_length=255)
@@ -69,6 +70,15 @@ class Visitor(models.Model):
     last_modified       = models.DateTimeField(default=datetime.now(), auto_now=True, auto_now_add=True)
 
     objects = VisitorManager()
+
+    def save(self, *args, **kwargs):
+        super(Visitor, self).save(*args, **kwargs)
+        try:
+            if self.rev_visitor.all().exists():
+                for rv in self.rev_visitor.all():
+                    rv.save()
+        except:
+            print_stack_trace()
 
     def bump_past_acquisition_info(self):
         #dont bump if this person was earlier direct - because that might lead to many direct bumps
@@ -170,7 +180,6 @@ class BannedIP(models.Model):
         verbose_name = _('Banned IP')
         verbose_name_plural = _('Banned IPs')
 
-
 class ClickTrack(models.Model):
     """ A new instance is created whenever a merchant link is clicked and potential revenue is earned:
     Two major instances:
@@ -185,7 +194,7 @@ class ClickTrack(models.Model):
     target_url          = models.CharField(max_length=255, null=True, blank=True)
     # coupon url or company page url
     source_url          = models.CharField(max_length=255, null=True, blank=True)
-    source_url_type     = models.CharField(max_length=10, null=True, blank=True) #'COUPON', 'COMPANY'
+    source_url_type     = models.CharField(max_length=10, null=True, blank=True) #'COUPON', 'COMPANY', 'LANDING'
     merchant_domain     = models.CharField(max_length=255, null=True, blank=True)
 
     merchant            = models.ForeignKey(Merchant, null=True, blank=True)
@@ -194,6 +203,61 @@ class ClickTrack(models.Model):
     date                = models.DateField(default=datetime.today())
     date_added          = models.DateTimeField(default=datetime.now(), auto_now_add=True)
     last_modified       = models.DateTimeField(default=datetime.now(), auto_now=True, auto_now_add=True)
+
+class RevenueVisitor(models.Model):
+    """if we've potentially earned revenue from a visitor we record them here"""
+    visitor             = models.ForeignKey(Visitor, blank=True, null=True, related_name='rev_visitor')
+
+    session_key         = models.CharField(max_length=40)
+    ip_address          = models.CharField(max_length=20)
+    user                = models.ForeignKey(User, null=True, blank=True)
+    user_agent          = models.CharField(max_length=255)
+    referrer            = models.CharField(max_length=255)
+    url                 = models.CharField(max_length=255)
+    page_views          = models.PositiveIntegerField(default=0)
+    session_start       = models.DateTimeField()
+    last_update         = models.DateTimeField()
+    acquisition_source      = models.CharField(max_length=255, default="direct")
+    acquisition_medium      = models.CharField(max_length=255, default="direct")
+    acquisition_term        = models.CharField(max_length=255, default="direct")
+    acquisition_content     = models.CharField(max_length=255, default="direct")
+    acquisition_campaign    = models.CharField(max_length=255, default="direct")
+    acquisition_gclid       = models.CharField(max_length=255, default="direct")
+
+    past_acquisition_info   = PickledObjectField(default=[])
+
+    date_added          = models.DateTimeField(default=datetime.now(), auto_now_add=True)
+    last_modified       = models.DateTimeField(default=datetime.now(), auto_now=True, auto_now_add=True)
+
+
+    date_obj_added      = models.DateTimeField(default=datetime.now(), auto_now_add=True)
+    last_obj_modified   = models.DateTimeField(default=datetime.now(), auto_now=True, auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        assert self.visitor, "Visitor object must be provided when creating RevenueVisitor object!"
+        if not self.id:
+            #only 1 RevenueVisitor object per Visitor object!
+            assert not RevenueVisitor.objects.filter(visitor_id=self.visitor.id).exists(), "Only 1 RevenueVisitor per Visitor object!"
+        transfer = lambda r,v,att: setattr(r, att, getattr(v, att))
+        transfer(self, self.visitor, 'session_key')
+        transfer(self, self.visitor, 'ip_address')
+        transfer(self, self.visitor, 'user')
+        transfer(self, self.visitor, 'user_agent')
+        transfer(self, self.visitor, 'referrer')
+        transfer(self, self.visitor, 'url')
+        transfer(self, self.visitor, 'page_views')
+        transfer(self, self.visitor, 'session_start')
+        transfer(self, self.visitor, 'last_update')
+        transfer(self, self.visitor, 'page_views')
+        transfer(self, self.visitor, 'acquisition_source')
+        transfer(self, self.visitor, 'acquisition_medium')
+        transfer(self, self.visitor, 'acquisition_term')
+        transfer(self, self.visitor, 'acquisition_content')
+        transfer(self, self.visitor, 'acquisition_campaign')
+        transfer(self, self.visitor, 'acquisition_gclid')
+        transfer(self, self.visitor, 'date_added')
+        transfer(self, self.visitor, 'last_modified')
+        super(RevenueVisitor, self).save(*args, **kwargs)
 
 class Commission(models.Model):
     commissionID        = models.CharField(max_length=255, null=True, blank=True, db_index=True, unique=True)

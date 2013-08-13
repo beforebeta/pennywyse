@@ -8,7 +8,7 @@ from django.template.context import RequestContext
 from django.template.defaultfilters import slugify
 from django.views.decorators.csrf import ensure_csrf_cookie
 from core.models import Category, Coupon, Merchant
-from core.util import encode_uri_component
+from core.util import encode_uri_component, print_stack_trace
 from web.models import FeaturedCoupon, NewCoupon, PopularCoupon, ShortenedURLComponent
 import math
 from django.core.paginator import Paginator
@@ -18,6 +18,10 @@ def build_base_context(request, context):
     context["coupons_path"] = "/"
     context["categories_path"] = "/categories"
     context["companies_path"] = "/companies"
+    try:
+        context["visitor"] = request.visitor
+    except:
+        print_stack_trace()
 
 def render_response(template_file, request, context={}):
     build_base_context(request, context)

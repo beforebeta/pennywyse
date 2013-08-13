@@ -1,6 +1,7 @@
 import os
 import urllib
 import datetime
+import urlparse
 from django.conf import settings
 from django.db import models
 from django.template.defaultfilters import slugify
@@ -299,7 +300,14 @@ class Coupon(models.Model):
         return True if self.dealtypes.filter(code=dealtype_code).count()>0 else False
 
     def get_retailer_link(self):
-        return self.skimlinks
+        """retrieves the direct link to the page"""
+        try:
+            parsed = urlparse.urlparse(self.skimlinks)
+            query = parsed.query.replace('&amp;','&')
+            return urlparse.parse_qs(query)["url"][0]
+        except:
+            print_stack_trace()
+            return self.skimlinks
 
     def create_short_desc(self):
         try:

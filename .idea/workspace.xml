@@ -5,16 +5,16 @@
     <ignored path="coupons.iws" />
     <ignored path=".idea/workspace.xml" />
     <file path="/start_script.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1375914262188" ignored="false" />
-    <file path="/models.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376333793522" ignored="false" />
+    <file path="/models.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376365810933" ignored="false" />
     <file path="/basesettings.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1375985751615" ignored="false" />
-    <file path="/admin.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376334767147" ignored="false" />
+    <file path="/admin.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376363553584" ignored="false" />
     <file path="/middleware.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376001228063" ignored="false" />
-    <file path="/main.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1375986288632" ignored="false" />
+    <file path="/main.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376366322514" ignored="false" />
     <file path="/visitor.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376074813552" ignored="false" />
     <file path="/__init__.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376056201461" ignored="false" />
     <file path="/test_tracking.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376074324417" ignored="false" />
     <file path="/clicktrack.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376074722944" ignored="false" />
-    <file path="/skimlinks.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376100974271" ignored="false" />
+    <file path="/skimlinks.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376350875137" ignored="false" />
     <file path="/Dummy.txt" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376249200443" ignored="false" />
     <file path="/company.html" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376244527111" ignored="false" />
     <file path="/_header.html" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376151965615" ignored="false" />
@@ -24,8 +24,12 @@
     <file path="/coupon.html" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376245254286" ignored="false" />
     <file path="/index.html" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376246051065" ignored="false" />
     <file path="/main.js" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376247448831" ignored="false" />
-    <file path="/urls.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376247408248" ignored="false" />
-    <file path="/ajax.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376333771215" ignored="false" />
+    <file path="/urls.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376344316540" ignored="false" />
+    <file path="/ajax.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376343494024" ignored="false" />
+    <file path="$PROJECT_DIR$/account/models.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376338972963" ignored="false" />
+    <file path="/views.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376344988987" ignored="false" />
+    <file path="/a.dummy" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376349088040" ignored="false" />
+    <file path="/coupon_extras.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376367306687" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,29 +62,29 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/core/admin.py" />
-        <option value="$PROJECT_DIR$/templates/base.html" />
-        <option value="$PROJECT_DIR$/templates/layouts/_header.html" />
-        <option value="$PROJECT_DIR$/static/css/header.css" />
-        <option value="$PROJECT_DIR$/core/management/commands/stats.py" />
         <option value="$PROJECT_DIR$/core/management/commands/fmtcload.py" />
-        <option value="$PROJECT_DIR$/templates/company.html" />
         <option value="$PROJECT_DIR$/web/templates/coupon.html" />
         <option value="$PROJECT_DIR$/templates/index.html" />
-        <option value="$PROJECT_DIR$/coupons/urls.py" />
         <option value="$PROJECT_DIR$/static/js/main.js" />
         <option value="$PROJECT_DIR$/tracking/middleware/visitor.py" />
         <option value="$PROJECT_DIR$/core/models.py" />
-        <option value="$PROJECT_DIR$/tracking/models.py" />
-        <option value="$PROJECT_DIR$/tracking/admin.py" />
         <option value="$PROJECT_DIR$/web/views/ajax.py" />
+        <option value="$PROJECT_DIR$/coupons/urls.py" />
+        <option value="$PROJECT_DIR$/tracking/commission/skimlinks.py" />
+        <option value="$PROJECT_DIR$/tracking/views.py" />
+        <option value="$PROJECT_DIR$/tracking/admin.py" />
+        <option value="$PROJECT_DIR$/tracking/models.py" />
+        <option value="$PROJECT_DIR$/web/views/main.py" />
+        <option value="$PROJECT_DIR$/templates/company.html" />
+        <option value="$PROJECT_DIR$/web/templatetags/coupon_extras.py" />
+        <option value="$PROJECT_DIR$/templates/open_coupon.html" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-2" />
+    <option name="x" value="-3" />
     <option name="y" value="22" />
-    <option name="width" value="1679" />
+    <option name="width" value="1683" />
     <option name="height" value="1024" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
@@ -172,7 +176,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="tracking" />
+              <option name="myItemId" value="web" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -186,7 +190,11 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="common" />
+              <option name="myItemId" value="web" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="views" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -200,11 +208,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="common" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="url" />
+              <option name="myItemId" value="templates" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -416,14 +420,15 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-2" y="22" width="1679" height="1024" extended-state="6" />
+    <frame x="-3" y="22" width="1683" height="1024" extended-state="6" />
     <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32853982" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2033068" sideWeight="0.67146015" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20281002" sideWeight="0.67146015" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
@@ -433,7 +438,6 @@
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32853982" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -502,37 +506,120 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/web/templatetags/coupon_extras.py">
+    <entry file="file://$PROJECT_DIR$/coupons/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="29" selection-start="89" selection-end="89" vertical-scroll-proportion="0.06849315">
+        <state line="51" column="1" selection-start="2161" selection-end="2161" vertical-scroll-proportion="0.7089041">
+          <folding>
+            <element signature="e#0#51#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/management/commands/fmtcload.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="82" column="38" selection-start="3117" selection-end="3117" vertical-scroll-proportion="0.15198618">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/base.html">
+    <entry file="file://$PROJECT_DIR$/tracking/commission/skimlinks.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="48" selection-start="1681" selection-end="1681" vertical-scroll-proportion="0.4827175">
+        <state line="51" column="72" selection-start="2605" selection-end="2605" vertical-scroll-proportion="0.65237546">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/index.html">
+    <entry file="file://$PROJECT_DIR$/core/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="58" column="53" selection-start="2685" selection-end="2686" vertical-scroll-proportion="0.3702337">
+        <state line="388" column="16" selection-start="17058" selection-end="17619" vertical-scroll-proportion="0.7566628">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/categories.html">
+    <entry file="file://$PROJECT_DIR$/tracking/admin.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="12" column="47" selection-start="429" selection-end="429" vertical-scroll-proportion="0.20547946">
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/templatetags/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/tracking/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="73" column="12" selection-start="3483" selection-end="3483" vertical-scroll-proportion="0.39165702">
+          <folding>
+            <element signature="e#0#40#0" expanded="true" />
+            <element signature="e#3799#4498#0" expanded="false" />
+            <element signature="e#4537#5056#0" expanded="false" />
+            <element signature="e#5140#5878#0" expanded="false" />
+            <element signature="e#5968#6265#0" expanded="false" />
+            <element signature="e#6345#6430#0" expanded="false" />
+            <element signature="e#6476#7151#0" expanded="false" />
+            <element signature="e#7187#7678#0" expanded="false" />
+            <element signature="e#7716#9179#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tracking/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="30" column="45" selection-start="909" selection-end="909" vertical-scroll-proportion="0.029411765">
+          <folding>
+            <element signature="e#0#53#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="43" column="0" selection-start="1690" selection-end="1690" vertical-scroll-proportion="0.74739283">
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="23" column="36" selection-start="1665" selection-end="1665" vertical-scroll-proportion="0.35547355">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/templatetags/coupon_extras.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="31" column="18" selection-start="1059" selection-end="1059" vertical-scroll-proportion="0.53881806">
+          <folding>
+            <element signature="e#0#27#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/templates/coupon.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="27" column="5" selection-start="1130" selection-end="1130" vertical-scroll-proportion="0.49815497">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/base.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1" column="33" selection-start="48" selection-end="49" vertical-scroll-proportion="0.017878426">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/templates/company.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="55" column="72" selection-start="2501" selection-end="2501" vertical-scroll-proportion="0.98331344">
+        <state line="1" column="0" selection-start="26" selection-end="50" vertical-scroll-proportion="0.017878426">
           <folding>
             <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#h2#0;n#div#0;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#section#0;n#div#0;n#div#0;n#!!top" expanded="true" />
@@ -542,86 +629,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/category.html">
+    <entry file="file://$PROJECT_DIR$/templates/open_coupon.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="105" column="14" selection-start="3895" selection-end="3895" vertical-scroll-proportion="1.8772348">
-          <folding>
-            <element signature="n#style#0;n#li#0;n#ul#0;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#a#0;n#ul#0;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/compiler/visitor.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="60" column="13" selection-start="2153" selection-end="2153" vertical-scroll-proportion="-0.0102739725">
+        <state line="10" column="22" selection-start="503" selection-end="503" vertical-scroll-proportion="0.17878427">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/common/url/tldextract.py">
+    <entry file="file://$PROJECT_DIR$/web/views/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="228" column="14" selection-start="8256" selection-end="8256" vertical-scroll-proportion="0.8458904">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tracking/utils.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="61" column="65" selection-start="2034" selection-end="2034" vertical-scroll-proportion="0.72602737">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="300" column="25" selection-start="14650" selection-end="14667" vertical-scroll-proportion="0.7670915">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tracking/middleware/visitor.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="35" selection-start="35" selection-end="35" vertical-scroll-proportion="-1.746234">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tracking/admin.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="28" selection-start="210" selection-end="210" vertical-scroll-proportion="0.10330579">
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tracking/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="195" column="104" selection-start="7589" selection-end="8839" vertical-scroll-proportion="0.7952314">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/views/ajax.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="68" selection-start="911" selection-end="911" vertical-scroll-proportion="0.47945204">
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coupons/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="40" selection-start="40" selection-end="40" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/static/js/main.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="186" column="21" selection-start="6565" selection-end="6565" vertical-scroll-proportion="0.6746575">
+        <state line="25" column="4" selection-start="959" selection-end="959" vertical-scroll-proportion="0.22260274">
           <folding />
         </state>
       </provider>

@@ -41,6 +41,9 @@ urlpatterns += patterns('web.views.main',
 
 urlpatterns += patterns('web.views.ajax',
     url(r'^a/subscribe/$', 'ajax_subscribe'),
+)
+
+urlpatterns += patterns('tracking.views',
     url(r'^a/clk/$', 'click_track'),
 )
 
