@@ -25,18 +25,21 @@ def _remove_skimlinks(skimlinked_url):
 def log_click_track(request):
     try:
         print request.path
-        click_track(request)
+        click_track(request, request.path)
     except:
         print_stack_trace()
 
 @require_POST
-def click_track(request):
+def click_track(request, clicked_link_path=None):
     try:
         referer = utils.u_clean(request.META.get('HTTP_REFERER', 'unknown')[:255])
-        clicked_link = request.POST["clicked"][:255]
-        try:
-            clicked_link=clicked_link.lower()
-        except: pass
+        clicked_link = clicked_link_path
+        if not clicked_link:
+            clicked_link = request.POST["clicked"][:255]
+            try:
+                clicked_link=clicked_link.lower()
+            except:
+                print_stack_trace()
 
         source_url_type='landing'
         if '/categories/' in referer:
