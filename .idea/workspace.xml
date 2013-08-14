@@ -32,7 +32,7 @@
     <file path="/coupon_extras.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376367306687" ignored="false" />
     <file path="/header.html" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376434931464" ignored="false" />
     <file path="/email.html" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376483575905" ignored="false" />
-    <file path="/email.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376487572853" ignored="false" />
+    <file path="/email.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376496985519" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,10 +56,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="views.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="views.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tracking/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="33" column="40" selection-start="1064" selection-end="1064" vertical-scroll-proportion="0.5650685">
+            <state line="87" column="20" selection-start="3208" selection-end="3208" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="e#0#53#0" expanded="true" />
               </folding>
@@ -72,6 +72,17 @@
           <provider selected="true" editor-type-id="text-editor">
             <state line="147" column="14" selection-start="5900" selection-end="5900" vertical-scroll-proportion="0.0">
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="email.py" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/web/views/email.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="25" column="22" selection-start="1176" selection-end="1176" vertical-scroll-proportion="0.4280822">
+              <folding>
+                <element signature="e#0#15#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -98,10 +109,10 @@
         <option value="$PROJECT_DIR$/templates/email/header.html" />
         <option value="$PROJECT_DIR$/templates/email.html" />
         <option value="$PROJECT_DIR$/tracking/commission/skimlinks.py" />
-        <option value="$PROJECT_DIR$/web/views/email.py" />
         <option value="$PROJECT_DIR$/templates/email/coupon.html" />
         <option value="$PROJECT_DIR$/web/views/main.py" />
         <option value="$PROJECT_DIR$/tracking/views.py" />
+        <option value="$PROJECT_DIR$/web/views/email.py" />
       </list>
     </option>
   </component>
@@ -603,15 +614,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/views/email.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="67" column="25" selection-start="2983" selection-end="2983" vertical-scroll-proportion="0.78995436">
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/email/coupon.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="26" column="21" selection-start="1894" selection-end="1894" vertical-scroll-proportion="0.4648391">
@@ -651,6 +653,15 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/tracking/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="87" column="20" selection-start="3208" selection-end="3208" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="e#0#53#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/web/views/main.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="147" column="14" selection-start="5900" selection-end="5900" vertical-scroll-proportion="0.0">
@@ -658,11 +669,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tracking/views.py">
+    <entry file="file://$PROJECT_DIR$/web/views/email.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="33" column="40" selection-start="1064" selection-end="1064" vertical-scroll-proportion="0.5650685">
+        <state line="25" column="22" selection-start="1176" selection-end="1176" vertical-scroll-proportion="0.4280822">
           <folding>
-            <element signature="e#0#53#0" expanded="true" />
+            <element signature="e#0#15#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -12,7 +12,7 @@ def coupon_tuple(link_type):
     index = 0
     for slug in merchant_slugs(None):
         index += 1
-        merchant = Merchant.objects.get(name_slug=slug)
+        merchant = Merchant.objects.filter(name_slug=slug)[0]
         coupon = merchant.featured_coupon()
         merchant_link = "http://pennywyse.com/coupons/{0}/{1}".format(merchant.name_slug, merchant.id)
         if link_type == 'merchant':
