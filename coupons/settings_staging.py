@@ -6,14 +6,10 @@ SVCS_HOST = HostName
 
 ALLOWED_HOSTS = [HostName, '127.0.0.1', 'localhost']
 
-DEBUG = False
-TEMPLATE_DEBUG = DEBUG
+STATIC_URL = '//d1094zu9qp7ilj.cloudfront.net/'
+STATICFILES_STORAGE = 'coupons.storage.S3PipelineStorage'
 
 def show_toolbar(request):
     return True
 
 DEBUG_TOOLBAR_CONFIG['SHOW_TOOLBAR_CALLBACK'] = show_toolbar
-
-#STATIC_URL = 'http://d2nixvjj44pjq8.cloudfront.net/static/'
-
-#SECRET_KEY = 'VtkbsjjstNxTCQTYopimAj5c3lbMdQHHCBShyCCxosCntEyzuk'

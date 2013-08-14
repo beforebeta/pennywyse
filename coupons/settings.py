@@ -3,7 +3,7 @@ import os
 import sys, urlparse
 import datetime
 
-urlparse.uses_netloc.append('postgres')
+#urlparse.uses_netloc.append('postgres')
 urlparse.uses_netloc.append('mysql')
 
 __author__ = 'amrish'
@@ -25,18 +25,13 @@ RAVEN_CONFIG = {
     'dsn': 'https://3068bc36ec7d4272ad85e90f19e57362:4d3431bd6ed241b382ace93a1b4a4050@app.getsentry.com/11687',
 }
 
-IMAGE_LOCAL_COPY_DIR_NO_PREFIX = 'static/img/local/'
-IMAGE_LOCAL_COPY_DIR = BASE_DIR + '/' + IMAGE_LOCAL_COPY_DIR_NO_PREFIX
-if not os.path.exists(IMAGE_LOCAL_COPY_DIR):
-    os.makedirs(IMAGE_LOCAL_COPY_DIR)
-
 ADMINS = (
     ('Jacob Friis Saxberg', 'jacob@webcom.dk'),
 )
 
-WEBSITE_NAME = 'PennyWyse'
-
 MANAGERS = ADMINS
+
+WEBSITE_NAME = 'PennyWyse'
 
 if os.environ.has_key('DATABASE_URL'):
   url = urlparse.urlparse(os.environ['DATABASE_URL'])
@@ -105,12 +100,12 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: '/home/media/media.lawrence.com/media/'
-MEDIA_ROOT = ''
+MEDIA_ROOT = os.path.abspath(os.path.join(BASE_DIR, os.pardir)) + '/media'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: 'http://media.lawrence.com/media/', 'http://example.com/media/'
-MEDIA_URL = ''
+MEDIA_URL = '/media/'
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
@@ -196,7 +191,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'django.contrib.humanize',
-    #'south',
+    'south',
     'core',
     'web',
     'websvcs',
@@ -236,7 +231,7 @@ LOGGING = {
         }
 }
 
-DEFAULT_IMAGE = 'http://pennywyse.com/static/img/favicon.png'
+DEFAULT_IMAGE = 'http://d1094zu9qp7ilj.cloudfront.net/img/favicon.png'
 
 APP_NAME = 'COUPONS_APP'
 APPEND_SLASH=True
@@ -252,14 +247,7 @@ DEVELOPER_KEY = '00a1be63fcdf4cc39b9fa1c4c9e021ed990814ac740758b6eae34a9f71c27e8
 # import warnings
 # warnings.filterwarnings('error', r'DateTimeField received a naive datetime', RuntimeWarning, r'django\.db\.models\.fields')
 
-### Static ###
-
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-
-if DEBUG:
-    STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
-else:
-    STATICFILES_STORAGE = 'coupons.storage.S3PipelineStorage'
 
 AWS_STORAGE_BUCKET_NAME = 'pennywyse'
 AWS_HEADERS = {
@@ -267,7 +255,11 @@ AWS_HEADERS = {
     'Expires': (datetime.datetime.today() + datetime.timedelta(days=365)).strftime('%a, %d %b %Y %H:%M:%S GMT')
 }
 
-if DEBUG:
-    STATIC_URL = '/static/'
-else:
-    STATIC_URL = '//d1094zu9qp7ilj.cloudfront.net/'
+# IMAGE_LOCAL_COPY_DIR_NO_PREFIX = 'static/img/local/'
+# IMAGE_LOCAL_COPY_DIR = BASE_DIR + '/' + IMAGE_LOCAL_COPY_DIR_NO_PREFIX
+# if not os.path.exists(IMAGE_LOCAL_COPY_DIR):
+#     os.makedirs(IMAGE_LOCAL_COPY_DIR)
+IMAGE_LOCAL_COPY_DIR_NO_PREFIX = 'static/img/local/'
+IMAGE_LOCAL_COPY_DIR = MEDIA_ROOT
+# if not os.path.exists(IMAGE_LOCAL_COPY_DIR):
+#     os.makedirs(IMAGE_LOCAL_COPY_DIR)
