@@ -5,7 +5,7 @@ from core.models import Coupon, Merchant
 from tracking.commission.skimlinks import merchant_slugs
 
 def coupon_tuple(slug, index, base_link, merchant_link):
-      merchant = Merchant.objects.get(name_slug=slug)
+      merchant = Merchant.objects.filter(name_slug=slug)[0]
       coupon = merchant.featured_coupon()
       params = "utm_medium=mailchimp&utm_source=newsletter&utm_campaign=promo&utm_term={0}".format(merchant.name_slug)
       link = "{0}?{1}".format(base_link, params)
@@ -18,7 +18,7 @@ def email_a(self):
     i = 0
     date_string = datetime.datetime.now().strftime("%d, %b %Y")
     for slug in merchant_slugs(None):
-        merchant = Merchant.objects.get(name_slug=slug)
+        merchant = Merchant.objects.filter(name_slug=slug)[0]
         coupon = merchant.featured_coupon()
         merchant_link = "http://pennywyse.com/coupons/{0}/{1}".format(merchant.name_slug, merchant.id)
         coupon_data.append(coupon_tuple(slug, i, merchant_link, merchant_link))
@@ -33,7 +33,7 @@ def email_b(self):
     i = 0
     date_string = datetime.datetime.now().strftime("%d, %b %Y")
     for slug in merchant_slugs(None):
-        merchant = Merchant.objects.get(name_slug=slug)
+        merchant = Merchant.objects.filter(name_slug=slug)[0]
         coupon = merchant.featured_coupon()
         merchant_link = "http://pennywyse.com/coupons/{0}/{1}".format(merchant.name_slug, merchant.id)
         coupon_link = "http://pennywyse.com/coupon/{0}/{1}/{2}".format(merchant.name_slug, coupon.desc_slug, coupon.id)
@@ -49,7 +49,7 @@ def email_c(self):
     i = 0
     date_string = datetime.datetime.now().strftime("%d, %b %Y")
     for slug in merchant_slugs(None):
-        merchant = Merchant.objects.get(name_slug=slug)
+        merchant = Merchant.objects.filter(name_slug=slug)[0]
         coupon = merchant.featured_coupon()
         merchant_link = "http://pennywyse.com/coupons/{0}/{1}".format(merchant.name_slug, merchant.id)
         coupon_data.append(coupon_tuple(slug, i, merchant_link, merchant_link))
@@ -64,7 +64,7 @@ def email_d(self):
     i = 0
     date_string = datetime.datetime.now().strftime("%d, %b %Y")
     for slug in merchant_slugs(None):
-        merchant = Merchant.objects.get(name_slug=slug)
+        merchant = Merchant.objects.filter(name_slug=slug)[0]
         coupon = merchant.featured_coupon()
         merchant_link = "http://pennywyse.com/coupons/{0}/{1}".format(merchant.name_slug, merchant.id)
         coupon_link = "http://pennywyse.com/coupon/{0}/{1}/{2}".format(merchant.name_slug, coupon.desc_slug, coupon.id)

@@ -32,6 +32,7 @@
     <file path="/coupon_extras.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376367306687" ignored="false" />
     <file path="/header.html" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376434931464" ignored="false" />
     <file path="/email.html" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376483575905" ignored="false" />
+    <file path="/email.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376487572853" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,30 +56,19 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="email.html" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="email.html" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/templates/email.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="29" column="38" selection-start="1739" selection-end="1739" vertical-scroll-proportion="-1.8333334">
+            <state line="29" column="38" selection-start="1739" selection-end="1739" vertical-scroll-proportion="0.052443385">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="email.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/web/views/email.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="65" column="25" selection-start="2859" selection-end="2859" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="e#0#15#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="skimlinks.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="skimlinks.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tracking/commission/skimlinks.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="59" column="1" selection-start="4775" selection-end="4775" vertical-scroll-proportion="0.6871379">
+            <state line="43" column="0" selection-start="1259" selection-end="1259" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -103,7 +93,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/templates/index.html" />
         <option value="$PROJECT_DIR$/static/js/main.js" />
         <option value="$PROJECT_DIR$/core/models.py" />
         <option value="$PROJECT_DIR$/web/views/ajax.py" />
@@ -119,6 +108,7 @@
         <option value="$PROJECT_DIR$/templates/email/header.html" />
         <option value="$PROJECT_DIR$/templates/email.html" />
         <option value="$PROJECT_DIR$/tracking/commission/skimlinks.py" />
+        <option value="$PROJECT_DIR$/web/views/email.py" />
       </list>
     </option>
   </component>
@@ -689,25 +679,25 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/email.html">
+    <entry file="file://$PROJECT_DIR$/tracking/commission/skimlinks.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="38" selection-start="1739" selection-end="1739" vertical-scroll-proportion="-1.8333334">
+        <state line="43" column="0" selection-start="1259" selection-end="1259" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/web/views/email.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="65" column="25" selection-start="2859" selection-end="2859" vertical-scroll-proportion="0.0">
+        <state line="67" column="25" selection-start="2983" selection-end="2983" vertical-scroll-proportion="0.78995436">
           <folding>
             <element signature="e#0#15#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tracking/commission/skimlinks.py">
+    <entry file="file://$PROJECT_DIR$/templates/email.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="59" column="1" selection-start="4775" selection-end="4775" vertical-scroll-proportion="0.6871379">
+        <state line="29" column="38" selection-start="1739" selection-end="1739" vertical-scroll-proportion="0.052443385">
           <folding />
         </state>
       </provider>
