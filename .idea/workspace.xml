@@ -9,7 +9,7 @@
     <file path="/basesettings.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1375985751615" ignored="false" />
     <file path="/admin.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376363553584" ignored="false" />
     <file path="/middleware.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376001228063" ignored="false" />
-    <file path="/main.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376492676364" ignored="false" />
+    <file path="/main.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376492842794" ignored="false" />
     <file path="/visitor.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376420112220" ignored="false" />
     <file path="/__init__.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376056201461" ignored="false" />
     <file path="/test_tracking.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376074324417" ignored="false" />
@@ -56,10 +56,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="views.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="views.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tracking/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="46" column="0" selection-start="1321" selection-end="1321" vertical-scroll-proportion="-0.07876712">
+            <state line="46" column="0" selection-start="1321" selection-end="1321" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="e#0#53#0" expanded="true" />
               </folding>
@@ -67,10 +67,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main.py" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="main.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/web/views/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="144" column="9" selection-start="5797" selection-end="5797" vertical-scroll-proportion="0.0">
+            <state line="31" column="8" selection-start="1191" selection-end="1191" vertical-scroll-proportion="0.32534248">
               <folding />
             </state>
           </provider>
@@ -651,19 +651,19 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/views/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="144" column="9" selection-start="5797" selection-end="5797" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tracking/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="46" column="0" selection-start="1321" selection-end="1321" vertical-scroll-proportion="-0.07876712">
+        <state line="46" column="0" selection-start="1321" selection-end="1321" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="e#0#53#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/views/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="31" column="8" selection-start="1191" selection-end="1191" vertical-scroll-proportion="0.32534248">
+          <folding />
         </state>
       </provider>
     </entry>

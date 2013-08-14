@@ -22,11 +22,14 @@ def build_base_context(request, context):
         context["visitor"] = request.visitor
     except:
         try:
-            print "Error happened at ", request.path
+            if '/favicon.ico' in request.path:
+                pass
+            else:
+                print "Error happened at ", request.path
+                print_stack_trace()
         except:
             pass
-        print_stack_trace()
-
+        
 def render_response(template_file, request, context={}):
     build_base_context(request, context)
     return render_to_response(template_file, context, context_instance=RequestContext(request))
