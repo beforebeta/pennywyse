@@ -21,7 +21,7 @@
     <file path="/header.css" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376152161058" ignored="false" />
     <file path="/stats.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376163220541" ignored="false" />
     <file path="/fmtcload.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376163424808" ignored="false" />
-    <file path="/coupon.html" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376490335297" ignored="false" />
+    <file path="/coupon.html" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376490397816" ignored="false" />
     <file path="/index.html" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376246051065" ignored="false" />
     <file path="/main.js" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376247448831" ignored="false" />
     <file path="/urls.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376344316540" ignored="false" />
@@ -68,8 +68,9 @@
       <file leaf-file-name="coupon.html" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/templates/email/coupon.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="33" column="80" selection-start="2267" selection-end="2267" vertical-scroll-proportion="0.58998805">
+            <state line="29" column="39" selection-start="2040" selection-end="2040" vertical-scroll-proportion="0.5184744">
               <folding>
+                <element signature="n#style#0;n#p#0;n#td#0;n#tr#3;n#table#0;n#td#2;n#tr#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#p#1;n#td#0;n#tr#3;n#table#0;n#td#2;n#tr#0;n#!!top" expanded="true" />
               </folding>
             </state>
@@ -708,8 +709,9 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/email/coupon.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="33" column="80" selection-start="2267" selection-end="2267" vertical-scroll-proportion="0.58998805">
+        <state line="29" column="39" selection-start="2040" selection-end="2040" vertical-scroll-proportion="0.5184744">
           <folding>
+            <element signature="n#style#0;n#p#0;n#td#0;n#tr#3;n#table#0;n#td#2;n#tr#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#p#1;n#td#0;n#tr#3;n#table#0;n#td#2;n#tr#0;n#!!top" expanded="true" />
           </folding>
         </state>
