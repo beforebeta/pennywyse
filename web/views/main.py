@@ -195,15 +195,8 @@ def category(request, category_code, current_page=1, category_ids=-1):
             "active"    : _search(coup_cat.id, selected_categories, lambda a,b:a==b)
         })
 
-    pages = Paginator(
-                        list(
-                                set(
-                                    category.get_coupons().filter(
-                                        Q(categories__id__in=selected_categories) |
-                                        Q(categories__id__isnull=True)
-                                    )
-                                )
-                        ), 10)
+    pages = category.coupons_in_categories(selected_categories)
+
     if current_page > pages.num_pages:
         current_page=pages.num_pages
     context={
