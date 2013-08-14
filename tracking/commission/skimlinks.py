@@ -41,17 +41,17 @@ def _get_response(path, arguments):
     return requests.get(REPORTING_ENDPOINT + path, params=arguments)
 
 _merchant_descriptions = {
-   # "macys"             :["macys"          , 3, "Macy's is the online destination for today's customer. Offering quality, style, value and great selections."],
+   "macys"             :["macys"          , 3, "Macy's is the online destination for today's customer. Offering quality, style, value and great selections."],
    "sephora"           :["sephora"        , 13, "Choose from over 200 top beauty brands including Bare Escentuals, Dior, Philosophy, Smashbox and more!"],
    "nordstrom"         :["nordstrom"      , 6, "Choose from over 200 top beauty brands including Bare Escentuals, Dior, Philosophy, Smashbox and more!"],
    "thinkgeekcom"      :["thinkgeekcom"   , 15, "From apparel to gadgets and computer accessories to caffeine, ThinkGeek is a one-stop shop for everything geeky."],
    "luisaviaroma"      :["luisaviaroma"   , 16, "LUISAVIAROMA has a a wide selection from over 400 Designer collections, such as Dior Homme, Dsquared2, Dolce&Gabbana, Christian Louboutin, Lanvin, Moncler, Marc Jacobs, Chloe and more."],
    "neiman-marcus"     :["neiman-marcus"  , 10, "Shop fashion's top designers and beauty's best brands, plus designer jewelry, luxurious decor, and distinctive gifts for any occasion."],
-   # "jcpenney"          :["jcpenney"       , 7, "FREE Shipping at jcpenney.com. Shop for women's clothing, men's clothing, boy's and girl's clothing, home furniture, bedding, jewelry and shoes."],
-   # "sears"             :["sears"          , 8, "Begin your Shopping Experience at Sears. Buy Online, Pick up in Store. Find Store Locations. Find Great Brands such as Kenmore, Craftsman & Diehard."],
-   # "target"            :["target"         , 5, "Expect more pay less with Target. Spend $50, get free shipping on over 500K items. Chose from a wide selection of furniture, baby, electronics, toys, shoes."],
+   "jcpenney"          :["jcpenney"       , 7, "FREE Shipping at jcpenney.com. Shop for women's clothing, men's clothing, boy's and girl's clothing, home furniture, bedding, jewelry and shoes."],
+   "sears"             :["sears"          , 8, "Begin your Shopping Experience at Sears. Buy Online, Pick up in Store. Find Store Locations. Find Great Brands such as Kenmore, Craftsman & Diehard."],
+   "target"            :["target"         , 5, "Expect more pay less with Target. Spend $50, get free shipping on over 500K items. Chose from a wide selection of furniture, baby, electronics, toys, shoes."],
    "kmart"             :["kmart"          , 9, "Quality products through a portfolio of exclusive brands that include Jaclyn Smith, Joe Boxer, County Living, Sofia Vergara, Gordon Ramsay and Smart Sense. Kmart offers a wide range of categories from appliances, to electronics, toys, apparel, sporting goods and more."],
-   # "kohls"             :["kohls"          , 12, "Kohl's stores are stocked with everything you need for yourself and your home - apparel, shoes & accessories for women, children and men, plus home products like small electrics, bedding, luggage and more."],
+   "kohls"             :["kohls"          , 12, "Kohl's stores are stocked with everything you need for yourself and your home - apparel, shoes & accessories for women, children and men, plus home products like small electrics, bedding, luggage and more."],
    "ssense"            :["ssense"         , 11, "SSENSE.com is the online fashion destination for discerning men and women shopping for luxury apparel. With a repertoire of over 200 designer collections, SSENSE boasts a selection of carefully curated runway and high-street fashions from designers such as Dsquared2, Diesel, Rag & Bone, Marc Jacobs, Alice + Olivia, Givenchy, Lanvin, Alexander Wang, Proenza Schouler and many more."],
    "bluefly"           :["bluefly"        , 2, "The online destination for the fashion savvy insider looking for the most current trends & hot designer brands. Fabulous new styles are added every day including Prada, Fendi, Gucci, Dolce & Gabbana, BCBG Max Azria, Theory, Nicole Miller, Michael Kors & many more."],
    "levis"             :["levis"          , 1, "Shop Jeans, Tops, Jackets, Shorts, and Accessories for men, women, juniors, kids, and babies at Levi's!"],
