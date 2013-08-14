@@ -30,6 +30,8 @@
     <file path="/views.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376409823061" ignored="false" />
     <file path="/a.dummy" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376410754227" ignored="false" />
     <file path="/coupon_extras.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376367306687" ignored="false" />
+    <file path="/header.html" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376434931464" ignored="false" />
+    <file path="/email.html" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376483575905" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,21 +55,30 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="visitor.py" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/tracking/middleware/visitor.py">
+      <file leaf-file-name="email.html" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/templates/email.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="76" column="70" selection-start="3072" selection-end="3072" vertical-scroll-proportion="0.6871379">
+            <state line="76" column="0" selection-start="4061" selection-end="4061" vertical-scroll-proportion="0.89272946">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="email.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/web/views/email.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="27" column="52" selection-start="1288" selection-end="1288" vertical-scroll-proportion="0.0">
               <folding>
-                <element signature="e#0#40#0" expanded="true" />
+                <element signature="e#0#15#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="prodsettings.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/coupons/prodsettings.py">
+      <file leaf-file-name="header.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/email/header.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="24" column="0" selection-start="693" selection-end="693" vertical-scroll-proportion="0.0">
+            <state line="11" column="32" selection-start="605" selection-end="605" vertical-scroll-proportion="-6.875">
               <folding />
             </state>
           </provider>
@@ -83,14 +94,11 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/core/management/commands/fmtcload.py" />
-        <option value="$PROJECT_DIR$/web/templates/coupon.html" />
         <option value="$PROJECT_DIR$/templates/index.html" />
         <option value="$PROJECT_DIR$/static/js/main.js" />
         <option value="$PROJECT_DIR$/core/models.py" />
         <option value="$PROJECT_DIR$/web/views/ajax.py" />
         <option value="$PROJECT_DIR$/coupons/urls.py" />
-        <option value="$PROJECT_DIR$/tracking/commission/skimlinks.py" />
         <option value="$PROJECT_DIR$/tracking/admin.py" />
         <option value="$PROJECT_DIR$/tracking/models.py" />
         <option value="$PROJECT_DIR$/web/views/main.py" />
@@ -99,6 +107,9 @@
         <option value="$PROJECT_DIR$/templates/open_coupon.html" />
         <option value="$PROJECT_DIR$/tracking/views.py" />
         <option value="$PROJECT_DIR$/tracking/middleware/visitor.py" />
+        <option value="$PROJECT_DIR$/tracking/commission/skimlinks.py" />
+        <option value="$PROJECT_DIR$/templates/email/header.html" />
+        <option value="$PROJECT_DIR$/templates/email.html" />
       </list>
     </option>
   </component>
@@ -197,7 +208,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="tracking" />
+              <option name="myItemId" value="web" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -211,11 +222,43 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="tracking" />
+              <option name="myItemId" value="web" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="middleware" />
+              <option name="myItemId" value="views" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="coupons" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="coupons" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="templates" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="coupons" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="coupons" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="templates" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="email" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -527,43 +570,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/templates/open_coupon.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="22" selection-start="503" selection-end="503" vertical-scroll-proportion="0.17878427">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="0" selection-start="67" selection-end="67" vertical-scroll-proportion="0.11986301">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/refresh.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="21" selection-start="68" selection-end="68" vertical-scroll-proportion="0.034246575">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tracking/commission/skimlinks.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="66" column="87" selection-start="4650" selection-end="4650" vertical-scroll-proportion="0.8435689">
-          <folding>
-            <element signature="e#0#14#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tracking/listeners.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="34" column="0" selection-start="1165" selection-end="1165" vertical-scroll-proportion="0.58219177">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="93" column="6" selection-start="3709" selection-end="3709" vertical-scroll-proportion="0.28041714">
@@ -603,15 +609,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tracking/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="49" column="55" selection-start="1562" selection-end="1562" vertical-scroll-proportion="0.8390411">
-          <folding>
-            <element signature="e#0#53#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tracking/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="8" column="0" selection-start="158" selection-end="158" vertical-scroll-proportion="0.1369863">
@@ -628,9 +625,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/tracking/commission/skimlinks.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="37" column="66" selection-start="1083" selection-end="1083" vertical-scroll-proportion="0.3221321">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/tracking/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="246" column="43" selection-start="11591" selection-end="11591" vertical-scroll-proportion="0.49594438">
+        <state line="60" column="35" selection-start="2810" selection-end="2810" vertical-scroll-proportion="0.5480881">
           <folding>
             <element signature="e#0#40#0" expanded="true" />
             <element signature="e#3799#4498#0" expanded="false" />
@@ -644,19 +648,58 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/tracking/middleware/visitor.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="67" column="42" selection-start="2677" selection-end="2677" vertical-scroll-proportion="0.6604867">
+          <folding>
+            <element signature="e#0#40#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/coupons/prodsettings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="0" selection-start="693" selection-end="693" vertical-scroll-proportion="0.0">
+        <state line="24" column="0" selection-start="693" selection-end="693" vertical-scroll-proportion="0.41095892">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tracking/middleware/visitor.py">
+    <entry file="file://$PROJECT_DIR$/tracking/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="76" column="70" selection-start="3072" selection-end="3072" vertical-scroll-proportion="0.6871379">
+        <state line="49" column="55" selection-start="1562" selection-end="1562" vertical-scroll-proportion="0.8390411">
           <folding>
-            <element signature="e#0#40#0" expanded="true" />
+            <element signature="e#0#53#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/email/coupon.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="25" column="49" selection-start="1889" selection-end="1889" vertical-scroll-proportion="0.44696066">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/views/email.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="27" column="52" selection-start="1288" selection-end="1288" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/email/header.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="32" selection-start="605" selection-end="605" vertical-scroll-proportion="-6.875">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/email.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="76" column="0" selection-start="4061" selection-end="4061" vertical-scroll-proportion="0.89272946">
+          <folding />
         </state>
       </provider>
     </entry>

@@ -1,9 +1,7 @@
 {% load email_extras %}
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:og="http://opengraph.org/schema/">
 {% include 'email/header.html' %}
-<body id="archivebody">
+<!--<body id="archivebody">-->
 <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0">
 <table width="100%" cellspacing="0" cellpadding="0">
   <tr>
@@ -13,7 +11,7 @@
         {% if show_image %}
         <tr>
           <td colspan="4" style="font-size:0; line-height:0;">
-            <a href="http://pennywyse.com"><img src="https://s3.amazonaws.com/pennywyse/Screen+Shot+2013-08-13+at+6.03.32+PM.png" alt="PennyWise" width="1000" height="187" hspace="0" vspace="0" border="0"></a>
+            <a href="http://pennywyse.com?utm_medium=mailchimp&utm_source=newsletter&utm_campaign=promo&utm_term=pennywyse&utm_content=main_img"><img src="http://s3.amazonaws.com/pwysemails/pennywyse_header.png" alt="PennyWise" width="1000" height="187" hspace="0" vspace="0" border="0"></a>
           </td>
         </tr>
         {% endif %}
@@ -75,31 +73,4 @@
     <td width="50%"></td>
   </tr>
 </table>
-<center>
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
-  <table border="0" cellpadding="20" cellspacing="0" width="100%" style="background:#EEEEEE  !important; border-top:1px solid #DDDDDD; clear:both;" id="canspamBarWrapper">
-    <tr>
-      <td align="center" valign="top" style="padding-bottom:0;">
-        <table border="0" cellpadding="0" cellspacing="0" width="600" id="canspamBar">
-          <tr>
-            <td align="left" valign="top" style="color:#505050 !important;font-family:Verdana,Arial,Sans !important;font-size:11px !important;font-weight:normal !important;font-style:normal !important;text-decoration:none !important;vertical-align:top !important;text-align:left !important;">
-              Sent to &lt;&lt;Email Address>> &mdash; <a href="http://wiwt.us2.list-manage.com/about?u=437b9c7ccbb42ff78d4d219fe&id=c9dc036353&e=[UNIQID]&c=31ae8404d4" style="font-family:Verdana,Arial,Sans !important;font-size:11px !important;font-weight:normal !important;font-style:normal !important;text-decoration:underline !important;color:#404040 !important;"><em>why did I get this?</em></a>
-              <br>
-              <a href="http://wiwt.us2.list-manage.com/unsubscribe?u=437b9c7ccbb42ff78d4d219fe&id=c9dc036353&e=[UNIQID]&c=31ae8404d4" style="font-family:Verdana,Arial,Sans !important;font-size:11px !important;font-weight:normal !important;font-style:normal !important;text-decoration:none !important;color:#369 !important;">unsubscribe from this list</a> |
-              <a href="http://wiwt.us2.list-manage1.com/profile?u=437b9c7ccbb42ff78d4d219fe&id=c9dc036353&e=[UNIQID]" style="font-family:Verdana,Arial,Sans !important;font-size:11px !important;font-weight:normal !important;font-style:normal !important;text-decoration:none !important;color:#369 !important;">update subscription preferences</a>
-              <br>
-            </td>
-            <td align="left" valign="top">
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
-</center>
-</body></body> </html>
+</body></html>
