@@ -56,10 +56,19 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="email.html" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="email.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/email.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="29" column="38" selection-start="1739" selection-end="1739" vertical-scroll-proportion="0.052443385">
+            <state line="61" column="50" selection-start="3202" selection-end="3202" vertical-scroll-proportion="-21.833334">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="coupon.html" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/templates/email/coupon.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="27" column="0" selection-start="1738" selection-end="1946" vertical-scroll-proportion="0.4827175">
               <folding />
             </state>
           </provider>
@@ -93,7 +102,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/static/js/main.js" />
         <option value="$PROJECT_DIR$/core/models.py" />
         <option value="$PROJECT_DIR$/web/views/ajax.py" />
         <option value="$PROJECT_DIR$/coupons/urls.py" />
@@ -109,6 +117,7 @@
         <option value="$PROJECT_DIR$/templates/email.html" />
         <option value="$PROJECT_DIR$/tracking/commission/skimlinks.py" />
         <option value="$PROJECT_DIR$/web/views/email.py" />
+        <option value="$PROJECT_DIR$/templates/email/coupon.html" />
       </list>
     </option>
   </component>
@@ -665,13 +674,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/email/coupon.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="49" selection-start="1889" selection-end="1889" vertical-scroll-proportion="0.44696066">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/email/header.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="11" column="32" selection-start="605" selection-end="605" vertical-scroll-proportion="-6.875">
@@ -697,7 +699,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/email.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="38" selection-start="1739" selection-end="1739" vertical-scroll-proportion="0.052443385">
+        <state line="61" column="50" selection-start="3202" selection-end="3202" vertical-scroll-proportion="-21.833334">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/email/coupon.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="27" column="0" selection-start="1738" selection-end="1946" vertical-scroll-proportion="0.4827175">
           <folding />
         </state>
       </provider>
