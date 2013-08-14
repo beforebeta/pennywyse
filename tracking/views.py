@@ -52,6 +52,7 @@ def click_track(request, clicked_link_path=None):
         coupon=None
         merchant=None
 
+        print "CLICKED LINK", clicked_link
         if "/coupon/" in clicked_link:
             #skimlinks will assume the source url to be the /coupon/ url
             if clicked_link.endswith("/"):
