@@ -8,6 +8,7 @@ from django.template.defaultfilters import slugify
 from django.views.decorators.csrf import ensure_csrf_cookie
 from core.models import Category, Coupon, Merchant
 from core.util import encode_uri_component, print_stack_trace
+from tracking.views import log_click_track
 from web.models import FeaturedCoupon, NewCoupon, PopularCoupon, ShortenedURLComponent
 import math
 from django.core.paginator import Paginator
@@ -20,6 +21,10 @@ def build_base_context(request, context):
     try:
         context["visitor"] = request.visitor
     except:
+        try:
+            print "Error happened at ", request.path
+        except:
+            pass
         print_stack_trace()
 
 def render_response(template_file, request, context={}):
@@ -137,7 +142,7 @@ def open_coupon(request, company_name, coupon_label, coupon_id):
         "back_url"      : back_url,
         "path"          : encode_uri_component("%s://%s%s" % ("http", "www.pennywyse.com", request.path))
     }
-    print context["path"]
+    log_click_track(request)
     return render_response("open_coupon.html",request, context)
 
 @ensure_csrf_cookie

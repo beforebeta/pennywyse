@@ -22,6 +22,12 @@ def _remove_skimlinks(skimlinked_url):
         print_stack_trace()
         return skimlinked_url
 
+def log_click_track(request):
+    try:
+        click_track(request)
+    except:
+        print_stack_trace()
+
 @require_POST
 def click_track(request):
     try:

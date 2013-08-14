@@ -9,7 +9,7 @@
     <file path="/basesettings.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1375985751615" ignored="false" />
     <file path="/admin.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376363553584" ignored="false" />
     <file path="/middleware.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376001228063" ignored="false" />
-    <file path="/main.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376366322514" ignored="false" />
+    <file path="/main.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376492676364" ignored="false" />
     <file path="/visitor.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376420112220" ignored="false" />
     <file path="/__init__.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376056201461" ignored="false" />
     <file path="/test_tracking.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376074324417" ignored="false" />
@@ -27,7 +27,7 @@
     <file path="/urls.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376344316540" ignored="false" />
     <file path="/ajax.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376343494024" ignored="false" />
     <file path="$PROJECT_DIR$/account/models.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376338972963" ignored="false" />
-    <file path="/views.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376409823061" ignored="false" />
+    <file path="/views.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376492637115" ignored="false" />
     <file path="/a.dummy" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376410754227" ignored="false" />
     <file path="/coupon_extras.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376367306687" ignored="false" />
     <file path="/header.html" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376434931464" ignored="false" />
@@ -56,39 +56,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="email.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/email.html">
+      <file leaf-file-name="views.py" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/tracking/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="61" column="50" selection-start="3202" selection-end="3202" vertical-scroll-proportion="-21.833334">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="coupon.html" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/templates/email/coupon.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="29" column="16" selection-start="2017" selection-end="2017" vertical-scroll-proportion="0.5184744">
+            <state line="46" column="0" selection-start="1321" selection-end="1321" vertical-scroll-proportion="-0.07876712">
               <folding>
-                <element signature="n#style#0;n#p#1;n#td#0;n#tr#3;n#table#0;n#td#2;n#tr#0;n#!!top" expanded="true" />
+                <element signature="e#0#53#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="skimlinks.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tracking/commission/skimlinks.py">
+      <file leaf-file-name="main.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/web/views/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="43" column="0" selection-start="1259" selection-end="1259" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="header.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/email/header.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="11" column="32" selection-start="605" selection-end="605" vertical-scroll-proportion="-6.875">
+            <state line="144" column="9" selection-start="5797" selection-end="5797" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -109,17 +91,17 @@
         <option value="$PROJECT_DIR$/coupons/urls.py" />
         <option value="$PROJECT_DIR$/tracking/admin.py" />
         <option value="$PROJECT_DIR$/tracking/models.py" />
-        <option value="$PROJECT_DIR$/web/views/main.py" />
         <option value="$PROJECT_DIR$/templates/company.html" />
         <option value="$PROJECT_DIR$/web/templatetags/coupon_extras.py" />
         <option value="$PROJECT_DIR$/templates/open_coupon.html" />
-        <option value="$PROJECT_DIR$/tracking/views.py" />
         <option value="$PROJECT_DIR$/tracking/middleware/visitor.py" />
         <option value="$PROJECT_DIR$/templates/email/header.html" />
         <option value="$PROJECT_DIR$/templates/email.html" />
         <option value="$PROJECT_DIR$/tracking/commission/skimlinks.py" />
         <option value="$PROJECT_DIR$/web/views/email.py" />
         <option value="$PROJECT_DIR$/templates/email/coupon.html" />
+        <option value="$PROJECT_DIR$/tracking/views.py" />
+        <option value="$PROJECT_DIR$/web/views/main.py" />
       </list>
     </option>
   </component>
@@ -250,39 +232,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="templates" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="coupons" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="coupons" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="templates" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="email" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="coupons" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="coupons" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="coupons" />
+              <option name="myItemId" value="tracking" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -580,26 +530,12 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/core/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="93" column="6" selection-start="3709" selection-end="3709" vertical-scroll-proportion="0.28041714">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/web/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="44" column="36" selection-start="1727" selection-end="1727" vertical-scroll-proportion="0.50342464">
           <folding>
             <element signature="e#0#15#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/views/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="40" selection-start="1190" selection-end="1190" vertical-scroll-proportion="-0.46232876">
-          <folding />
         </state>
       </provider>
     </entry>
@@ -667,29 +603,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tracking/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="49" column="55" selection-start="1562" selection-end="1562" vertical-scroll-proportion="0.8390411">
-          <folding>
-            <element signature="e#0#53#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/email/header.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="32" selection-start="605" selection-end="605" vertical-scroll-proportion="-6.875">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tracking/commission/skimlinks.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="43" column="0" selection-start="1259" selection-end="1259" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/web/views/email.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="67" column="25" selection-start="2983" selection-end="2983" vertical-scroll-proportion="0.78995436">
@@ -699,18 +612,57 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/templates/email/coupon.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="26" column="21" selection-start="1894" selection-end="1894" vertical-scroll-proportion="0.4648391">
+          <folding>
+            <element signature="n#style#0;n#p#1;n#td#0;n#tr#3;n#table#0;n#td#2;n#tr#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/templates/email.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="61" column="50" selection-start="3202" selection-end="3202" vertical-scroll-proportion="-21.833334">
+        <state line="61" column="50" selection-start="3202" selection-end="3202" vertical-scroll-proportion="0.624553">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/email/coupon.html">
+    <entry file="file://$PROJECT_DIR$/tracking/commission/skimlinks.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="16" selection-start="2017" selection-end="2017" vertical-scroll-proportion="0.5184744">
+        <state line="43" column="0" selection-start="1259" selection-end="1259" vertical-scroll-proportion="0.40903825">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/email/header.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="32" selection-start="605" selection-end="605" vertical-scroll-proportion="0.19366197">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/views/ajax.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="42" column="48" selection-start="1490" selection-end="1490" vertical-scroll-proportion="0.7191781">
           <folding>
-            <element signature="n#style#0;n#p#1;n#td#0;n#tr#3;n#table#0;n#td#2;n#tr#0;n#!!top" expanded="true" />
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/views/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="144" column="9" selection-start="5797" selection-end="5797" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tracking/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="46" column="0" selection-start="1321" selection-end="1321" vertical-scroll-proportion="-0.07876712">
+          <folding>
+            <element signature="e#0#53#0" expanded="true" />
           </folding>
         </state>
       </provider>
