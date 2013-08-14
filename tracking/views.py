@@ -24,6 +24,7 @@ def _remove_skimlinks(skimlinked_url):
 
 def log_click_track(request):
     try:
+        print request.PATH
         click_track(request)
     except:
         print_stack_trace()

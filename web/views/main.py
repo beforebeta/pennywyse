@@ -29,7 +29,7 @@ def build_base_context(request, context):
                 print_stack_trace()
         except:
             pass
-        
+
 def render_response(template_file, request, context={}):
     build_base_context(request, context)
     return render_to_response(template_file, context, context_instance=RequestContext(request))
