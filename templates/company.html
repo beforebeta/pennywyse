@@ -115,7 +115,7 @@
 {% block end_of_body %}
 <script type="text/javascript">
     try{
-        mixpanel.track("Company", {
+        mixpanel.track("Company Page Opened", {
             "company" : "{{ merchant.name_slug }}",
             "id"      : "{{ merchant.id }}"
         });

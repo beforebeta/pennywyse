@@ -111,7 +111,7 @@ mixpanel.init("3d3d512c8e3abb7052561dcaa0187132");</script>
 {% block end_of_body %}
 <script type="text/javascript">
     try{
-        mixpanel.track("CouponOpened", {
+        mixpanel.track("Coupon Page Opened", {
             "company"       : "{{ coupon.merchant.name_slug }}",
             "id"            : "{{ coupon.merchant.id }}",
             "coupon_id"     : "{{ coupon.id }}",

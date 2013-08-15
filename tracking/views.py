@@ -72,6 +72,16 @@ def log_click_track(request):
         click_track.merchant_domain = merchant_domain[:255]
 
         try:
+            click_track.acquisition_source      = request.visitor.acquisition_source
+            click_track.acquisition_medium      = request.visitor.acquisition_medium
+            click_track.acquisition_term        = request.visitor.acquisition_term
+            click_track.acquisition_content     = request.visitor.acquisition_content
+            click_track.acquisition_campaign    = request.visitor.acquisition_campaign
+            click_track.acquisition_gclid       = request.visitor.acquisition_gclid
+        except:
+            print_stack_trace()
+
+        try:
             click_track.save()
         except:
             try:
@@ -144,6 +154,16 @@ def click_track(request, clicked_link_path=None):
         click_track.merchant        = merchant
         click_track.coupon          = coupon
         click_track.merchant_domain = merchant_domain[:255]
+
+        try:
+            click_track.acquisition_source      = request.visitor.acquisition_source
+            click_track.acquisition_medium      = request.visitor.acquisition_medium
+            click_track.acquisition_term        = request.visitor.acquisition_term
+            click_track.acquisition_content     = request.visitor.acquisition_content
+            click_track.acquisition_campaign    = request.visitor.acquisition_campaign
+            click_track.acquisition_gclid       = request.visitor.acquisition_gclid
+        except:
+            print_stack_trace()
 
         try:
             click_track.save()
