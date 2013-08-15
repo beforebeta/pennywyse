@@ -10,11 +10,12 @@ def run_staging():
 
 def run_pro():
     with shell_env(DJANGO_SETTINGS_MODULE='coupons.settings_pro'):
-        local('python manage.py runserver')
+        local('gunicorn coupons.wsgi')
 
 def deploy_staging():
     branch = local('git rev-parse --abbrev-ref HEAD', capture=True)
     local('git push heroku %s:master' % branch)
 
-def refresh():
-    local('heroku run python manage.py fmtcload --load')
+def refresh_staging():
+    with shell_env(DJANGO_SETTINGS_MODULE='coupons.settings_staging'):
+        local('heroku run python manage.py fmtcload --load')

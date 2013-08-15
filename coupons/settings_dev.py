@@ -6,5 +6,6 @@ SVCS_HOST = HostName
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
-STATIC_URL = '/static/'
+#DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+STATIC_URL = '/static/'

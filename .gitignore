@@ -4,10 +4,5 @@
 .pydevproject
 .idea
 .tm_properties
-
-static/*
-coupons/static/img/local
-coupons/static/img/logos
-coupons/static/img/ph
-
-coupons/data
+static
+data

@@ -1,19 +1,20 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
+# static
+from django.conf import settings
+from django.conf.urls.static import static
+
+# cache
+from django.views.decorators.cache import cache_page
+cache_ttl = 24 * 60 * 60
+
+# import views
+from web.views import main
+
 admin.autodiscover()
 
-# Uncomment the next two lines to enable the admin:
-
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'coupons.views.home', name='home'),
-    # url(r'^coupons/', include('coupons.foo.urls')),
-
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
 )
 
@@ -35,9 +36,9 @@ urlpatterns += patterns('web.views.main',
     url(r'^coupon/(?P<company_name>[a-z0-9-]+)/(?P<coupon_label>[a-z0-9-]+)/(?P<coupon_id>[\d]+)/$', 'open_coupon'),
 
 
-    url(r'^categories/(?P<category_code>[A-z0-9-]+)/page/(?P<current_page>[\d]+)/$', 'category'),
-    url(r'^categories/(?P<category_code>[A-z0-9-]+)/$', 'category'),
-    url(r'^categories/$', 'categories'),
+    url(r'^categories/(?P<category_code>[A-z0-9-]+)/page/(?P<current_page>[\d]+)/$', cache_page(cache_ttl)(main.category)),
+    url(r'^categories/(?P<category_code>[A-z0-9-]+)/$', cache_page(cache_ttl)(main.category)),
+    url(r'^categories/$', cache_page(cache_ttl)(main.categories)),
 )
 
 urlpatterns += patterns('web.views.ajax',
@@ -81,3 +82,7 @@ urlpatterns += patterns('websvcs.views.image',
 urlpatterns += patterns('websvcs.views.subscriptions',
     url(r'^e/subscribe/$', 'email_subscribe')
 )
+
+
+if settings.DEBUG :
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

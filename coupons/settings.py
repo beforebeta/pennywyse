@@ -12,9 +12,11 @@ BASE_URL_NO_APPENDED_SLASH = ''
 
 FMTC_ACCESS_KEY = '43a787c3f5f2cf2f675cbf86aff6a33b'
 
+PROJECT_PATH = os.path.abspath(os.path.dirname(__name__))
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-DATA_DIR = os.path.join(BASE_DIR, 'data')
+DATA_DIR = os.path.join(PROJECT_PATH, 'data')
 if not os.path.exists(DATA_DIR):
     os.makedirs(DATA_DIR)
 
@@ -78,8 +80,7 @@ else:
 # timezone as the operating system.
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
-#TIME_ZONE = 'America/Chicago'
-TIME_ZONE = 'GMT'
+TIME_ZONE = 'UTC'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -96,23 +97,28 @@ USE_I18N = False
 USE_L10N = True
 
 # If you set this to False, Django will not use timezone-aware datetimes.
-USE_TZ = True
+USE_TZ = False
+
+MEDIA_DIR = 'media'
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: '/home/media/media.lawrence.com/media/'
-MEDIA_ROOT = os.path.abspath(os.path.join(BASE_DIR, os.pardir)) + '/media'
+MEDIA_ROOT = os.path.join(DATA_DIR, MEDIA_DIR)
+# if not os.path.exists(MEDIA_ROOT):
+#     os.makedirs(MEDIA_ROOT)
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: 'http://media.lawrence.com/media/', 'http://example.com/media/'
-MEDIA_URL = '/media/'
+MEDIA_URL = '/' + MEDIA_DIR + '/'
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
 # in apps' 'static/' subdirectories and in STATICFILES_DIRS.
 # Example: '/home/media/media.lawrence.com/static/'
 #STATIC_ROOT = '/static'
-STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR, os.pardir)) + '/static'
+#STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR, os.pardir)) + '/static'
+STATIC_ROOT = os.path.join(DATA_DIR, 'static')
 
 # URL prefix for static files.
 # Example: 'http://media.lawrence.com/static/'
@@ -123,8 +129,6 @@ STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR, os.pardir)) + '/static'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
-
-#STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.CachedStaticFilesStorage'
 
 # List of finder classes that know how to find static files in
 # various locations.
@@ -244,22 +248,17 @@ SVCS_SECRET_KEY = 'a59bbf62-d332-471b-b8d3-494a97065fa1'
 
 DEVELOPER_KEY = '00a1be63fcdf4cc39b9fa1c4c9e021ed990814ac740758b6eae34a9f71c27e8352950d4c5e37628f33690375a200ded9ffb2bcbe93e1f13a0525ea77c6fe52a719/4ac6543f61948191feb8b0db8b6ce4052d813140eaec8e9404c448f634ae7c530005b86783dad215c136a0f4fdf4ecf8d27390fda73847e7fba5c512b1b72849'
 
-# import warnings
-# warnings.filterwarnings('error', r'DateTimeField received a naive datetime', RuntimeWarning, r'django\.db\.models\.fields')
-
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-
+AWS_QUERYSTRING_AUTH = False
+AWS_S3_SECURE_URLS = False
+AWS_REDUCED_REDUNDANCY = True
 AWS_STORAGE_BUCKET_NAME = 'pennywyse'
 AWS_HEADERS = {
-    'Cache-Control': 'max-age=31556926, public',
+    'Cache-Control': 'max-age=31556926',
     'Expires': (datetime.datetime.today() + datetime.timedelta(days=365)).strftime('%a, %d %b %Y %H:%M:%S GMT')
 }
 
-# IMAGE_LOCAL_COPY_DIR_NO_PREFIX = 'static/img/local/'
-# IMAGE_LOCAL_COPY_DIR = BASE_DIR + '/' + IMAGE_LOCAL_COPY_DIR_NO_PREFIX
-# if not os.path.exists(IMAGE_LOCAL_COPY_DIR):
-#     os.makedirs(IMAGE_LOCAL_COPY_DIR)
-IMAGE_LOCAL_COPY_DIR_NO_PREFIX = 'static/img/local/'
-IMAGE_LOCAL_COPY_DIR = MEDIA_ROOT
-# if not os.path.exists(IMAGE_LOCAL_COPY_DIR):
-#     os.makedirs(IMAGE_LOCAL_COPY_DIR)
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    }
+}

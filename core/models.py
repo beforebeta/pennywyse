@@ -9,6 +9,7 @@ from django.template.defaultfilters import slugify
 from django.core.paginator import Paginator
 from core.util import print_stack_trace, get_first_google_image_result, get_description_tag_from_url
 from tracking.commission.skimlinks import get_merchant_description
+from django.core.files.storage import default_storage
 
 def get_descriptive_image(name):
     return get_first_google_image_result(name)
@@ -20,7 +21,8 @@ def get_directed_image(model):
         return settings.DEFAULT_IMAGE
 
 def get_description(model):
-    #return '' #hack for speed
+    if settings.DEBUG :
+        return '' #hack for speed
     if not model.directlink:
         if model.name:
             return model.name
@@ -155,19 +157,32 @@ class Merchant(models.Model):
     def save(self, *args, **kwargs):
         if not self.image:
             if self.ref_id:
-                try:
-                    logo_path = "static/img/logos/%s.gif" % self.ref_id
-                    with open(os.path.join(settings.BASE_DIR,logo_path)): pass
-                    # logo exists
-                    self.image = settings.BASE_URL_NO_APPENDED_SLASH + "/" + logo_path
-                except:
-                    try:
-                        logo_path = "static/img/logos/%s.jpg" % self.ref_id
-                        with open(os.path.join(settings.BASE_DIR,logo_path)): pass
-                        # logo exists
-                        self.image = settings.BASE_URL_NO_APPENDED_SLASH + "/" + logo_path
-                    except:
-                        self.image = get_descriptive_image(self.name + " logo")
+
+                logo_path = 'logos/%s.gif' % self.ref_id
+                local_copy = os.path.join(settings.MEDIA_ROOT, logo_path)
+                if default_storage.exists(local_copy):
+                    self.image = local_copy
+                else:
+                    logo_path = 'logos/%s.jpg' % self.ref_id
+                    local_copy = os.path.join(settings.MEDIA_ROOT, logo_path)
+                    if default_storage.exists(local_copy):
+                        self.image = local_copy
+                    else:
+                        self.image = get_descriptive_image(self.name + ' logo')
+
+                # try:
+                #     logo_path = 'logos/%s.gif' % self.ref_id
+                #     with open(os.path.join(settings.IMAGE_LOCAL_COPY_DIR, logo_path)): pass
+                #     # logo exists
+                #     self.image = settings.IMAGE_LOCAL_COPY_DIR + logo_path
+                # except:
+                #     try:
+                #         logo_path = 'logos/%s.jpg' % self.ref_id
+                #         with open(os.path.join(settings.IMAGE_LOCAL_COPY_DIR, logo_path)): pass
+                #         # logo exists
+                #         self.image = settings.IMAGE_LOCAL_COPY_DIR + logo_path
+                #     except:
+                #         self.image = get_descriptive_image(self.name + " logo")
         if not self.description:
             self.description = get_description(self)
         self.name_slug = slugify(self.name)
