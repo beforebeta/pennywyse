@@ -40,3 +40,11 @@
   </div>
 </div>
 {% endblock %} {# main #}
+
+{% block end_of_body %}
+<script type="text/javascript">
+    try{
+        mixpanel.track("Categories Index Page Opened");
+    }catch(e){}
+</script>
+{% endblock %}
