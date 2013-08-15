@@ -19,13 +19,6 @@ STATIC_URL = '//' + CDN + '/'
 MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = STATIC_URL + MEDIA_DIR + '/'
 
-# Debug toolbar
-
-def show_toolbar(request):
-    return True
-
-DEBUG_TOOLBAR_CONFIG['SHOW_TOOLBAR_CALLBACK'] = show_toolbar
-
 # Memcache
 
 os.environ['MEMCACHE_SERVERS'] = os.environ.get('MEMCACHIER_SERVERS', '').replace(',', ';')
@@ -40,3 +33,10 @@ CACHES = {
     'OPTIONS': { 'tcp_nodelay': True }
   }
 }
+
+# Debug toolbar
+
+def show_toolbar(request):
+    return True
+
+DEBUG_TOOLBAR_CONFIG['SHOW_TOOLBAR_CALLBACK'] = show_toolbar

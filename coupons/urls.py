@@ -35,7 +35,6 @@ urlpatterns += patterns('web.views.main',
 
     url(r'^coupon/(?P<company_name>[a-z0-9-]+)/(?P<coupon_label>[a-z0-9-]+)/(?P<coupon_id>[\d]+)/$', 'open_coupon'),
 
-
     url(r'^categories/(?P<category_code>[A-z0-9-]+)/page/(?P<current_page>[\d]+)/$', cache_page(cache_ttl)(main.category)),
     url(r'^categories/(?P<category_code>[A-z0-9-]+)/$', cache_page(cache_ttl)(main.category)),
     url(r'^categories/$', cache_page(cache_ttl)(main.categories)),
