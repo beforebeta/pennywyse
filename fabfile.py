@@ -17,5 +17,4 @@ def deploy_staging():
     local('git push heroku %s:master' % branch)
 
 def refresh_staging():
-    with shell_env(DJANGO_SETTINGS_MODULE='coupons.settings_staging'):
-        local('heroku run python manage.py fmtcload --load')
+    local('heroku run python manage.py fmtcload --load')

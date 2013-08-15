@@ -38,6 +38,7 @@ def get_first_google_image_result(query_string):
     return settings.DEFAULT_IMAGE
 
 def get_description_tag_from_url(url):
+    # todo: fix InvalidSchema, MissingSchema, ConnectionError, SSLError
     data = requests.get(url, headers={'User-agent': 'Mozilla/5.0'}).content
     soup = BeautifulSoup(data)
     description = ""
