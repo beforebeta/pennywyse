@@ -1,4 +1,5 @@
 from django.views.decorators.http import require_POST
+from functools import wraps
 import json
 import urlparse
 from django.http import HttpResponse
@@ -12,6 +13,20 @@ from tracking.models import ClickTrack
 def success():
     return HttpResponse(json.dumps({"status":"1","text":"Success"}))
 
+def _ignore_bots(f):
+    @wraps(f)
+    def wrapper(request, *args, **kwds):
+        try:
+            user_agent = unicode(request.META.get('HTTP_USER_AGENT', '')[:255], errors='ignore')
+            user_agent = user_agent.lower()
+            print user_agent
+            if "googlebot" in user_agent:
+                return success()
+            else:
+                return f(request, *args, **kwds)
+        except:
+            return f(request, *args, **kwds)
+    return wrapper
 
 def _remove_skimlinks(skimlinked_url):
     try:
@@ -22,6 +37,7 @@ def _remove_skimlinks(skimlinked_url):
         print_stack_trace()
         return skimlinked_url
 
+@_ignore_bots
 def log_click_track(request):
     try:
         referer = utils.u_clean(request.META.get('HTTP_REFERER', 'unknown')[:255])
@@ -100,6 +116,7 @@ def log_click_track(request):
     except:
         print_stack_trace()
 
+@_ignore_bots
 @require_POST
 def click_track(request, clicked_link_path=None):
     try:

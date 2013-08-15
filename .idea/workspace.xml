@@ -27,7 +27,7 @@
     <file path="/urls.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376344316540" ignored="false" />
     <file path="/ajax.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376343494024" ignored="false" />
     <file path="$PROJECT_DIR$/account/models.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376338972963" ignored="false" />
-    <file path="/views.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376578771487" ignored="false" />
+    <file path="/views.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376580434498" ignored="false" />
     <file path="/a.dummy" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376410754227" ignored="false" />
     <file path="/coupon_extras.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376367306687" ignored="false" />
     <file path="/header.html" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376434931464" ignored="false" />
@@ -170,6 +170,24 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="tracking" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="coupons" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="coupons" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="tracking" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="middleware" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -477,45 +495,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/tracking/commission/skimlinks.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="43" column="0" selection-start="1259" selection-end="1259" vertical-scroll-proportion="0.40903825">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/email/header.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="32" selection-start="605" selection-end="605" vertical-scroll-proportion="0.19366197">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/views/ajax.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="42" column="48" selection-start="1490" selection-end="1490" vertical-scroll-proportion="0.7191781">
-          <folding>
-            <element signature="e#0#11#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/views/email.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="46" column="48" selection-start="1716" selection-end="1716" vertical-scroll-proportion="0.7876712">
-          <folding>
-            <element signature="e#0#15#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/views/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="147" column="14" selection-start="5900" selection-end="5900" vertical-scroll-proportion="0.15410958">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/base.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="136" column="84" selection-start="6650" selection-end="6650" vertical-scroll-proportion="0.3921335">
@@ -583,7 +562,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tracking/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="203" column="4" selection-start="9001" selection-end="9001" vertical-scroll-proportion="0.33256084">
+        <state line="228" column="46" selection-start="10627" selection-end="10627" vertical-scroll-proportion="-0.12977983">
           <folding>
             <element signature="e#3799#4498#0" expanded="false" />
             <element signature="e#4537#5056#0" expanded="false" />
@@ -596,10 +575,53 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/tracking/listeners.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Library/Caches/PyCharm20/python_stubs/1561625382/django/views/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tracking/middleware/cleanup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="e#0#40#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tracking/utils.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tracking/middleware/visitor.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="52" column="44" selection-start="1999" selection-end="1999" vertical-scroll-proportion="0.49594438">
+          <folding>
+            <element signature="e#0#40#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/tracking/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="161" column="48" selection-start="6222" selection-end="6222" vertical-scroll-proportion="0.6164383">
-          <folding />
+        <state line="130" column="37" selection-start="4779" selection-end="4779" vertical-scroll-proportion="0.47945204">
+          <folding>
+            <element signature="e#0#53#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
