@@ -126,7 +126,12 @@
 <script type="text/javascript">
 try{
    mixpanel.track("Search Performed", {
-       "query" : "{{ query }}"
+       "query"          : "{{ query }}",
+        "utm_source"    : "{{ visitor.acquisition_source }}",
+        "utm_medium"    : "{{ visitor.acquisition_medium }}",
+        "utm_term"      : "{{ visitor.acquisition_term }}",
+        "utm_content"   : "{{ visitor.acquisition_content }}",
+        "utm_campaign"  : "{{ visitor.acquisition_campaign }}"
    });
 }catch(e){}
 </script>

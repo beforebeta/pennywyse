@@ -115,7 +115,12 @@ mixpanel.init("3d3d512c8e3abb7052561dcaa0187132");</script>
             "company"       : "{{ coupon.merchant.name_slug }}",
             "id"            : "{{ coupon.merchant.id }}",
             "coupon_id"     : "{{ coupon.id }}",
-            "coupon_name"   : "{{ coupon.description }}"
+            "coupon_name"   : "{{ coupon.description }}",
+            "utm_source"    : "{{ visitor.acquisition_source }}",
+            "utm_medium"    : "{{ visitor.acquisition_medium }}",
+            "utm_term"      : "{{ visitor.acquisition_term }}",
+            "utm_content"   : "{{ visitor.acquisition_content }}",
+            "utm_campaign"  : "{{ visitor.acquisition_campaign }}"
         });
     }catch(e){}
 </script>
