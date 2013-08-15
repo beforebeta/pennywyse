@@ -160,11 +160,11 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.gzip.GZipMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'web.middleware.WebMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    #'web.middleware.WebMiddleware',
+    #'django.middleware.csrf.CsrfViewMiddleware',
     'django.middleware.http.ConditionalGetMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
+    #'django.contrib.auth.middleware.AuthenticationMiddleware',
+    #'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
     #'pipeline.middleware.MinifyHTMLMiddleware',
@@ -262,6 +262,7 @@ AWS_HEADERS = {
 
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+        #'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
     }
 }
