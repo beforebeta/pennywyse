@@ -3,13 +3,7 @@
 <div id="article-meta">
   <h4>Meta</h4>
 
-  <p><strong>{% trans 'Published' %}</strong>: {{ article.publish_date|naturalday }}</p>
-
-  <p><strong>{% trans 'Author' %}</strong>: {{ article.author.get_name }}</p>
-
-  <p><strong>{% trans 'Comments' %}</strong>: <a href="#disqus_thread">&nbsp;</a></p>
-
-  <p><strong>{% trans 'Word Count' %}</strong>: {{ article.word_count|intcomma }}</p>
+  <p>{% trans 'Published' %} {{ article.publish_date|naturalday }} by {{ article.author.get_name }}</p>
 
   {% if article.get_next_article %}
   <p>

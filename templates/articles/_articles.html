@@ -9,7 +9,7 @@
       </div>
       <div class="large-5 small-8 columns">
         <div class="col-middle">
-          <h2 class="alt"><a href="post.html">{{ article.title }}</a></h2>
+          <h2 class="alt"><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></h2>
           <p class="rr subtitle">
             {% trans 'Posted on' %} {{ article.publish_date|date:"F jS, Y" }}
             {% trans 'by' %} {{ article.author.get_name }}
