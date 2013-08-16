@@ -1,6 +1,6 @@
 from settings import *
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 HostName = 'pennywyse.herokuapp.com'
@@ -18,22 +18,6 @@ STATICFILES_STORAGE = 'coupons.storage.S3PipelineStorage'
 STATIC_URL = '//' + CDN + '/'
 MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = STATIC_URL + MEDIA_DIR + '/'
-
-# Memcache
-
-os.environ['MEMCACHE_SERVERS'] = os.environ.get('MEMCACHIER_SERVERS', '').replace(',', ';')
-os.environ['MEMCACHE_USERNAME'] = os.environ.get('MEMCACHIER_USERNAME', '')
-os.environ['MEMCACHE_PASSWORD'] = os.environ.get('MEMCACHIER_PASSWORD', '')
-
-CACHES = {
-  'default': {
-    'BACKEND': 'django_pylibmc.memcached.PyLibMCCache',
-    #'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache',
-    'TIMEOUT': 500,
-    'BINARY': True,
-    'OPTIONS': { 'tcp_nodelay': True }
-  }
-}
 
 # Debug toolbar
 
