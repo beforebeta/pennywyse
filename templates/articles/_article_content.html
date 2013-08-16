@@ -8,18 +8,19 @@
           <div class="column">
             <heading>
             <figure>
-              <img src="img/ph/650x260/1.jpg" alt="">
+              <img src="http://teothemes.com/html/Couponizer/img/ph/650x260/1.jpg" alt="">
             </figure>
             <h2 class="alt">{% trans article.title %}</h2>
             <p class="rr subtitle">
-            posted on <a href="#">20th of March</a> by <a href="#">admin</a>
+              {% trans 'posted on' %} {{ article.publish_date|date:"F jS, Y" }} by {{ article.author.get_name }}
             </p>
             </heading>
 
             <div class="text-content">
-              {{ article.rendered_content|safe }}
+              <p>
+                {{ article.rendered_content|safe }}
+              </p>
             </div>
-
             <a class="input button dark secondary responsive fixed share-button right" href="#">Share</a>
           </div>
         </div>

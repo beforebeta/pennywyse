@@ -3,7 +3,6 @@
 
 {% block header_block %}
   <h1 class="text-center">{% trans article.title %}</h1>
-  <h2 class="text-center">PennyWyse Recomendations</h2>
 {% endblock %}
 {% block meta-keywords %}{{ article.keywords|escape }}{% endblock %}
 {% block meta-description %}{{ article.description|escape }}{% endblock %}
@@ -21,8 +20,9 @@
     <div class="stripe-regular">
       <div class="row">
         {% include 'articles/_article_content.html' %}
-        {% include 'articles/_meta.html' %}
-        {% include 'articles/_comments.html' %}
+        <div class="large-9 columns left">
+          {% include 'articles/_comments.html' %}
+        </div>
       </div>
     </div>
   </div>
