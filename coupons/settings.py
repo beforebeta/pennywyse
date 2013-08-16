@@ -156,7 +156,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 #PREPEND_WWW=True
 
 MIDDLEWARE_CLASSES = (
-    'django.middleware.cache.UpdateCacheMiddleware',
+    #'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.gzip.GZipMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -169,7 +169,7 @@ MIDDLEWARE_CLASSES = (
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
     #'pipeline.middleware.MinifyHTMLMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',
+    #'django.middleware.cache.FetchFromCacheMiddleware',
     )
 
 INTERNAL_IPS = ('127.0.0.1',)
@@ -290,7 +290,8 @@ def get_cache():
   except:
     return {
       'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'
+        #'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'
+        'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache'
       }
     }
 
