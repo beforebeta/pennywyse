@@ -156,20 +156,20 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 #PREPEND_WWW=True
 
 MIDDLEWARE_CLASSES = (
-    'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.gzip.GZipMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    #'web.middleware.WebMiddleware',
-    #'django.middleware.csrf.CsrfViewMiddleware',
+    'web.middleware.WebMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
     'django.middleware.http.ConditionalGetMiddleware',
-    #'django.contrib.auth.middleware.AuthenticationMiddleware',
-    #'django.contrib.messages.middleware.MessageMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
     #'pipeline.middleware.MinifyHTMLMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',
+    'django.middleware.cache.UpdateCacheMiddleware',
     )
 
 INTERNAL_IPS = ('127.0.0.1',)
@@ -262,7 +262,6 @@ AWS_HEADERS = {
 
 CACHES = {
     'default': {
-        #'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
     }
 }
