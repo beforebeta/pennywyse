@@ -8,7 +8,6 @@
 
 {% block header_block %}
     <h1 class="text-center">PennyWyse Recomendations</h1>
-    {% include 'articles/search_bar.html' %}
 {% endblock %}
 
 {% block content %}
@@ -17,18 +16,7 @@
       <div class="stripe-regular">
         <div class="row">
           <div class="large-9 columns">
-
             <div class="coupons-wrapper">
-              <div class="row">
-                <div class="large-8 columns">
-                  <h2>Newest posts <span>- 2453 entries</span></h2>
-                </div>
-                <div class="large-4 columns">
-                  <div class="ui-links sort-items">
-                    <a href="#">Popular</a> | <a href="#" class="current">Newest</a>
-                  </div>
-                </div>
-              </div>
               {% block articles-content %}
               {% endblock %}
             </div>
