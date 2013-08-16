@@ -25,8 +25,8 @@ def build_base_context(request, context):
             if '/favicon.ico' in request.path:
                 pass
             else:
-                print "Error happened at ", request.path
-                print_stack_trace()
+                print "Error (request.visitor) happened at ", request.path
+                #print_stack_trace()
         except:
             pass
 
