@@ -282,7 +282,7 @@ def get_cache():
     return {
       'default': {
         'BACKEND': 'django_pylibmc.memcached.PyLibMCCache',
-        'TIMEOUT': 500,
+        'TIMEOUT': 24 * 60 * 60,
         'BINARY': True,
         'OPTIONS': { 'tcp_nodelay': True }
       }

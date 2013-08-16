@@ -6,7 +6,7 @@ def run_dev():
 
 def run_staging():
     with shell_env(DJANGO_SETTINGS_MODULE='coupons.settings_staging'):
-        local('gunicorn coupons.wsgi')
+        local('gunicorn -t 300 coupons.wsgi')
 
 def run_pro():
     with shell_env(DJANGO_SETTINGS_MODULE='coupons.settings_pro'):
