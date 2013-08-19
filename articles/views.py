@@ -10,6 +10,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from articles.models import Article, Tag
 from datetime import datetime
+from web.views.main import build_base_context, set_active_tab
 
 ARTICLE_PAGINATION = getattr(settings, 'ARTICLE_PAGINATION', 20)
 
@@ -23,6 +24,9 @@ def display_blog_page(request, tag=None, username=None, year=None, month=None, p
     """
 
     context = {'request': request}
+    build_base_context(request, context)
+    set_active_tab('blog', context)
+
     if tag:
         try:
             tag = get_object_or_404(Tag, slug__iexact=tag)
@@ -81,10 +85,14 @@ def display_article(request, year, month, day, slug, template='articles/article_
     if article.login_required and not request.user.is_authenticated():
         return HttpResponseRedirect(reverse('auth_login') + '?next=' + request.path)
 
-    variables = RequestContext(request, {
+    context = {
         'article': article,
         'disqus_forum': getattr(settings, 'DISQUS_FORUM_SHORTNAME', None),
-    })
+    }
+    build_base_context(request, context)
+    set_active_tab('blog', context)
+
+    variables = RequestContext(request, context)
     response = render_to_response(template, variables)
 
     return response
