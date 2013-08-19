@@ -3,7 +3,9 @@
   <article class="row">
     <div class="large-4 small-12 columns">
       <figure>
-        <img src="img/ph/200x110/1.jpg" alt="">
+        <a href="{{ article.get_absolute_url }}">
+          <img src="{{ article.image_url }}" alt="">
+        </a>
       </figure>
     </div>
     <div class="large-8 small-12 columns">

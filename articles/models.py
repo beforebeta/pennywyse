@@ -180,6 +180,7 @@ class Article(models.Model):
     status = models.ForeignKey(ArticleStatus, default=ArticleStatus.objects.default)
     author = models.ForeignKey(User)
     sites = models.ManyToManyField(Site, blank=True)
+    image_url = models.CharField(max_length=255, blank=True)
 
     keywords = models.TextField(blank=True, help_text=_("If omitted, the keywords will be the same as the article tags."))
     description = models.TextField(blank=True, help_text=_("If omitted, the description will be determined by the first bit of the article's content."))

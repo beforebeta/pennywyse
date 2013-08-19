@@ -39,7 +39,7 @@ class ArticleAdmin(admin.ModelAdmin):
     ]
 
     fieldsets = (
-        (None, {'fields': ('title', 'content', 'tags', 'auto_tag', 'markup', 'status')}),
+        (None, {'fields': ('title', 'content', 'tags', 'auto_tag', 'markup', 'image_url', 'status')}),
         ('Metadata', {
             'fields': ('keywords', 'description',),
             'classes': ('collapse',)
