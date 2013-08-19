@@ -1,25 +1,23 @@
 {% load i18n %}
-{% if forloop.first %}<ol class="article-list">{% endif %}
-  <li class="wrapper-3">
-    <article class="row">
-      <div class="large-4 small-12 columns">
-        <figure>
-          <img src="img/ph/200x110/1.jpg" alt="">
-        </figure>
+<li class="wrapper-3 blog-teaser">
+  <article class="row">
+    <div class="large-4 small-12 columns">
+      <figure>
+        <img src="img/ph/200x110/1.jpg" alt="">
+      </figure>
+    </div>
+    <div class="large-8 small-12 columns">
+      <div class="col-middle">
+        <h2 class="alt"><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></h2>
+        <p class="rr subtitle">
+          {% trans 'Posted on' %} {{ article.publish_date|date:"F jS, Y" }}
+          {% trans 'by' %} {{ article.author.get_name }}
+        </p>
+        <p class="text secondary">
+          {{ article.content }}
+        </p>
+        <a class="input button red secondary responsive fixed blue-h" href="#">Learn more</a>
       </div>
-      <div class="large-8 small-12 columns">
-        <div class="col-middle">
-          <h2 class="alt"><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></h2>
-          <p class="rr subtitle">
-            {% trans 'Posted on' %} {{ article.publish_date|date:"F jS, Y" }}
-            {% trans 'by' %} {{ article.author.get_name }}
-          </p>
-          <p class="text secondary">
-            {{ article.content }}
-          </p>
-          <a class="input button red secondary responsive fixed blue-h" href="#">Learn more</a>
-        </div>
-      </div>
-    </article>
-  </li>
-{% if forloop.last %}</ol>{% endif %}
+    </div>
+  </article>
+</li>

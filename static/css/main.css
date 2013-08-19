@@ -1764,3 +1764,8 @@ span.arrow-down {
   display: inline-block;
   vertical-align: middle;
 }
+
+
+li.blog-teaser {
+  margin-bottom: 20px;
+}
