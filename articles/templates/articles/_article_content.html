@@ -26,16 +26,16 @@
         </div>
       </div>
 
-      <ul class="rr tags">
-        <li>
-        <span>Tags:</span>
-        </li>
-        <li><a href="#">business</a></li>
-        <li><a href="#">technology</a></li>
-        <li><a href="#">experience</a></li>
-        <li><a href="#">information</a></li>
-        <li><a href="#">news</a></li>
-      </ul>
+      {% if tagged_models.exist %}
+        <ul class="rr tags">
+          <li>
+          <span>Tags:</span>
+          </li>
+          {% for model in tagged_models %}
+            <li><a href="{{ model.path }}">{{ model.name }}</a></li>
+          {% endfor %}
+        </ul>
+      {% endif %}
 
     </section>
   </article>

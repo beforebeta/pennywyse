@@ -68,6 +68,9 @@ class Category(models.Model):
       return Paginator(self.get_coupons().filter(
         Q(categories__id__in=selected_categories) | Q(categories__id__isnull=True)), 10)
 
+    def get_local_url(self):
+      return "/categories/{0}".format(self.code)
+
     def __unicode__(self):  # Python 3: def __str__(self):
       return "%s %s" % (self.code, self.name)
 
@@ -172,6 +175,9 @@ class Merchant(models.Model):
             self.description = get_description(self)
         self.name_slug = slugify(self.name)
         super(Merchant, self).save(*args, **kwargs)
+
+    def get_local_url(self):
+      return "/coupons/{0}".format(self.name_slug)
 
     def __unicode__(self):  # Python 3: def __str__(self):
         return "%s %s" % (self.ref_id, self.name)
