@@ -2,6 +2,7 @@ import os
 import urllib
 import datetime
 import urlparse
+
 from django.conf import settings
 from django.db import models
 from django.db.models.query_utils import Q

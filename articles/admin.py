@@ -45,7 +45,7 @@ class ArticleAdmin(admin.ModelAdmin):
             'classes': ('collapse',)
         }),
         ('Relationships', {
-            'fields': ('followup_for', 'related_articles'),
+            'fields': ('followup_for', 'related_articles', 'merchants', 'categories'),
             'classes': ('collapse',)
         }),
         ('Scheduling', {'fields': ('publish_date', 'expiration_date')}),
@@ -59,7 +59,7 @@ class ArticleAdmin(admin.ModelAdmin):
         }),
     )
 
-    filter_horizontal = ('tags', 'followup_for', 'related_articles')
+    filter_horizontal = ('tags', 'followup_for', 'related_articles', 'merchants', 'categories')
     prepopulated_fields = {'slug': ('title',)}
 
     def tag_count(self, obj):

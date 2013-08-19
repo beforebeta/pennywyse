@@ -18,6 +18,8 @@ from django.utils.text import truncate_html_words
 
 from decorators import logtime, once_per_instance
 
+from core.models import Category, Merchant
+
 WORD_LIMIT = getattr(settings, 'ARTICLES_TEASER_LIMIT', 75)
 AUTO_TAG = getattr(settings, 'ARTICLES_AUTO_TAG', True)
 DEFAULT_DB = getattr(settings, 'ARTICLES_DEFAULT_DB', 'default')
@@ -180,7 +182,6 @@ class Article(models.Model):
     status = models.ForeignKey(ArticleStatus, default=ArticleStatus.objects.default)
     author = models.ForeignKey(User)
     sites = models.ManyToManyField(Site, blank=True)
-    image_url = models.CharField(max_length=255, blank=True)
 
     keywords = models.TextField(blank=True, help_text=_("If omitted, the keywords will be the same as the article tags."))
     description = models.TextField(blank=True, help_text=_("If omitted, the description will be determined by the first bit of the article's content."))
@@ -203,6 +204,12 @@ class Article(models.Model):
     use_addthis_button = models.BooleanField(_('Show AddThis button'), blank=True, default=USE_ADDTHIS_BUTTON, help_text=_('Check this to show an AddThis bookmark button when viewing an article.'))
     addthis_use_author = models.BooleanField(_("Use article author's username"), blank=True, default=ADDTHIS_USE_AUTHOR, help_text=_("Check this if you want to use the article author's username for the AddThis button.  Respected only if the username field is left empty."))
     addthis_username = models.CharField(_('AddThis Username'), max_length=50, blank=True, default=DEFAULT_ADDTHIS_USER, help_text=_('The AddThis username to use for the button.'))
+
+
+    #extra fields/tables that we've added
+    image_url = models.CharField(max_length=255, blank=True)
+    merchants = models.ManyToManyField(Merchant, help_text='Merchants that are related to this article', blank=True)
+    categories = models.ManyToManyField(Category, help_text='Categories that are related to this article', blank=True)
 
     objects = ArticleManager()
 
