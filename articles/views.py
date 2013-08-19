@@ -69,7 +69,7 @@ def display_blog_page(request, tag=None, username=None, year=None, month=None, p
 
     return response
 
-def display_article(request, year, slug, template='articles/article_detail.html'):
+def display_article(request, year, month, day, slug, template='articles/article_detail.html'):
     """Displays a single article."""
 
     try:

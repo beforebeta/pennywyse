@@ -16,7 +16,7 @@
         <p class="text secondary">
           {{ article.content }}
         </p>
-        <a class="input button red secondary responsive fixed blue-h" href="#">Learn more</a>
+        <a class="input button red secondary responsive fixed blue-h" href="{{ article.get_absolute_url }}">Learn more</a>
       </div>
     </div>
   </article>

@@ -449,7 +449,7 @@ class Article(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
-        return ('articles_display_article', (self.publish_date.year, self.slug))
+        return ('articles_display_article', (self.publish_date.year, self.publish_date.month, self.publish_date.day, self.slug))
 
     def _get_teaser(self):
         """
