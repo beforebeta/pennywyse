@@ -146,13 +146,13 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'django.contrib.humanize',
-    'articles',
     'south',
     'core',
     'web',
     'websvcs',
     'ads',
-    'tracking'
+    'tracking',
+    'articles',
     )
 
 # A sample logging configuration. The only tangible logging
