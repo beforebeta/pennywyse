@@ -85,13 +85,10 @@ def display_article(request, year, month, day, slug, template='articles/article_
     if article.login_required and not request.user.is_authenticated():
         return HttpResponseRedirect(reverse('auth_login') + '?next=' + request.path)
 
-    merchants = [{'name': m.name, 'path': m.get_local_url()} for m in article.merchants.all()]
-    categories = [{'name': c.name, 'path': c.get_local_url()} for c in article.categories.all()]
-
     context = {
         'article': article,
         'disqus_forum': getattr(settings, 'DISQUS_FORUM_SHORTNAME', None),
-        'tagged_models': (merchants + categories)
+        'tagged_models': (list(article.merchants.all()) + list(article.categories.all()))
     }
     build_base_context(request, context)
     set_active_tab('blog', context)
@@ -124,4 +121,3 @@ def ajax_tag_autocomplete(request):
         return response
 
     return HttpResponse()
-

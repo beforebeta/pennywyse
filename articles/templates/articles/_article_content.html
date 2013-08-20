@@ -25,17 +25,14 @@
           </div>
         </div>
       </div>
-
-      {% if tagged_models.exist %}
-        <ul class="rr tags">
-          <li>
-          <span>Tags:</span>
-          </li>
-          {% for model in tagged_models %}
-            <li><a href="{{ model.path }}">{{ model.name }}</a></li>
-          {% endfor %}
-        </ul>
-      {% endif %}
+      <ul class="rr tags">
+        <li>
+        <!-- <span>Tags:</span> -->
+        </li>
+        {% for model in tagged_models %}
+          <li><a href="{{ model.local_path }}">{{ model.display_name }}</a></li>
+        {% endfor %}
+      </ul>
 
     </section>
   </article>
