@@ -71,7 +71,7 @@ class Category(models.Model):
     def display_name(self):
       return self.name
 
-    def local_url(self):
+    def local_path(self):
       return "/categories/{0}".format(self.code)
 
     def __unicode__(self):  # Python 3: def __str__(self):
@@ -182,7 +182,7 @@ class Merchant(models.Model):
     def display_name(self):
       return self.name
 
-    def local_url(self):
+    def local_path(self):
       return "/coupons/{0}".format(self.name_slug)
 
     def __unicode__(self):  # Python 3: def __str__(self):

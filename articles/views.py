@@ -88,7 +88,8 @@ def display_article(request, year, month, day, slug, template='articles/article_
     context = {
         'article': article,
         'disqus_forum': getattr(settings, 'DISQUS_FORUM_SHORTNAME', None),
-        'tagged_models': (list(article.merchants.all()) + list(article.categories.all()))
+        'merchants': article.merchants.all(),
+        'categories': article.categories.all()
     }
     build_base_context(request, context)
     set_active_tab('blog', context)
