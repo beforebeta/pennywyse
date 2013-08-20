@@ -2,6 +2,7 @@ import os
 import urllib
 import datetime
 import urlparse
+
 from django.conf import settings
 from django.db import models
 from django.db.models.query_utils import Q
@@ -66,6 +67,12 @@ class Category(models.Model):
     def coupons_in_categories(self, selected_categories):
       return Paginator(self.get_coupons().filter(
         Q(categories__id__in=selected_categories) | Q(categories__id__isnull=True)), 10)
+
+    def display_name(self):
+      return self.name
+
+    def local_path(self):
+      return "/categories/{0}".format(self.code)
 
     def __unicode__(self):  # Python 3: def __str__(self):
       return "%s %s" % (self.code, self.name)
@@ -171,6 +178,12 @@ class Merchant(models.Model):
             self.description = get_description(self)
         self.name_slug = slugify(self.name)
         super(Merchant, self).save(*args, **kwargs)
+
+    def display_name(self):
+      return self.name
+
+    def local_path(self):
+      return "/coupons/{0}".format(self.name_slug)
 
     def __unicode__(self):  # Python 3: def __str__(self):
         return "%s %s" % (self.ref_id, self.name)
