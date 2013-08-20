@@ -21,12 +21,10 @@
                 {{ article.rendered_content|safe }}
               </p>
             </div>
-            <a class="input button dark secondary responsive fixed share-button right" href="#">Share</a>
           </div>
         </div>
       </div>
       <ul class="rr tags">
-        <!-- <li><span>Tags:</span></li> -->
         {% for merchant in merchants %}
           <li><a href="{{ merchant.local_path }}">{{ merchant.display_name }}</a></li>
         {% endfor %}
@@ -48,7 +46,6 @@
           <li>
             <a href="{{ merchant.local_path }}">
               {{ merchant.display_name }}
-              <!-- <span class="count-bullet">10</span> -->
             </a>
           </li>
         {% endfor %}
@@ -64,7 +61,6 @@
           <li>
             <a href="{{ category.local_path }}">
               {{ category.display_name }}
-              <!-- <span class="count-bullet">10</span> -->
             </a>
           </li>
         {% endfor %}
@@ -73,15 +69,3 @@
     </div>
   {% endif %}
 </aside>
-
-{% for att in article.attachments.all %}
-{% if forloop.first %}<div id="article-attachments">
-    <h3>Attachments</h3>
-    <ul>{% endif %}
-        <li id="attachment-{{ forloop.counter }}" class="attachment ct_{{ att.content_type_class }}">
-            <a href="{{ att.attachment.url }}" class="attachment-link">{{ att.filename }}</a>
-            <span class="attachment-size">Size: {{ att.attachment.size|filesizeformat }}</span>
-        </li>
-    {% if forloop.last %}</ul>
-</div>{% endif %}
-{% endfor %}
