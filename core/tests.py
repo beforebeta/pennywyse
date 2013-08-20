@@ -1,16 +1,13 @@
-"""
-This file demonstrates writing tests using the unittest module. These will pass
-when you run "manage.py test".
-
-Replace this with more appropriate tests for your application.
-"""
-
 from django.test import TestCase
+from core.models import Coupon
 
 
-class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.assertEqual(1 + 1, 2)
+class CouponTest(TestCase):
+    # fixtures = ['coupons']
+    # Can't get this test to run with the fixtures. Why?
+
+    def test_active_objects(self):
+        all_objects = Coupon.objects.count()
+        active_objects = Coupon.active_objects.count()
+        filtered_objects = Coupon.objects.filter(end_lte=datetime.datetime.now()).count()
+        self.assertEqual(active_objects, (all_objects - filtered_objects))

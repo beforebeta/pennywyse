@@ -281,6 +281,10 @@ class CouponManager(models.Manager):
             curr_merchant_idx += 1
         return popular_coupons
 
+class ActiveCouponManager(models.Manager):
+    def get_query_set(self):
+        return super(ActiveCouponManager, self).get_query_set().filter(end__gt=datetime.datetime.now())
+
 
 class Coupon(models.Model):
     """
@@ -341,7 +345,8 @@ class Coupon(models.Model):
     date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
     last_modified   = models.DateTimeField(default=datetime.datetime.now(), auto_now=True, auto_now_add=True)
 
-    objects = CouponManager()
+    objects = models.Manager()
+    active_objects = ActiveCouponManager()
 
     def get_image(self):
         return get_directed_image(self)
