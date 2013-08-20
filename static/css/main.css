@@ -1215,7 +1215,6 @@ ul.tags li {
 ul.tags li:after {
   content: ", ";
 }
-ul.tags li:first-child:after,
 ul.tags li:last-child:after {
   content: "";
 }
