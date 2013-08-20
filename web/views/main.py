@@ -18,6 +18,7 @@ def build_base_context(request, context):
     context["coupons_path"] = "/"
     context["categories_path"] = "/categories"
     context["companies_path"] = "/companies"
+    context["blog_path"] = "/blog"
     try:
         context["visitor"] = request.visitor
     except:
@@ -37,16 +38,12 @@ def render_response(template_file, request, context={}):
 def set_active_tab(active_tab, context):
     if active_tab == "category":
       context['category_tab_class'] = 'active'
-      context['company_tab_class'] = ''
-      context['coupon_tab_class'] = ''
     elif active_tab == "company":
       context['company_tab_class'] = 'active'
-      context['category_tab_class'] = ''
-      context['coupon_tab_class'] = ''
+    elif active_tab == "blog":
+      context['blog_tab_class'] = 'active'
     else:
       context['coupon_tab_class'] = 'active'
-      context['company_tab_class'] = ''
-      context['category_tab_class'] = ''
 
 @ensure_csrf_cookie
 def index(request):

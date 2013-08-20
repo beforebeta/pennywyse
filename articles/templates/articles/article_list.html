@@ -1,0 +1,10 @@
+{% extends 'articles/base.html' %}
+{% load i18n %}
+
+{% block articles-content %}
+  <ul class="rr blog-summary">
+    {% for article in page_obj.object_list %}
+      {% include 'articles/_articles.html' %}
+    {% endfor %}
+  </ul>
+{% endblock %}
