@@ -207,7 +207,7 @@ class Article(models.Model):
 
 
     #extra fields/tables that we've added
-    image_url = models.CharField(max_length=255, blank=True)
+    image_url = models.TextField(blank=True)
     merchants = models.ManyToManyField(Merchant, help_text='Merchants that are related to this article', blank=True)
     categories = models.ManyToManyField(Category, help_text='Categories that are related to this article', blank=True)
 
