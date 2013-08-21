@@ -121,7 +121,7 @@ def refresh_deals():
             id = deal.couponid.text
             coupon=None
             try:
-                coupon = Coupon.objects.get(ref_id = id)
+                coupon = Coupon.active_objects.get(ref_id = id)
             except:
                 coupon=Coupon(ref_id=id)
                 coupon.save()
@@ -193,14 +193,14 @@ def setup_web_coupons():
 
     try:
         if NewCoupon.objects.all().count()<=0:
-            for coupon in Coupon.objects.get_new_coupons(8):
+            for coupon in Coupon.active_objects.get_new_coupons(8):
                 NewCoupon(coupon=coupon).save()
     except:
         print_stack_trace()
 
     try:
         if PopularCoupon.objects.all().count()<=0:
-            for coupon in Coupon.objects.get_popular_coupons(8):
+            for coupon in Coupon.active_objects.get_popular_coupons(8):
                 PopularCoupon(coupon=coupon).save()
     except:
         print_stack_trace()

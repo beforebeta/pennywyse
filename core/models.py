@@ -253,7 +253,6 @@ class Country(models.Model):
 #######################################################################################################################
 
 class CouponManager(models.Manager):
-
     def get_new_coupons(self,how_many=10):
         #TODO: Improve
         return self.all().order_by("-created")[:how_many]
@@ -274,7 +273,7 @@ class CouponManager(models.Manager):
                 curr_merchant_idx = 0
             curr_merchant_id = merchants[curr_merchant_idx].id
             if curr_merchant_id not in coupons_by_merchant:
-                coupons_by_merchant[curr_merchant_id] = list(Coupon.objects.filter(merchant_id=curr_merchant_id).order_by("-created")[:how_many])
+                coupons_by_merchant[curr_merchant_id] = list(Coupon.active_objects.filter(merchant_id=curr_merchant_id).order_by("-created")[:how_many])
             if len(coupons_by_merchant[curr_merchant_id]) > 0:
                 popular_coupons.append(coupons_by_merchant[curr_merchant_id][0])
                 coupons_by_merchant[curr_merchant_id] = coupons_by_merchant[curr_merchant_id][1:]

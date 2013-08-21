@@ -60,7 +60,7 @@ def log_click_track(request):
             else:
                 coupon_id = clicked_link.split("/")[-1]
             source_url = clicked_link
-            coupon = Coupon.objects.get(id=int(coupon_id))
+            coupon = Coupon.active_objects.get(id=int(coupon_id))
             try:
                 merchant = Merchant.objects.get(id=coupon.merchant.id)
             except:
@@ -145,7 +145,7 @@ def click_track(request, clicked_link_path=None):
             else:
                 coupon_id = clicked_link.split("/")[-1]
             source_url = clicked_link
-            coupon = Coupon.objects.get(id=int(coupon_id))
+            coupon = Coupon.active_objects.get(id=int(coupon_id))
             try:
                 merchant = Merchant.objects.get(id=coupon.merchant.id)
             except:
