@@ -85,22 +85,22 @@ class Command(BaseCommand):
         file.write('<?xml version="1.0" encoding="UTF-8"?>\n\
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n\
   <sitemap>\n\
-    <loc>{1}</loc>\n\
+    <loc>{1}{2}</loc>\n\
     <lastmod>{0}</lastmod>\n\
   </sitemap>\n\
   <sitemap>\n\
-    <loc>{2}</loc>\n\
+    <loc>{1}{3}</loc>\n\
     <lastmod>{0}</lastmod>\n\
   </sitemap>\n\
   <sitemap>\n\
-    <loc>{3}</loc>\n\
+    <loc>{1}{4}</loc>\n\
     <lastmod>{0}</lastmod>\n\
   </sitemap>\n\
   <sitemap>\n\
-    <loc>{4}</loc>\n\
+    <loc>{1}{5}</loc>\n\
     <lastmod>{0}</lastmod>\n\
   </sitemap>\n\
-</sitemapindex>'.format(last_updated, base_url, category_url, coupon_url, merchant_url))
+</sitemapindex>'.format(last_updated, 'http://s3.amazonaws.com/pennywyse/', base_url, category_url, coupon_url, merchant_url))
         file.close()
 
         self.stdout.write('Uploading the sitemap index to S3...\n\n')
