@@ -6,6 +6,7 @@ from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 from django.template.defaultfilters import slugify
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.http import HttpResponse
 from core.models import Category, Coupon, Merchant
 from core.util import encode_uri_component, print_stack_trace
 from tracking.views import log_click_track
@@ -212,3 +213,10 @@ def category(request, category_code, current_page=1, category_ids=-1):
         context["comma_categories"] = ShortenedURLComponent.objects.shorten_url_component(comma_categories).shortened_url
 
     return render_response("category.html", request, context)
+
+def robots_txt(request):
+  robots = """User-agent: *
+Allow: /
+Sitemap: http://s3.amazonaws.com/pennywyse/sitemap.xml
+"""
+  return HttpResponse(robots, content_type="text/plain")

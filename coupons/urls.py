@@ -38,7 +38,8 @@ urlpatterns += patterns('web.views.main',
     url(r'^categories/(?P<category_code>[A-z0-9-]+)/$', 'category'),
     url(r'^categories/$', 'categories'),
 
-    url(r'^blog/', include('articles.urls'))
+    url(r'^blog/', include('articles.urls')),
+    url(r'^robots\.txt$', 'robots_txt'),
 )
 
 urlpatterns += patterns('web.views.ajax',
