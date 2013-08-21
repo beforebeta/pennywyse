@@ -40,6 +40,7 @@ urlpatterns += patterns('web.views.main',
 
     url(r'^blog/', include('articles.urls')),
     url(r'^robots\.txt$', 'robots_txt'),
+    url(r'^sitemap\.xml$', 'sitemap'),
 )
 
 urlpatterns += patterns('web.views.ajax',

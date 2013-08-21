@@ -6,7 +6,7 @@ from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 from django.template.defaultfilters import slugify
 from django.views.decorators.csrf import ensure_csrf_cookie
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from core.models import Category, Coupon, Merchant
 from core.util import encode_uri_component, print_stack_trace
 from tracking.views import log_click_track
@@ -220,3 +220,6 @@ Allow: /
 Sitemap: http://s3.amazonaws.com/pennywyse/sitemap.xml
 """
   return HttpResponse(robots, content_type="text/plain")
+
+def sitemap(request):
+  return HttpResponseRedirect('http://s3.amazonaws.com/pennywyse/sitemap.xml')
