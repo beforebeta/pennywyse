@@ -118,3 +118,7 @@ class Command(BaseCommand):
         self.remove_sitemap('./sitemap/coupon_sitemap.xml')
         self.remove_sitemap('./sitemap/merchant_sitemap.xml')
         self.remove_sitemap('./sitemap/sitemap.xml')
+
+
+        if Coupon.objects.count() > 50000
+            self.stdout.write('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n MORE THAN 50,000 COUPONS\nSplit Sitemap!!!!!!!!!!\n!!!!!!!!!!!!!!!!!!!!!!!!!\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
