@@ -50,8 +50,8 @@ def index(request):
     context = {}
     context["featured_coupons"] = list(FeaturedCoupon.objects.all()[:10])
     random.shuffle(context["featured_coupons"])
-    context["new_coupons"] = [Coupon.active_objects.get(id=nc.coupon_id) for nc in NewCoupon.objects.all().order_by("-date_added")[:8]]
-    context["pop_coupons"] = [Coupon.active_objects.get(id=pc.coupon_id) for pc in PopularCoupon.objects.all().order_by("-date_added")[:8]]
+    context["new_coupons"] = [Coupon.objects.get(id=nc.coupon_id) for nc in NewCoupon.objects.all().order_by("-date_added")[:8]]
+    context["pop_coupons"] = [Coupon.objects.get(id=pc.coupon_id) for pc in PopularCoupon.objects.all().order_by("-date_added")[:8]]
     set_active_tab('coupon', context)
     return render_response("index.html", request, context)
 
