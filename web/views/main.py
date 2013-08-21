@@ -137,7 +137,7 @@ def open_coupon(request, company_name, coupon_label, coupon_id):
     except:
         pass
     context={
-        "coupon"        : Coupon.active_objects.get(id=coupon_id),
+        "coupon"        : Coupon.objects.get(id=coupon_id),
         "logo_url"      : logo_url,
         "back_url"      : back_url,
         "path"          : encode_uri_component("%s://%s%s" % ("http", "www.pennywyse.com", request.path))
