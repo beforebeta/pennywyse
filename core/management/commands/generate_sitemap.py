@@ -25,7 +25,7 @@ class Command(BaseCommand):
         for category in Category.objects.all():
             file.write('http://pennywyse.com/categories/%s/ changefreq=weekly priority=0.7\n' % category.code)
 
-            page_count = int((category.coupon_set.all().count() / 10.0) + 0.5)
+            page_count = int((category.get_active_coupons.count() / 10.0) + 0.5)
             for i in range(1, page_count):
               file.write('http://pennywyse.com/categories/{0}/page/{1}/ changefreq=weekly priority=0.3\n'.format(category.code, i))
         file.close()
@@ -37,7 +37,7 @@ class Command(BaseCommand):
             file.write('http://pennywyse.com/coupons/{0}/{1}/ changefreq=weekly priority=0.7\n'.format(merchant.name_slug, merchant.id))
             file.write('http://pennywyse.com/coupons/{0}/ changefreq=weekly priority=0.7\n'.format(merchant.name_slug))
 
-            page_count = int((merchant.coupon_set.all().count() / 10.0) + 0.5)
+            page_count = int((merchant.get_active_coupons.count() / 10.0) + 0.5)
             for i in range(1, page_count):
               file.write('http://pennywyse.com/coupons/{0}/page/{1}/ changefreq=weekly priority=0.3\n'.format(merchant.name_slug, i))
               file.write('http://pennywyse.com/coupons/{0}/{1}/page/{2}/ changefreq=weekly priority=0.3\n'.format(merchant.name_slug, merchant.id, i))

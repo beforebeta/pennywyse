@@ -83,7 +83,7 @@ def coupons_for_company(request, company_name, company_id=-1, current_page=1, ca
         merchant = Merchant.objects.get(id=company_id)
     selected_categories = ""
     if selected_cat_ids == -1:
-        selected_categories = ",".join(set([str(x["categories__id"]) for x in merchant.coupon_set.all().values("categories__id") if x["categories__id"]]))
+        selected_categories = ",".join(set([str(x["categories__id"]) for x in merchant.get_active_coupons().values("categories__id") if x["categories__id"]]))
     else:
         selected_categories = selected_cat_ids
     comma_categories = selected_categories
@@ -103,7 +103,7 @@ def coupons_for_company(request, company_name, company_id=-1, current_page=1, ca
     pages = Paginator(
                         list(
                                 set(
-                                    merchant.get_coupons().filter(
+                                    merchant.get_active_coupons().filter(
                                         Q(categories__id__in=selected_categories) |
                                         Q(categories__id__isnull=True)
                                     )
@@ -164,7 +164,7 @@ def category(request, category_code, current_page=1, category_ids=-1):
     category = Category.objects.get(code=category_code)
 
     if category_ids == -1:
-        all_categories = [str(x["categories__id"]) for x in category.coupon_set.all().values("categories__id") if x["categories__id"]]
+        all_categories = [str(x["categories__id"]) for x in category.get_active_coupons().values("categories__id") if x["categories__id"]]
         selected_categories = ",".join(set(all_categories))
     else:
         selected_categories = category_ids
