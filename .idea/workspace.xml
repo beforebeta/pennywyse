@@ -55,7 +55,19 @@
     <favorites_list name="coupons" />
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf>
+      <file leaf-file-name="generate_sitemap.py" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/core/management/commands/generate_sitemap.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="42" column="63" selection-start="2071" selection-end="2071" vertical-scroll-proportion="0.6217184">
+              <folding>
+                <element signature="e#0#46#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -79,8 +91,8 @@
         <option value="$PROJECT_DIR$/templates/category.html" />
         <option value="$PROJECT_DIR$/templates/open_coupon.html" />
         <option value="$PROJECT_DIR$/templates/search-results.html" />
-        <option value="$PROJECT_DIR$/core/management/commands/generate_sitemap.py" />
         <option value="$PROJECT_DIR$/core/management/commands/stats.py" />
+        <option value="$PROJECT_DIR$/core/management/commands/generate_sitemap.py" />
       </list>
     </option>
   </component>
@@ -432,13 +444,13 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-3" y="22" width="1677" height="1024" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.20722891" sideWeight="0.42682928" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20784795" sideWeight="0.5731707" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20784795" sideWeight="0.5731707" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
@@ -517,29 +529,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/articles/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="491" column="16" selection-start="17820" selection-end="17820" vertical-scroll-proportion="0.18118466">
-          <folding>
-            <element signature="e#0#24#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/common/url/tldextract.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="202" column="15" selection-start="7497" selection-end="7497" vertical-scroll-proportion="0.3993135">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/common/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tracking/management/commands/skimlinks.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="29" column="0" selection-start="718" selection-end="718" vertical-scroll-proportion="0.0">
@@ -616,15 +605,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/management/commands/generate_sitemap.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="31" column="0" selection-start="1275" selection-end="1275" vertical-scroll-proportion="0.5548926">
-          <folding>
-            <element signature="e#0#46#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/management/commands/stats.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="23" column="47" selection-start="709" selection-end="709" vertical-scroll-proportion="0.4054054">
@@ -639,6 +619,36 @@
         <state line="220" column="19" selection-start="7905" selection-end="7905" vertical-scroll-proportion="3.877791">
           <folding>
             <element signature="e#0#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/fixtures/coupons.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="16" column="0" selection-start="254" selection-end="254" vertical-scroll-proportion="0.28169015">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../env/pennywyse_env/pennywyse_env/lib/python2.7/site-packages/django/core/files/storage.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="299" column="0" selection-start="10870" selection-end="10870" vertical-scroll-proportion="2.25">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="55" column="8" selection-start="2110" selection-end="2110" vertical-scroll-proportion="0.3424821">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/management/commands/generate_sitemap.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="42" column="63" selection-start="2071" selection-end="2071" vertical-scroll-proportion="0.6217184">
+          <folding>
+            <element signature="e#0#46#0" expanded="true" />
           </folding>
         </state>
       </provider>
