@@ -19,7 +19,6 @@ def _ignore_bots(f):
         try:
             user_agent = unicode(request.META.get('HTTP_USER_AGENT', '')[:255], errors='ignore')
             user_agent = user_agent.lower()
-            print user_agent
             if "googlebot" in user_agent:
                 return success()
             else:

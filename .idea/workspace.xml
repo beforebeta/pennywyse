@@ -28,11 +28,12 @@
     <file path="/ajax.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376343494024" ignored="false" />
     <file path="$PROJECT_DIR$/account/models.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376338972963" ignored="false" />
     <file path="/views.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1377209935045" ignored="false" />
-    <file path="/a.dummy" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376410754227" ignored="false" />
+    <file path="/a.dummy" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1377210252195" ignored="false" />
     <file path="/coupon_extras.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376367306687" ignored="false" />
     <file path="/header.html" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376434931464" ignored="false" />
     <file path="/email.html" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376483575905" ignored="false" />
     <file path="/email.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376496985519" ignored="false" />
+    <file path="/storage.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1377210453718" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,7 +66,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/templates/email.html" />
         <option value="$PROJECT_DIR$/tracking/commission/skimlinks.py" />
         <option value="$PROJECT_DIR$/templates/email/coupon.html" />
         <option value="$PROJECT_DIR$/web/views/main.py" />
@@ -79,8 +79,9 @@
         <option value="$PROJECT_DIR$/templates/search-results.html" />
         <option value="$PROJECT_DIR$/core/management/commands/stats.py" />
         <option value="$PROJECT_DIR$/core/management/commands/generate_sitemap.py" />
-        <option value="$PROJECT_DIR$/tracking/views.py" />
         <option value="$PROJECT_DIR$/coupons/basesettings.py" />
+        <option value="$PROJECT_DIR$/tracking/views.py" />
+        <option value="$PROJECT_DIR$/coupons/storage.py" />
       </list>
     </option>
   </component>
@@ -155,52 +156,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="coupons" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="coupons" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="coupons" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="web" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="coupons" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="coupons" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="web" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="views" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="coupons" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="coupons" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="tracking" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -441,9 +396,10 @@
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32853982" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.20722891" sideWeight="0.42682928" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21030043" sideWeight="0.5731707" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21030043" sideWeight="0.67146015" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
@@ -453,7 +409,6 @@
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32853982" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -522,11 +477,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/install.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="36" column="31" selection-start="1342" selection-end="1342" vertical-scroll-proportion="0.6164383" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/output.log">
       <provider selected="true" editor-type-id="text-editor">
         <state line="41" column="0" selection-start="1144" selection-end="1144" vertical-scroll-proportion="-2.3630137" />
@@ -545,11 +495,6 @@
     <entry file="file://$PROJECT_DIR$/../env/pennywyse_env/pennywyse_env/lib/python2.7/site-packages/pipeline/storage.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="14" column="6" selection-start="387" selection-end="387" vertical-scroll-proportion="0.051369864" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coupons/storage.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="27" selection-start="219" selection-end="219" vertical-scroll-proportion="0.08813161" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/core/management/commands/__init__.py">
@@ -600,19 +545,37 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/web/views/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="29" column="22" selection-start="1167" selection-end="1173" vertical-scroll-proportion="0.25939393">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/tracking/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="189" column="21" selection-start="7173" selection-end="7178" vertical-scroll-proportion="0.6363636">
+        <state line="184" column="30" selection-start="7038" selection-end="7038" vertical-scroll-proportion="1.1883562">
           <folding>
             <element signature="e#0#53#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/views/main.py">
+    <entry file="file://$PROJECT_DIR$/articles/management/commands/check_for_articles_from_email.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="22" selection-start="1167" selection-end="1173" vertical-scroll-proportion="0.25939393">
-          <folding />
+        <state line="26" column="32" selection-start="827" selection-end="827" vertical-scroll-proportion="0.44520548">
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/coupons/storage.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="16" column="0" selection-start="585" selection-end="585" vertical-scroll-proportion="0.28202116">
+          <folding>
+            <element signature="e#0#63#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
