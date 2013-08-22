@@ -1,6 +1,65 @@
 {% extends "base.html" %}
+{% load static from staticfiles %}
+
 
 {% block header_block %}
+<div id="carousel">
+	<ul>
+		{% for i in "0123456789629581640424328767965" %}
+			<li><img src="http://lorempixel.com/100/100/fashion/{{ i }}" /></li>
+		{% endfor %}
+	</ul>
+</div>
+<a href="#" class="prev">&lt;</a>
+<a href="#" class="next">&gt;</a>
+
+<style>
+	#carousel {
+		overflow: hidden;
+		width: 940px;
+		height: 94px;
+		margin: 0 auto;
+	}
+/*	#carousel {
+		overflow: hidden;
+		width: 940px;
+		height: 94px;
+		margin: 0 auto;
+		position: relative;
+		z-index: 2;
+	}
+	#carousel ul {
+		overflow: hidden;
+		margin: 0;
+		padding: 0;
+		position: relative;
+		list-style-type: none;
+		z-index: 1;
+	}
+	li.slide {
+		width: 94px;
+		height: 94px;
+		float: left;
+	}
+*/
+</style>
+
+<script src="{% static "js/carousel/jcarousellite.min.js" %}"></script>
+<script>
+$('#carousel').jCarouselLite({
+	autoCSS: true,
+	autoWidth: true,
+	visible: 10,
+	responsive: true,
+	btnNext: '.next',
+	btnPrev: '.prev',
+	scroll: 10
+});
+</script>
+{% endblock %}
+
+
+{% block header_block_old %}
 
             <div class="main-slider-wrap">
               <div class="row">

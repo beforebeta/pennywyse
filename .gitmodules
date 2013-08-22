@@ -1,0 +1,3 @@
+[submodule "coupons/static/js/carousel"]
+	path = coupons/static/js/carousel
+	url = https://github.com/kswedberg/jquery-carousel-lite.git

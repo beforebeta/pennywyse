@@ -4,5 +4,5 @@
 .pydevproject
 .idea
 .tm_properties
-static
+/static
 data
