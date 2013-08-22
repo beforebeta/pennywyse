@@ -11,6 +11,7 @@ import os
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
+        self.cleanup()
         self.generate_category_urls()
         self.generate_merchant_urls()
         self.generate_coupon_urls()
@@ -106,19 +107,23 @@ class Command(BaseCommand):
         self.stdout.write('Uploading the sitemap index to S3...\n\n')
         default_storage.save('sitemap.xml', ContentFile(open('sitemap/sitemap.xml').read()))
 
+    def remove_file(self, file_path):
+        os.path.exists(file_path) and os.remove(file_path)
+
     def remove_sitemap(self, file_name):
-        os.path.exists(file_name) and os.remove(file_name)
-        os.path.exists(file_name + '.gz') and os.remove(file_name + '.gz')
+        self.remove_file('./' + file_name)
+        self.remove_file('./' + file_name + '.gz')
+        self.remove_file('./sitemap/' + file_name)
+        self.remove_file('./sitemap/' + file_name + '.gz')
 
     def cleanup(self):
         self.stdout.write('Cleaning up...\n\n')
 
-        self.remove_sitemap('./sitemap/base_sitemap.xml')
-        self.remove_sitemap('./sitemap/category_sitemap.xml')
-        self.remove_sitemap('./sitemap/coupon_sitemap.xml')
-        self.remove_sitemap('./sitemap/merchant_sitemap.xml')
-        self.remove_sitemap('./sitemap/sitemap.xml')
-
+        self.remove_sitemap('base_sitemap.xml')
+        self.remove_sitemap('category_sitemap.xml')
+        self.remove_sitemap('coupon_sitemap.xml')
+        self.remove_sitemap('merchant_sitemap.xml')
+        self.remove_sitemap('sitemap.xml')
 
         if Coupon.objects.count() > 50000:
             self.stdout.write('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n MORE THAN 50,000 COUPONS\nSplit Sitemap!!!!!!!!!!\n!!!!!!!!!!!!!!!!!!!!!!!!!\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
