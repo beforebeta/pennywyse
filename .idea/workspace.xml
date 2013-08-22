@@ -34,6 +34,7 @@
     <file path="/email.html" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376483575905" ignored="false" />
     <file path="/email.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376496985519" ignored="false" />
     <file path="/storage.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1377210453718" ignored="false" />
+    <file path="/prodsettings.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1377211291852" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,19 +58,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="settings.py" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="settings.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/coupons/settings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="prodsettings.py" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/coupons/prodsettings.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="26" column="65" selection-start="801" selection-end="801" vertical-scroll-proportion="0.45828438">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -590,13 +582,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/coupons/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/coupons/basesettings.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="226" column="0" selection-start="7373" selection-end="7373" vertical-scroll-proportion="-30.92">
@@ -606,7 +591,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/coupons/prodsettings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="65" selection-start="801" selection-end="801" vertical-scroll-proportion="0.45828438">
+        <state line="2" column="13" selection-start="41" selection-end="41" vertical-scroll-proportion="0.035252646">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/coupons/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.0">
           <folding />
         </state>
       </provider>
