@@ -1,6 +1,6 @@
 from basesettings import *
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 ALLOWED_HOSTS = ["pennywyse.com","www.pennywyse.com"]
 
