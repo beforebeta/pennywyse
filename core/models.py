@@ -67,7 +67,9 @@ class Category(models.Model):
       return categories
 
     def coupons_in_categories(self, selected_categories):
-      return Paginator(self.get_coupons().filter(
+      # return Paginator(self.get_coupons().filter(
+      #   Q(categories__id__in=selected_categories) | Q(categories__id__isnull=True)), 10)
+      return Paginator(self.get_coupons().values('id', 'merchant__name_slug', 'desc_slug', 'description', 'merchant__name', 'end', 'short_desc').filter(
         Q(categories__id__in=selected_categories) | Q(categories__id__isnull=True)), 10)
 
     def __unicode__(self):  # Python 3: def __str__(self):
@@ -99,7 +101,8 @@ class DealType(models.Model):
 class MerchantManager(models.Manager):
 
     def get_popular_companies(self, how_many=8):
-        return Merchant.objects.exclude(coupon__isnull=True)[:how_many]
+        #return Merchant.objects.exclude(coupon__isnull=True)[:how_many]
+        return Merchant.objects.values('name_slug', 'id').exclude(coupon__isnull=True)[:how_many]
 
 class Merchant(models.Model):
     ref_id          = models.CharField(max_length=255, db_index=True, blank=True, null=True)

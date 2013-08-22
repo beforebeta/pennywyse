@@ -284,14 +284,15 @@ def get_cache():
         'BACKEND': 'django_pylibmc.memcached.PyLibMCCache',
         'TIMEOUT': 24 * 60 * 60,
         'BINARY': True,
-        'OPTIONS': { 'tcp_nodelay': True }
+        'OPTIONS': { 'tcp_nodelay': True },
       }
     }
   except:
     return {
       'default': {
-        #'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'
-        'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache'
+        #'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        #'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache',
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
       }
     }
 

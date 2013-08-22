@@ -155,7 +155,8 @@ def privacy(request):
 @ensure_csrf_cookie
 def categories(request):
     context={
-        "categories"        : sorted(Category.objects.filter(parent=None), key=lambda category: category.name)
+        #"categories"        : sorted(Category.objects.filter(parent=None), key=lambda category: category.name)
+        "categories"        : Category.objects.values('code', 'name').filter(parent_id=None).order_by('name')
     }
     set_active_tab('category', context)
     return render_response("categories.html", request, context)
@@ -164,10 +165,14 @@ def categories(request):
 def category(request, category_code, current_page=1, category_ids=-1):
     current_page = int(current_page)
     category = Category.objects.get(code=category_code)
+    #category = Category.objects.select_related().get(code=category_code)
+    #category = Category.objects.values('id', 'code').get(code=category_code)
 
     if category_ids == -1:
-        all_categories = [str(x["categories__id"]) for x in category.coupon_set.all().values("categories__id") if x["categories__id"]]
-        selected_categories = ",".join(set(all_categories))
+        #all_categories = [str(x["categories__id"]) for x in category.coupon_set.all().values("categories__id") if x["categories__id"]]
+        #selected_categories = ",".join(set(all_categories))
+        #selected_categories = category.get('id')
+        selected_categories = str(category.id)
     else:
         selected_categories = category_ids
     comma_categories = selected_categories
@@ -187,7 +192,8 @@ def category(request, category_code, current_page=1, category_ids=-1):
         selected_categories=[int(s) for s in category_ids.split(",") if s]
     except:
         selected_categories=[]
-    all_categories = category.get_coupon_categories()
+    #all_categories = category.get_coupon_categories()
+    all_categories = []
     coupon_categories = []
     for coup_cat in all_categories:
         coupon_categories.append({
@@ -196,6 +202,7 @@ def category(request, category_code, current_page=1, category_ids=-1):
         })
 
     pages = category.coupons_in_categories(selected_categories)
+    print pages
 
     if current_page > pages.num_pages:
         current_page=pages.num_pages
