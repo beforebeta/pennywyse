@@ -210,3 +210,17 @@ DEVELOPER_KEY = "00a1be63fcdf4cc39b9fa1c4c9e021ed990814ac740758b6eae34a9f71c27e8
 DISQUS_USER_API_KEY = "xEJVgJlNeCV3gcCD9w5b67kP8QaZi2R51JCaQuycadblRxI29ADap9MC9EViXEzq"
 DISQUS_FORUM_SHORTNAME = "pennywyse"
 ARTICLES_AUTO_TAG = False
+ARTICLE_PAGINATION = 10
+
+#S3
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+STATICFILES_STORAGE = 'coupons.storage.S3PipelineStorage'
+
+AWS_QUERYSTRING_AUTH = False
+AWS_S3_SECURE_URLS = False
+AWS_REDUCED_REDUNDANCY = True
+AWS_STORAGE_BUCKET_NAME = 'pennywyse'
+AWS_HEADERS = {
+    'Cache-Control': 'max-age=31556926',
+    'Expires': (datetime.datetime.today() + datetime.timedelta(days=365)).strftime('%a, %d %b %Y %H:%M:%S GMT')
+}
