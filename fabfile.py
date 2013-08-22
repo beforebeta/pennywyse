@@ -13,8 +13,10 @@ def run_pro():
         local('gunicorn coupons.wsgi')
 
 def deploy_staging():
+    local('heroku maintenance:on')
     branch = local('git rev-parse --abbrev-ref HEAD', capture=True)
     local('git push heroku %s:master' % branch)
+    local('heroku maintenance:off')
 
 def refresh_staging():
     local('heroku run python manage.py fmtcload --load')

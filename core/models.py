@@ -59,11 +59,19 @@ class Category(models.Model):
       return self.coupon_set.all().count()
 
     def get_coupon_categories(self):
-      categories = set()
-      for c in self.coupon_set.all():
-          for cat in c.categories.all():
-              categories.add(cat)
-      categories = sorted(list(categories), key=lambda cat: cat.name)
+      # categories = set()
+      # for c in self.coupon_set.all():
+      #     for cat in c.categories.all():
+      #         categories.add(cat)
+      # categories = sorted(list(categories), key=lambda cat: cat.name)
+      # # #return self.coupon_set.values('categories__name').order_by('categories__name')
+      #categories =  self.coupon_set.select_related('categories').order_by('categories__name')
+      #categories = self.coupon_set.only('categories').order_by('categories__name')
+      #categories = self.coupon_set.select_related('categories').order_by('categories__name')
+      #categories = Category.objects.filter(id__in=self.coupon_set.values('categories__id'))
+      categories = Category.objects.all().order_by('name')
+      #print categories
+      # #return self.coupon_set.only('categories__name').order_by('categories__name')
       return categories
 
     def coupons_in_categories(self, selected_categories):

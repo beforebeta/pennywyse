@@ -192,8 +192,7 @@ def category(request, category_code, current_page=1, category_ids=-1):
         selected_categories=[int(s) for s in category_ids.split(",") if s]
     except:
         selected_categories=[]
-    #all_categories = category.get_coupon_categories()
-    all_categories = []
+    all_categories = category.get_coupon_categories()
     coupon_categories = []
     for coup_cat in all_categories:
         coupon_categories.append({
