@@ -107,8 +107,8 @@ class Command(BaseCommand):
         default_storage.save('sitemap.xml', ContentFile(open('sitemap/sitemap.xml').read()))
 
     def remove_sitemap(self, file_name):
-      os.path.exists(file_name) and os.remove(file_name)
-      os.path.exists(file_name + '.gz') and os.remove(file_name + '.gz')
+        os.path.exists(file_name) and os.remove(file_name)
+        os.path.exists(file_name + '.gz') and os.remove(file_name + '.gz')
 
     def cleanup(self):
         self.stdout.write('Cleaning up...\n\n')
@@ -120,5 +120,5 @@ class Command(BaseCommand):
         self.remove_sitemap('./sitemap/sitemap.xml')
 
 
-        if Coupon.objects.count() > 50000
+        if Coupon.objects.count() > 50000:
             self.stdout.write('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n MORE THAN 50,000 COUPONS\nSplit Sitemap!!!!!!!!!!\n!!!!!!!!!!!!!!!!!!!!!!!!!\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
