@@ -459,6 +459,10 @@ p:last-child {
 .text-content p {
   margin: 1em 0;
 }
+.text-content a {
+    color:#4DA1E9 !important;
+    font-weight:400;
+}
 .text-content p:first-child {
   margin-top: 0;
 }
