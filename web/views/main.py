@@ -128,6 +128,12 @@ def coupons_for_company(request, company_name, company_id=-1, current_page=1, ca
 
 @ensure_csrf_cookie
 def open_coupon(request, company_name, coupon_label, coupon_id):
+    log_click_track(request)
+
+    coupon = Coupon.objects.get(id=coupon_id)
+    if coupon.merchant.redirect:
+      return HttpResponseRedirect(coupon.merchant.link)
+
     logo_url = "/"
     back_url = "/"
     try:
@@ -137,13 +143,13 @@ def open_coupon(request, company_name, coupon_label, coupon_id):
             logo_url="/"
     except:
         pass
+
     context={
-        "coupon"        : Coupon.objects.get(id=coupon_id),
+        "coupon"        : coupon,
         "logo_url"      : logo_url,
         "back_url"      : back_url,
         "path"          : encode_uri_component("%s://%s%s" % ("http", "www.pennywyse.com", request.path))
     }
-    log_click_track(request)
     return render_response("open_coupon.html",request, context)
 
 @ensure_csrf_cookie
