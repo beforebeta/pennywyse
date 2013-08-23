@@ -20,7 +20,11 @@ DATA_DIR = os.path.join(PROJECT_PATH, 'data')
 if not os.path.exists(DATA_DIR):
     os.makedirs(DATA_DIR)
 
-DEBUG = False
+def bool_env(val):
+    """Replaces string based environment values with Python booleans"""
+    return True if os.environ.get(val, False) == 'True' else False
+
+DEBUG = bool_env('DEBUG')
 TEMPLATE_DEBUG = DEBUG
 
 RAVEN_CONFIG = {

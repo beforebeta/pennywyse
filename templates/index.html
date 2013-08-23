@@ -4,38 +4,43 @@
 
 {% block header_block %}
 {# https://github.com/kswedberg/jquery-carousel-lite #}
-<section id="carousel">
-	<div class="selected">
-		{% with featured_coupons|random as coupon %}
-			<img src="{{ coupon.coupon.merchant.get_image }}" alt="{{ coupon.coupon.merchant.name }}" />
-			<h2>{{ coupon.coupon.short_desc }} at {{ coupon.coupon.merchant.name }}</h2>
-			<p class="description">{{ coupon.coupon.description }}</p>
-			<p>
-				<a class="button" href="/coupon/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.desc_slug }}/{{ coupon.coupon.id }}/">Use coupon</a>
-				See more from <a class="merchantlink" href="/coupons/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.merchant.id }}/">{{ coupon.coupon.merchant.name }}</a>
-			</p>
-		{% endwith %}
-	</div>
-	<nav class="carousel">
-		<ul>
-			{% for coupon in featured_coupons %}
-				<li
-					data-image="{{ coupon.coupon.merchant.get_image }}"
-					data-merchantname="{{ coupon.coupon.merchant.name }}"
-					data-shortdesc="{{ coupon.coupon.short_desc }}"
-					data-description="{{ coupon.coupon.description }}"
-					data-couponurl="/coupon/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.desc_slug }}/{{ coupon.coupon.id }}/"
-					data-merchanturl="/coupons/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.merchant.id }}/"
-					>
+
+<section id="carousel" class="row">
+	<div class="column">
+		<div class="selected">
+			{% with featured_coupons|random as coupon %}
+				<div class="merchantlogo">
 					<img src="{{ coupon.coupon.merchant.get_image }}" alt="{{ coupon.coupon.merchant.name }}" />
-				</li>
-			{% endfor %}
-		</ul>
-	</nav>
-	<nav class="paging">
-		<a href="#" class="prev">&lt;</a>
-		<a href="#" class="next">&gt;</a>
-	</nav>
+				</div>
+				<h2>{{ coupon.coupon.short_desc }} at {{ coupon.coupon.merchant.name }}</h2>
+				<p class="description">{{ coupon.coupon.description }}</p>
+				<p>
+					<a class="tiny button" href="/coupon/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.desc_slug }}/{{ coupon.coupon.id }}/">Use Coupon</a>
+					See more from <a class="merchantlink" href="/coupons/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.merchant.id }}/">{{ coupon.coupon.merchant.name }}</a>
+				</p>
+			{% endwith %}
+		</div>
+		<nav class="carousel">
+			<ul>
+				{% for coupon in featured_coupons %}
+					<li
+						data-image="{{ coupon.coupon.merchant.get_image }}"
+						data-merchantname="{{ coupon.coupon.merchant.name }}"
+						data-shortdesc="{{ coupon.coupon.short_desc }}"
+						data-description="{{ coupon.coupon.description }}"
+						data-couponurl="/coupon/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.desc_slug }}/{{ coupon.coupon.id }}/"
+						data-merchanturl="/coupons/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.merchant.id }}/"
+						>
+						<img src="{{ coupon.coupon.merchant.get_image }}" alt="{{ coupon.coupon.merchant.name }}" />
+					</li>
+				{% endfor %}
+			</ul>
+		</nav>
+		<nav class="paging">
+			<a href="javascript:void(0);" class="prev">&lt;</a>
+			<a href="javascript:void(0);" class="next">&gt;</a>
+		</nav>
+	</div>
 </section>
 
 <script>
@@ -52,12 +57,10 @@
 </script>
 
 <style>
-	#carousel {
-		width: 940px;
-		margin: 0 auto;
-	}
+	#carousel {}
 	#carousel .selected {
 		color: #fff;
+		min-height: 140px;
 	}
 	#carousel .selected .button {
 		background-color: rgb(77, 194, 161);
@@ -65,17 +68,25 @@
 		margin-right: 20px;
 		font-weight: bold;
 	}
-	#carousel .selected img {
+	#carousel .selected .merchantlogo {
 		float: left;
-		max-width: 150px;
-		max-height: 150px;
+		width: 120px;
+		height: 120px;
 		margin-right: 20px;
+		margin-bottom: 20px;
+	}
+	#carousel .selected .merchantlogo img {
+		max-width: 120px;
+		max-height: 120px;
 	}
 	#carousel .selected h2 {
 		color: #fff;
 	}
 	#carousel .selected a {
 		color: #fff;
+	}
+	#carousel .selected a.merchantlink {
+		text-decoration: underline;
 	}
 	#carousel .carousel {
 		overflow: hidden;
@@ -84,6 +95,7 @@
 	}
 	#carousel .carousel li {
 		height: 104px;
+		cursor: pointer;
 	}
 	#carousel .carousel li img {
 		max-width: 94px;
@@ -113,43 +125,6 @@ $('#carousel').jCarouselLite({
 	scroll: 10
 });
 </script>
-{% endblock %}
-
-
-{% block header_block_old %}
-
-            <div class="main-slider-wrap">
-              <div class="row">
-                <div class="column">
-                  <div class="main-slider flexslider white">
-                    <ul class="slides">
-                        {% for coupon in featured_coupons %}
-                      <li>
-                        <p class="h1"><a target="_blank" rel="comm" href="/coupon/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.desc_slug }}/{{ coupon.coupon.id }}/">{{ coupon.coupon.short_desc }} at {{ coupon.coupon.merchant.name }}</a></p>
-                        <div class="row">
-                          <div class="large-8 columns large-centered">
-                            <div class="content">
-                              <p class="caption">
-                                <a target="_blank" rel="comm" href="/coupon/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.desc_slug }}/{{ coupon.coupon.id }}/">{{ coupon.coupon.description }}</a>
-                                <a target="_blank" rel="comm" href="/coupon/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.desc_slug }}/{{ coupon.coupon.id }}/" class="ir icon tag">Learn More</a>
-                              </p>
-                                <a href="/coupons/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.merchant.id }}/">
-                                  <figure>
-                                    <img src="{{ coupon.coupon.merchant.get_image }}" alt="{{ coupon.coupon.merchant.name }}" style="max-height: 100px">
-                                  </figure>
-                                </a>
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                        {% endfor %}
-
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-
 {% endblock %}
 
 
