@@ -4,45 +4,104 @@
 
 {% block header_block %}
 {# https://github.com/kswedberg/jquery-carousel-lite #}
-<div id="carousel">
-	<ul>
-		{% for i in "0123456789629581640424328767965" %}
-			<li><img src="http://lorempixel.com/100/100/fashion/{{ i }}" /></li>
-		{% endfor %}
-	</ul>
-</div>
-<a href="#" class="prev">&lt;</a>
-<a href="#" class="next">&gt;</a>
+<section id="carousel">
+	<div class="selected">
+		{% with featured_coupons|random as coupon %}
+			<img src="{{ coupon.coupon.merchant.get_image }}" alt="{{ coupon.coupon.merchant.name }}" />
+			<h2>{{ coupon.coupon.short_desc }} at {{ coupon.coupon.merchant.name }}</h2>
+			<p class="description">{{ coupon.coupon.description }}</p>
+			<p>
+				<a class="button" href="/coupon/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.desc_slug }}/{{ coupon.coupon.id }}/">Use coupon</a>
+				See more from <a class="merchantlink" href="/coupons/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.merchant.id }}/">{{ coupon.coupon.merchant.name }}</a>
+			</p>
+		{% endwith %}
+	</div>
+	<nav class="carousel">
+		<ul>
+			{% for coupon in featured_coupons %}
+				<li
+					data-image="{{ coupon.coupon.merchant.get_image }}"
+					data-merchantname="{{ coupon.coupon.merchant.name }}"
+					data-shortdesc="{{ coupon.coupon.short_desc }}"
+					data-description="{{ coupon.coupon.description }}"
+					data-couponurl="/coupon/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.desc_slug }}/{{ coupon.coupon.id }}/"
+					data-merchanturl="/coupons/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.merchant.id }}/"
+					>
+					<img src="{{ coupon.coupon.merchant.get_image }}" alt="{{ coupon.coupon.merchant.name }}" />
+				</li>
+			{% endfor %}
+		</ul>
+	</nav>
+	<nav class="paging">
+		<a href="#" class="prev">&lt;</a>
+		<a href="#" class="next">&gt;</a>
+	</nav>
+</section>
+
+<script>
+	$('#carousel .carousel ul').on('click', 'li', function(){
+		// unmark
+		$(this).closest('ul').find('img').removeClass('active');
+		// mark
+		$(this).children('img:first').addClass('active');
+		// set data
+		var db = $(this).data();
+		$('#carousel .selected img').attr('src', db.image);
+		$('#carousel .selected h2').text(db.shortdesc + ' at ' + db.merchantname);
+		$('#carousel .selected .description').text(db.description);
+		$('#carousel .selected .button').attr('href', db.couponurl);
+		$('#carousel .selected .merchantlink').attr('href', db.merchanturl);
+	});
+</script>
 
 <style>
 	#carousel {
-		overflow: hidden;
 		width: 940px;
-		height: 94px;
 		margin: 0 auto;
 	}
-/*	#carousel {
-		overflow: hidden;
-		width: 940px;
-		height: 94px;
-		margin: 0 auto;
-		position: relative;
-		z-index: 2;
+	#carousel .selected {
+		color: #fff;
 	}
-	#carousel ul {
-		overflow: hidden;
-		margin: 0;
-		padding: 0;
-		position: relative;
-		list-style-type: none;
-		z-index: 1;
+	#carousel .selected .button {
+		background-color: rgb(77, 194, 161);
+		padding: 5px 10px;
+		margin-right: 20px;
+		font-weight: bold;
 	}
-	li.slide {
-		width: 94px;
-		height: 94px;
+	#carousel .selected img {
 		float: left;
+		max-width: 150px;
+		max-height: 150px;
+		margin-right: 20px;
 	}
-*/
+	#carousel .selected h2 {
+		color: #fff;
+	}
+	#carousel .selected a {
+		color: #fff;
+	}
+	#carousel .carousel {
+		overflow: hidden;
+		height: 94px;
+		clear: both;
+	}
+	#carousel .carousel li {
+		height: 104px;
+	}
+	#carousel .carousel li img {
+		max-width: 94px;
+		max-height: 94px;
+		padding-top: 10px;
+	}
+	#carousel .carousel li img.active {
+		padding-top: 0;
+	}
+	#carousel nav.paging {
+		text-align: center;
+	}
+	#carousel nav.paging a {
+		color: #fff;
+	}
 </style>
 
 <script src="{% static "js/carousel/jcarousellite.min.js" %}"></script>
