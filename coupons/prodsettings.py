@@ -23,5 +23,3 @@ IMAGE_LOCAL_COPY_DIR = '/root/public_html/pennywyse/static/img/local/'
 try: os.makedirs(IMAGE_LOCAL_COPY_DIR)
 except: pass
 
-AWS_ACCESS_KEY_ID = 'AKIAISPVNQL76YJWH4WQ'
-AWS_SECRET_ACCESS_KEY = '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'

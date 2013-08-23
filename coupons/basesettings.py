@@ -224,3 +224,5 @@ AWS_HEADERS = {
     'Cache-Control': 'max-age=31556926',
     'Expires': (datetime.datetime.today() + datetime.timedelta(days=365)).strftime('%a, %d %b %Y %H:%M:%S GMT')
 }
+AWS_ACCESS_KEY_ID = 'AKIAISPVNQL76YJWH4WQ'
+AWS_SECRET_ACCESS_KEY = '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'

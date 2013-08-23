@@ -13,12 +13,11 @@
         <h2 class="alt"><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></h2>
         <p class="rr subtitle">
           {% trans 'Posted on' %} {{ article.publish_date|date:"F jS, Y" }}
-          {% trans 'by' %} {{ article.author.get_name }}
         </p>
-        <p class="text secondary">
-          {{ article.content }}
+        <p class="text">
+          {{ article.content|safe|truncatewords_html:50 }}
         </p>
-        <a class="input button blue secondary responsive fixed" href="{{ article.get_absolute_url }}">Learn more</a>
+        <a class="input button blue secondary responsive fixed" href="{{ article.get_absolute_url }}">Read more</a>
       </div>
     </div>
   </article>
