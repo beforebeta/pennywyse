@@ -3,11 +3,11 @@ from settings import *
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
-HostName = 'pennywyse.com'
+HostName = 'pennywyse.herokuapp.com'
 BASE_URL_NO_APPENDED_SLASH = 'http://' + HostName
 SVCS_HOST = HostName
 
-ALLOWED_HOSTS = ['pennywyse.com', 'www.pennywyse.com']
+ALLOWED_HOSTS = ['pennywyse.com', 'www.pennywyse.com', 'pennywyse.herokuapp.com']
 
 # Static files
 

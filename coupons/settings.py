@@ -20,7 +20,7 @@ DATA_DIR = os.path.join(PROJECT_PATH, 'data')
 if not os.path.exists(DATA_DIR):
     os.makedirs(DATA_DIR)
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 RAVEN_CONFIG = {
@@ -282,7 +282,7 @@ def get_cache():
     return {
       'default': {
         'BACKEND': 'django_pylibmc.memcached.PyLibMCCache',
-        'TIMEOUT': 24 * 60 * 60,
+        'TIMEOUT': 500,
         'BINARY': True,
         'OPTIONS': { 'tcp_nodelay': True },
       }
@@ -290,8 +290,6 @@ def get_cache():
   except:
     return {
       'default': {
-        #'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        #'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache',
         'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
       }
     }
