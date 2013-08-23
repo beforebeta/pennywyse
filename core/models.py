@@ -120,6 +120,7 @@ class Merchant(models.Model):
     link            = models.TextField(blank=True, null=True)
     directlink      = models.TextField(blank=True, null=True)
     skimlinks       = models.TextField(blank=True, null=True)
+    redirect        = models.NullBooleanField()
 
     date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
     last_modified   = models.DateTimeField(default=datetime.datetime.now(), auto_now=True, auto_now_add=True)

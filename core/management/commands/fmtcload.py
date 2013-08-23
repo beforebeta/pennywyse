@@ -214,6 +214,22 @@ def refresh_calculated_fields():
             print "Error with: ", m.name, m.id
             print_stack_trace()
 
+def refresh_merchant_redirects():
+    for merchant in Merchant.objects.all():
+        if merchant.link:
+            try:
+                request = requests.get(merchant.link, timeout=20)
+                if merchant.link and request.headers.get('x-frame-options', False) == 'SAMEORIGIN':
+                    merchant.redirect = True
+                    merchant.save()
+                    print "{0}: True!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!".format(merchant.name)
+                else:
+                    print "{0}: False".format(merchant.name)
+            except:
+                print "{0} timed out connecting to {1}".format(merchant.name, merchant.link)
+        else:
+            print "{0}: False".format(merchant.name)
+
 def load():
     refresh_deal_types()
     refresh_categories()
@@ -221,3 +237,4 @@ def load():
     refresh_deals()
     setup_web_coupons()
     refresh_calculated_fields()
+    refresh_merchant_redirects()
