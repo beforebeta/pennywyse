@@ -224,6 +224,7 @@ INSTALLED_APPS = (
     #'django_pdb',
     'debug_toolbar',
     'pipeline',
+    'caroused',
     )
 
 # A sample logging configuration. The only tangible logging
