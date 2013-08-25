@@ -78,7 +78,8 @@ def coupons_for_company(request, company_name, company_id=-1, current_page=1, ca
     merchant=None
     current_page = int(current_page)
     if company_id == -1:
-        merchant = Merchant.objects.get(name_slug= slugify(company_name))
+        # merchant = Merchant.objects.get(name_slug= slugify(company_name)) -> this will error out if two merchants have the same slug
+        merchant = Merchant.objects.filter(name_slug= slugify(company_name)).order_by("-id")[0]
     else:
         merchant = Merchant.objects.get(id=company_id)
     selected_categories = ""
