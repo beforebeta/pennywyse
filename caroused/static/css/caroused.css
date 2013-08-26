@@ -1,0 +1,70 @@
+#caroused {}
+#caroused .selected {
+	color: #fff;
+	min-height: 140px;
+	margin: auto;
+}
+#caroused .selected .button {
+	background-color: rgb(77, 194, 161);
+	padding: 5px 10px;
+	margin-right: 20px;
+	font-weight: bold;
+}
+#caroused .selected .merchantlogo {
+	float: left;
+	width: 120px;
+	height: 120px;
+	margin-right: 20px;
+	margin-bottom: 20px;
+}
+#caroused .selected .merchantlogo img {
+	max-width: 120px;
+	max-height: 120px;
+}
+#caroused .selected h2 {
+	color: #fff;
+}
+#caroused .selected a {
+	color: #fff;
+}
+#caroused .selected a.merchantlink {
+	text-decoration: underline;
+}
+#caroused .carousel {
+	overflow: hidden;
+	height: 67px;
+	clear: both;
+}
+#caroused .carousel li {
+	height: 67px;
+	cursor: pointer;
+}
+#caroused .carousel li img {
+	max-width: 94px;
+	max-height: 57px;
+	padding-top: 10px;
+}
+#caroused .carousel li img.active {
+	padding-top: 0;
+}
+#caroused .paging {
+	text-indent: -9999px;
+	height: 57px;
+	position: relative;
+}
+#caroused .paging a {
+	position: absolute;
+	top: 23px;
+	left: 33px;
+	display: block;
+	width: 14px;
+	height: 23px;
+	background-image: url('/static/img/sprite.png');
+	background-repeat: no-repeat;
+}
+#caroused .paging a.prev {
+	background-position: -50px 0;
+}
+#caroused .paging a.next {
+	background-position: -100px 0;
+}

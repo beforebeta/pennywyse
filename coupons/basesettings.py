@@ -151,7 +151,8 @@ INSTALLED_APPS = (
     'web',
     'websvcs',
     'ads',
-    'tracking'
+    'tracking',
+    'caroused',
     )
 
 # A sample logging configuration. The only tangible logging
