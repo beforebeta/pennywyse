@@ -14,10 +14,10 @@ $(function(){
 	$('#caroused').jCarouselLite({
 		autoCSS: true,
 		autoWidth: true,
-		visible: 10,
+		visible: 8,
 		responsive: true,
 		btnNext: '.next',
 		btnPrev: '.prev',
-		scroll: 10
+		scroll: 8
 	});
 });

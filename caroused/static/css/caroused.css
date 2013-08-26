@@ -1,6 +1,7 @@
 #caroused .selected {
 	color: #fff;
 	min-height: 140px;
+	margin: auto;
 }
 #caroused .selected .button {
 	background-color: rgb(77, 194, 161);
@@ -45,9 +46,10 @@
 #caroused .carousel li img.active {
 	padding-top: 0;
 }
-#caroused nav.paging {
+#caroused .paging {
 	text-align: center;
+	line-height: 57px;
 }
-#caroused nav.paging a {
+#caroused .paging a {
 	color: #fff;
 }
