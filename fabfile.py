@@ -16,6 +16,7 @@ def deploy_staging():
     local('heroku maintenance:on')
     branch = local('git rev-parse --abbrev-ref HEAD', capture=True)
     local('git push heroku %s:master' % branch)
+    local('heroku run python manage.py collectstatic --noinput')
     local('heroku maintenance:off')
 
 def refresh_staging():

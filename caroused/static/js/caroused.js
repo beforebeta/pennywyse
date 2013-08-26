@@ -1,4 +1,5 @@
 $(function(){
+
 	$('#caroused .carousel ul').on('click', 'li', function(){
 		var db = $(this).data();
 		$(this).closest('ul').find('img').removeClass('active');
@@ -20,4 +21,5 @@ $(function(){
 		btnPrev: '.prev',
 		scroll: 8
 	});
+
 });
