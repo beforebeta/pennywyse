@@ -7,7 +7,7 @@
     <file path="/start_script.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1375914262188" ignored="false" />
     <file path="/models.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376365810933" ignored="false" />
     <file path="/basesettings.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1375985751615" ignored="false" />
-    <file path="/admin.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376363553584" ignored="false" />
+    <file path="/admin.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1377546887392" ignored="false" />
     <file path="/middleware.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376001228063" ignored="false" />
     <file path="/main.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1377441695579" ignored="false" />
     <file path="/visitor.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376420112220" ignored="false" />
@@ -38,7 +38,7 @@
     <file path="/_articles.html" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1377215196710" ignored="false" />
     <file path="/main.css" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1377271986290" ignored="false" />
     <file path="/_article_content.html" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1377215342259" ignored="false" />
-    <file path="/base.html" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1377523305956" ignored="false" />
+    <file path="/base.html" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1377545862595" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,10 +62,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="base.html" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/templates/base.html">
+      <file leaf-file-name="admin.py" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/tracking/admin.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="128" column="0" selection-start="6433" selection-end="6433" vertical-scroll-proportion="0.42789036">
+            <state line="14" column="48" selection-start="611" selection-end="611" vertical-scroll-proportion="0.2467685">
+              <folding>
+                <element signature="e#0#32#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="models.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tracking/models.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="63" column="24" selection-start="3022" selection-end="3042" vertical-scroll-proportion="-16.88">
               <folding />
             </state>
           </provider>
@@ -81,7 +92,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/templates/categories.html" />
         <option value="$PROJECT_DIR$/templates/category.html" />
         <option value="$PROJECT_DIR$/templates/open_coupon.html" />
         <option value="$PROJECT_DIR$/templates/search-results.html" />
@@ -97,6 +107,7 @@
         <option value="$PROJECT_DIR$/articles/templates/articles/_article_content.html" />
         <option value="$PROJECT_DIR$/web/views/main.py" />
         <option value="$PROJECT_DIR$/templates/base.html" />
+        <option value="$PROJECT_DIR$/tracking/admin.py" />
       </list>
     </option>
   </component>
@@ -184,7 +195,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="templates" />
+              <option name="myItemId" value="tracking" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -492,20 +503,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/coupons/storage.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="6" selection-start="482" selection-end="482" vertical-scroll-proportion="0.22914219">
-          <folding>
-            <element signature="e#0#63#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/articles/templates/base.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="40" column="0" selection-start="1161" selection-end="1161" vertical-scroll-proportion="0.70422536" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/coupons/settings.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="4" column="0" selection-start="103" selection-end="103" vertical-scroll-proportion="0.07050529">
@@ -595,8 +592,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/base.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="128" column="0" selection-start="6433" selection-end="6433" vertical-scroll-proportion="0.42789036">
+        <state line="137" column="12" selection-start="6573" selection-end="6573" vertical-scroll-proportion="0.37425506">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tracking/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="63" column="24" selection-start="3022" selection-end="3042" vertical-scroll-proportion="-16.88">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tracking/admin.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="48" selection-start="611" selection-end="611" vertical-scroll-proportion="0.2467685">
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
