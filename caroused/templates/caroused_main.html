@@ -1,0 +1,41 @@
+<section id="caroused" class="row">
+	<div class="selected large-12">
+		{% with featured_coupons|random as coupon %}
+			<div class="merchantlogo">
+				<img src="{{ coupon.coupon.merchant.get_image }}" alt="{{ coupon.coupon.merchant.name }}" />
+			</div>
+			<h2>{{ coupon.coupon.short_desc }} at {{ coupon.coupon.merchant.name }}</h2>
+			<p class="description">{{ coupon.coupon.description }}</p>
+			<p>
+				<a class="button" href="/coupon/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.desc_slug }}/{{ coupon.coupon.id }}/">Use Coupon</a>
+				See more from <a class="merchantlink" href="/coupons/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.merchant.id }}/">{{ coupon.coupon.merchant.name }}</a>
+			</p>
+		{% endwith %}
+	</div>
+	<div class="row">
+		<div class="large-1 columns hide-for-medium-down paging">
+			<a href="javascript:void(0);" class="prev">&lt;</a>
+		</div>
+		<div class="large-10 columns">
+			<nav class="carousel">
+				<ul>
+					{% for coupon in featured_coupons %}
+						<li
+							data-image="{{ coupon.coupon.merchant.get_image }}"
+							data-merchantname="{{ coupon.coupon.merchant.name }}"
+							data-shortdesc="{{ coupon.coupon.short_desc }}"
+							data-description="{{ coupon.coupon.description }}"
+							data-couponurl="/coupon/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.desc_slug }}/{{ coupon.coupon.id }}/"
+							data-merchanturl="/coupons/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.merchant.id }}/"
+							>
+							<img src="{{ coupon.coupon.merchant.get_image }}" alt="{{ coupon.coupon.merchant.name }}" />
+						</li>
+					{% endfor %}
+				</ul>
+			</nav>
+		</div>
+		<div class="large-1 columns hide-for-medium-down paging">
+			<a href="javascript:void(0);" class="next">&gt;</a>
+		</div>
+	</div>
+</section>
