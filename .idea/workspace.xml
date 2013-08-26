@@ -65,7 +65,7 @@
       <file leaf-file-name="admin.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tracking/admin.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="14" column="48" selection-start="611" selection-end="611" vertical-scroll-proportion="0.2467685">
+            <state line="9" column="0" selection-start="419" selection-end="419" vertical-scroll-proportion="0.1586369">
               <folding>
                 <element signature="e#0#32#0" expanded="true" />
               </folding>
@@ -606,7 +606,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tracking/admin.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="48" selection-start="611" selection-end="611" vertical-scroll-proportion="0.2467685">
+        <state line="9" column="0" selection-start="419" selection-end="419" vertical-scroll-proportion="0.1586369">
           <folding>
             <element signature="e#0#32#0" expanded="true" />
           </folding>

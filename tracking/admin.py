@@ -6,7 +6,7 @@ class ClickTrackAdmin(admin.ModelAdmin):
     ordering = ['-date_added']
 
 class VisitorAdmin(admin.ModelAdmin):
-    fields = ('url', 'acquisition_source', 'acquisition_medium','acquisition_campaign','acquisition_term','acquisition_content')
+    list_display = ('url', 'acquisition_source', 'acquisition_medium','acquisition_campaign','acquisition_term','acquisition_content')
 
 admin.site.register(BannedIP)
 admin.site.register(UntrackedUserAgent)
