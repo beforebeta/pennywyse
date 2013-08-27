@@ -190,7 +190,7 @@ class Merchant(models.Model):
       return self.name
 
     def local_path(self):
-      return "/coupons/{0}".format(self.name_slug)
+      return "/coupons/{0}/{1}".format(self.name_slug, self.id)
 
     def __unicode__(self):  # Python 3: def __str__(self):
         return "%s %s" % (self.ref_id, self.name)
@@ -470,3 +470,6 @@ class Coupon(models.Model):
 
     def in_category(self, category):
       return category in [c.code for c in self.categories.all()]
+
+    def local_path(self):
+      return "/coupon/{0}/{1}/{2}/".format(self.merchant.name_slug, self.desc_slug, self.id)
