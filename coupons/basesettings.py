@@ -153,7 +153,7 @@ INSTALLED_APPS = (
     'ads',
     'tracking',
     'articles',
-    'caroused',
+    'carousel',
     )
 
 # A sample logging configuration. The only tangible logging
