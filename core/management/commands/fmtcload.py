@@ -8,6 +8,7 @@ from core.models import DealType, Category, Coupon, Merchant, Country
 from core.util import print_stack_trace
 from web.models import FeaturedCoupon, NewCoupon, PopularCoupon
 from embedly import Embedly
+from websvcs.models import EmbedlyMerchant
 import HTMLParser
 
 class Command(BaseCommand):
@@ -248,19 +249,4 @@ def load():
     refresh_merchant_redirects()
 
 def embedly():
-    client = Embedly(settings.EMBEDLY_KEY)
-    for coupon in Coupon.active_objects.all():
-        try:
-            link = coupon.directlink
-            if link[-1] == "+":
-              link = link[0:-1]
-            extract = client.extract(link)
-            coupon.embedly_title = extract.title
-            coupon.embedly_description = extract.description
-            if extract.images:
-                coupon.embedly_image_url = extract.images[0].url
-                print "For:    {0}\nEmbedly returned:   {1}".format(link, coupon.embedly_image_url)
-            coupon.save()
-            print "extracted data for Coupon #{0}:    {1}\n  Merchant:      {2}\n\n\n".format(coupon.id, coupon.local_path(), coupon.merchant.local_path())
-        except:
-            print "failed to extract data for Coupon #{0}".format(coupon.id)
+  [EmbedlyMerchant(merchant).update_coupons() for merchant in Merchant.objects.all()]
