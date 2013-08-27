@@ -1,0 +1,3 @@
+[submodule "carousel/static/js/carousel"]
+	path = carousel/static/js/carousel
+	url = https://github.com/kswedberg/jquery-carousel-lite.git
