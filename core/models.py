@@ -348,6 +348,10 @@ class Coupon(models.Model):
 
     desc_slug       = models.CharField(max_length=175, default="COUPON")
 
+    embedly_title = models.TextField(blank=True, null=True)
+    embedly_description = models.TextField(blank=True, null=True)
+    embedly_image_url = models.TextField(blank=True, null=True)
+
     date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
     last_modified   = models.DateTimeField(default=datetime.datetime.now(), auto_now=True, auto_now_add=True)
 
@@ -355,7 +359,16 @@ class Coupon(models.Model):
     active_objects = ActiveCouponManager()
 
     def get_image(self):
-        return get_directed_image(self)
+        if self.embedly_image_url:
+            return self.embedly_image_url
+        else:
+            return get_directed_image(self)
+
+    def get_description(self):
+        if self.embedly_description:
+            return self.embedly_description
+        else:
+            return self.description
 
     def has_deal_type(self, dealtype_code):
         return True if self.dealtypes.filter(code=dealtype_code).count()>0 else False
