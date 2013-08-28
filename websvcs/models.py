@@ -7,7 +7,7 @@ from picklefield.fields import PickledObjectField
 from django.conf import settings
 import urllib, gzip, os, base64
 from cPickle import dumps, loads
-from embedly import Embedly
+from vendor.embedly import Embedly
 
 class ImageStore(models.Model):
     remote_url = models.CharField(max_length=255, db_index=True)

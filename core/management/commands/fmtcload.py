@@ -7,7 +7,6 @@ import requests
 from core.models import DealType, Category, Coupon, Merchant, Country
 from core.util import print_stack_trace
 from web.models import FeaturedCoupon, NewCoupon, PopularCoupon
-from embedly import Embedly
 from websvcs.models import EmbedlyMerchant
 import HTMLParser
 
