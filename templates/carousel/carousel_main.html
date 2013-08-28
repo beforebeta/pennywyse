@@ -1,4 +1,4 @@
-<section id="caroused" class="row">
+<section id="carousel" class="row">
 	<div class="selected large-12">
 		{% with featured_coupons|random as coupon %}
 			<div class="merchantlogo">
@@ -26,8 +26,7 @@
 							data-shortdesc="{{ coupon.coupon.short_desc }}"
 							data-description="{{ coupon.coupon.description }}"
 							data-couponurl="/coupon/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.desc_slug }}/{{ coupon.coupon.id }}/"
-							data-merchanturl="/coupons/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.merchant.id }}/"
-							>
+							data-merchanturl="/coupons/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.merchant.id }}/">
 							<img src="{{ coupon.coupon.merchant.get_image }}" alt="{{ coupon.coupon.merchant.name }}" />
 						</li>
 					{% endfor %}

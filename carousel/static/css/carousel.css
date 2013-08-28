@@ -59,7 +59,7 @@
 	display: block;
 	width: 14px;
 	height: 23px;
-	background-image: url('../img/sprite.png');
+	background-image: url('/static/img/sprite.png');
 	background-repeat: no-repeat;
 }
 #carousel .paging a.prev {

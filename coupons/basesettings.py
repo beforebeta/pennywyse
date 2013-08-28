@@ -4,7 +4,7 @@ __author__ = 'amrish'
 
 FMTC_ACCESS_KEY = '43a787c3f5f2cf2f675cbf86aff6a33b'
 
-BASE_DIR = "/Users/amrish/Dropbox/workspace/coupons/"
+BASE_DIR = "/Users/asingh/Dropbox/workspace/coupons/"
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG

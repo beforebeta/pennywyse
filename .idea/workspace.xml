@@ -6,7 +6,7 @@
     <ignored path=".idea/workspace.xml" />
     <file path="/start_script.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1375914262188" ignored="false" />
     <file path="/models.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376365810933" ignored="false" />
-    <file path="/basesettings.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1375985751615" ignored="false" />
+    <file path="/basesettings.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1377702893841" ignored="false" />
     <file path="/admin.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1377546887392" ignored="false" />
     <file path="/middleware.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376001228063" ignored="false" />
     <file path="/main.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1377441695579" ignored="false" />
@@ -22,7 +22,7 @@
     <file path="/stats.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1377140198882" ignored="false" />
     <file path="/fmtcload.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376163424808" ignored="false" />
     <file path="/coupon.html" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376490456385" ignored="false" />
-    <file path="/index.html" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376583094648" ignored="false" />
+    <file path="/index.html" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1377702301593" ignored="false" />
     <file path="/main.js" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376247448831" ignored="false" />
     <file path="/urls.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376344316540" ignored="false" />
     <file path="/ajax.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376343494024" ignored="false" />
@@ -38,7 +38,9 @@
     <file path="/_articles.html" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1377215196710" ignored="false" />
     <file path="/main.css" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1377271986290" ignored="false" />
     <file path="/_article_content.html" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1377215342259" ignored="false" />
-    <file path="/base.html" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1377545862595" ignored="false" />
+    <file path="/base.html" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1377702513013" ignored="false" />
+    <file path="$PROJECT_DIR$/core/management/commands/fmtcload.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1377701073419" ignored="false" />
+    <file path="/carousel_head.html" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1377702197402" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,21 +64,37 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="admin.py" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/tracking/admin.py">
+      <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="6" column="174" selection-start="419" selection-end="419" vertical-scroll-proportion="0.10739857">
-              <folding>
-                <element signature="e#0#32#0" expanded="true" />
-              </folding>
+            <state line="13" column="0" selection-start="366" selection-end="366" vertical-scroll-proportion="-8.125">
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="models.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tracking/models.py">
+      <file leaf-file-name="models.py" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/core/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="197" column="19" selection-start="8684" selection-end="8699" vertical-scroll-proportion="-13.88">
+            <state line="172" column="56" selection-start="6892" selection-end="6892" vertical-scroll-proportion="0.29116946">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="base.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/base.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="41" column="25" selection-start="2349" selection-end="2370" vertical-scroll-proportion="-17.5">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="carousel_main.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/carousel/carousel_main.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="39" column="10" selection-start="1777" selection-end="1777" vertical-scroll-proportion="-24.375">
               <folding />
             </state>
           </provider>
@@ -92,22 +110,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/templates/category.html" />
-        <option value="$PROJECT_DIR$/templates/open_coupon.html" />
-        <option value="$PROJECT_DIR$/templates/search-results.html" />
-        <option value="$PROJECT_DIR$/core/management/commands/stats.py" />
         <option value="$PROJECT_DIR$/core/management/commands/generate_sitemap.py" />
         <option value="$PROJECT_DIR$/tracking/views.py" />
         <option value="$PROJECT_DIR$/coupons/storage.py" />
         <option value="$PROJECT_DIR$/coupons/prodsettings.py" />
-        <option value="$PROJECT_DIR$/coupons/basesettings.py" />
         <option value="$PROJECT_DIR$/articles/templates/articles/_articles.html" />
         <option value="$PROJECT_DIR$/static/css/main.css" />
         <option value="$PROJECT_DIR$/articles/templates/articles/base.html" />
         <option value="$PROJECT_DIR$/articles/templates/articles/_article_content.html" />
         <option value="$PROJECT_DIR$/web/views/main.py" />
-        <option value="$PROJECT_DIR$/templates/base.html" />
         <option value="$PROJECT_DIR$/tracking/admin.py" />
+        <option value="$PROJECT_DIR$/carousel/static/css/carousel.css" />
+        <option value="$PROJECT_DIR$/templates/carousel/carousel_head.html" />
+        <option value="$PROJECT_DIR$/templates/carousel/carousel_main.html" />
+        <option value="$PROJECT_DIR$/templates/base.html" />
+        <option value="$PROJECT_DIR$/templates/index.html" />
+        <option value="$PROJECT_DIR$/coupons/basesettings.py" />
       </list>
     </option>
   </component>
@@ -195,7 +213,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="tracking" />
+              <option name="myItemId" value="core" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -237,16 +255,18 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/templates/carousel" />
+      <recent name="$PROJECT_DIR$/static/js" />
+      <recent name="$PROJECT_DIR$/static/css" />
       <recent name="$PROJECT_DIR$/common/url" />
       <recent name="$PROJECT_DIR$/templates/original" />
-      <recent name="$PROJECT_DIR$/templates" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/static/js/vendor" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/data" />
       <recent name="$PROJECT_DIR$/ads" />
       <recent name="$PROJECT_DIR$/web/views" />
-      <recent name="$PROJECT_DIR$/websvcs/views" />
     </key>
   </component>
   <component name="RunManager" selected="Django server.coupons">
@@ -503,91 +523,113 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/coupons/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="0" selection-start="103" selection-end="103" vertical-scroll-proportion="0.07050529" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coupons/basesettings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="228" column="0" selection-start="7483" selection-end="7483" vertical-scroll-proportion="0.9582339">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coupons/prodsettings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="11" selection-start="11" selection-end="11" vertical-scroll-proportion="-0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/articles/templates/articles/article_list.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="0" selection-start="244" selection-end="244" vertical-scroll-proportion="0.17605634" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/articles/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="221" column="29" selection-start="8516" selection-end="8516" vertical-scroll-proportion="0.9162561" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/static/css/mq-0.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/static/css/foundation.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="14" selection-start="295" selection-end="297" vertical-scroll-proportion="0.4282353" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/static/css/main.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="451" column="19" selection-start="7235" selection-end="7235" vertical-scroll-proportion="0.369863" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/articles/templates/articles/_articles.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="0" selection-start="821" selection-end="821" vertical-scroll-proportion="0.4225352" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/articles/templates/articles/base.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="61" column="10" selection-start="2236" selection-end="2236" vertical-scroll-proportion="0.58998805" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/articles/templates/articles/_article_content.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="20" selection-start="927" selection-end="927" vertical-scroll-proportion="0.28169015" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="110" column="6" selection-start="4339" selection-end="4339" vertical-scroll-proportion="0.3424821" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/web/views/main.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="92" column="11" selection-start="3773" selection-end="3773" vertical-scroll-proportion="0.70035255" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/base.html">
+    <entry file="file://$PROJECT_DIR$/tracking/admin.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="137" column="12" selection-start="6573" selection-end="6573" vertical-scroll-proportion="0.37425506" />
+        <state line="15" column="26" selection-start="770" selection-end="770" vertical-scroll-proportion="0.26849642">
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tracking/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="197" column="19" selection-start="8684" selection-end="8699" vertical-scroll-proportion="-13.88">
+        <state line="197" column="19" selection-start="8684" selection-end="8699" vertical-scroll-proportion="0.41408116">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tracking/admin.py">
+    <entry file="file://$PROJECT_DIR$/static/img/sprite.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/carousel/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="174" selection-start="419" selection-end="419" vertical-scroll-proportion="0.10739857">
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/carousel/templates/carousel_main.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/carousel/static/js/carousel.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="25" column="0" selection-start="773" selection-end="773" vertical-scroll-proportion="0.4280822">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/carousel/templates/carousel_head.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="0" selection-start="258" selection-end="258" vertical-scroll-proportion="0.08802817">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/carousel/static/css/carousel.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="40" column="1" selection-start="704" selection-end="704" vertical-scroll-proportion="0.38356164">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/js/carousel.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/css/carousel.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="31" column="1" selection-start="572" selection-end="572" vertical-scroll-proportion="0.5308219">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/carousel/carousel_main.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="39" column="10" selection-start="1777" selection-end="1777" vertical-scroll-proportion="-24.375">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/base.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="41" column="25" selection-start="2349" selection-end="2370" vertical-scroll-proportion="-17.5">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="0" selection-start="366" selection-end="366" vertical-scroll-proportion="-8.125">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/coupons/basesettings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="32" column="109" selection-start="995" selection-end="995" vertical-scroll-proportion="0.57279235">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="172" column="56" selection-start="6892" selection-end="6892" vertical-scroll-proportion="0.29116946">
+          <folding />
         </state>
       </provider>
     </entry>
