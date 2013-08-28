@@ -39,7 +39,8 @@
     <script>window.jQuery || document.write('<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"><\/script>')</script>
     <script src="/static/js/plugins.js"></script>
 
-	{% include "carousel_head.html" %}
+	{% block head_tags %}
+    {% endblock %}
 
     {% block fbtags %}
         <meta property="og:image" content="http://pennywyse.com/static/img/fbog.png"/>

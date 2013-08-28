@@ -11,3 +11,4 @@ Merchants_Content_*
 data
 sitemap/*.xml.gz
 sitemap/*.xml
+.idea/*
