@@ -121,7 +121,7 @@ def refresh_deals():
             id = deal.couponid.text
             coupon=None
             try:
-                coupon = Coupon.objects.get(ref_id = id)
+                coupon = Coupon.active_objects.get(ref_id = id)
             except:
                 coupon=Coupon(ref_id=id)
                 coupon.save()
@@ -193,14 +193,14 @@ def setup_web_coupons():
 
     try:
         if NewCoupon.objects.all().count()<=0:
-            for coupon in Coupon.objects.get_new_coupons(8):
+            for coupon in Coupon.active_objects.get_new_coupons(8):
                 NewCoupon(coupon=coupon).save()
     except:
         print_stack_trace()
 
     try:
         if PopularCoupon.objects.all().count()<=0:
-            for coupon in Coupon.objects.get_popular_coupons(8):
+            for coupon in Coupon.active_objects.get_popular_coupons(8):
                 PopularCoupon(coupon=coupon).save()
     except:
         print_stack_trace()
@@ -214,6 +214,22 @@ def refresh_calculated_fields():
             print "Error with: ", m.name, m.id
             print_stack_trace()
 
+def refresh_merchant_redirects():
+    for merchant in Merchant.objects.all():
+        if merchant.link:
+            try:
+                request = requests.get(merchant.link, timeout=20)
+                if merchant.link and request.headers.get('x-frame-options', False) == 'SAMEORIGIN':
+                    merchant.redirect = True
+                    merchant.save()
+                    print "{0}: True!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!".format(merchant.name)
+                else:
+                    print "{0}: False".format(merchant.name)
+            except:
+                print "{0} timed out connecting to {1}".format(merchant.name, merchant.link)
+        else:
+            print "{0}: False".format(merchant.name)
+
 def load():
     refresh_deal_types()
     refresh_categories()
@@ -221,3 +237,4 @@ def load():
     refresh_deals()
     setup_web_coupons()
     refresh_calculated_fields()
+    refresh_merchant_redirects()

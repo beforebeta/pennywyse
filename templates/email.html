@@ -1,0 +1,75 @@
+{% load email_extras %}
+
+{% include 'email/header.html' %}
+<body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0">
+<table width="100%" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="50%"></td>
+    <td>
+      <table width="1000" cellspacing="0" cellpadding="0">
+        {% if show_image %}
+        <tr>
+          <td colspan="4" style="font-size:0; line-height:0;">
+            <a href="http://pennywyse.com?utm_medium=mailchimp&utm_source=newsletter&utm_campaign=promo&utm_term=pennywyse&utm_content=main_img"><img src="http://s3.amazonaws.com/pwysemails/pennywyse_header.png" alt="PennyWise" width="1000" border="0"></a>
+          </td>
+        </tr>
+        {% endif %}
+        <tr>
+          <td colspan="4">
+            <table width="1000" cellspacing="0" cellpadding="0">
+              <tr>
+                <td width="418">
+                  <table style='margin-top: 15px;' width="1000" cellspacing="0" cellpadding="0">
+                    <tr>
+                      <td width="1000" align="left"><font face="Arial, Helvetica, sans-serif" color="#333333" size="2" style="font-size:14px; line-height:24px; font-weight:bold;">
+                          <p>
+                          Introducing PennyWyse, your source for the best deals and discounts on the web. We've curated the top deals for you in this newsletter and our goal is to continuously bring you the best, most relevant deals and discounts out there. Give us your feedback on what you think is most appealing and we'll continue to refine what we send to make it as useful as possible.
+                          </p>
+                          <p>
+                          Happy Shopping,<br/>
+                          The PennyWyse Team ({{ date_string }})
+                          </p>
+                      </font></td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+              <tr><td colspan="2" bgcolor="#cccccc"><img src="http://gallery.mailchimp.com/437b9c7ccbb42ff78d4d219fe/images/none.gif" alt="" width="1" height="1"></td></tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td width="650">
+            <table width="650" cellspacing="0" cellpadding="0">
+              <tr>
+                <td colspan="4" height="50" width="649">&nbsp;</td>
+                <td width="1" bgcolor="#cccccc" style="font-size:0; line-height:0;"><img src="http://gallery.mailchimp.com/437b9c7ccbb42ff78d4d219fe/images/none.gif" alt="" width="1" height="1"></td>
+              </tr>
+              {% for coupon in coupon_data %}
+                {% show_coupon coupon store_description %}
+              {% endfor %}
+              <tr><td colspan="5" style="font-size:0; line-height:0;" align="center">
+                <a href="http://pennywyse.com">
+                  <div style='height:50px;'>Want More PennyWyse?</div>
+                </a>
+              </td></tr>
+            </table>
+          </td>
+          <td width="48">&nbsp;</td>
+          <td width="300" valign="top">
+            <table width="300" cellspacing="0" cellpadding="0">
+              <tr><td height="47">&nbsp;</td></tr>
+              <tr><td><font face="Arial, Helvetica, sans-serif" style="font-size:14px; line-height:18px;" color="#333333">
+                PennyWyse is America's best and largest source for working coupon codes. All codes on PennyWyse are hand verified by a team right here in the US. We have all the best coupons and deals from over 6,000 brands and retailers. So if its a great coupon, we will have it and we will give you the simplest way to find it and use it.
+              </font></td></tr>
+            </table>
+          </td>
+          <td style="font-size:0; line-height:0;"><img src="http://gallery.mailchimp.com/437b9c7ccbb42ff78d4d219fe/images/none.gif" alt="" width="2" height="1"></td>
+        </tr>
+        <tr><td colspan="4" height="50">&nbsp;</td></tr>
+      </table>
+    </td>
+    <td width="50%"></td>
+  </tr>
+</table>
+</body></html>

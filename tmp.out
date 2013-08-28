@@ -1,0 +1,103 @@
+BEGIN;
+CREATE TABLE `articles_tag` (
+    `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `name` varchar(64) NOT NULL UNIQUE,
+    `slug` varchar(64) UNIQUE
+)
+ENGINE=MyISAM;
+CREATE TABLE `articles_articlestatus` (
+    `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `name` varchar(50) NOT NULL,
+    `ordering` integer NOT NULL,
+    `is_live` bool NOT NULL
+)
+ENGINE=MyISAM;
+CREATE TABLE `articles_article_merchants` (
+    `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `article_id` integer NOT NULL,
+    `merchant_id` integer NOT NULL,
+    UNIQUE (`article_id`, `merchant_id`)
+)
+ENGINE=MyISAM;
+ALTER TABLE `articles_article_merchants` ADD CONSTRAINT `merchant_id_refs_id_0e1c6575` FOREIGN KEY (`merchant_id`) REFERENCES `core_merchant` (`id`);
+CREATE TABLE `articles_article_sites` (
+    `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `article_id` integer NOT NULL,
+    `site_id` integer NOT NULL,
+    UNIQUE (`article_id`, `site_id`)
+)
+ENGINE=MyISAM;
+ALTER TABLE `articles_article_sites` ADD CONSTRAINT `site_id_refs_id_d628d2e7` FOREIGN KEY (`site_id`) REFERENCES `django_site` (`id`);
+CREATE TABLE `articles_article_tags` (
+    `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `article_id` integer NOT NULL,
+    `tag_id` integer NOT NULL,
+    UNIQUE (`article_id`, `tag_id`)
+)
+ENGINE=MyISAM;
+ALTER TABLE `articles_article_tags` ADD CONSTRAINT `tag_id_refs_id_5c4b2268` FOREIGN KEY (`tag_id`) REFERENCES `articles_tag` (`id`);
+CREATE TABLE `articles_article_related_articles` (
+    `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `from_article_id` integer NOT NULL,
+    `to_article_id` integer NOT NULL,
+    UNIQUE (`from_article_id`, `to_article_id`)
+)
+ENGINE=MyISAM;
+CREATE TABLE `articles_article_followup_for` (
+    `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `from_article_id` integer NOT NULL,
+    `to_article_id` integer NOT NULL,
+    UNIQUE (`from_article_id`, `to_article_id`)
+)
+ENGINE=MyISAM;
+CREATE TABLE `articles_article_categories` (
+    `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `article_id` integer NOT NULL,
+    `category_id` integer NOT NULL,
+    UNIQUE (`article_id`, `category_id`)
+)
+ENGINE=MyISAM;
+ALTER TABLE `articles_article_categories` ADD CONSTRAINT `category_id_refs_id_bd478858` FOREIGN KEY (`category_id`) REFERENCES `core_category` (`id`);
+CREATE TABLE `articles_article` (
+    `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `title` varchar(100) NOT NULL,
+    `slug` varchar(50) NOT NULL,
+    `status_id` integer NOT NULL,
+    `author_id` integer NOT NULL,
+    `keywords` longtext NOT NULL,
+    `description` longtext NOT NULL,
+    `markup` varchar(1) NOT NULL,
+    `content` longtext NOT NULL,
+    `rendered_content` longtext NOT NULL,
+    `auto_tag` bool NOT NULL,
+    `publish_date` datetime NOT NULL,
+    `expiration_date` datetime,
+    `is_active` bool NOT NULL,
+    `login_required` bool NOT NULL,
+    `use_addthis_button` bool NOT NULL,
+    `addthis_use_author` bool NOT NULL,
+    `addthis_username` varchar(50) NOT NULL,
+    `image_url` longtext NOT NULL
+)
+ENGINE=MyISAM;
+ALTER TABLE `articles_article` ADD CONSTRAINT `author_id_refs_id_7965054d` FOREIGN KEY (`author_id`) REFERENCES `auth_user` (`id`);
+ALTER TABLE `articles_article` ADD CONSTRAINT `status_id_refs_id_3d58d4fd` FOREIGN KEY (`status_id`) REFERENCES `articles_articlestatus` (`id`);
+ALTER TABLE `articles_article_merchants` ADD CONSTRAINT `article_id_refs_id_e11d85eb` FOREIGN KEY (`article_id`) REFERENCES `articles_article` (`id`);
+ALTER TABLE `articles_article_sites` ADD CONSTRAINT `article_id_refs_id_58977980` FOREIGN KEY (`article_id`) REFERENCES `articles_article` (`id`);
+ALTER TABLE `articles_article_tags` ADD CONSTRAINT `article_id_refs_id_570e2a75` FOREIGN KEY (`article_id`) REFERENCES `articles_article` (`id`);
+ALTER TABLE `articles_article_related_articles` ADD CONSTRAINT `from_article_id_refs_id_96fd16ad` FOREIGN KEY (`from_article_id`) REFERENCES `articles_article` (`id`);
+ALTER TABLE `articles_article_related_articles` ADD CONSTRAINT `to_article_id_refs_id_96fd16ad` FOREIGN KEY (`to_article_id`) REFERENCES `articles_article` (`id`);
+ALTER TABLE `articles_article_followup_for` ADD CONSTRAINT `from_article_id_refs_id_92dec6b6` FOREIGN KEY (`from_article_id`) REFERENCES `articles_article` (`id`);
+ALTER TABLE `articles_article_followup_for` ADD CONSTRAINT `to_article_id_refs_id_92dec6b6` FOREIGN KEY (`to_article_id`) REFERENCES `articles_article` (`id`);
+ALTER TABLE `articles_article_categories` ADD CONSTRAINT `article_id_refs_id_e4484e23` FOREIGN KEY (`article_id`) REFERENCES `articles_article` (`id`);
+CREATE TABLE `articles_attachment` (
+    `id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    `article_id` integer NOT NULL,
+    `attachment` varchar(100) NOT NULL,
+    `caption` varchar(255) NOT NULL
+)
+ENGINE=MyISAM;
+ALTER TABLE `articles_attachment` ADD CONSTRAINT `article_id_refs_id_56cb2404` FOREIGN KEY (`article_id`) REFERENCES `articles_article` (`id`);
+
+COMMIT;
+

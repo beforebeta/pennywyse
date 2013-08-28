@@ -125,8 +125,13 @@
 {% block end_of_body %}
 <script type="text/javascript">
 try{
-   mixpanel.track("Search", {
-       "query" : "{{ query }}"
+   mixpanel.track("Search Performed", {
+       "query"          : "{{ query }}",
+        "utm_source"    : "{{ visitor.acquisition_source }}",
+        "utm_medium"    : "{{ visitor.acquisition_medium }}",
+        "utm_term"      : "{{ visitor.acquisition_term }}",
+        "utm_content"   : "{{ visitor.acquisition_content }}",
+        "utm_campaign"  : "{{ visitor.acquisition_campaign }}"
    });
 }catch(e){}
 </script>

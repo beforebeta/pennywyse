@@ -4,4 +4,10 @@ static/img/local/*.jpg
 .DS_Store
 *.log
 .pydevproject
-
+Categories_Content_*
+Deal_Types_Content_*
+Deals_Content_*
+Merchants_Content_*
+data
+sitemap/*.xml.gz
+sitemap/*.xml

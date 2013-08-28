@@ -2,10 +2,14 @@ import os
 import urllib
 import datetime
 import urlparse
+
 from django.conf import settings
 from django.db import models
+from django.db.models.query_utils import Q
 from django.template.defaultfilters import slugify
+from django.core.paginator import Paginator
 from core.util import print_stack_trace, get_first_google_image_result, get_description_tag_from_url
+from tracking.commission.skimlinks import get_merchant_description
 
 def get_descriptive_image(name):
     return get_first_google_image_result(name)
@@ -42,26 +46,39 @@ class Category(models.Model):
     last_modified   = models.DateTimeField(default=datetime.datetime.now(), auto_now=True, auto_now_add=True)
 
     def save(self, *args, **kwargs):
-        if not self.image:
-            self.image = get_descriptive_image(self.code)
-        super(Category, self).save(*args, **kwargs)
+      if not self.image:
+          self.image = get_descriptive_image(self.code)
+      super(Category, self).save(*args, **kwargs)
 
     def get_coupons(self):
-        return self.coupon_set.all().order_by("-created")
+      return self.coupon_set.all().order_by("-created")
+
+    def get_active_coupons(self):
+        return self.coupon_set.all().filter(Q(end__gt=datetime.datetime.now()) | Q(end__isnull=True)).order_by("-created")
 
     def get_coupon_count(self):
-        return self.coupon_set.all().count()
+      return self.get_active_coupons().count()
 
     def get_coupon_categories(self):
-        categories = set()
-        for c in self.coupon_set.all():
-            for cat in c.categories.all():
-                categories.add(cat)
-        categories = sorted(list(categories), key=lambda cat: cat.name)
-        return categories
+      categories = set()
+      for c in self.get_active_coupons():
+          for cat in c.categories.all():
+              categories.add(cat)
+      categories = sorted(list(categories), key=lambda cat: cat.name)
+      return categories
+
+    def coupons_in_categories(self, selected_categories):
+      return Paginator(self.get_active_coupons().filter(
+        Q(categories__id__in=selected_categories) | Q(categories__id__isnull=True)), 10)
+
+    def display_name(self):
+      return self.name
+
+    def local_path(self):
+      return "/categories/{0}".format(self.code)
 
     def __unicode__(self):  # Python 3: def __str__(self):
-        return "%s %s" % (self.code, self.name)
+      return "%s %s" % (self.code, self.name)
 
 #######################################################################################################################
 #
@@ -103,6 +120,7 @@ class Merchant(models.Model):
     link            = models.TextField(blank=True, null=True)
     directlink      = models.TextField(blank=True, null=True)
     skimlinks       = models.TextField(blank=True, null=True)
+    redirect        = models.NullBooleanField()
 
     date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
     last_modified   = models.DateTimeField(default=datetime.datetime.now(), auto_now=True, auto_now_add=True)
@@ -111,31 +129,34 @@ class Merchant(models.Model):
 
     def get_top_coupon(self):
         try:
-            top_coupon = self.coupon_set.filter(short_desc__icontains="%").order_by("-created")
+            top_coupon = self.get_active_coupons().filter(short_desc__icontains="%").order_by("-created")
             if top_coupon:
                 return top_coupon[0]
             else:
-                top_coupon = self.coupon_set.filter(short_desc__icontains="$").order_by("-created")
+                top_coupon = self.get_active_coupons().filter(short_desc__icontains="$").order_by("-created")
                 if top_coupon:
                     return top_coupon[0]
                 else:
-                    return list(self.coupon_set.all().order_by("-created")[:1])[0]
+                    return list(self.get_active_coupons()[:1])[0]
         except:
             return ""
 
     def get_coupons(self):
         return self.coupon_set.all().order_by("-created")
 
+    def get_active_coupons(self):
+        return self.coupon_set.all().filter(Q(end__gt=datetime.datetime.now()) | Q(end__isnull=True)).order_by("-created")
+
     def get_coupon_categories(self):
         categories = set()
-        for c in self.coupon_set.all():
+        for c in self.get_active_coupons():
             for cat in c.categories.all():
                 categories.add(cat)
         categories = sorted(list(categories), key=lambda cat: cat.name)
         return categories
 
     def get_coupon_count(self):
-        return self.coupon_set.all().count()
+        return self.get_active_coupons().count()
 
     def get_image(self):
         return get_directed_image(self)
@@ -165,8 +186,44 @@ class Merchant(models.Model):
         self.name_slug = slugify(self.name)
         super(Merchant, self).save(*args, **kwargs)
 
+    def display_name(self):
+      return self.name
+
+    def local_path(self):
+      return "/coupons/{0}".format(self.name_slug)
+
     def __unicode__(self):  # Python 3: def __str__(self):
         return "%s %s" % (self.ref_id, self.name)
+
+    def skimlinks_description(self):
+        skim_desc = get_merchant_description(self.name_slug)
+        if skim_desc == None:
+          skim_desc = self.description
+        return skim_desc
+
+    def featured_coupon(self):
+        active = self.get_active_coupons().filter(Q(end__gt = datetime.datetime.now()) | Q(end = None))
+        active_codes = active.exclude(code = None)
+        featured = None
+
+        #active w/code and in apparel
+        for coupon in active_codes:
+            if coupon.in_category('apparel'):
+                featured = coupon
+
+        #active w/code NOT in apparel
+        if featured == None and active_codes.exists():
+            featured = active_codes[0]
+
+        #active in apparel W/O code
+        if featured == None and active.exists():
+            for coupon in active:
+                if coupon.in_category('apparel'):
+                    featured = coupon
+            if featured == None:
+                featured = codes[0]
+
+        return featured
 
 #######################################################################################################################
 #
@@ -203,7 +260,6 @@ class Country(models.Model):
 #######################################################################################################################
 
 class CouponManager(models.Manager):
-
     def get_new_coupons(self,how_many=10):
         #TODO: Improve
         return self.all().order_by("-created")[:how_many]
@@ -224,12 +280,16 @@ class CouponManager(models.Manager):
                 curr_merchant_idx = 0
             curr_merchant_id = merchants[curr_merchant_idx].id
             if curr_merchant_id not in coupons_by_merchant:
-                coupons_by_merchant[curr_merchant_id] = list(Coupon.objects.filter(merchant_id=curr_merchant_id).order_by("-created")[:how_many])
+                coupons_by_merchant[curr_merchant_id] = list(Coupon.active_objects.filter(merchant_id=curr_merchant_id).order_by("-created")[:how_many])
             if len(coupons_by_merchant[curr_merchant_id]) > 0:
                 popular_coupons.append(coupons_by_merchant[curr_merchant_id][0])
                 coupons_by_merchant[curr_merchant_id] = coupons_by_merchant[curr_merchant_id][1:]
             curr_merchant_idx += 1
         return popular_coupons
+
+class ActiveCouponManager(models.Manager):
+    def get_query_set(self):
+        return super(ActiveCouponManager, self).get_query_set().filter(Q(end__gt=datetime.datetime.now()) | Q(end__isnull=True))
 
 
 class Coupon(models.Model):
@@ -291,7 +351,8 @@ class Coupon(models.Model):
     date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
     last_modified   = models.DateTimeField(default=datetime.datetime.now(), auto_now=True, auto_now_add=True)
 
-    objects = CouponManager()
+    objects = models.Manager()
+    active_objects = ActiveCouponManager()
 
     def get_image(self):
         return get_directed_image(self)
@@ -394,3 +455,5 @@ class Coupon(models.Model):
         else:
             return "%s %s" % (self.ref_id, self.description)
 
+    def in_category(self, category):
+      return category in [c.code for c in self.categories.all()]

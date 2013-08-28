@@ -1,6 +1,6 @@
 from basesettings import *
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 ALLOWED_HOSTS = ["pennywyse.com","www.pennywyse.com"]
 
@@ -22,3 +22,4 @@ IMAGE_LOCAL_COPY_DIR = '/root/public_html/pennywyse/static/img/local/'
 
 try: os.makedirs(IMAGE_LOCAL_COPY_DIR)
 except: pass
+

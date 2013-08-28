@@ -1,0 +1,24 @@
+{% load i18n %}
+<li class="wrapper-3 blog-teaser">
+  <article class="row">
+    <div class="large-4 small-12 columns">
+      <figure>
+        <a href="{{ article.get_absolute_url }}">
+          <img src="{{ article.image_url }}" alt="">
+        </a>
+      </figure>
+    </div>
+    <div class="large-8 small-12 columns">
+      <div class="col-middle">
+        <h2 class="alt"><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></h2>
+        <p class="rr subtitle">
+          {% trans 'Posted on' %} {{ article.publish_date|date:"F jS, Y" }}
+        </p>
+        <p class="text">
+          {{ article.content|safe|truncatewords_html:50 }}
+        </p>
+        <a class="input button blue secondary responsive fixed" href="{{ article.get_absolute_url }}">Read more</a>
+      </div>
+    </div>
+  </article>
+</li>

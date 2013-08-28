@@ -200,6 +200,13 @@ class ClickTrack(models.Model):
     merchant            = models.ForeignKey(Merchant, null=True, blank=True)
     coupon              = models.ForeignKey(Coupon, null=True, blank=True)
 
+    acquisition_source      = models.CharField(max_length=255, default="direct")
+    acquisition_medium      = models.CharField(max_length=255, default="direct")
+    acquisition_term        = models.CharField(max_length=255, default="direct")
+    acquisition_content     = models.CharField(max_length=255, default="direct")
+    acquisition_campaign    = models.CharField(max_length=255, default="direct")
+    acquisition_gclid       = models.CharField(max_length=255, default="direct")
+
     date                = models.DateField(default=datetime.today())
     date_added          = models.DateTimeField(default=datetime.now(), auto_now_add=True)
     last_modified       = models.DateTimeField(default=datetime.now(), auto_now=True, auto_now_add=True)

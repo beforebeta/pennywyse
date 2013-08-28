@@ -1,5 +1,4 @@
 # Create your views here.
-import pdb
 import random
 from django.contrib.sites.models import get_current_site
 from django.db.models.query_utils import Q
@@ -7,8 +6,10 @@ from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 from django.template.defaultfilters import slugify
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.http import HttpResponse, HttpResponseRedirect
 from core.models import Category, Coupon, Merchant
 from core.util import encode_uri_component, print_stack_trace
+from tracking.views import log_click_track
 from web.models import FeaturedCoupon, NewCoupon, PopularCoupon, ShortenedURLComponent
 import math
 from django.core.paginator import Paginator
@@ -18,10 +19,18 @@ def build_base_context(request, context):
     context["coupons_path"] = "/"
     context["categories_path"] = "/categories"
     context["companies_path"] = "/companies"
+    context["blog_path"] = "/blog"
     try:
         context["visitor"] = request.visitor
     except:
-        print_stack_trace()
+        try:
+            if '/favicon.ico' in request.path:
+                pass
+            else:
+                print "Error happened at ", request.path
+                print_stack_trace()
+        except:
+            pass
 
 def render_response(template_file, request, context={}):
     build_base_context(request, context)
@@ -30,16 +39,12 @@ def render_response(template_file, request, context={}):
 def set_active_tab(active_tab, context):
     if active_tab == "category":
       context['category_tab_class'] = 'active'
-      context['company_tab_class'] = ''
-      context['coupon_tab_class'] = ''
     elif active_tab == "company":
       context['company_tab_class'] = 'active'
-      context['category_tab_class'] = ''
-      context['coupon_tab_class'] = ''
+    elif active_tab == "blog":
+      context['blog_tab_class'] = 'active'
     else:
       context['coupon_tab_class'] = 'active'
-      context['company_tab_class'] = ''
-      context['category_tab_class'] = ''
 
 @ensure_csrf_cookie
 def index(request):
@@ -73,12 +78,13 @@ def coupons_for_company(request, company_name, company_id=-1, current_page=1, ca
     merchant=None
     current_page = int(current_page)
     if company_id == -1:
-        merchant = Merchant.objects.get(name_slug= slugify(company_name))
+        # merchant = Merchant.objects.get(name_slug= slugify(company_name)) -> this will error out if two merchants have the same slug
+        merchant = Merchant.objects.filter(name_slug= slugify(company_name)).order_by("-id")[0]
     else:
         merchant = Merchant.objects.get(id=company_id)
     selected_categories = ""
     if selected_cat_ids == -1:
-        selected_categories = ",".join(set([str(x["categories__id"]) for x in merchant.coupon_set.all().values("categories__id") if x["categories__id"]]))
+        selected_categories = ",".join(set([str(x["categories__id"]) for x in merchant.get_active_coupons().values("categories__id") if x["categories__id"]]))
     else:
         selected_categories = selected_cat_ids
     comma_categories = selected_categories
@@ -98,7 +104,7 @@ def coupons_for_company(request, company_name, company_id=-1, current_page=1, ca
     pages = Paginator(
                         list(
                                 set(
-                                    merchant.get_coupons().filter(
+                                    merchant.get_active_coupons().filter(
                                         Q(categories__id__in=selected_categories) |
                                         Q(categories__id__isnull=True)
                                     )
@@ -123,6 +129,12 @@ def coupons_for_company(request, company_name, company_id=-1, current_page=1, ca
 
 @ensure_csrf_cookie
 def open_coupon(request, company_name, coupon_label, coupon_id):
+    log_click_track(request)
+
+    coupon = Coupon.objects.get(id=coupon_id)
+    if coupon.merchant.redirect:
+      return HttpResponseRedirect(coupon.merchant.link)
+
     logo_url = "/"
     back_url = "/"
     try:
@@ -132,13 +144,13 @@ def open_coupon(request, company_name, coupon_label, coupon_id):
             logo_url="/"
     except:
         pass
+
     context={
-        "coupon"        : Coupon.objects.get(id=coupon_id),
+        "coupon"        : coupon,
         "logo_url"      : logo_url,
         "back_url"      : back_url,
         "path"          : encode_uri_component("%s://%s%s" % ("http", "www.pennywyse.com", request.path))
     }
-    print context["path"]
     return render_response("open_coupon.html",request, context)
 
 @ensure_csrf_cookie
@@ -159,7 +171,7 @@ def category(request, category_code, current_page=1, category_ids=-1):
     category = Category.objects.get(code=category_code)
 
     if category_ids == -1:
-        all_categories = [str(x["categories__id"]) for x in category.coupon_set.all().values("categories__id") if x["categories__id"]]
+        all_categories = [str(x["categories__id"]) for x in category.get_active_coupons().values("categories__id") if x["categories__id"]]
         selected_categories = ",".join(set(all_categories))
     else:
         selected_categories = category_ids
@@ -188,15 +200,8 @@ def category(request, category_code, current_page=1, category_ids=-1):
             "active"    : _search(coup_cat.id, selected_categories, lambda a,b:a==b)
         })
 
-    pages = Paginator(
-                        list(
-                                set(
-                                    category.get_coupons().filter(
-                                        Q(categories__id__in=selected_categories) |
-                                        Q(categories__id__isnull=True)
-                                    )
-                                )
-                        ), 10)
+    pages = category.coupons_in_categories(selected_categories)
+
     if current_page > pages.num_pages:
         current_page=pages.num_pages
     context={
@@ -215,3 +220,13 @@ def category(request, category_code, current_page=1, category_ids=-1):
         context["comma_categories"] = ShortenedURLComponent.objects.shorten_url_component(comma_categories).shortened_url
 
     return render_response("category.html", request, context)
+
+def robots_txt(request):
+  robots = """User-agent: *
+Allow: /
+Sitemap: http://s3.amazonaws.com/pennywyse/sitemap.xml
+"""
+  return HttpResponse(robots, content_type="text/plain")
+
+def sitemap(request):
+  return HttpResponseRedirect('http://s3.amazonaws.com/pennywyse/sitemap.xml')

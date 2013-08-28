@@ -449,11 +449,19 @@ p:last-child {
   margin-bottom: 0;
 }
 .text-content {
-  font-size: 0.813em;
-  line-height: 1.615em;
+  font-size: 0.9em;
+  line-height: 1.5em;
+  color:#000;
+}
+.text-content ol {
+  padding-left: 30px;
 }
 .text-content p {
-  margin: 1.6em 0;
+  margin: 1em 0;
+}
+.text-content a {
+    color:#4DA1E9 !important;
+    font-weight:400;
 }
 .text-content p:first-child {
   margin-top: 0;
@@ -1215,7 +1223,6 @@ ul.tags li {
 ul.tags li:after {
   content: ", ";
 }
-ul.tags li:first-child:after,
 ul.tags li:last-child:after {
   content: "";
 }
@@ -1763,4 +1770,8 @@ span.arrow-down {
   border-top: 5px solid #ccc;
   display: inline-block;
   vertical-align: middle;
+}
+
+li.blog-teaser {
+  margin-bottom: 20px;
 }

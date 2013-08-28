@@ -19,5 +19,6 @@ class Command(BaseCommand):
             run()
 
 def run():
-    print "Coupons: ", Coupon.objects.all().count()
+    print "Active Coupons: ", Coupon.active_objects.all().count()
+    print "Inactive Coupons: ", (Coupon.objects.all().count() - Coupon.active_objects.all().count())
     print "Merchants: ", Merchant.objects.all().count()

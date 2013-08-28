@@ -1,0 +1,42 @@
+<tr>
+  <td width="119" valign="top"><div alt="{{ index }}" style='width: 119px; height: 119px; -webkit-border-radius: 119px; -moz-border-radius: 119px; border-radius: 119px; color: white; background: gray; font-size: 72px; text-align: center; line-height: 119px;'>
+      <a style='text-decoration: none; color: white;' href="{{ coupon_url }}&utm_content=number">
+        {{ index }}
+      </a>
+  </div></td>
+  <td width="34">&nbsp;</td>
+  <td width="448" valign="top">
+    <table width="448" cellspacing="0" cellpadding="0">
+      <tr>
+        <td style="line-height:36px;"><a href="{{ coupon_url }}&utm_content=header" mc:edit="name" style="text-decoration:none;"><font face="Arial, Helvetica, sans-serif" style="font-size:24px; line-height:36px; text-decoration:underline; font-weight:bold;" size="6" color="#333333">
+              <span style='text-transform: uppercase;'>{{coupon.short_desc}} at {{ coupon.merchant.name }}:</span>
+      </font></a>&nbsp;&nbsp;<font face="Arial, Helvetica, sans-serif" style="font-size:30px; line-height:36px;" size="6" color="#999999" mc:edit="price"></font></td>
+      </tr>
+      <tr>
+        <td mc:edit="description">
+          <a style='text-decoration: none;' href="{{ coupon_url }}&utm_content=coupon_description">
+            <p></p><p> {{ coupon.description }}: {% if coupon.code %}Use coupon code <strong><i class="tag">{{ coupon.code }}</i></strong>{% else %}<strong>No code necessary</strong>{% endif %}</p>
+          </a>
+        </td>
+      </tr>
+      <tr><td style="font-size:0; line-height:0;" mc:edit="image"><a href="{{ merchant_url }}&utm_content=image"><img src="{{ coupon.image }}" alt="image description" border="0"></a></td></tr>
+      <tr>
+        <td mc:edit="description">
+          {% if store_description %}
+            <br>
+            <p>{{ coupon.merchant.description }}</p>
+          {% endif %}
+          <p style="margin-top:10px;"><a href="{{ coupon_url }}&utm_content=call_to_action">Redeem</a></p>
+        </td>
+      </tr>
+      <tr><td style="font-size:0; line-height:0;"><img src="http://gallery.mailchimp.com/437b9c7ccbb42ff78d4d219fe/images/none.gif" alt="" width="1" height="48" hspace="0" vspace="0"></td></tr>
+    </table>
+  </td>
+  <td width="48">&nbsp;</td>
+  <td width="1" bgcolor="#cccccc" style="font-size:0; line-height:0;"><img src="http://gallery.mailchimp.com/437b9c7ccbb42ff78d4d219fe/images/none.gif" alt="" width="1" height="1"></td>
+</tr>
+<tr><td colspan="5"><img src="http://gallery.mailchimp.com/437b9c7ccbb42ff78d4d219fe/images/separator.gif" alt="" width="650" height="46"></td></tr>
+<tr>
+  <td colspan="4" height="50" width="649">&nbsp;</td>
+  <td width="1" bgcolor="#cccccc" style="font-size:0; line-height:0;"><img src="http://gallery.mailchimp.com/437b9c7ccbb42ff78d4d219fe/images/none.gif" alt="" width="1" height="1"></td>
+</tr>

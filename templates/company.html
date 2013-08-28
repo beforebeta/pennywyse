@@ -115,9 +115,14 @@
 {% block end_of_body %}
 <script type="text/javascript">
     try{
-        mixpanel.track("Company", {
+        mixpanel.track("Company Page Opened", {
             "company" : "{{ merchant.name_slug }}",
-            "id"      : "{{ merchant.id }}"
+            "id"      : "{{ merchant.id }}",
+            "utm_source"    : "{{ visitor.acquisition_source }}",
+            "utm_medium"    : "{{ visitor.acquisition_medium }}",
+            "utm_term"      : "{{ visitor.acquisition_term }}",
+            "utm_content"   : "{{ visitor.acquisition_content }}",
+            "utm_campaign"  : "{{ visitor.acquisition_campaign }}"
         });
     }catch(e){}
 </script>

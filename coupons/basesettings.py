@@ -1,4 +1,4 @@
-import os
+import os, datetime
 
 __author__ = 'amrish'
 
@@ -153,6 +153,7 @@ INSTALLED_APPS = (
     'ads',
     'tracking',
     'carousel',
+    'articles',
     )
 
 # A sample logging configuration. The only tangible logging
@@ -203,3 +204,26 @@ SKIMLINKS_REPORTING_PUBLIC_KEY = "067eada877c2bbc1698a04bdc0c19c0a"
 SVCS_SECRET_KEY = "a59bbf62-d332-471b-b8d3-494a97065fa1"
 
 DEVELOPER_KEY = "00a1be63fcdf4cc39b9fa1c4c9e021ed990814ac740758b6eae34a9f71c27e8352950d4c5e37628f33690375a200ded9ffb2bcbe93e1f13a0525ea77c6fe52a719/4ac6543f61948191feb8b0db8b6ce4052d813140eaec8e9404c448f634ae7c530005b86783dad215c136a0f4fdf4ecf8d27390fda73847e7fba5c512b1b72849"
+
+######################
+# django-articles
+######################
+DISQUS_USER_API_KEY = "xEJVgJlNeCV3gcCD9w5b67kP8QaZi2R51JCaQuycadblRxI29ADap9MC9EViXEzq"
+DISQUS_FORUM_SHORTNAME = "pennywyse"
+ARTICLES_AUTO_TAG = False
+ARTICLE_PAGINATION = 10
+
+#S3
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+STATICFILES_STORAGE = 'coupons.storage.S3PipelineStorage'
+
+AWS_QUERYSTRING_AUTH = False
+AWS_S3_SECURE_URLS = False
+AWS_REDUCED_REDUNDANCY = True
+AWS_STORAGE_BUCKET_NAME = 'pennywyse'
+AWS_HEADERS = {
+    'Cache-Control': 'max-age=31556926',
+    'Expires': (datetime.datetime.today() + datetime.timedelta(days=365)).strftime('%a, %d %b %Y %H:%M:%S GMT')
+}
+AWS_ACCESS_KEY_ID = 'AKIAISPVNQL76YJWH4WQ'
+AWS_SECRET_ACCESS_KEY = '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'

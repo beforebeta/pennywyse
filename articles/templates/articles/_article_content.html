@@ -1,0 +1,71 @@
+{% load i18n %}
+
+<div class="large-9 columns">
+  <article class="blog-post-content">
+    <section class="article-main-content">
+      <div class="wrapper-3 primary">
+        <div class="row">
+          <div class="column">
+            <heading>
+            <figure>
+              <img src="{{ article.image_url }}" alt="">
+            </figure>
+            <h2 class="alt">{% trans article.title %}</h2>
+            <p class="rr subtitle">
+              {% trans 'posted on' %} {{ article.publish_date|date:"F jS, Y" }}
+            </p>
+            </heading>
+
+            <div class="text-content">
+              <p>
+                {{ article.rendered_content|safe }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ul class="rr tags">
+        {% for merchant in merchants %}
+          <li><a href="{{ merchant.local_path }}">{{ merchant.display_name }}</a></li>
+        {% endfor %}
+        {% for category in categories %}
+          <li><a href="{{ category.local_path }}">{{ category.display_name }}</a></li>
+        {% endfor %}
+      </ul>
+
+    </section>
+  </article>
+</div>
+
+<aside class="large-3 columns main-sidebar bg">
+  {% if merchants %}
+    <div class="wrapper-3 secondary block">
+      <h2 class="alt inner">Related Merchants</h2>
+      <ul class="rr inne sidebar-list popular-merchants">
+        {% for merchant in merchants %}
+          <li>
+            <a href="{{ merchant.local_path }}">
+              {{ merchant.display_name }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+      <a href="{{ merchant_path }}" class="side-link">View All Merchants</a>
+    </div>
+  {% endif %}
+  {% if categories %}
+    <div class="wrapper-3 secondary block">
+      <h2 class="alt inner">Related Categories</h2>
+      <ul class="rr inne sidebar-list popular-merchants">
+        {% for category in categories %}
+          <li>
+            <a href="{{ category.local_path }}">
+              {{ category.display_name }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+      <a href="{{ categories_path }}" class="side-link">View All Categories</a>
+    </div>
+  {% endif %}
+</aside>

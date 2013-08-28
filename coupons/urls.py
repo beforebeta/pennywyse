@@ -37,6 +37,10 @@ urlpatterns += patterns('web.views.main',
     url(r'^categories/(?P<category_code>[A-z0-9-]+)/page/(?P<current_page>[\d]+)/$', 'category'),
     url(r'^categories/(?P<category_code>[A-z0-9-]+)/$', 'category'),
     url(r'^categories/$', 'categories'),
+
+    url(r'^blog/', include('articles.urls')),
+    url(r'^robots\.txt$', 'robots_txt'),
+    url(r'^sitemap\.xml$', 'sitemap'),
 )
 
 urlpatterns += patterns('web.views.ajax',
@@ -49,6 +53,13 @@ urlpatterns += patterns('tracking.views',
 
 urlpatterns += patterns('web.views.search',
     url(r'^search/$', 'search')
+)
+
+urlpatterns += patterns('web.views.email',
+    url(r'^emailA$', 'email_a'),
+    url(r'^emailB$', 'email_b'),
+    url(r'^emailC$', 'email_c'),
+    url(r'^emailD$', 'email_d'),
 )
 
 handler404 = 'web.views.main.index'
