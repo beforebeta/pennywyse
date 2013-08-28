@@ -14,9 +14,9 @@ from tracking.commission.skimlinks import get_merchant_description
 def get_descriptive_image(name):
     return get_first_google_image_result(name)
 
-def get_directed_image(model):
+def get_directed_image(image_url):
     try:
-        return "/s/image/%s" % urllib.quote_plus(model.image)
+        return "/s/image/%s" % urllib.quote_plus(image_url)
     except:
         return settings.DEFAULT_IMAGE
 
@@ -159,7 +159,7 @@ class Merchant(models.Model):
         return self.get_active_coupons().count()
 
     def get_image(self):
-        return get_directed_image(self)
+        return get_directed_image(self.image)
 
     def refresh_coupon_count(self):
         self.coupon_count = self.get_coupon_count()
@@ -360,9 +360,9 @@ class Coupon(models.Model):
 
     def get_image(self):
         if self.embedly_image_url:
-            return self.embedly_image_url
+            return get_directed_image(self.embedly_image_url)
         else:
-            return get_directed_image(self)
+            return get_directed_image(self.image)
 
     def get_description(self):
         if self.embedly_description:
