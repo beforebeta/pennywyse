@@ -14,9 +14,9 @@ from tracking.commission.skimlinks import get_merchant_description
 def get_descriptive_image(name):
     return get_first_google_image_result(name)
 
-def get_directed_image(model):
+def get_directed_image(image_url):
     try:
-        return "/s/image/%s" % urllib.quote_plus(model.image)
+        return "/s/image/%s" % urllib.quote_plus(image_url)
     except:
         return settings.DEFAULT_IMAGE
 
@@ -159,7 +159,7 @@ class Merchant(models.Model):
         return self.get_active_coupons().count()
 
     def get_image(self):
-        return get_directed_image(self)
+        return get_directed_image(self.image)
 
     def refresh_coupon_count(self):
         self.coupon_count = self.get_coupon_count()
@@ -190,7 +190,7 @@ class Merchant(models.Model):
       return self.name
 
     def local_path(self):
-      return "/coupons/{0}".format(self.name_slug)
+      return "/coupons/{0}/{1}".format(self.name_slug, self.id)
 
     def __unicode__(self):  # Python 3: def __str__(self):
         return "%s %s" % (self.ref_id, self.name)
@@ -348,6 +348,10 @@ class Coupon(models.Model):
 
     desc_slug       = models.CharField(max_length=175, default="COUPON")
 
+    embedly_title = models.TextField(blank=True, null=True)
+    embedly_description = models.TextField(blank=True, null=True)
+    embedly_image_url = models.TextField(blank=True, null=True)
+
     date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
     last_modified   = models.DateTimeField(default=datetime.datetime.now(), auto_now=True, auto_now_add=True)
 
@@ -355,7 +359,16 @@ class Coupon(models.Model):
     active_objects = ActiveCouponManager()
 
     def get_image(self):
-        return get_directed_image(self)
+        if self.embedly_image_url:
+            return get_directed_image(self.embedly_image_url)
+        else:
+            return get_directed_image(self.image)
+
+    def get_description(self):
+        if self.embedly_description:
+            return self.embedly_description
+        else:
+            return self.description
 
     def has_deal_type(self, dealtype_code):
         return True if self.dealtypes.filter(code=dealtype_code).count()>0 else False
@@ -457,3 +470,6 @@ class Coupon(models.Model):
 
     def in_category(self, category):
       return category in [c.code for c in self.categories.all()]
+
+    def local_path(self):
+      return "/coupon/{0}/{1}/{2}/".format(self.merchant.name_slug, self.desc_slug, self.id)

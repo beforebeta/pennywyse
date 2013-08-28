@@ -7,6 +7,7 @@ import requests
 from core.models import DealType, Category, Coupon, Merchant, Country
 from core.util import print_stack_trace
 from web.models import FeaturedCoupon, NewCoupon, PopularCoupon
+from websvcs.models import EmbedlyMerchant
 import HTMLParser
 
 class Command(BaseCommand):
@@ -16,6 +17,11 @@ class Command(BaseCommand):
             dest='load',
             default=False,
             help='load'),
+        make_option('--embedly',
+            action='store_true',
+            dest='embedly',
+            default=False,
+            help='embedly'),
         )
 
     def handle(self, *args, **options):
@@ -23,6 +29,8 @@ class Command(BaseCommand):
         out = self.stdout
         if options['load']:
             load()
+        if options['embedly']:
+            embedly()
 
 def section(message):
     print " "
@@ -238,3 +246,6 @@ def load():
     setup_web_coupons()
     refresh_calculated_fields()
     refresh_merchant_redirects()
+
+def embedly():
+  [EmbedlyMerchant(merchant).update_coupons() for merchant in Merchant.objects.all()]

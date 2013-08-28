@@ -1,4 +1,4 @@
-static/img/local/*.jpg
+static/img/local/*
 *.jpeg
 *.pyc
 .DS_Store

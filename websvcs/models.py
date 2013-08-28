@@ -4,6 +4,11 @@ from django.db import models
 import uuid
 from picklefield.fields import PickledObjectField
 
+from django.conf import settings
+import urllib, gzip, os, base64
+from cPickle import dumps, loads
+from vendor.embedly import Embedly
+
 class ImageStore(models.Model):
     remote_url = models.CharField(max_length=255, db_index=True)
     local_url = models.CharField(max_length=255, db_index=True)
@@ -86,3 +91,100 @@ class EmailSubscription(models.Model):
 
     def __unicode__(self):  # Python 3: def __str__(self):
         return "%s %s" % (self.app, self.email)
+
+class EmbedlyCache:
+    def __init__(self):
+        self.cache_loc = settings.DOWNLOADER_CACHE_LOCATION
+        self.cache = {}
+        self.client = Embedly(settings.EMBEDLY_KEY)
+
+        try:
+            os.makedirs(cache_loc)
+        except:
+            pass
+        for file in os.listdir(self.cache_loc):
+            file = os.path.join(self.cache_loc, file)
+            print(file)
+            if os.path.isfile(file):
+                filename = os.path.basename(file)
+                self.cache[self.path2url(filename)] = file
+
+    def get(self, url, stateless_params=""):
+        try:
+            f = gzip.open(self.cache[url], 'rb')
+            file_contents = loads(f.read())
+            print '!!!!!!!!!!!!!!!!!!!!!!!loads!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
+            print file_contents.data
+            f.close()
+            return file_contents
+        except KeyError:
+            filename = os.path.join(self.cache_loc, self.url2path(url))
+            url_contents = self.client.extract(url)
+
+            if ('title' in url_contents) and (url_contents['title'] == 'error'):
+              raise Exception('Embedly Exception', url)
+
+            if len(filename) < 255:
+              f = gzip.open(filename, 'wb')
+              print '!!!!!!!!!!!!!!!!!!!!!!!dumps!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
+              f.write(dumps(url_contents))
+              f.close()
+            print url_contents.data
+
+            self.cache[url] = filename
+            return url_contents
+
+    def delete_cache(self, url):
+        try:
+            filename = os.path.join(self.cache_loc, self.url2path(url))
+            os.remove(filename)
+            del self.cache[url]
+        except:
+            pass
+
+    def url2path(self, url):
+        print url
+        return base64.urlsafe_b64encode(url)
+
+    def path2url(self, path):
+        return base64.urlsafe_b64decode(path)
+
+cache = EmbedlyCache()
+
+class EmbedlyMerchant:
+  def __init__(self, merchant):
+    self.merchant = merchant
+    self.coupons = [EmbedlyCoupon(coupon) for coupon in self.merchant.coupon_set.all()]
+
+  def update_coupons(self):
+    [coupon.update() for coupon in self.coupons]
+
+
+class EmbedlyCoupon:
+  def __init__(self, coupon):
+    self.coupon = coupon
+
+  def link(self):
+    link = self.coupon.directlink
+    if not link:
+      link = self.coupon.link
+    if link[-1] == "+":
+      link = link[0:-1]
+    return link
+
+  def update(self):
+    # try:
+    if self.link():
+      print self.link()
+      extract = cache.get(self.link())
+      if 'title' in extract:
+        self.coupon.embedly_title = extract['title']
+      if 'description' in extract:
+        self.coupon.embedly_description = extract['description']
+      if ('images' in extract) and extract['images'] and 'url' in extract['images'][0]:
+        self.coupon.embedly_image_url = extract['images'][0]['url']
+        print "For:    {0}\nEmbedly returned:   {1}".format(self.link(), self.coupon.embedly_image_url)
+      self.coupon.save()
+      print "extracted data for Coupon #{0}:    {1}\n  Merchant:      {2}\n\n\n".format(self.coupon.id, self.coupon.local_path(), self.coupon.merchant.local_path())
+    # except:
+      # print "failed to extract data for Coupon #{0}".format(self.coupon.id)
