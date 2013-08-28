@@ -4,7 +4,7 @@ from tracking.models import BannedIP, UntrackedUserAgent, Visitor, ClickTrack, R
 class ClickTrackAdmin(admin.ModelAdmin):
     readonly_fields = ('coupon','merchant',)
     ordering = ['-date_added']
-    list_display = ('target_url', 'source_url', 'merchant_domain', 'acquisition_source', 'acquisition_medium','acquisition_campaign','acquisition_term','acquisition_content')
+    list_display = ('acquisition_source', 'acquisition_medium','acquisition_campaign','acquisition_term','acquisition_content', 'target_url', 'source_url', 'merchant_domain')
 
 class VisitorAdmin(admin.ModelAdmin):
     list_display = ('url', 'acquisition_source', 'acquisition_medium','acquisition_campaign','acquisition_term','acquisition_content')
