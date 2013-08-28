@@ -3,6 +3,8 @@
 	color: #fff;
 	min-height: 140px;
 	margin: auto;
+    padding-left:14px;
+    padding-right: 14px;
 }
 #carousel .selected .button {
 	background-color: rgb(77, 194, 161);
