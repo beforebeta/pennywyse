@@ -62,20 +62,13 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="base.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/base.html">
+      <file leaf-file-name="models.py" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/websvcs/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="49" column="17" selection-start="2656" selection-end="2656" vertical-scroll-proportion="-3.125">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="_header.html" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/templates/layouts/_header.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="24" column="97" selection-start="1136" selection-end="1136" vertical-scroll-proportion="0.42908224">
-              <folding />
+            <state line="106" column="23" selection-start="4027" selection-end="4027" vertical-scroll-proportion="0.35957697">
+              <folding>
+                <element signature="e#0#15#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -90,7 +83,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/templates/search-results.html" />
         <option value="$PROJECT_DIR$/core/management/commands/stats.py" />
         <option value="$PROJECT_DIR$/core/management/commands/generate_sitemap.py" />
         <option value="$PROJECT_DIR$/tracking/views.py" />
@@ -106,6 +98,7 @@
         <option value="$PROJECT_DIR$/tracking/admin.py" />
         <option value="$PROJECT_DIR$/core/management/commands/fmtcload.py" />
         <option value="$PROJECT_DIR$/templates/layouts/_header.html" />
+        <option value="$PROJECT_DIR$/websvcs/models.py" />
       </list>
     </option>
   </component>
@@ -203,25 +196,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="templates" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="coupons" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="coupons" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="templates" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="layouts" />
+              <option name="myItemId" value="websvcs" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -519,11 +494,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/articles/templates/articles/article_list.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="0" selection-start="244" selection-end="244" vertical-scroll-proportion="0.17605634" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/articles/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="221" column="29" selection-start="8516" selection-end="8516" vertical-scroll-proportion="0.9162561" />
@@ -594,26 +564,33 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/websvcs/models.py">
+    <entry file="file://$PROJECT_DIR$/templates/layouts/_header.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="154" column="31" selection-start="5577" selection-end="5577" vertical-scroll-proportion="0.2596945">
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
+        <state line="5" column="12" selection-start="196" selection-end="196" vertical-scroll-proportion="0.08939213">
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/base.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="49" column="17" selection-start="2656" selection-end="2656" vertical-scroll-proportion="-3.125">
+        <state line="49" column="17" selection-start="2656" selection-end="2656" vertical-scroll-proportion="0.08939213">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/layouts/_header.html">
+    <entry file="file://$PROJECT_DIR$/coupons/basesettings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="97" selection-start="1136" selection-end="1136" vertical-scroll-proportion="0.42908224">
+        <state line="201" column="0" selection-start="6372" selection-end="6372" vertical-scroll-proportion="0.36754176">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/websvcs/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="106" column="23" selection-start="4027" selection-end="4027" vertical-scroll-proportion="0.35957697">
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

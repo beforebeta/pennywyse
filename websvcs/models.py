@@ -99,7 +99,7 @@ class EmbedlyCache:
         self.client = Embedly(settings.EMBEDLY_KEY)
 
         try:
-            os.makedirs(cache_loc)
+            os.makedirs(self.cache_loc)
         except:
             pass
         for file in os.listdir(self.cache_loc):
