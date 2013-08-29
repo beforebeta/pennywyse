@@ -1,17 +1,19 @@
-<section id="carousel" class="row large-12" data-count="{{ featured_coupons|length }}">
+<section id="carousel" class="row large-12">
   <div class="selected">
-    <div class="coupon">
-      {% with featured_coupons|random as coupon %}
-        <img class="merchantlogo" src="{{ coupon.coupon.merchant.get_image }}" alt="{{ coupon.coupon.merchant.name }}" />
-        <div class='coupon-info'>
-          <h1>{{ coupon.coupon.short_desc }} at {{ coupon.coupon.merchant.name }}</h1>
-          <span class="description">{{ coupon.coupon.description }}</span>
-          <span class='call-to-action'>
-            <a class="button" href="/coupon/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.desc_slug }}/{{ coupon.coupon.id }}/">Use Coupon</a>
-            See more from <a class="merchantlink" href="/coupons/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.merchant.id }}/">{{ coupon.coupon.merchant.name }}</a>
-          </span>
-        </div>
-      {% endwith %}
+    <div class="coupon-border">
+      <div class="coupon">
+        {% with featured_coupons|random as coupon %}
+          <img class="merchantlogo" src="{{ coupon.coupon.merchant.get_image }}" alt="{{ coupon.coupon.merchant.name }}" />
+          <div class='coupon-info'>
+            <h1>{{ coupon.coupon.short_desc }} at {{ coupon.coupon.merchant.name }}</h1>
+            <span class="description">{{ coupon.coupon.description }}</span>
+            <span class='call-to-action'>
+              <a class="input button" href="/coupon/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.desc_slug }}/{{ coupon.coupon.id }}/">Use Coupon</a>
+              See more from <a class="merchantlink" href="/coupons/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.merchant.id }}/">{{ coupon.coupon.merchant.name }}</a>
+            </span>
+          </div>
+        {% endwith %}
+      </div>
     </div>
   </div>
   <div class="row">
@@ -30,7 +32,9 @@
               data-couponurl="/coupon/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.desc_slug }}/{{ coupon.coupon.id }}/"
               data-merchanturl="/coupons/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.merchant.id }}/"
               >
-              <img src="{{ coupon.coupon.merchant.get_image }}" alt="{{ coupon.coupon.merchant.name }}" />
+              <div class='coupon'>
+                <img src="{{ coupon.coupon.merchant.get_image }}" alt="{{ coupon.coupon.merchant.name }}" />
+              </div>
             </li>
           {% endfor %}
         </ul>

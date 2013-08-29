@@ -7,12 +7,24 @@
   text-align: center;
   height: 220px;
 }
+#carousel .selected .coupon-border {
+  display: inline-block;
+  background-color: #fff;
+  padding: 5px 5px 0 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
 #carousel .selected .coupon {
   background-color: #fff;
   min-height: 140px;
   padding: 15px;
   display: inline-block;
-  border: #ccc dashed 3px;
+
+  border: #ccc dashed 2px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
 }
 #carousel .selected .button {
   background-color: rgb(77, 194, 161);
@@ -39,36 +51,52 @@
   float: left;
   clear: both;
 }
+#carousel .selected .description {
+  max-height: 66px;
+  overflow: hidden;
+}
 #carousel .selected .call-to-action {
   display: block;
   margin-top: 10px;
 }
 #carousel .selected .call-to-action .button {
   font-size: 20px;
+  display: inline-block;
 }
 #carousel .selected a.merchantlink {
   text-decoration: underline;
 }
 #carousel .carousel {
+  padding: 10px;
   margin: 10px 0;
   overflow: hidden;
-  height: 72px;
+  height: 75px;
   clear: both;
 }
 #carousel .carousel li {
-  height: 67px;
+  height: 75px;
   cursor: pointer;
 }
+#carousel .carousel .coupon {
+  display: inline-block;
+  background-color: #fff;
+  padding: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
 #carousel .carousel li img {
-  margin: 5px;
   max-width: 94px;
   max-height: 67px;
   padding: 5px;
   background-color: #fff;
-  border: dashed #ccc 2px;
+  border: dashed #ccc 1px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
 }
-#carousel .carousel li img.active {
-  margin-top: 0;
+#carousel .carousel li.active .coupon {
+  margin-top: -10px;
 }
 #carousel .paging {
   text-indent: -9999px;

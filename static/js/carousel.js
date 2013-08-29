@@ -1,8 +1,8 @@
 $(function(){
   $('#carousel .carousel ul').on('click', 'li', function(){
     var db = $(this).data();
-    $(this).closest('ul').find('img').removeClass('active');
-    $(this).children('img:first').addClass('active');
+    $(this).closest('ul').find('li.active').removeClass('active');
+    $(this).addClass('active');
     $('#carousel .selected img').attr('src', db.image);
     $('#carousel .selected h1').text(db.shortdesc + ' at ' + db.merchantname);
     $('#carousel .selected .description').text(db.description);
