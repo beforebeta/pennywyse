@@ -248,4 +248,4 @@ def load():
     refresh_merchant_redirects()
 
 def embedly():
-  [EmbedlyMerchant(merchant).update_coupons() for merchant in Merchant.objects.all()]
+  [EmbedlyMerch ant(merchant).update_coupons() for merchant in Merchant.objects.all()]
