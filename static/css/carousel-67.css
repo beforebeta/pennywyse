@@ -1,11 +1,9 @@
-#carousel {
-}
 #carousel .selected {
   margin-top: 20px;
   margin-left: auto;
   margin-right: auto;
   text-align: center;
-  height: 220px;
+  max-height: 220px;
 }
 #carousel .selected .coupon-border {
   display: inline-block;
@@ -20,6 +18,7 @@
   min-height: 140px;
   padding: 15px;
   display: inline-block;
+  max-height: 220px;
 
   border: #ccc dashed 2px;
   -webkit-border-radius: 5px;
@@ -97,21 +96,6 @@
 }
 #carousel .carousel li.active .coupon {
   margin-top: -10px;
-}
-#carousel .paging {
-  text-indent: -9999px;
-  height: 57px;
-  position: relative;
-}
-#carousel .paging a {
-  position: absolute;
-  top: 23px;
-  left: 33px;
-  display: block;
-  width: 14px;
-  height: 23px;
-  background-image: url('/static/img/sprite.png');
-  background-repeat: no-repeat;
 }
 #carousel .paging a.prev {
   background-position: -50px 0;
