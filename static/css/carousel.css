@@ -1,72 +1,78 @@
-#carousel {}
+#carousel {
+}
 #carousel .selected {
-	color: #fff;
-	min-height: 140px;
-	margin: auto;
-    padding-left:14px;
-    padding-right: 14px;
+  margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+#carousel .selected .coupon {
+  background-color: #fff;
+  min-height: 140px;
+  padding: 15px;
+  display: inline-block;
+  border: #ccc dashed 3px;
 }
 #carousel .selected .button {
-	background-color: rgb(77, 194, 161);
-	padding: 5px 10px;
-	margin-right: 20px;
-	font-weight: bold;
+  background-color: rgb(77, 194, 161);
+  padding: 5px 10px;
+  margin-right: 20px;
+  font-weight: bold;
 }
-#carousel .selected .merchantlogo {
-	float: left;
-	width: 120px;
-	height: 120px;
-	margin-right: 20px;
-	margin-bottom: 20px;
+#carousel .selected img.merchantlogo {
+  float: left;
+  max-width: 120px;
+  max-height: 120px;
+  margin-right: 20px;
+  margin-bottom: 20px;
 }
-#carousel .selected .merchantlogo img {
-	max-width: 120px;
-	max-height: 120px;
+#carousel .selected .coupon-info {
+  float: left;
 }
-#carousel .selected h2 {
-	color: #fff;
-}
-#carousel .selected a {
-	color: #fff;
+#carousel .selected h1, #carousel .selected span {
+  color: #525252;
+  margin-bottom: 10px;
+  float: left;
+  clear: both;
 }
 #carousel .selected a.merchantlink {
-	text-decoration: underline;
+  text-decoration: underline;
 }
 #carousel .carousel {
-	overflow: hidden;
-	height: 67px;
-	clear: both;
+  overflow: hidden;
+  height: 67px;
+  clear: both;
 }
 #carousel .carousel li {
-	height: 67px;
-	cursor: pointer;
+  height: 67px;
+  cursor: pointer;
 }
 #carousel .carousel li img {
-	max-width: 94px;
-	max-height: 57px;
-	padding-top: 10px;
+  max-width: 94px;
+  max-height: 57px;
+  padding-top: 10px;
 }
 #carousel .carousel li img.active {
-	padding-top: 0;
+  padding-top: 0;
 }
 #carousel .paging {
-	text-indent: -9999px;
-	height: 57px;
-	position: relative;
+  text-indent: -9999px;
+  height: 57px;
+  position: relative;
 }
 #carousel .paging a {
-	position: absolute;
-	top: 23px;
-	left: 33px;
-	display: block;
-	width: 14px;
-	height: 23px;
-	background-image: url('/static/img/sprite.png');
-	background-repeat: no-repeat;
+  position: absolute;
+  top: 23px;
+  left: 33px;
+  display: block;
+  width: 14px;
+  height: 23px;
+  background-image: url('/static/img/sprite.png');
+  background-repeat: no-repeat;
 }
 #carousel .paging a.prev {
-	background-position: -50px 0;
+  background-position: -50px 0;
 }
 #carousel .paging a.next {
-	background-position: -100px 0;
+  background-position: -100px 0;
 }
