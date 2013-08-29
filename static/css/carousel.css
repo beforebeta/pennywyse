@@ -1,10 +1,11 @@
 #carousel {
 }
 #carousel .selected {
-  margin-top: 10px;
+  margin-top: 20px;
   margin-left: auto;
   margin-right: auto;
   text-align: center;
+  height: 220px;
 }
 #carousel .selected .coupon {
   background-color: #fff;
@@ -17,6 +18,7 @@
   background-color: rgb(77, 194, 161);
   padding: 5px 10px;
   margin-right: 20px;
+  color: #fff;
   font-weight: bold;
 }
 #carousel .selected img.merchantlogo {
@@ -28,19 +30,29 @@
 }
 #carousel .selected .coupon-info {
   float: left;
+  max-width: 500px;
 }
 #carousel .selected h1, #carousel .selected span {
   color: #525252;
   margin-bottom: 10px;
+  text-align: left;
   float: left;
   clear: both;
+}
+#carousel .selected .call-to-action {
+  display: block;
+  margin-top: 10px;
+}
+#carousel .selected .call-to-action .button {
+  font-size: 20px;
 }
 #carousel .selected a.merchantlink {
   text-decoration: underline;
 }
 #carousel .carousel {
+  margin: 10px 0;
   overflow: hidden;
-  height: 67px;
+  height: 72px;
   clear: both;
 }
 #carousel .carousel li {
@@ -48,12 +60,15 @@
   cursor: pointer;
 }
 #carousel .carousel li img {
+  margin: 5px;
   max-width: 94px;
-  max-height: 57px;
-  padding-top: 10px;
+  max-height: 67px;
+  padding: 5px;
+  background-color: #fff;
+  border: dashed #ccc 2px;
 }
 #carousel .carousel li img.active {
-  padding-top: 0;
+  margin-top: 0;
 }
 #carousel .paging {
   text-indent: -9999px;

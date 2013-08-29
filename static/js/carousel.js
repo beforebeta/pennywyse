@@ -11,14 +11,13 @@ $(function(){
     $('#carousel .selected .merchantlink').text(db.merchantname);
   });
 
-  var featuredCount = $('#carousel').data('count');
   $('#carousel').jCarouselLite({
     autoCSS: true,
     autoWidth: true,
-    visible: featuredCount,
+    visible: 7,
     responsive: true,
     btnNext: '.next',
     btnPrev: '.prev',
-    scroll: featuredCount
+    scroll: 5
   });
 });
