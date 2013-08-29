@@ -5,7 +5,7 @@
     <ignored path="coupons.iws" />
     <ignored path=".idea/workspace.xml" />
     <file path="/start_script.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1375914262188" ignored="false" />
-    <file path="/models.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376365810933" ignored="false" />
+    <file path="/models.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1377795801477" ignored="false" />
     <file path="/basesettings.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1375985751615" ignored="false" />
     <file path="/admin.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1377546887392" ignored="false" />
     <file path="/middleware.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376001228063" ignored="false" />
@@ -15,12 +15,12 @@
     <file path="/test_tracking.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376074324417" ignored="false" />
     <file path="/clicktrack.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376074722944" ignored="false" />
     <file path="/skimlinks.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376350875137" ignored="false" />
-    <file path="/Dummy.txt" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376249200443" ignored="false" />
+    <file path="/Dummy.txt" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1377810211531" ignored="false" />
     <file path="/company.html" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376244527111" ignored="false" />
     <file path="/_header.html" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1377785464344" ignored="false" />
     <file path="/header.css" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376152161058" ignored="false" />
     <file path="/stats.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1377140198882" ignored="false" />
-    <file path="/fmtcload.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376163424808" ignored="false" />
+    <file path="/fmtcload.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1377796658967" ignored="false" />
     <file path="/coupon.html" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376490456385" ignored="false" />
     <file path="/index.html" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376583094648" ignored="false" />
     <file path="/main.js" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376247448831" ignored="false" />
@@ -63,12 +63,10 @@
   <component name="FileEditorManager">
     <leaf>
       <file leaf-file-name="models.py" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/websvcs/models.py">
+        <entry file="file://$PROJECT_DIR$/core/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="106" column="23" selection-start="4027" selection-end="4027" vertical-scroll-proportion="0.35957697">
-              <folding>
-                <element signature="e#0#15#0" expanded="true" />
-              </folding>
+            <state line="110" column="6" selection-start="4341" selection-end="4341" vertical-scroll-proportion="-3.5620525">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -96,9 +94,9 @@
         <option value="$PROJECT_DIR$/web/views/main.py" />
         <option value="$PROJECT_DIR$/templates/base.html" />
         <option value="$PROJECT_DIR$/tracking/admin.py" />
-        <option value="$PROJECT_DIR$/core/management/commands/fmtcload.py" />
         <option value="$PROJECT_DIR$/templates/layouts/_header.html" />
         <option value="$PROJECT_DIR$/websvcs/models.py" />
+        <option value="$PROJECT_DIR$/core/management/commands/fmtcload.py" />
       </list>
     </option>
   </component>
@@ -197,6 +195,60 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="websvcs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="coupons" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="coupons" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="coupons" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="coupons" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="management" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="coupons" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="coupons" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="management" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="commands" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -529,11 +581,6 @@
         <state line="29" column="20" selection-start="927" selection-end="927" vertical-scroll-proportion="0.28169015" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="110" column="6" selection-start="4339" selection-end="4339" vertical-scroll-proportion="0.3424821" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/web/views/main.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="92" column="11" selection-start="3773" selection-end="3773" vertical-scroll-proportion="0.70035255" />
@@ -552,15 +599,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state line="197" column="19" selection-start="8684" selection-end="8699" vertical-scroll-proportion="0.017899761">
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/management/commands/fmtcload.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="217" column="36" selection-start="7899" selection-end="7899" vertical-scroll-proportion="0.29494712">
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -585,12 +623,28 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/core/management/commands/fmtcload.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="226" column="25" selection-start="8153" selection-end="8153" vertical-scroll-proportion="2.1351352">
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/websvcs/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="106" column="23" selection-start="4027" selection-end="4027" vertical-scroll-proportion="0.35957697">
+        <state line="166" column="27" selection-start="6154" selection-end="6154" vertical-scroll-proportion="0.2596945">
           <folding>
             <element signature="e#0#15#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="110" column="6" selection-start="4341" selection-end="4341" vertical-scroll-proportion="-3.5620525">
+          <folding />
         </state>
       </provider>
     </entry>

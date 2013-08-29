@@ -30,7 +30,7 @@ class Command(BaseCommand):
         if options['load']:
             load()
         if options['embedly']:
-            embedly()
+            embedly(args)
 
 def section(message):
     print " "
@@ -247,5 +247,17 @@ def load():
     refresh_calculated_fields()
     refresh_merchant_redirects()
 
-def embedly():
-  [EmbedlyMerch ant(merchant).update_coupons() for merchant in Merchant.objects.all()]
+def embedly(args):
+    _from = 0
+    _to = Merchant.objects.all().count()
+    if len(args) == 2:
+        _from = int(args[0])
+        _to = int(args[1])
+        if _to == 1:
+            _to = Merchant.objects.all().count()
+    print "loading from", _from, "to", _to
+    for merchant in Merchant.objects.all()[_from:_to]:
+        try:
+            EmbedlyMerchant(merchant).update_coupons()
+        except:
+            print_stack_trace()

@@ -7,6 +7,7 @@ from picklefield.fields import PickledObjectField
 from django.conf import settings
 import urllib, gzip, os, base64
 from cPickle import dumps, loads
+from core.util import print_stack_trace
 from vendor.embedly import Embedly
 
 class ImageStore(models.Model):
@@ -97,17 +98,17 @@ class EmbedlyCache:
         self.cache_loc = settings.DOWNLOADER_CACHE_LOCATION
         self.cache = {}
         self.client = Embedly(settings.EMBEDLY_KEY)
-
+        print "Loading in Embedly Cache-Start. Wait for End confirmation..."
         try:
             os.makedirs(self.cache_loc)
         except:
             pass
         for file in os.listdir(self.cache_loc):
             file = os.path.join(self.cache_loc, file)
-            print(file)
             if os.path.isfile(file):
                 filename = os.path.basename(file)
                 self.cache[self.path2url(filename)] = file
+        print "End. Finished loading Embedly Cache."
 
     def get(self, url, stateless_params=""):
         try:
@@ -115,6 +116,13 @@ class EmbedlyCache:
             file_contents = loads(f.read())
             print '!!!!!!!!!!!!!!!!!!!!!!!loads!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
             print file_contents.data
+            if "error_code" in file_contents.data:
+                print "*"*100
+                print "Deleting cache for", url
+                print "*"*100
+                self.delete_cache(url)
+                f.close()
+                raise KeyError #go into the except block
             f.close()
             return file_contents
         except KeyError:
@@ -157,7 +165,11 @@ class EmbedlyMerchant:
     self.coupons = [EmbedlyCoupon(coupon) for coupon in self.merchant.coupon_set.all()]
 
   def update_coupons(self):
-    [coupon.update() for coupon in self.coupons]
+        for coupon in self.coupons:
+            try:
+                coupon.update()
+            except:
+                print_stack_trace()
 
 
 class EmbedlyCoupon:
