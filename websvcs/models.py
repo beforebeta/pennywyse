@@ -185,18 +185,21 @@ class EmbedlyCoupon:
     return link
 
   def update(self):
-    # try:
-    if self.link():
-      print self.link()
-      extract = cache.get(self.link())
-      if 'title' in extract:
-        self.coupon.embedly_title = extract['title']
-      if 'description' in extract:
-        self.coupon.embedly_description = extract['description']
-      if ('images' in extract) and extract['images'] and 'url' in extract['images'][0]:
-        self.coupon.embedly_image_url = extract['images'][0]['url']
-        print "For:    {0}\nEmbedly returned:   {1}".format(self.link(), self.coupon.embedly_image_url)
-      self.coupon.save()
-      print "extracted data for Coupon #{0}:    {1}\n  Merchant:      {2}\n\n\n".format(self.coupon.id, self.coupon.local_path(), self.coupon.merchant.local_path())
-    # except:
-      # print "failed to extract data for Coupon #{0}".format(self.coupon.id)
+    try:
+      if self.link():
+        print self.link()
+        extract = cache.get(self.link())
+        if ('description' in extract) and extract['description'] != self.coupon.merchant.description:
+          if 'title' in extract:
+            self.coupon.embedly_title = extract['title']
+          if ('description' in extract):
+            self.coupon.embedly_description = extract['description']
+          if ('images' in extract) and extract['images'] and 'url' in extract['images'][0]:
+            self.coupon.embedly_image_url = extract['images'][0]['url']
+            print "For:    {0}\nEmbedly returned:   {1}".format(self.link(), self.coupon.embedly_image_url)
+          self.coupon.save()
+          print "extracted data for Coupon #{0}:    {1}\n  Merchant:      {2}\n\n\n".format(self.coupon.id, self.coupon.local_path(), self.coupon.merchant.local_path())
+        else:
+          print "\n\n\nno extract for Coupon #{0}   Merchant#{1}\n\n\nCoupon Description Matches Merchant Description\n\n\n\n".format(self.coupon.id, self.coupon.merchant.id)
+    except:
+      print "failed to extract data for Coupon #{0}".format(self.coupon.id)
