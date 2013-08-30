@@ -5,7 +5,7 @@
     <ignored path="coupons.iws" />
     <ignored path=".idea/workspace.xml" />
     <file path="/start_script.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1375914262188" ignored="false" />
-    <file path="/models.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1377892113506" ignored="false" />
+    <file path="/models.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1377892221843" ignored="false" />
     <file path="/basesettings.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1375985751615" ignored="false" />
     <file path="/admin.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1377884634594" ignored="false" />
     <file path="/middleware.py" changelist="2c8b8f83-163d-4f9e-8351-2aa43a3b7454" time="1376001228063" ignored="false" />
@@ -74,7 +74,7 @@
       <file leaf-file-name="skimlinks.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tracking/management/commands/skimlinks.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="11" column="0" selection-start="310" selection-end="310" vertical-scroll-proportion="0.0">
+            <state line="11" column="0" selection-start="310" selection-end="310" vertical-scroll-proportion="-2.4">
               <folding />
             </state>
           </provider>
@@ -83,7 +83,7 @@
       <file leaf-file-name="models.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tracking/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="340" column="77" selection-start="17387" selection-end="17387" vertical-scroll-proportion="0.89260143">
+            <state line="339" column="85" selection-start="17309" selection-end="17309" vertical-scroll-proportion="0.8747017">
               <folding>
                 <element signature="e#0#40#0" expanded="true" />
               </folding>
@@ -621,14 +621,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tracking/management/commands/skimlinks.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="0" selection-start="310" selection-end="310" vertical-scroll-proportion="0.0">
+        <state line="11" column="0" selection-start="310" selection-end="310" vertical-scroll-proportion="-2.4">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tracking/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="340" column="77" selection-start="17387" selection-end="17387" vertical-scroll-proportion="0.89260143">
+        <state line="339" column="85" selection-start="17309" selection-end="17309" vertical-scroll-proportion="0.8747017">
           <folding>
             <element signature="e#0#40#0" expanded="true" />
           </folding>

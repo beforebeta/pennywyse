@@ -338,4 +338,4 @@ class Commission(models.Model):
             visitor_id = self.customIDAsInt
             if visitor_id and visitor_id > 0:
                 if RevenueVisitor.objects.filter(visitor_id=visitor_id).count() == 0:
-                    RevenueVisitor(Visitor.objects.get(id=visitor_id)).save()
+                    RevenueVisitor(visitor=Visitor.objects.get(id=visitor_id)).save()
