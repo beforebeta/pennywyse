@@ -49,7 +49,7 @@ def set_active_tab(active_tab, context):
 @ensure_csrf_cookie
 def index(request):
     context = {}
-    context["featured_coupons"] = list(FeaturedCoupon.objects.all()[:10])
+    context["featured_coupons"] = list(FeaturedCoupon.objects.all())
     random.shuffle(context["featured_coupons"])
     context["new_coupons"] = [Coupon.objects.get(id=nc.coupon_id) for nc in NewCoupon.objects.all().order_by("-date_added")[:8]]
     context["pop_coupons"] = [Coupon.objects.get(id=pc.coupon_id) for pc in PopularCoupon.objects.all().order_by("-date_added")[:8]]

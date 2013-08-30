@@ -95,7 +95,7 @@
   -moz-border-radius: 3px;
   border-radius: 3px;
 }
-#carousel .carousel li.active .coupon {
+#carousel .carousel li .coupon.active {
   margin-top: -10px;
 }
 #carousel .paging {

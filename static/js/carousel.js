@@ -1,8 +1,8 @@
 $(function(){
-  $('#carousel .carousel ul').on('click', 'li', function(){
-    var db = $(this).data();
-    $(this).closest('ul').find('li.active').removeClass('active');
-    $(this).addClass('active');
+  $('#carousel .carousel ul li .coupon').on('click', function(){
+    var db = $(this).closest('li').data();
+    $(this).closest('ul').find('li .coupon.active').removeClass('active');
+    $('.coupon-' + db.couponid).addClass('active');
     $('#carousel .selected img').attr('src', db.image);
     $('#carousel .selected h1').text(db.shortdesc + ' at ' + db.merchantname);
     $('#carousel .selected .description').text(db.description);
@@ -11,10 +11,10 @@ $(function(){
     $('#carousel .selected .merchantlink').text(db.merchantname);
   });
 
-  $('#carousel').jCarouselLite({
+  $('#carousel .carousel-row').jCarouselLite({
     autoCSS: true,
     autoWidth: true,
-    visible: 7,
+    visible: 6,
     responsive: true,
     btnNext: '.next',
     btnPrev: '.prev',
