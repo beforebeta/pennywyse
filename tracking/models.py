@@ -1,8 +1,11 @@
 from datetime import datetime, timedelta
+import json
 import logging
 import traceback
 
 from django.contrib.gis.utils import HAS_GEOIP
+from common import url
+from common.url.tldextract import shorten_to_domain
 from core.models import Merchant, Coupon
 from core.util import print_stack_trace
 
@@ -236,7 +239,6 @@ class RevenueVisitor(models.Model):
     date_added          = models.DateTimeField(default=datetime.now(), auto_now_add=True)
     last_modified       = models.DateTimeField(default=datetime.now(), auto_now=True, auto_now_add=True)
 
-
     date_obj_added      = models.DateTimeField(default=datetime.now(), auto_now_add=True)
     last_obj_modified   = models.DateTimeField(default=datetime.now(), auto_now=True, auto_now_add=True)
 
@@ -266,12 +268,48 @@ class RevenueVisitor(models.Model):
         transfer(self, self.visitor, 'last_modified')
         super(RevenueVisitor, self).save(*args, **kwargs)
 
+class CommissionManager(models.Manager):
+
+    def create_from_skimlinks_commissions(self, commissions):
+        default_to_empty_string = lambda x: "" if x == None else x
+        for c in commissions["skimlinksAccount"]["commissions"].keys():
+            try:
+                commission = commissions["skimlinksAccount"]["commissions"][c]
+                if self.filter(commissionID = commission["commissionID"]).count() > 0:
+                    continue #commission already recorded
+                comm = Commission(
+                    commissionID        = commission["commissionID"],
+                    commissionType      = "skimlinks",
+                    commissionValue     = float(commission["commissionValue"])/100, #values comes in cents - we convert to dollars)
+                    orderValue          = float(commission["orderValue"])/100, #values comes in cents - we convert to dollars)
+                    currency            = default_to_empty_string(commission["currency"]),
+                    customID            = default_to_empty_string(commission["customID"]),
+                    date                = datetime.strptime(commission["date"],"%Y-%m-%d").date(),
+                    domainID            = default_to_empty_string(commission["domainID"]),
+                    merchantID          = default_to_empty_string(commission["merchantID"]),
+                    publisherID         = default_to_empty_string(commission["publisherID"]),
+                    items               = int(commission["items"]) if commission["items"] is not None else 0,
+                    sales               = int(commission["sales"]) if commission["sales"] is not None else 0,
+                    remoteReferer       = default_to_empty_string(commission["remoteReferer"]),
+                    remoteUserAgent     = default_to_empty_string(commission["remoteUserAgent"]),
+                    url                 = default_to_empty_string(commission["url"]),
+                    domain              = default_to_empty_string(shorten_to_domain(commission["url"]) if commission["url"] else ""),
+                    status              = default_to_empty_string(commission["status"])
+                )
+                comm.save()
+            except:
+                print json.dumps(commissions["skimlinksAccount"]["commissions"][c], indent=4)
+                print_stack_trace()
+            # if self.get(commissionID)
+
 class Commission(models.Model):
     commissionID        = models.CharField(max_length=255, null=True, blank=True, db_index=True, unique=True)
     commissionType      = models.CharField(max_length=255, null=True, blank=True)
     commissionValue     = models.FloatField(default=0) #in dollars
+    orderValue          = models.FloatField(default=0) #in dollars
     currency            = models.CharField(max_length=10, null=True, blank=True)
     customID            = models.CharField(max_length=50, null=True, blank=True)
+    customIDAsInt       = models.IntegerField(max_length=50, null=True, blank=True)
     date                = models.DateField(blank=True, null=True)
     domainID            = models.CharField(max_length=255, null=True, blank=True)
     merchantID          = models.CharField(max_length=255, null=True, blank=True)
@@ -284,4 +322,19 @@ class Commission(models.Model):
     domain              = models.CharField(max_length=255, null=True, blank=True)
     status              = models.CharField(max_length=255, null=True, blank=True)
 
+    objects = CommissionManager()
 
+    def save(self, *args, **kwargs):
+        newly_created = False if self.id else True
+        if self.customID:
+            try:
+                self.customIDAsInt = int(self.customID)
+            except:
+                pass
+        super(Commission, self).save(*args, **kwargs)
+        if newly_created:
+            #attempt creating a RevenueVisitor object
+            visitor_id = self.customIDAsInt
+            if visitor_id and visitor_id > 0:
+                if RevenueVisitor.objects.filter(visitor_id=visitor_id).count() == 0:
+                    RevenueVisitor(Visitor.objects.get(id=visitor_id), id=visitor_id).save()

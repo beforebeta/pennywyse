@@ -4,8 +4,8 @@ import uuid
 import requests
 import time
 from tracking.commission.skimlinks import ReportingAPI
-from tracking.models import Visitor
-
+from tracking.models import Visitor, Commission
+import json
 
 class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
@@ -24,6 +24,10 @@ class Command(BaseCommand):
 
 
 def load_commissions():
-    r = ReportingAPI()
-    print r.get_commissions()
+    # r = ReportingAPI()
+    # commissions = r.get_commissions()
+    commissions = json.loads(open("comm.js","r").read())
+    # print json.dumps(commissions["skimlinksAccount"]["commissions"]["commission"], indent=4)
+    Commission.objects.create_from_skimlinks_commissions(commissions)
+
 

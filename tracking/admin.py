@@ -1,5 +1,6 @@
 from django.contrib import admin
-from tracking.models import BannedIP, UntrackedUserAgent, Visitor, ClickTrack, RevenueVisitor
+from tracking.models import BannedIP, UntrackedUserAgent, Visitor, ClickTrack, RevenueVisitor, Commission
+
 
 class ClickTrackAdmin(admin.ModelAdmin):
     readonly_fields = ('coupon','merchant',)
@@ -14,3 +15,5 @@ admin.site.register(UntrackedUserAgent)
 admin.site.register(Visitor, VisitorAdmin)
 admin.site.register(RevenueVisitor)
 admin.site.register(ClickTrack, ClickTrackAdmin)
+
+admin.site.register(Commission)

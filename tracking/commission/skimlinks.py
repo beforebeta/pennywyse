@@ -5,6 +5,7 @@ import urllib
 from django.conf import settings
 import requests
 from tracking.utils import u_clean
+import json
 
 REPORTING_ENDPOINT = 'https://api-reports.skimlinks.com'
 
@@ -14,10 +15,10 @@ class ReportingAPI():
         return _get_response('/publisher/test', {}).content
 
     def get_commissions(self):
-        return _get_response('/publisher/reportcommissions', {
+        return json.loads(_get_response('/publisher/reportcommissions', {
             'startDate'     : '2011-12-01',
             'endDate'       : datetime.date.today().isoformat()
-        }).content
+        }).content)
 
 def _md5(message):
     return hashlib.md5(message).hexdigest()
@@ -58,7 +59,6 @@ _merchant_descriptions = {
    "life-is-good"      :["life-is-good"   , 4, "Optimistic apparel and accessories featuring positive messaging and comfortable fits for men, women and kids."],
    "charlotte-russe"   :["charlotte-russe", 14, "Fashion that's trendy, not spendy! Shop the glam at Charlotte Russe, and snag major savings on the hottest clothes, shoes, denim, accessories and more. XOXO!"]
 }
-
 
 def get_merchant_description(merchant_name_slug):
     try:
