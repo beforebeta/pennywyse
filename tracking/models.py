@@ -247,6 +247,7 @@ class RevenueVisitor(models.Model):
         if not self.id:
             #only 1 RevenueVisitor object per Visitor object!
             assert not RevenueVisitor.objects.filter(visitor_id=self.visitor.id).exists(), "Only 1 RevenueVisitor per Visitor object!"
+            self.id = self.visitor.id
         transfer = lambda r,v,att: setattr(r, att, getattr(v, att))
         transfer(self, self.visitor, 'session_key')
         transfer(self, self.visitor, 'ip_address')
@@ -337,4 +338,4 @@ class Commission(models.Model):
             visitor_id = self.customIDAsInt
             if visitor_id and visitor_id > 0:
                 if RevenueVisitor.objects.filter(visitor_id=visitor_id).count() == 0:
-                    RevenueVisitor(Visitor.objects.get(id=visitor_id), id=visitor_id).save()
+                    RevenueVisitor(Visitor.objects.get(id=visitor_id)).save()
