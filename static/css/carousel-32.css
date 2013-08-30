@@ -1,14 +1,14 @@
 #carousel .selected {
+  height: 320px;
   margin-top: 20px;
   margin-left: auto;
   margin-right: auto;
   text-align: center;
-  max-height: 220px;
 }
 #carousel .selected .coupon-border {
   display: inline-block;
-  background-color: #000;
-  padding: 5px 5px 0 5px;
+  background-color: #fff;
+  padding: 5px 5px 5px 5px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
@@ -18,7 +18,6 @@
   min-height: 140px;
   padding: 15px;
   display: inline-block;
-  max-height: 220px;
 
   border: #ccc dashed 2px;
   -webkit-border-radius: 5px;
@@ -33,21 +32,15 @@
   font-weight: bold;
 }
 #carousel .selected img.merchantlogo {
-  float: left;
   max-width: 120px;
   max-height: 120px;
-  margin-right: 20px;
-  margin-bottom: 20px;
 }
 #carousel .selected .coupon-info {
-  float: left;
   max-width: 500px;
 }
 #carousel .selected h1, #carousel .selected span {
   color: #525252;
   margin-bottom: 10px;
-  text-align: left;
-  float: left;
   clear: both;
 }
 #carousel .selected .description {
@@ -60,20 +53,20 @@
 }
 #carousel .selected .call-to-action .button {
   font-size: 20px;
-  display: inline-block;
 }
 #carousel .selected a.merchantlink {
   text-decoration: underline;
 }
+#carousel > .row {
+  font-size: 0;
+}
 #carousel .carousel {
   padding: 10px;
-  margin: 10px 0;
   overflow: hidden;
   height: 75px;
-  clear: both;
 }
 #carousel .carousel li {
-  height: 75px;
+  height: 50px;
   cursor: pointer;
 }
 #carousel .carousel .coupon {
@@ -85,8 +78,7 @@
   border-radius: 3px;
 }
 #carousel .carousel li img {
-  max-width: 94px;
-  max-height: 67px;
+  max-height: 42px;
   padding: 5px;
   background-color: #fff;
   border: dashed #ccc 1px;
@@ -97,15 +89,21 @@
 #carousel .carousel li.active .coupon {
   margin-top: -10px;
 }
+#carousel .carousel-row {
+  margin: 0;
+  display: inline-block;
+  width: 80%;
+  float: left;
+}
 #carousel .paging {
   text-indent: -9999px;
   height: 57px;
-  position: relative;
+  width: 10%;
+  display: inline-block;
+  position: static;
+  padding-top: 10px;
 }
 #carousel .paging a {
-  position: absolute;
-  top: 23px;
-  left: 33px;
   display: block;
   width: 14px;
   height: 23px;
@@ -113,8 +111,10 @@
   background-repeat: no-repeat;
 }
 #carousel .paging a.prev {
+  float: right;
   background-position: -50px 0;
 }
 #carousel .paging a.next {
+  float: left;
   background-position: -100px 0;
 }

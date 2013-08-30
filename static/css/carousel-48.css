@@ -3,7 +3,7 @@
   margin-left: auto;
   margin-right: auto;
   text-align: center;
-  max-height: 220px;
+  height: 240px;
 }
 #carousel .selected .coupon-border {
   display: inline-block;
@@ -12,6 +12,7 @@
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
+  max-height: 240px;
 }
 #carousel .selected .coupon {
   background-color: #fff;
