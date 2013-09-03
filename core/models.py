@@ -28,6 +28,8 @@ def get_description(model):
             return ""
     return get_description_tag_from_url(model.directlink)
 
+base_description = "PennyWyse | Hand Verified Coupon Codes"
+
 #######################################################################################################################
 #
 # Category
@@ -76,6 +78,9 @@ class Category(models.Model):
 
     def local_path(self):
       return "/categories/{0}".format(self.code)
+
+    def page_description(self):
+      return "Coupons for {0} | {1}".format(self.name, base_description)
 
     def __unicode__(self):  # Python 3: def __str__(self):
       return "%s %s" % (self.code, self.name)
@@ -224,6 +229,9 @@ class Merchant(models.Model):
                 featured = codes[0]
 
         return featured
+
+    def page_description(self):
+      return "{0} | Coupons for {1} | {2}".format(self.description, self.name, base_description)
 
 #######################################################################################################################
 #
@@ -473,3 +481,6 @@ class Coupon(models.Model):
 
     def local_path(self):
       return "/coupon/{0}/{1}/{2}/".format(self.merchant.name_slug, self.desc_slug, self.id)
+
+    def page_description(self):
+      return "{0} | {1}".format(self.get_description(), self.merchant.page_description())
