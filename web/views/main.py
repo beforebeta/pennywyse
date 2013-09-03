@@ -7,7 +7,7 @@ from django.template.context import RequestContext
 from django.template.defaultfilters import slugify
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.http import HttpResponse, HttpResponseRedirect
-from core.models import Category, Coupon, Merchant
+from core.models import Category, Coupon, Merchant, base_description
 from core.util import encode_uri_component, print_stack_trace
 from tracking.views import log_click_track
 from web.models import FeaturedCoupon, NewCoupon, PopularCoupon, ShortenedURLComponent
@@ -53,6 +53,7 @@ def index(request):
     random.shuffle(context["featured_coupons"])
     context["new_coupons"] = [Coupon.objects.get(id=nc.coupon_id) for nc in NewCoupon.objects.all().order_by("-date_added")[:8]]
     context["pop_coupons"] = [Coupon.objects.get(id=pc.coupon_id) for pc in PopularCoupon.objects.all().order_by("-date_added")[:8]]
+    context["page_description"] = base_description
     set_active_tab('coupon', context)
     return render_response("index.html", request, context)
 
@@ -118,7 +119,8 @@ def coupons_for_company(request, company_name, company_id=-1, current_page=1, ca
         "current_page"          : int(current_page),
         "coupons"               : pages.page(current_page).object_list,
         "num_coupons"           : pages.count,
-        "total_coupon_count"    : merchant.coupon_count
+        "total_coupon_count"    : merchant.coupon_count,
+        "page_description" : merchant.page_description(),
     }
     context["coupon_categories"] = coupon_categories
 
@@ -149,8 +151,10 @@ def open_coupon(request, company_name, coupon_label, coupon_id):
         "coupon"        : coupon,
         "logo_url"      : logo_url,
         "back_url"      : back_url,
-        "path"          : encode_uri_component("%s://%s%s" % ("http", "www.pennywyse.com", request.path))
+        "path"          : encode_uri_component("%s://%s%s" % ("http", "www.pennywyse.com", request.path)),
+        "page_description" : coupon.page_description(),
     }
+
     return render_response("open_coupon.html",request, context)
 
 @ensure_csrf_cookie
@@ -160,7 +164,8 @@ def privacy(request):
 @ensure_csrf_cookie
 def categories(request):
     context={
-        "categories"        : sorted(Category.objects.filter(parent=None), key=lambda category: category.name)
+        "categories"        : sorted(Category.objects.filter(parent=None), key=lambda category: category.name),
+        "page_description" : "Coupon Categories | {0}".format(base_description),
     }
     set_active_tab('category', context)
     return render_response("categories.html", request, context)
@@ -212,7 +217,8 @@ def category(request, category_code, current_page=1, category_ids=-1):
         "num_coupons"           : pages.count,
         "total_coupon_count"    : category.get_coupon_count(),
         "coupon_categories"     : coupon_categories,
-        "form_path"             : "/categories/{0}/".format(category.code)
+        "form_path"             : "/categories/{0}/".format(category.code),
+        "page_description" : category.page_description(),
     }
     set_active_tab('category', context)
 
