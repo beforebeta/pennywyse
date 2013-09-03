@@ -1,5 +1,6 @@
 import datetime
 from django.contrib.auth.models import User
+from django.db.models.query_utils import Q
 from django.db import models
 import uuid
 from picklefield.fields import PickledObjectField
@@ -162,7 +163,8 @@ cache = EmbedlyCache()
 class EmbedlyMerchant:
   def __init__(self, merchant):
     self.merchant = merchant
-    self.coupons = [EmbedlyCoupon(coupon) for coupon in self.merchant.coupon_set.all()]
+    active = self.merchant.coupon_set.filter(Q(end__gt=datetime.datetime.now()) | Q(end__isnull=True))
+    self.coupons = [EmbedlyCoupon(coupon) for coupon in active]
 
   def update_coupons(self):
         for coupon in self.coupons:
