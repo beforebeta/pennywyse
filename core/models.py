@@ -82,6 +82,9 @@ class Category(models.Model):
     def page_description(self):
       return "Coupons for {0} | {1}".format(self.name, base_description)
 
+    def page_title(self):
+      return "Coupons for {0} | {1}".format(self.name, base_description)
+
     def __unicode__(self):  # Python 3: def __str__(self):
       return "%s %s" % (self.code, self.name)
 
@@ -232,6 +235,9 @@ class Merchant(models.Model):
 
     def page_description(self):
       return "{0} | Coupons for {1} | {2}".format(self.description, self.name, base_description)
+
+    def page_title(self):
+      return "Coupons for {0} | {1}".format(self.name, base_description)
 
 #######################################################################################################################
 #
@@ -484,3 +490,6 @@ class Coupon(models.Model):
 
     def page_description(self):
       return "{0} | {1}".format(self.get_description(), self.merchant.page_description())
+
+    def page_title(self):
+      return "{0} | {1}".format(self.description, self.merchant.page_title())
