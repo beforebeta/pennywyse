@@ -53,6 +53,7 @@ def index(request):
     random.shuffle(context["featured_coupons"])
     context["new_coupons"] = [Coupon.objects.get(id=nc.coupon_id) for nc in NewCoupon.objects.all().order_by("-date_added")[:8]]
     context["pop_coupons"] = [Coupon.objects.get(id=pc.coupon_id) for pc in PopularCoupon.objects.all().order_by("-date_added")[:8]]
+    context["page_title"] = base_description
     context["page_description"] = base_description
     set_active_tab('coupon', context)
     return render_response("index.html", request, context)
@@ -120,9 +121,10 @@ def coupons_for_company(request, company_name, company_id=-1, current_page=1, ca
         "coupons"               : pages.page(current_page).object_list,
         "num_coupons"           : pages.count,
         "total_coupon_count"    : merchant.coupon_count,
+        "coupon_categories"     : coupon_categories,
         "page_description" : merchant.page_description(),
+        "page_title": merchant.page_title(),
     }
-    context["coupon_categories"] = coupon_categories
 
     if len(all_categories) != len(selected_categories):
         context["comma_categories"] = ShortenedURLComponent.objects.shorten_url_component(comma_categories).shortened_url
@@ -153,6 +155,7 @@ def open_coupon(request, company_name, coupon_label, coupon_id):
         "back_url"      : back_url,
         "path"          : encode_uri_component("%s://%s%s" % ("http", "www.pennywyse.com", request.path)),
         "page_description" : coupon.page_description(),
+        "page_title": coupon.page_title(),
     }
 
     return render_response("open_coupon.html",request, context)
@@ -163,9 +166,11 @@ def privacy(request):
 
 @ensure_csrf_cookie
 def categories(request):
+    description = "Coupon Categories | {0}".format(base_description)
     context={
         "categories"        : sorted(Category.objects.filter(parent=None), key=lambda category: category.name),
-        "page_description" : "Coupon Categories | {0}".format(base_description),
+        "page_description" : description,
+        "page_title": description,
     }
     set_active_tab('category', context)
     return render_response("categories.html", request, context)
@@ -219,6 +224,7 @@ def category(request, category_code, current_page=1, category_ids=-1):
         "coupon_categories"     : coupon_categories,
         "form_path"             : "/categories/{0}/".format(category.code),
         "page_description" : category.page_description(),
+        "page_title" : category.page_title(),
     }
     set_active_tab('category', context)
 
