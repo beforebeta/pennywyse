@@ -155,7 +155,6 @@
   #carousel .selected .button {
     background-color: rgb(77, 194, 161);
     padding: 5px 10px;
-    margin-right: 20px;
     color: #fff;
     font-weight: bold;
   }
@@ -226,7 +225,7 @@
   #carousel .paging {
     text-indent: -9999px;
     height: 57px;
-    width: 10%;
+    width: 9%;
     display: inline-block;
     position: static;
     padding-top: 10px;
