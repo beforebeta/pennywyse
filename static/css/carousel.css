@@ -304,7 +304,7 @@
   #carousel .paging a.next {
     display: none;
   }
-  #carousel .row {
-    margin-bottom: 10px;
+  #carousel nav.carousel ul li {
+    height: 40px;
   }
 }
