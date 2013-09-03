@@ -12,7 +12,7 @@ class Command(BaseCommand):
         file_name = 'backups/coupons{0}.sql'.format(datetime.datetime.now().strftime('%Y%m%d%H%M'))
 
         self.stdout.write('Grabbing database dump...\n\n')
-        sql_string = check_output(['mysqldump', '-u', 'dbuser', '-p', 'coupons'])
+        sql_string = check_output(['mysqldump', '-u', 'dbuser', '--password=dbuser', 'coupons'])
 
         self.stdout.write('Uploading to S3...\n\n')
         default_storage.save(file_name, ContentFile(sql_string))
