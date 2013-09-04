@@ -49,7 +49,7 @@ class Command(BaseCommand):
         file = open('/tmp/pennywyse_sitemap_coupon_urls.txt', 'w')
         for coupon in Coupon.objects.all():
             if coupon.merchant:
-                file.write('http://pennywyse.com/coupon/{0}/{1}/{2}/ changefreq=weekly priority=0.7\n'.format(coupon.merchant.name_slug, coupon.desc_slug, coupon.id))
+                file.write('http://pennywyse.com{0} changefreq=weekly priority=0.7\n'.format(coupon.local_path()))
         file.close()
 
     def build_sitemaps(self):
