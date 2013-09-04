@@ -45,9 +45,10 @@
     {% endblock %}
 
     {% block fbtags %}
-        <meta property="og:image" content="http://pennywyse.com/static/img/fbog.png"/>
-        <meta property="og:title" content="PennyWyse: Hand Verified Coupon Codes"/>
-        <meta property="og:url" content="{{ CURRENT_URL }}"/>
+        <meta property="og:image" content="{{ og_image }}"/>
+        <meta property="og:title" content="{{ og_title }}"/>
+        <meta property="og:description" content="{{ og_description }}"/>
+        <meta property="og:url" content="{{ og_url }}"/>
     {% endblock %}
 
 </head>

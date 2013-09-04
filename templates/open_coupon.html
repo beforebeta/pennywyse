@@ -37,9 +37,10 @@
     </script>
 
     {% block fbtags %}
-    <meta property="og:image" content="{{ BASE_URL_NO_APPENDED_SLASH }}{{ coupon.merchant.get_image }}"/>
-    <meta property="og:title" content="{{ coupon.merchant.name }}: {{ coupon.description }}. A Hand Verified Coupon Code for {{ coupon.merchant.name }} from PennyWyse."/>
-    <meta property="og:url" content="{{ CURRENT_URL }}"/>
+      <meta property="og:image" content="{{ og_image }}"/>
+      <meta property="og:title" content="{{ og_title }}"/>
+      <meta property="og:description" content="{{ og_description }}"/>
+      <meta property="og:url" content="{{ og_url }}"/>
     {% endblock %}
     <script type="text/javascript">
         var fb_param = {};

@@ -29,6 +29,7 @@ def get_description(model):
     return get_description_tag_from_url(model.directlink)
 
 base_description = "PennyWyse | Hand Verified Coupon Codes"
+icon_url = "{0}/static/img/favicon.ico".format(settings.BASE_URL_NO_APPENDED_SLASH)
 
 #######################################################################################################################
 #
@@ -77,13 +78,25 @@ class Category(models.Model):
       return self.name
 
     def local_path(self):
-      return "/categories/{0}".format(self.code)
+      return "/categories/{0}/".format(self.code)
 
     def page_description(self):
       return "Coupons for {0} | {1}".format(self.name, base_description)
 
     def page_title(self):
       return "Coupons for {0} | {1}".format(self.name, base_description)
+
+    def og_title(self):
+      return "Coupons for {0}".format(self.name)
+
+    def og_description(self):
+      return "Hand Verified Coupon Codes for {0} from PennyWyse.".format(self.name)
+
+    def og_image(self):
+      return icon_url
+
+    def og_url(self):
+      return "{0}{1}".format(settings.BASE_URL_NO_APPENDED_SLASH, self.local_path())
 
     def __unicode__(self):  # Python 3: def __str__(self):
       return "%s %s" % (self.code, self.name)
@@ -238,6 +251,18 @@ class Merchant(models.Model):
 
     def page_title(self):
       return "Coupons for {0} | {1}".format(self.name, base_description)
+
+    def og_title(self):
+      return "Coupons for {0}".format(self.name)
+
+    def og_description(self):
+      return "{0} | Hand Verified Coupon Codes for {1} from PennyWyse.".format(self.description, self.name)
+
+    def og_image(self):
+      return "{0}{1}".format(settings.BASE_URL_NO_APPENDED_SLASH, self.get_image())
+
+    def og_url(self):
+      return "{0}{1}".format(settings.BASE_URL_NO_APPENDED_SLASH, self.local_path())
 
 #######################################################################################################################
 #
@@ -493,3 +518,15 @@ class Coupon(models.Model):
 
     def page_title(self):
       return "{0} | {1}".format(self.description, self.merchant.page_title())
+
+    def og_title(self):
+      return "{0}: {1}. A Hand Verified Coupon Code for {2} from PennyWyse.".format(self.merchant.name, self.description, self.merchant.name)
+
+    def og_description(self):
+      return "{0}: {1}. A Hand Verified Coupon Code for {2} from PennyWyse.".format(self.merchant.name, self.description, self.merchant.name)
+
+    def og_image(self):
+      return "{0}{1}".format(settings.BASE_URL_NO_APPENDED_SLASH, self.merchant.get_image())
+
+    def og_url(self):
+      return "{0}{1}".format(settings.BASE_URL_NO_APPENDED_SLASH, self.local_path())
