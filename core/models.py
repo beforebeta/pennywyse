@@ -11,6 +11,7 @@ from django.core.paginator import Paginator
 from core.util import print_stack_trace, get_first_google_image_result, get_description_tag_from_url
 from tracking.commission.skimlinks import get_merchant_description
 
+
 def get_descriptive_image(name):
     return get_first_google_image_result(name)
 

@@ -1,5 +1,5 @@
 # Create your views here.
-import math, random
+import math, random, re
 from django.conf import settings
 from django.contrib.sites.models import get_current_site
 from django.db.models.query_utils import Q
@@ -13,6 +13,7 @@ from core.util import encode_uri_component, print_stack_trace
 from tracking.views import log_click_track
 from web.models import FeaturedCoupon, NewCoupon, PopularCoupon, ShortenedURLComponent
 from django.core.paginator import Paginator
+
 
 def build_base_context(request, context):
     context["pop_companies"] = Merchant.objects.get_popular_companies(21)
@@ -54,6 +55,12 @@ def set_meta_tags(subject, context):
     context["og_image"] = subject.og_image()
     context["og_url"] = subject.og_url()
 
+def set_canonical_url(request, context):
+    full_path = request.get_full_path()
+    canonical_path = re.search('[A-z0-9\/\-]+', full_path).group(0)
+    context["canonical_url"] = (settings.BASE_URL_NO_APPENDED_SLASH + canonical_path)
+
+
 @ensure_csrf_cookie
 def index(request):
     context = {
@@ -69,6 +76,7 @@ def index(request):
     }
     random.shuffle(context['featured_coupons'])
 
+    set_canonical_url(request, context)
     set_active_tab('coupon', context)
     return render_response("index.html", request, context)
 
@@ -138,6 +146,7 @@ def coupons_for_company(request, company_name, company_id=-1, current_page=1, ca
         "coupon_categories"     : coupon_categories,
     }
     set_meta_tags(merchant, context)
+    set_canonical_url(request, context)
 
     if len(all_categories) != len(selected_categories):
         context["comma_categories"] = ShortenedURLComponent.objects.shorten_url_component(comma_categories).shortened_url
@@ -169,6 +178,7 @@ def open_coupon(request, company_name, coupon_label, coupon_id):
         "path"          : encode_uri_component("%s://%s%s" % ("http", "www.pennywyse.com", request.path)),
     }
     set_meta_tags(coupon, context)
+    set_canonical_url(request, context)
 
     return render_response("open_coupon.html",request, context)
 
@@ -189,6 +199,8 @@ def categories(request):
         "og_url": "{0}/categories/".format(settings.BASE_URL_NO_APPENDED_SLASH),
     }
     set_active_tab('category', context)
+    set_canonical_url(request, context)
+
     return render_response("categories.html", request, context)
 
 @ensure_csrf_cookie
@@ -242,6 +254,7 @@ def category(request, category_code, current_page=1, category_ids=-1):
     }
     set_meta_tags(category, context)
     set_active_tab('category', context)
+    set_canonical_url(request, context)
 
     if len(all_categories) != len(selected_categories):
         context["comma_categories"] = ShortenedURLComponent.objects.shorten_url_component(comma_categories).shortened_url
