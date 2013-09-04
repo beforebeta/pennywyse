@@ -820,6 +820,7 @@ header[role="banner"] {
   font-size: 33px;
   font-weight: 700;
   text-align: center;
+  margin: 0;
   /*text-transform: uppercase;*/
 }
 .main-menu,

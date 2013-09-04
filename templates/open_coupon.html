@@ -69,9 +69,11 @@
         </div>
         <div class="large-8 small-12 columns">
             <div class="coupon-data-container">
-                <p class="coupon-data">
-                    Coupon from {{ coupon.merchant.name }}: {{ coupon.description }}. {% if coupon.code %}Use coupon code <span class="tag">{{ coupon.code }}</span>{% else %}<strong>No code necessary</strong>.{% endif %}
-                </p>
+                <h1 class='discrete-h1 small'>
+                  <p class="coupon-data">
+                      Coupon from {{ coupon.merchant.name }}: {{ coupon.description }}. {% if coupon.code %}Use coupon code <span class="tag">{{ coupon.code }}</span>{% else %}<strong>No code necessary</strong>.{% endif %}
+                  </p>
+                </h1>
             </div>
         </div>
         <div class="large-2 small-12 columns">
