@@ -86,7 +86,7 @@
                             {% for pop_company in pop_companies %}
                             <li style="margin: 10px;">
                                 <a href="/coupons/{{ pop_company.name_slug }}/{{ pop_company.id }}" class="wrapper-5 small" style="display:table-cell;vertical-align:middle;height:114px;width:114px;text-align: center;">
-                                    <img src="{{ pop_company.get_image }}" alt="" style="max-height:88px;max-width:88px;">
+                                  <img src="{{ pop_company.get_image }}" alt="{{ pop_company.name }}" style="max-height:88px;max-width:88px;">
                                 </a>
                             </li>
                             {% endfor %}

@@ -31,10 +31,9 @@
               data-description="{{ coupon.coupon.description }}"
               data-couponurl="/coupon/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.desc_slug }}/{{ coupon.coupon.id }}/"
               data-merchanturl="/coupons/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.merchant.id }}/"
-              data-couponid="{{ coupon.id }}"
-              >
+              data-couponid="{{ coupon.id }}" >
               <div class='coupon coupon-{{ coupon.id }}'>
-                <img src="{{ coupon.coupon.merchant.get_image }}" alt="{{ coupon.coupon.merchant.name }}" />
+                <img src="{{ coupon.coupon.merchant.get_image }}" alt="{{ coupon.coupon.short_desc }} at {{ coupon.coupon.merchant.name }}" />
               </div>
             </li>
           {% endfor %}
