@@ -1,4 +1,5 @@
 import datetime
+from django.conf import settings
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 from core.models import Coupon, Merchant
@@ -18,7 +19,7 @@ def coupon_tuple(link_type):
         if link_type == 'merchant':
           link_address = merchant_link
         else:
-          link_address = "http://pennywyse.com/coupon/{0}/{1}/{2}".format(merchant.name_slug, coupon.desc_slug, coupon.id)
+          link_address = "{0}{1}".format(settings.BASE_URL_NO_APPENDED_SLASH, coupon.local_path())
         params = "utm_medium=mailchimp&utm_source=newsletter&utm_campaign=promo&utm_term={0}".format(merchant.name_slug)
         link_address = "{0}?{1}".format(link_address, params)
         merchant_link = "{0}?{1}".format(merchant_link, params)

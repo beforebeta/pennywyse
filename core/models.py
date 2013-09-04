@@ -512,7 +512,7 @@ class Coupon(models.Model):
       return category in [c.code for c in self.categories.all()]
 
     def local_path(self):
-      return "/coupon/{0}/{1}/{2}/".format(self.merchant.name_slug, self.desc_slug, self.id)
+      return "/coupons/{0}/{1}/{2}/".format(self.merchant.name_slug, self.desc_slug, self.id)
 
     def page_description(self):
       return "{0} | {1}".format(self.get_description(), self.merchant.page_description())

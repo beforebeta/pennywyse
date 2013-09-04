@@ -8,7 +8,7 @@
             <h1>{{ coupon.coupon.short_desc }} at {{ coupon.coupon.merchant.name }}</h1>
             <span class="description">{{ coupon.coupon.description }}</span>
             <span class='call-to-action'>
-              <a class="input button" href="/coupon/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.desc_slug }}/{{ coupon.coupon.id }}/">Use Coupon</a>
+              <a class="input button" href="{{ coupon.coupon.local_path }}">Use Coupon</a>
               See more from <a class="merchantlink" href="/coupons/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.merchant.id }}/">{{ coupon.coupon.merchant.name }}</a>
             </span>
           </div>
@@ -29,7 +29,7 @@
               data-merchantname="{{ coupon.coupon.merchant.name }}"
               data-shortdesc="{{ coupon.coupon.short_desc }}"
               data-description="{{ coupon.coupon.description }}"
-              data-couponurl="/coupon/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.desc_slug }}/{{ coupon.coupon.id }}/"
+              data-couponurl="{{ coupon.coupon.local_path }}"
               data-merchanturl="/coupons/{{ coupon.coupon.merchant.name_slug }}/{{ coupon.coupon.merchant.id }}/"
               data-couponid="{{ coupon.id }}" >
               <div class='coupon coupon-{{ coupon.id }}'>
