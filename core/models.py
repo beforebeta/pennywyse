@@ -212,7 +212,7 @@ class Merchant(models.Model):
       return self.name
 
     def local_path(self):
-      return "/coupons/{0}/{1}".format(self.name_slug, self.id)
+      return "/coupons/{0}/{1}/".format(self.name_slug, self.id)
 
     def __unicode__(self):  # Python 3: def __str__(self):
         return "%s %s" % (self.ref_id, self.name)
