@@ -223,20 +223,20 @@ def refresh_calculated_fields():
             print_stack_trace()
 
 def refresh_merchant_redirects():
-    for merchant in Merchant.objects.all():
-        if merchant.link:
+    for coupon in Coupon.objects.all():
+        if coupon.link and not coupon.merchant.redirect:
             try:
-                request = requests.get(merchant.link, timeout=20)
-                if merchant.link and request.headers.get('x-frame-options', False) == 'SAMEORIGIN':
-                    merchant.redirect = True
-                    merchant.save()
-                    print "{0}: True!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!".format(merchant.name)
+                request = requests.get(coupon.link, timeout=20)
+                if request.headers.get('x-frame-options', False) == 'SAMEORIGIN':
+                    coupon.merchant.redirect = True
+                    coupon.merchant.save()
+                    print "{0}: True!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!".format(coupon.merchant.name)
                 else:
-                    print "{0}: False".format(merchant.name)
+                    print "{0}: False".format(coupon.merchant.name)
             except:
-                print "{0} timed out connecting to {1}".format(merchant.name, merchant.link)
+                print "{0} timed out connecting to {1}".format(coupon.merchant.name, coupon.link)
         else:
-            print "{0}: False".format(merchant.name)
+            print "{0}: else False".format(coupon.merchant.name)
 
 def load():
     refresh_deal_types()
