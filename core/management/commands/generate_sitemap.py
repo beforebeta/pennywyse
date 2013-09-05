@@ -117,10 +117,10 @@ class Command(BaseCommand):
 # Write each coupon file
         for file_num in range(1, (coupon_file_count + 1)):
           file_name = "coupon_sitemap_{0}.xml".format(file_num)
-          coupon_url = default_storage.save(file_name, ContentFile(open('sitemap/{0}'.format(file_name)).read()))
+          coupon_url = default_storage.save(file_name, ContentFile(open('{0}'.format(file_name)).read()))
           file.write('\
   <sitemap>\n\
-    <loc>{1}sitemap/{2}</loc>\n\
+    <loc>{1}{2}</loc>\n\
     <lastmod>{0}</lastmod>\n\
   </sitemap>\n'.format(last_updated, root, file_name))
 
