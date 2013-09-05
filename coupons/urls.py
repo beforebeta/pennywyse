@@ -33,7 +33,7 @@ urlpatterns += patterns('web.views.main',
 
     url(r'^coupons/(?P<company_name>[a-z0-9-]+)/(?P<coupon_label>[a-z0-9-]+)/(?P<coupon_id>[\d]+)/$', 'open_coupon'),
     #do not kill old links:
-    url(r'^coupon/(?P<company_name>[a-z0-9-]+)/(?P<coupon_label>[a-z0-9-]+)/(?P<coupon_id>[\d]+)/$', 'open_coupon'),
+    url(r'^coupon/(?P<company_name>[a-z0-9-]+)/(?P<coupon_label>[a-z0-9-]+)/(?P<coupon_id>[\d]+)/$', 'redirect_to_open_coupon'),
 
 
     url(r'^categories/(?P<category_code>[A-z0-9-]+)/page/(?P<current_page>[\d]+)/$', 'category'),

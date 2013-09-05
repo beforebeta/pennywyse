@@ -157,6 +157,10 @@ def coupons_for_company(request, company_name, company_id=-1, current_page=1, ca
     return render_response("company.html", request, context)
 
 @ensure_csrf_cookie
+def redirect_to_open_coupon(request, company_name, coupon_label, coupon_id):
+  return HttpResponseRedirect('{0}/coupons/{1}/{2}/{3}'.format(settings.BASE_URL_NO_APPENDED_SLASH, company_name, coupon_label, coupon_id))
+
+@ensure_csrf_cookie
 def open_coupon(request, company_name, coupon_label, coupon_id):
     log_click_track(request)
 
