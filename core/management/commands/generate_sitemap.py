@@ -119,7 +119,7 @@ class Command(BaseCommand):
   <sitemap>\n\
     <loc>{1}sitemap/{2}</loc>\n\
     <lastmod>{0}</lastmod>\n\
-  </sitemap>\n'.format(last_updated, root, file_num))
+  </sitemap>\n'.format(last_updated, root, file_name))
 
         file.write('</sitemapindex>')
         file.close()
