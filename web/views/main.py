@@ -54,10 +54,12 @@ def set_meta_tags(subject, context):
     context["og_description"] = subject.og_description()
     context["og_image"] = subject.og_image()
     context["og_url"] = subject.og_url()
+    context["canonical_url"] = subject.og_url()
 
 def set_canonical_url(request, context):
     full_path = request.get_full_path()
     canonical_path = re.search('[A-z0-9\/\-]+', full_path).group(0)
+
     context["canonical_url"] = (settings.BASE_URL_NO_APPENDED_SLASH + canonical_path)
 
 
@@ -146,7 +148,8 @@ def coupons_for_company(request, company_name, company_id=-1, current_page=1, ca
         "coupon_categories"     : coupon_categories,
     }
     set_meta_tags(merchant, context)
-    set_canonical_url(request, context)
+    if current_page > 1:
+      context['canonical_url'] = "{0}pages/{1}/".format(merchant.og_url(), current_page)
 
     if len(all_categories) != len(selected_categories):
         context["comma_categories"] = ShortenedURLComponent.objects.shorten_url_component(comma_categories).shortened_url
@@ -178,7 +181,6 @@ def open_coupon(request, company_name, coupon_label, coupon_id):
         "path"          : encode_uri_component("%s://%s%s" % ("http", "www.pennywyse.com", request.path)),
     }
     set_meta_tags(coupon, context)
-    set_canonical_url(request, context)
 
     return render_response("open_coupon.html",request, context)
 
@@ -253,8 +255,9 @@ def category(request, category_code, current_page=1, category_ids=-1):
         "form_path"             : "/categories/{0}/".format(category.code),
     }
     set_meta_tags(category, context)
+    if current_page > 1:
+      context['canonical_url'] = "{0}pages/{1}/".format(category.og_url(), current_page)
     set_active_tab('category', context)
-    set_canonical_url(request, context)
 
     if len(all_categories) != len(selected_categories):
         context["comma_categories"] = ShortenedURLComponent.objects.shorten_url_component(comma_categories).shortened_url
