@@ -2,6 +2,7 @@ from django.views.decorators.http import require_POST
 from functools import wraps
 import json
 import urlparse
+import re
 from django.http import HttpResponse
 from common.url.tldextract import shorten_to_domain
 from core.models import Coupon, Merchant
@@ -42,12 +43,13 @@ def log_click_track(request):
         referer = utils.u_clean(request.META.get('HTTP_REFERER', 'unknown')[:255])
         clicked_link = request.path
         source_url_type='landing'
-        if '/categories/' in referer:
-            source_url_type = 'category'
-        elif '/coupons/' in referer:
-            source_url_type = 'company'
-        elif '/coupon/' in clicked_link:
+
+        if re.search('/coupons/[a-z0-9-]+/[a-z0-9-]+/[\d]+/', referer):
             source_url_type = 'coupon'
+        elif re.search('/coupons/[a-z0-9-]+/', referer):
+            source_url_type = 'company'
+        elif re.search('/categories/[A-z0-9-]+/', referer):
+            source_url_type = 'category'
 
         coupon=None
         merchant=None
@@ -127,12 +129,12 @@ def click_track(request, clicked_link_path=None):
             print_stack_trace()
 
         source_url_type='landing'
-        if '/categories/' in referer:
-            source_url_type = 'category'
-        elif '/coupons/' in referer:
-            source_url_type = 'company'
-        elif '/coupon/' in clicked_link:
+        if re.search('/coupons/[a-z0-9-]+/[a-z0-9-]+/[\d]+/', referer):
             source_url_type = 'coupon'
+        elif re.search('/coupons/[a-z0-9-]+/', referer):
+            source_url_type = 'company'
+        elif re.search('/categories/[A-z0-9-]+/', referer):
+            source_url_type = 'category'
 
         coupon=None
         merchant=None
