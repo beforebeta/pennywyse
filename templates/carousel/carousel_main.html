@@ -3,7 +3,9 @@
     <div class="coupon-border">
       <div class="coupon">
         {% with featured_coupons|random as coupon %}
-          <img class="merchantlogo" src="{{ coupon.coupon.merchant.get_image }}" alt="{{ coupon.coupon.merchant.name }}" />
+          <a href="{{ coupon.coupon.merchant.local_path }}">
+            <img class="merchantlogo" src="{{ coupon.coupon.merchant.get_image }}" alt="{{ coupon.coupon.merchant.name }}" />
+          </a>
           <div class='coupon-info'>
             <h1>{{ coupon.coupon.short_desc }} at {{ coupon.coupon.merchant.name }}</h1>
             <span class="description">{{ coupon.coupon.description }}</span>
