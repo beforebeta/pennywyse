@@ -7,7 +7,7 @@ from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 from django.template.defaultfilters import slugify
 from django.views.decorators.csrf import ensure_csrf_cookie
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 from core.models import Category, Coupon, Merchant, base_description, icon_url
 from core.util import encode_uri_component, print_stack_trace
 from tracking.views import log_click_track
@@ -158,7 +158,7 @@ def coupons_for_company(request, company_name, company_id=-1, current_page=1, ca
 
 @ensure_csrf_cookie
 def redirect_to_open_coupon(request, company_name, coupon_label, coupon_id):
-  return HttpResponseRedirect('{0}/coupons/{1}/{2}/{3}'.format(settings.BASE_URL_NO_APPENDED_SLASH, company_name, coupon_label, coupon_id))
+  return HttpResponsePermanentRedirect('{0}/coupons/{1}/{2}/{3}'.format(settings.BASE_URL_NO_APPENDED_SLASH, company_name, coupon_label, coupon_id))
 
 @ensure_csrf_cookie
 def open_coupon(request, company_name, coupon_label, coupon_id):
