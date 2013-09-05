@@ -50,7 +50,7 @@ class Command(BaseCommand):
     def generate_coupon_urls(self):
         self.stdout.write('Generating Coupon URLs...')
         file_num = 0
-        for c_ids in self.chunks([c.id for c in Coupon.objects.all()], 500000):
+        for c_ids in self.chunks([c.id for c in Coupon.objects.all()], 50000):
           file_num += 1
           f = open('/tmp/pennywyse_sitemap_coupon_urls.txt'.format(file_num), 'w')
           for c_id in c_ids:
