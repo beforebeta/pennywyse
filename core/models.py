@@ -248,7 +248,7 @@ class Merchant(models.Model):
         return featured
 
     def page_description(self):
-      return "{0} | Coupons for {1} | {2}".format(self.description, self.name, base_description)
+      return "Coupons for {0} | {1} | {2}".format(self.name, self.description, base_description)
 
     def page_title(self):
       return "Coupons for {0} | {1}".format(self.name, base_description)
