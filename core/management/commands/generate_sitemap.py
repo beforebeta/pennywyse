@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.core.files.base import ContentFile
 from django.core.management.base import BaseCommand
 from django.core.files.storage import default_storage
@@ -12,6 +13,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         self.cleanup()
+        settings.AWS_DEFAULT_ACL = 'public-read'
+
         self.generate_category_urls()
         self.generate_merchant_urls()
         coupon_file_count = self.generate_coupon_urls()
