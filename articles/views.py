@@ -66,8 +66,17 @@ def display_blog_page(request, tag=None, username=None, year=None, month=None, p
     except EmptyPage:
         raise Http404
 
-    context.update({'paginator': paginator,
-                    'page_obj': page})
+    context.update({
+        'paginator': paginator,
+        'page_obj': page,
+        "page_title" : 'PennyWyse Reccomendations',
+        "page_description" : "PennyWyse Blog: Reccomendations For You",
+        "og_title" : "PennyWyse Reccomendations",
+        "og_description" : "PennyWyse Blog: Reccomendations For You",
+        "og_image" : "http://pennywyse.com/static/img/fbog.png",
+        "og_url" : 'http://pennywyse.com/blog/',
+        "canonical_url" : 'http://pennywyse.com/blog/',
+    })
     variables = RequestContext(request, context)
     response = render_to_response(template, variables)
 
@@ -89,8 +98,16 @@ def display_article(request, year, month, day, slug, template='articles/article_
         'article': article,
         'disqus_forum': getattr(settings, 'DISQUS_FORUM_SHORTNAME', None),
         'merchants': article.merchants.all(),
-        'categories': article.categories.all()
+        'categories': article.categories.all(),
+        "page_title" : article.title,
+        "page_description" : "PennyWyse Blog: {0}".format(article.title),
+        "og_title" : article.title,
+        "og_description" : "PennyWyse Blog: {0}".format(article.title),
+        "og_image" : article.image_url,
+        "og_url" : article.get_absolute_url(),
+        "canonical_url" : article.get_absolute_url(),
     }
+
     build_base_context(request, context)
     set_active_tab('blog', context)
 
