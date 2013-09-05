@@ -94,6 +94,7 @@ def display_article(request, year, month, day, slug, template='articles/article_
     if article.login_required and not request.user.is_authenticated():
         return HttpResponseRedirect(reverse('auth_login') + '?next=' + request.path)
 
+    root = settings.BASE_URL_NO_APPENDED_SLASH
     context = {
         'article': article,
         'disqus_forum': getattr(settings, 'DISQUS_FORUM_SHORTNAME', None),
@@ -104,8 +105,8 @@ def display_article(request, year, month, day, slug, template='articles/article_
         "og_title" : article.title,
         "og_description" : "PennyWyse Blog: {0}".format(article.title),
         "og_image" : article.image_url,
-        "og_url" : article.get_absolute_url(),
-        "canonical_url" : article.get_absolute_url(),
+        "og_url" : (root + article.get_absolute_url()),
+        "canonical_url" : (root + article.get_absolute_url()),
     }
 
     build_base_context(request, context)
