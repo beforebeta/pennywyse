@@ -24,9 +24,9 @@ class Command(BaseCommand):
 
 
 def load_commissions():
-    # r = ReportingAPI()
-    # commissions = r.get_commissions()
-    commissions = json.loads(open("comm.js","r").read())
+    r = ReportingAPI()
+    commissions = r.get_commissions()
+    # commissions = json.loads(open("comm.js","r").read())
     # print json.dumps(commissions["skimlinksAccount"]["commissions"]["commission"], indent=4)
     Commission.objects.create_from_skimlinks_commissions(commissions)
 
