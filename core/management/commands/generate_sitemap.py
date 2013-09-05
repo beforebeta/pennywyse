@@ -14,10 +14,10 @@ class Command(BaseCommand):
         self.cleanup()
         self.generate_category_urls()
         self.generate_merchant_urls()
-        self.generate_coupon_urls()
+        coupon_file_count = self.generate_coupon_urls()
         self.build_sitemaps()
         # self.gzip_sitemaps() # commented out because of trouble getting S3 tp serve gziped files
-        self.build_sitemap_index()
+        self.build_sitemap_index(coupon_file_count)
         self.cleanup()
 
     def generate_category_urls(self):
@@ -44,13 +44,27 @@ class Command(BaseCommand):
               file.write('http://pennywyse.com/coupons/{0}/{1}/page/{2}/ changefreq=weekly priority=0.3\n'.format(merchant.name_slug, merchant.id, i))
         file.close()
 
+    def chunks(self, l, n):
+        return [l[i:i+n] for i in range(0, len(l), n)]
+
     def generate_coupon_urls(self):
         self.stdout.write('Generating Coupon URLs...')
-        file = open('/tmp/pennywyse_sitemap_coupon_urls.txt', 'w')
-        for coupon in Coupon.objects.all():
-            if coupon.merchant:
-                file.write('http://pennywyse.com{0} changefreq=weekly priority=0.7\n'.format(coupon.local_path()))
-        file.close()
+        file_num = 0
+        for c_ids in self.chunks([c.id for c in Coupon.objects.all()], 500000):
+          file_num += 1
+          f = open('/tmp/pennywyse_sitemap_coupon_urls.txt'.format(file_num), 'w')
+          for c_id in c_ids:
+              coupon = Coupon.objects.get(id=c_id)
+              if coupon.merchant:
+                  f.write('http://pennywyse.com{0} changefreq=weekly priority=0.7\n'.format(coupon.local_path()))
+          f.close()
+
+      #build coupon in one place and move them to their own unique location
+          self.stdout.write('Building coupon sitemap {0}...\n\n'.format(file_num))
+          call(['./vendor/sitemap_gen/sitemap_gen.py', '--config=sitemap/configs/coupon.xml'])
+          call(['mv', "./sitemap/coupon_sitemap.xml", "./sitemap/coupon_sitemap_{0}.xml".format(file_num)])
+
+        return file_num
 
     def build_sitemaps(self):
         self.stdout.write('Building base sitemap...\n\n')
@@ -59,8 +73,6 @@ class Command(BaseCommand):
         call(['./vendor/sitemap_gen/sitemap_gen.py', '--config=sitemap/configs/category.xml'])
         self.stdout.write('Building merchant sitemap...\n\n')
         call(['./vendor/sitemap_gen/sitemap_gen.py', '--config=sitemap/configs/merchant.xml'])
-        self.stdout.write('Building coupon sitemap...\n\n')
-        call(['./vendor/sitemap_gen/sitemap_gen.py', '--config=sitemap/configs/coupon.xml'])
 
     def gzip_sitemaps(self):
         self.stdout.write('gzipping...\n\n')
@@ -71,13 +83,13 @@ class Command(BaseCommand):
         call(['gzip', '-f', 'sitemap/merchant_sitemap.xml'])
 
 
-    def build_sitemap_index(self):
+    def build_sitemap_index(self, coupon_file_count):
         self.stdout.write('Uploading sitemaps to S3...\n\n')
         base_url = default_storage.save('base_sitemap.xml', ContentFile(open('sitemap/base_sitemap.xml').read()))
         category_url = default_storage.save('category_sitemap.xml', ContentFile(open('sitemap/category_sitemap.xml').read()))
-        coupon_url = default_storage.save('coupon_sitemap.xml', ContentFile(open('sitemap/coupon_sitemap.xml').read()))
         merchant_url = default_storage.save('merchant_sitemap.xml', ContentFile(open('sitemap/merchant_sitemap.xml').read()))
         last_updated = datetime.datetime.now().strftime('%Y-%m-%d')
+        root = 'http://s3.amazonaws.com/pennywyse/'
 
 
         self.stdout.write('Updating the sitemap index...\n\n')
@@ -96,12 +108,20 @@ class Command(BaseCommand):
   <sitemap>\n\
     <loc>{1}{4}</loc>\n\
     <lastmod>{0}</lastmod>\n\
-  </sitemap>\n\
+  </sitemap>\n'.format(last_updated, root, base_url, category_url, merchant_url))
+
+
+# Write each coupon file
+        for file_num in range(1, (coupon_file_count + 1)):
+          file_name = "coupon_sitemap_{0}.xml".format(file_num)
+          coupon_url = default_storage.save(file_name, ContentFile(open('sitemap/{0}'.format(file_name)).read()))
+          file.write('\
   <sitemap>\n\
-    <loc>{1}{5}</loc>\n\
+    <loc>{1}sitemap/{2}</loc>\n\
     <lastmod>{0}</lastmod>\n\
-  </sitemap>\n\
-</sitemapindex>'.format(last_updated, 'http://s3.amazonaws.com/pennywyse/', base_url, category_url, coupon_url, merchant_url))
+  </sitemap>\n'.format(last_updated, root, file_num))
+
+        file.write('</sitemapindex>')
         file.close()
 
         self.stdout.write('Uploading the sitemap index to S3...\n\n')
@@ -124,6 +144,3 @@ class Command(BaseCommand):
         self.remove_sitemap('coupon_sitemap.xml')
         self.remove_sitemap('merchant_sitemap.xml')
         self.remove_sitemap('sitemap.xml')
-
-        if Coupon.objects.count() > 50000:
-            self.stdout.write('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n MORE THAN 50,000 COUPONS\nSplit Sitemap!!!!!!!!!!\n!!!!!!!!!!!!!!!!!!!!!!!!!\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
