@@ -29,5 +29,6 @@ def load_commissions():
     # commissions = json.loads(open("comm.js","r").read())
     # print json.dumps(commissions["skimlinksAccount"]["commissions"]["commission"], indent=4)
     Commission.objects.create_from_skimlinks_commissions(commissions)
+    print "Commissions Count", Commission.objects.all().count()
 
 
