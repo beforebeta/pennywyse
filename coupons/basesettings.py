@@ -106,7 +106,8 @@ TEMPLATE_LOADERS = (
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     "web.context_processors.base",
-    "django.contrib.auth.context_processors.auth"
+    "django.contrib.auth.context_processors.auth",
+    "django.core.context_processors.request",
     )
 
 #PREPEND_WWW=True
