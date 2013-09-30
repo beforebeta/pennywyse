@@ -7,7 +7,14 @@
       <div class='catch-phrase'><span>Hand Verified Coupon Codes</span></div>
     </div>
     <form action="/search/" id="search_form">
+      {% if ACQUISITION_SOURCE_LOGO_URL %}
+      <div class="large-2 columns">
+        <img src="{{ ACQUISITION_SOURCE_LOGO_URL }}">
+      </div>
+      <div class="large-5 columns">
+      {% else %}
       <div class="large-7 columns">
+      {% endif %}
         <span class="search-box">
           <input name="q" type="text" class="input field primary" placeholder="Search over 50,000+ coupons from 6,000+ stores" style="background:none repeat scroll 0 0 #FFFFFF;" {% block search_query %}{% endblock %}>
           <a href="#" class="icon clear ir" id="clear-sb">Clear</a>
