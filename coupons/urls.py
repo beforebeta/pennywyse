@@ -39,6 +39,8 @@ urlpatterns += patterns('web.views.main',
     url(r'^categories/(?P<category_code>[A-z0-9-]+)/page/(?P<current_page>[\d]+)/$', 'category'),
     url(r'^categories/(?P<category_code>[A-z0-9-]+)/$', 'category'),
     url(r'^categories/$', 'categories'),
+    url(r'^stores/(?P<page>[A-Za-z]+)/$', 'stores'),
+    url(r'^stores/$', 'stores'),
 
     url(r'^blog/', include('articles.urls')),
     url(r'^robots\.txt$', 'robots_txt'),

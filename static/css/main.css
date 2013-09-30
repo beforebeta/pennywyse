@@ -1776,3 +1776,33 @@ span.arrow-down {
 li.blog-teaser {
   margin-bottom: 20px;
 }
+.stores-pagination {
+	list-style-type: none;
+	line-height: 1em;
+	height: 1em;
+}
+.stores-pagination li {
+	display: inline-block;
+	margin-left: 5px;
+	margin-right: 5px;
+	width:20px;
+	height:20px;
+}
+.stores-pagination li:hover {
+	border-radius: 10px; 
+	-moz-border-radius: 10px; 
+	-webkit-border-radius: 10px; 
+	border: 0px solid #F0E9E9;
+	background-color: #F0E9E9;	
+}
+.active-page {
+	border-radius: 10px; 
+	-moz-border-radius: 10px; 
+	-webkit-border-radius: 10px; 
+	border: 0px solid #CFCFCF;
+	background-color: #CFCFCF;	
+}
+.last-page {
+	width: auto !important;
+	height: auto !important;
+}

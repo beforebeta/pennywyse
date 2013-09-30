@@ -63,7 +63,9 @@
       {% include 'layouts/_header.html' %}
       {% block header_block %}
       {% endblock %}
-      {% include 'layouts/_newsletter_subscription_bar.html' %}
+      {% block newsletter_subscription %}
+      		{% include 'layouts/_newsletter_subscription_bar.html' %}
+      {% endblock %}
     </header>
 
     {% block main %}
@@ -73,28 +75,30 @@
     {% endblock %}
 
     <footer role="contentinfo">
-        <div class="stripe-regular">
-            <div class="row">
-                <div class="column">
-                    <h2>Popular Companies</h2>
-                </div>
-            </div>
-            <div class="row collapse">
-                <div class="column">
-                    <div class="popular-companies flexslider">
-                        <ul class="rr slides">
-                            {% for pop_company in pop_companies %}
-                            <li style="margin: 10px;">
-                                <a href="/coupons/{{ pop_company.name_slug }}/{{ pop_company.id }}" class="wrapper-5 small" style="display:table-cell;vertical-align:middle;height:114px;width:114px;text-align: center;">
-                                  <img src="{{ pop_company.get_image }}" alt="{{ pop_company.name }}" style="max-height:88px;max-width:88px;">
-                                </a>
-                            </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
+        {% block popular_companies %}
+	        <div class="stripe-regular">
+	            <div class="row">
+	                <div class="column">
+	                    <h2>Popular Companies</h2>
+	                </div>
+	            </div>
+	            <div class="row collapse">
+	                <div class="column">
+	                    <div class="popular-companies flexslider">
+	                        <ul class="rr slides">
+	                            {% for pop_company in pop_companies %}
+	                            <li style="margin: 10px;">
+	                                <a href="/coupons/{{ pop_company.name_slug }}/{{ pop_company.id }}" class="wrapper-5 small" style="display:table-cell;vertical-align:middle;height:114px;width:114px;text-align: center;">
+	                                  <img src="{{ pop_company.get_image }}" alt="{{ pop_company.name }}" style="max-height:88px;max-width:88px;">
+	                                </a>
+	                            </li>
+	                            {% endfor %}
+	                        </ul>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+        {% endblock %}
 
         <div class="stripe-dark pre-footer-wrap">
             <div class="row">

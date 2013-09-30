@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block fbtags %}
+    <meta property="og:image" content="{{ BASE_URL_NO_APPENDED_SLASH }}{{ merchant.get_image }}"/>
+    <meta property="og:title" content="Hand Verified Coupon Codes for {{ merchant.name }} from PennyWyse"/>
+    <meta property="og:url" content="{{ CURRENT_URL }}"/>
+{% endblock %}
+
+{% block header_block %}
+  <h1 class="text-center">Stores</h1>
+{% endblock %} {# header #}
+
+{% block main %}
+<div class="stripe-regular items-carousel-wrap">
+              <div class="row collapse">
+                <div class="column">
+                  <div class="items-carousel flexslider" >
+                    <ul class="rr slides wrapper-3 ">
+						<div style="float:left;">
+							<form action="" method="get" name="categories_filter">
+								<select id="categories_filter" name="category" style="width:auto !important;margin-right:20px;">
+		                			<option value="">Categories</option>
+		                			{% for category in categories %}
+		                				<option value="{{category.id}}">{{category.name}}</option>
+		                			{% endfor %}
+		                		</select>
+	                    	</form>
+                    	</div>
+                    	<div style="float:left !important;">
+                    		<ul class="stores-pagination">
+                    			{% if pagination.previous_page %}
+                    				<li style="text-align: center;" class="last-page">
+				          				<a href="/stores/{{ pagination.previous_page }}/">< Previous</a>
+				          			</li>
+                    			{% endif %}
+				          		{% if pagination.previous_pages %}
+				          			<select style="width:auto !important;" class="side-pagination">
+				          				<option>...</option>
+				          				{% for page in pagination.previous_pages %}
+				          					<option>{{page}}</option>
+				          				{% endfor %}
+				          			</select>
+				          		{% endif %}
+				          		{% for page in pagination.pages %}
+				          			<li style="text-align: center;" {% if pagination.page = page %}class="active-page"{% endif %}>
+				          				<a href="/stores/{{ page }}/">{{ page }}</a>
+				          			</li>
+				          		{% endfor %}
+				          		{% if pagination.next_pages %}
+				          			<select style="width:auto !important;" class="side-pagination">
+				          				<option>...</option>
+				          				{% for page in pagination.next_pages %}
+				          					<option>{{page}}</option>
+				          				{% endfor %}
+				          			</select>
+				          		{% endif %}
+				          		{% if pagination.next_page %}
+                    				<li style="text-align: center;" class="last-page">
+				          				<a href="/stores/{{ pagination.next_page }}/">Next ></a>
+				          			</li>
+                    			{% endif %}
+			        		</ul>
+                    	</div>
+                    	<br clear="both">
+                        {% for store in stores %}
+                        <li>
+                            <div class="store-item" style="margin:15px;" data-rid="{{ coupon.ref_id }}">
+                                <div>
+                                    <a href="/coupons/{{ store.name_slug }}/{{ store.id }}/">
+                                        <figure class="prodimg">
+                                            <img src="http://pennywyse.com/{{ store.get_image }}" alt="{{ store.description }}" style="display:normal">
+                                        </figure>
+                                    </a>
+                                </div>
+                            </div>
+                        </li>
+                        {% endfor %}
+
+                    </ul>
+                  </div>
+                  <div class="items-carousel flexslider" >
+			         	<ul class="rr pagination">
+			          		{% for page in pages %}
+			          			<li style="width: 55px;text-align: center;" {% if current_page = page %}class="current"{% endif %}>
+			          				<a style="padding:10px 0px;" href="/stores/{{ page }}/">{{ page }}</a>
+			          			</li>
+			          		{% endfor %}
+			        	</ul>
+			        </div>
+                </div>
+              </div>
+              
+            </div>
+{% endblock %} {# main #}
+{% block popular_companies %}{% endblock %}
+{% block newsletter_subscription %}{% endblock %}
+{% block end_of_body %}
+<script type="text/javascript">
+    try{
+        mixpanel.track("Stores Index Page Opened",{
+            "utm_source"    : "{{ visitor.acquisition_source }}",
+            "utm_medium"    : "{{ visitor.acquisition_medium }}",
+            "utm_term"      : "{{ visitor.acquisition_term }}",
+            "utm_content"   : "{{ visitor.acquisition_content }}",
+            "utm_campaign"  : "{{ visitor.acquisition_campaign }}"
+        });
+    }catch(e){}
+</script>
+{% endblock %}

@@ -1,5 +1,6 @@
 # Create your views here.
 import math, random, re
+import string
 from django.conf import settings
 from django.contrib.sites.models import get_current_site
 from django.db.models.query_utils import Q
@@ -10,10 +11,10 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 from core.models import Category, Coupon, Merchant, base_description, icon_url
 from core.util import encode_uri_component, print_stack_trace
+from core.util.pagination import AlphabeticalPagination
 from tracking.views import log_click_track
 from web.models import FeaturedCoupon, NewCoupon, PopularCoupon, ShortenedURLComponent
 from django.core.paginator import Paginator
-
 
 def build_base_context(request, context):
     context["pop_companies"] = Merchant.objects.get_popular_companies(21)
@@ -39,13 +40,15 @@ def render_response(template_file, request, context={}):
 
 def set_active_tab(active_tab, context):
     if active_tab == "category":
-      context['category_tab_class'] = 'active'
+        context['category_tab_class'] = 'active'
     elif active_tab == "company":
-      context['company_tab_class'] = 'active'
+        context['company_tab_class'] = 'active'
     elif active_tab == "blog":
-      context['blog_tab_class'] = 'active'
+        context['blog_tab_class'] = 'active'
+    elif active_tab == "stores":
+        context['stores_tab_class'] = 'active'
     else:
-      context['coupon_tab_class'] = 'active'
+        context['coupon_tab_class'] = 'active'
 
 def set_meta_tags(subject, context):
     context["page_title"] = subject.page_title()
@@ -277,3 +280,26 @@ Sitemap: http://s3.amazonaws.com/pennywyse/sitemap.xml
 
 def sitemap(request):
   return HttpResponseRedirect('http://s3.amazonaws.com/pennywyse/sitemap.xml')
+
+@ensure_csrf_cookie
+def stores(request, page='A'):
+    description = "Stores List | {0}".format(base_description)
+    category = request.GET.get('category', None)
+    filters = {'name__istartswith': page}
+    if category:
+        merchant_ids = Coupon.objects.filter(categories=category).only('merchant__id')
+        filters['id__in'] = merchant_ids
+    stores = Merchant.objects.filter(**filters)
+    context={
+        "stores": stores,
+        "categories": Category.objects.filter(parent=None).order_by('name'),
+        "page_description": description,
+        "page_title": description,
+        "pagination": AlphabeticalPagination(page),
+        "og_title": "Stores List",
+        "og_description": description,
+        "og_image": icon_url,
+        "og_url": "{0}/categories/".format(settings.BASE_URL_NO_APPENDED_SLASH),
+    }
+    set_active_tab('stores', context)
+    return render_response("stores.html", request, context)

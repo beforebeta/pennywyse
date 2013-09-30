@@ -204,4 +204,14 @@ $(function() {
         }catch(e){}
         return true;
     });
+    
+    $('#categories_filter').change(function(){
+    	$('form[name=categories_filter]').submit();
+    })
+    $('.side-pagination').change(function(){
+    	var page = $('.side-pagination').find('option:selected').val();
+    	if (page != '...') {
+    		location.href = '/stores/' + page + '/';
+    	}
+    });
 });
