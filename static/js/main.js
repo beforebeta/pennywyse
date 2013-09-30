@@ -206,12 +206,19 @@ $(function() {
     });
     
     $('#categories_filter').change(function(){
-    	$('form[name=categories_filter]').submit();
+  		$('form[name=categories_filter]').submit();
+
     })
     $('.side-pagination').change(function(){
     	var page = $('.side-pagination').find('option:selected').val();
+    	var category = $('#categories_filter').find('option:selected').val()
+    	var redirection_url = '';
     	if (page != '...') {
-    		location.href = '/stores/' + page + '/';
+    		redirection_url = '/stores/' + page + '/';
     	}
+    	if (category) {
+    		redirection_url += '?category=' + category;
+    	}
+    	location.href = redirection_url;
     });
 });

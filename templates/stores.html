@@ -17,25 +17,25 @@
                 <div class="column">
                   <div class="items-carousel flexslider" >
                     <ul class="rr slides wrapper-3 ">
-						<div style="float:left;">
+						<div class="top-container">
 							<form action="" method="get" name="categories_filter">
-								<select id="categories_filter" name="category" style="width:auto !important;margin-right:20px;">
+								<select id="categories_filter" name="category">
 		                			<option value="">Categories</option>
-		                			{% for category in categories %}
-		                				<option value="{{category.id}}">{{category.name}}</option>
+		                			{% for cat in categories %}
+		                				<option {% if cat.id == category %}selected{% endif %} value="{{cat.id}}">{{cat.name}}</option>
 		                			{% endfor %}
 		                		</select>
 	                    	</form>
                     	</div>
-                    	<div style="float:left !important;">
+                    	<div class="top-container">
                     		<ul class="stores-pagination">
                     			{% if pagination.previous_page %}
-                    				<li style="text-align: center;" class="last-page">
-				          				<a href="/stores/{{ pagination.previous_page }}/">< Previous</a>
+                    				<li class="last-page">
+				          				<a href="/stores/{{ pagination.previous_page }}/{% if category %}?category={{category}}{% endif %}">< Previous</a>
 				          			</li>
                     			{% endif %}
 				          		{% if pagination.previous_pages %}
-				          			<select style="width:auto !important;" class="side-pagination">
+				          			<select class="side-pagination">
 				          				<option>...</option>
 				          				{% for page in pagination.previous_pages %}
 				          					<option>{{page}}</option>
@@ -43,12 +43,12 @@
 				          			</select>
 				          		{% endif %}
 				          		{% for page in pagination.pages %}
-				          			<li style="text-align: center;" {% if pagination.page = page %}class="active-page"{% endif %}>
-				          				<a href="/stores/{{ page }}/">{{ page }}</a>
+				          			<li {% if pagination.page = page %}class="active-page"{% endif %}>
+				          				<a href="/stores/{{ page }}/{% if category %}?category={{category}}{% endif %}">{{ page }}</a>
 				          			</li>
 				          		{% endfor %}
 				          		{% if pagination.next_pages %}
-				          			<select style="width:auto !important;" class="side-pagination">
+				          			<select class="side-pagination">
 				          				<option>...</option>
 				          				{% for page in pagination.next_pages %}
 				          					<option>{{page}}</option>
@@ -56,8 +56,8 @@
 				          			</select>
 				          		{% endif %}
 				          		{% if pagination.next_page %}
-                    				<li style="text-align: center;" class="last-page">
-				          				<a href="/stores/{{ pagination.next_page }}/">Next ></a>
+                    				<li class="last-page">
+				          				<a href="/stores/{{ pagination.next_page }}/{% if category %}?category={{category}}{% endif %}">Next ></a>
 				          			</li>
                     			{% endif %}
 			        		</ul>
@@ -65,7 +65,7 @@
                     	<br clear="both">
                         {% for store in stores %}
                         <li>
-                            <div class="store-item" style="margin:15px;" data-rid="{{ coupon.ref_id }}">
+                            <div class="store-item" data-rid="{{ coupon.ref_id }}">
                                 <div>
                                     <a href="/coupons/{{ store.name_slug }}/{{ store.id }}/">
                                         <figure class="prodimg">
@@ -79,15 +79,6 @@
 
                     </ul>
                   </div>
-                  <div class="items-carousel flexslider" >
-			         	<ul class="rr pagination">
-			          		{% for page in pages %}
-			          			<li style="width: 55px;text-align: center;" {% if current_page = page %}class="current"{% endif %}>
-			          				<a style="padding:10px 0px;" href="/stores/{{ page }}/">{{ page }}</a>
-			          			</li>
-			          		{% endfor %}
-			        	</ul>
-			        </div>
                 </div>
               </div>
               

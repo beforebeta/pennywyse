@@ -293,6 +293,7 @@ def stores(request, page='A'):
     context={
         "stores": stores,
         "categories": Category.objects.filter(parent=None).order_by('name'),
+        "category": int(category) if category else None,
         "page_description": description,
         "page_title": description,
         "pagination": AlphabeticalPagination(page),

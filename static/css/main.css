@@ -1782,6 +1782,7 @@ li.blog-teaser {
 	height: 1em;
 }
 .stores-pagination li {
+	text-align: center;
 	display: inline-block;
 	margin-left: 5px;
 	margin-right: 5px;
@@ -1805,4 +1806,17 @@ li.blog-teaser {
 .last-page {
 	width: auto !important;
 	height: auto !important;
+}
+#categories-filter {
+	width:auto !important;
+	margin-right:20px;
+}
+.side-pagination {
+	width:auto !important;
+}
+.store-item { 
+	margin:15px;
+}
+.top-container {
+	float:left;
 }
