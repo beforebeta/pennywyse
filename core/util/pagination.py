@@ -1,15 +1,23 @@
 import string
 
+# number of pages in one row of pagination
 ROW_LIMIT = 12
-SIDE_LIMIT = round(ROW_LIMIT, 0) - 1
+
+# number of pages for both sides near active page
+# current value keeps active page in the middle of the pagination row
+SIDE_LIMIT = round(ROW_LIMIT/2, 0) - 1
 
 class AlphabeticalPagination(object):
+    """
+    Basic implementation of alphabetical pagination.
+    Calculates pages beyond row limit that can be displayed for back and forth navigation.
+    """
+    
     all_pages = list(string.uppercase)
     
     def __init__(self, page):
         self.page = page
     
-  
     @property
     def page_index(self):
         return self.all_pages.index(self.page)
@@ -52,12 +60,16 @@ class AlphabeticalPagination(object):
     
     @property
     def previous_pages(self):
+        """Pages beyond row limit, can be displayed to navigate back from active page."""
+        
         if self.start > 0:
             return self.all_pages[0:self.start]
         return
     
     @property
     def next_pages(self):
+        """Pages beyond row limit, can be displayed to navigate forward from active page."""
+        
         if len(self.all_pages) - self.end > 0:
             return self.all_pages[self.end:]
         return

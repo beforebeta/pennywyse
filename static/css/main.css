@@ -1828,3 +1828,17 @@ li.blog-teaser {
 	min-width: 960px !important;
 	width: 960px !important;
 }
+.pop-companies li{
+	margin: 10px;
+}
+.pop-companies a{
+	display:table-cell;
+	vertical-align:middle;
+	height:114px;
+	width:114px;
+	text-align: center;
+}
+.pop-companies img{
+	max-height:88px;
+	max-width:88px;
+}

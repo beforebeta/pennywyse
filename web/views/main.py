@@ -283,7 +283,9 @@ def sitemap(request):
 
 @ensure_csrf_cookie
 def stores(request, page='A'):
-    description = "Stores List | {0}".format(base_description)
+    """List of stores, ordered by alphabet."""
+    
+    description = u"Stores List | {0}".format(base_description)
     category = request.GET.get('category', None)
     filters = {'name__istartswith': page}
     if category:

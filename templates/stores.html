@@ -31,7 +31,7 @@
                     		<ul class="stores-pagination">
                     			{% if pagination.previous_page %}
                     				<li class="last-page">
-				          				<a href="/stores/{{ pagination.previous_page }}/{% if category %}?category={{category}}{% endif %}">< Previous</a>
+				          				<a href="{% url 'web.views.main.stores' pagination.previous_page %}{% if category %}?category={{category}}{% endif %}">< Previous</a>
 				          			</li>
                     			{% endif %}
 				          		{% if pagination.previous_pages %}
@@ -44,7 +44,7 @@
 				          		{% endif %}
 				          		{% for page in pagination.pages %}
 				          			<li {% if pagination.page = page %}class="active-page"{% endif %}>
-				          				<a href="/stores/{{ page }}/{% if category %}?category={{category}}{% endif %}">{{ page }}</a>
+				          				<a href="{% url 'web.views.main.stores' page %}{% if category %}?category={{category}}{% endif %}">{{ page }}</a>
 				          			</li>
 				          		{% endfor %}
 				          		{% if pagination.next_pages %}
@@ -57,7 +57,7 @@
 				          		{% endif %}
 				          		{% if pagination.next_page %}
                     				<li class="last-page">
-				          				<a href="/stores/{{ pagination.next_page }}/{% if category %}?category={{category}}{% endif %}">Next ></a>
+				          				<a href="{% url 'web.views.main.stores' pagination.next_page %}{% if category %}?category={{category}}{% endif %}">Next ></a>
 				          			</li>
                     			{% endif %}
 			        		</ul>
@@ -67,9 +67,9 @@
 	                        <li>
 	                            <div class="store-item" data-rid="{{ coupon.ref_id }}">
 	                                <div>
-	                                    <a href="/coupons/{{ store.name_slug }}/{{ store.id }}/">
+	                                    <a href="{% url 'web.views.main.coupons_for_company' store.name_slug store.id %}">
 	                                        <figure class="prodimg">
-	                                            <img src="http://pennywyse.com/{{ store.get_image }}" alt="{{ store.description }}" style="display:normal">
+	                                            <img src="{{ store.get_image }}" alt="{{ store.description }}" style="display:normal">
 	                                        </figure>
 	                                    </a>
 	                                </div>
