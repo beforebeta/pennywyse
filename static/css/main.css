@@ -1820,3 +1820,11 @@ li.blog-teaser {
 .top-container {
 	float:left;
 }
+.stores-separator {
+	clear:both;
+	width:100%;
+}
+.stores-container {
+	min-width: 960px !important;
+	width: 960px !important;
+}

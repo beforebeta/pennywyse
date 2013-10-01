@@ -13,7 +13,7 @@
 
 {% block main %}
 <div class="stripe-regular items-carousel-wrap">
-              <div class="row collapse">
+              <div class="row collapse stores-container">
                 <div class="column">
                   <div class="items-carousel flexslider" >
                     <ul class="rr slides wrapper-3 ">
@@ -64,17 +64,20 @@
                     	</div>
                     	<br clear="both">
                         {% for store in stores %}
-                        <li>
-                            <div class="store-item" data-rid="{{ coupon.ref_id }}">
-                                <div>
-                                    <a href="/coupons/{{ store.name_slug }}/{{ store.id }}/">
-                                        <figure class="prodimg">
-                                            <img src="http://pennywyse.com/{{ store.get_image }}" alt="{{ store.description }}" style="display:normal">
-                                        </figure>
-                                    </a>
-                                </div>
-                            </div>
-                        </li>
+	                        <li>
+	                            <div class="store-item" data-rid="{{ coupon.ref_id }}">
+	                                <div>
+	                                    <a href="/coupons/{{ store.name_slug }}/{{ store.id }}/">
+	                                        <figure class="prodimg">
+	                                            <img src="http://pennywyse.com/{{ store.get_image }}" alt="{{ store.description }}" style="display:normal">
+	                                        </figure>
+	                                    </a>
+	                                </div>
+	                            </div>
+	                        </li>
+                        	{% if forloop.counter|divisibleby:"6" %}
+                        		<hr class="stores-separator">
+                       		{% endif %}
                         {% endfor %}
 
                     </ul>
