@@ -29,37 +29,11 @@
                     	</div>
                     	<div class="top-container">
                     		<ul class="stores-pagination">
-                    			{% if pagination.previous_page %}
-                    				<li class="last-page">
-				          				<a href="{% url 'web.views.main.stores' pagination.previous_page %}{% if category %}?category={{category}}{% endif %}">< Previous</a>
-				          			</li>
-                    			{% endif %}
-				          		{% if pagination.previous_pages %}
-				          			<select class="side-pagination">
-				          				<option>...</option>
-				          				{% for page in pagination.previous_pages %}
-				          					<option>{{page}}</option>
-				          				{% endfor %}
-				          			</select>
-				          		{% endif %}
-				          		{% for page in pagination.pages %}
+                    			{% for page in pagination.all_pages %}
 				          			<li {% if pagination.page = page %}class="active-page"{% endif %}>
 				          				<a href="{% url 'web.views.main.stores' page %}{% if category %}?category={{category}}{% endif %}">{{ page }}</a>
 				          			</li>
 				          		{% endfor %}
-				          		{% if pagination.next_pages %}
-				          			<select class="side-pagination">
-				          				<option>...</option>
-				          				{% for page in pagination.next_pages %}
-				          					<option>{{page}}</option>
-				          				{% endfor %}
-				          			</select>
-				          		{% endif %}
-				          		{% if pagination.next_page %}
-                    				<li class="last-page">
-				          				<a href="{% url 'web.views.main.stores' pagination.next_page %}{% if category %}?category={{category}}{% endif %}">Next ></a>
-				          			</li>
-                    			{% endif %}
 			        		</ul>
                     	</div>
                     	<br clear="both">
@@ -68,10 +42,11 @@
 	                            <div class="store-item" data-rid="{{ coupon.ref_id }}">
 	                                <div>
 	                                    <a href="{% url 'web.views.main.coupons_for_company' store.name_slug store.id %}">
-	                                        <figure class="prodimg">
-	                                            <img src="{{ store.get_image }}" alt="{{ store.description }}" style="display:normal">
+	                                        <figure class="store-image">
+	                                            <img src="{{ store.get_image }}" alt="{{ store.name }} Coupons" >
 	                                        </figure>
 	                                    </a>
+	                                	<a href="{% url 'web.views.main.coupons_for_company' store.name_slug store.id %}">{{store.name}}</a>
 	                                </div>
 	                            </div>
 	                        </li>

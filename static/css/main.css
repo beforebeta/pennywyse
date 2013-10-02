@@ -1784,8 +1784,6 @@ li.blog-teaser {
 .stores-pagination li {
 	text-align: center;
 	display: inline-block;
-	margin-left: 5px;
-	margin-right: 5px;
 	width:20px;
 	height:20px;
 }
@@ -1815,10 +1813,20 @@ li.blog-teaser {
 	width:auto !important;
 }
 .store-item { 
-	margin:15px;
+	margin:10px;
+	width: 120px !important;
+}
+.store-item a{
+	font-size: 0.75em;
+	font-weight: bold;
+}
+.store-item a:hover {
+	text-decoration: underline;
 }
 .top-container {
 	float:left;
+	height:1em !important;
+	line-height:1em !important;
 }
 .stores-separator {
 	clear:both;
@@ -1841,4 +1849,15 @@ li.blog-teaser {
 .pop-companies img{
 	max-height:88px;
 	max-width:88px;
+}
+.store-image {
+    height: 60px;
+    text-align: center;
+}
+.store-image img{
+	height: auto;
+	weidth: auto;
+	max-height: 60px;
+	max-width: 120px;
+	display:normal;
 }
