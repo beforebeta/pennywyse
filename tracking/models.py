@@ -24,6 +24,20 @@ CACHE_TYPE = getattr(settings, 'GEOIP_CACHE_TYPE', 4)
 log = logging.getLogger('tracking.models')
 from picklefield.fields import PickledObjectField
 
+
+class AcquisitionSource(models.Model):
+    tag = models.CharField(max_length=255, unique=True)
+    logo_url = models.CharField(max_length=255)
+
+    def __unicode__(self):
+        return self.tag
+
+    class Meta:
+        ordering = ('tag',)
+        verbose_name = _('Acquisition source')
+        verbose_name_plural = _('Acquisition sources')
+
+
 class VisitorManager(models.Manager):
     def active(self, timeout=None):
         """
@@ -37,6 +51,7 @@ class VisitorManager(models.Manager):
         cutoff = now - timedelta(minutes=timeout)
 
         return self.get_query_set().filter(last_update__gte=cutoff)
+
 
 class Visitor(models.Model):
     session_key         = models.CharField(max_length=40)
