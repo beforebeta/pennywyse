@@ -1,4 +1,5 @@
 import os, datetime
+from celery.schedules import crontab
 import djcelery
 djcelery.setup_loader()
 
@@ -237,3 +238,9 @@ DOWNLOADER_CACHE_LOCATION = 'tmp/embedly'
 
 # Celery settings
 BROKER_URL = 'amqp://pennywyse:pennywyse@localhost:5672/'
+CELERYBEAT_SCHEDULE = {
+    'daily-coupons-update': {
+        'task': 'tasks.load_coupons',
+        'schedule': crontab(hour=23),
+    },
+}
