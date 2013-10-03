@@ -38,15 +38,17 @@
                     	</div>
                     	<br clear="both">
                         {% for store in stores %}
-	                        <li>
-	                            <div class="store-item" data-rid="{{ coupon.ref_id }}">
+	                        <li class="store-container">
+	                            <div class="store-item" data-rid="{{ store.id }}">
 	                                <div>
 	                                    <a href="{% url 'web.views.main.coupons_for_company' store.name_slug store.id %}">
 	                                        <figure class="store-image">
 	                                            <img src="{{ store.get_image }}" alt="{{ store.name }} Coupons" >
 	                                        </figure>
 	                                    </a>
-	                                	<a href="{% url 'web.views.main.coupons_for_company' store.name_slug store.id %}">{{store.name}}</a>
+	                                	<div class="store-link">
+	                                		<a href="{% url 'web.views.main.coupons_for_company' store.name_slug store.id %}">{{store.name}}</a>
+	                                	</div>
 	                                </div>
 	                            </div>
 	                        </li>

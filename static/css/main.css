@@ -1778,14 +1778,14 @@ li.blog-teaser {
 }
 .stores-pagination {
 	list-style-type: none;
-	line-height: 1em;
-	height: 1em;
+	line-height: 21px;
+	height: 21px;
 }
 .stores-pagination li {
 	text-align: center;
 	display: inline-block;
-	width:20px;
-	height:20px;
+	width:21px;
+	height:21px;
 }
 .stores-pagination li:hover {
 	border-radius: 10px; 
@@ -1825,8 +1825,8 @@ li.blog-teaser {
 }
 .top-container {
 	float:left;
-	height:1em !important;
-	line-height:1em !important;
+	height:21px !important;
+	line-height:21px !important;
 }
 .stores-separator {
 	clear:both;
@@ -1860,4 +1860,13 @@ li.blog-teaser {
 	max-height: 60px;
 	max-width: 120px;
 	display:normal;
+}
+.store-container {
+	margin-right:13px;
+}
+.store-link {
+	width:120px !important;
+	text-overflow:ellipsis;
+	overflow:hidden;
+	white-space: nowrap;
 }
