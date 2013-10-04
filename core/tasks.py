@@ -1,6 +1,11 @@
+from django.core.mail import send_mail
 from celery import task
 from core.management.commands.fmtcload import load
 
-@task()
+
+@task(max_retries=1)
 def load_coupons():
-    load()
+    try:
+        load()
+    except Exception as e:
+        load_coupons.retry(exc=e)
