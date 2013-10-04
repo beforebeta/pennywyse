@@ -1,5 +1,5 @@
 from django.contrib import admin
-from tracking.models import BannedIP, UntrackedUserAgent, Visitor, ClickTrack, RevenueVisitor, Commission
+from tracking.models import BannedIP, UntrackedUserAgent, Visitor, ClickTrack, RevenueVisitor, Commission,AcquisitionSource
 
 
 class ClickTrackAdmin(admin.ModelAdmin):
@@ -15,5 +15,6 @@ admin.site.register(UntrackedUserAgent)
 admin.site.register(Visitor, VisitorAdmin)
 admin.site.register(RevenueVisitor)
 admin.site.register(ClickTrack, ClickTrackAdmin)
+admin.site.register(AcquisitionSource)
 
 admin.site.register(Commission)

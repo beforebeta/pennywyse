@@ -33,6 +33,7 @@ class Command(BaseCommand):
         delim = options['delim']
 
         for line in lines:
+            print line
             line = line.strip()
             if not line:
                 continue
@@ -54,7 +55,7 @@ class Command(BaseCommand):
                 src = AcquisitionSource(tag=tag, logo_url=logo_url)
                 src.save()
             except DatabaseError:
-                print >> sys.stderr, 'Faled to insert record {0!r}'.format(src)
+                print >> sys.stderr, 'Failed to insert record {0!r}'.format(src)
                 continue
 
             if verbose:
