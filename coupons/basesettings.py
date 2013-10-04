@@ -237,10 +237,10 @@ EMBEDLY_KEY = "5918594fbe75489ea6f24784a3fff75d"
 DOWNLOADER_CACHE_LOCATION = 'tmp/embedly'
 
 # Celery settings
-BROKER_URL = 'amqp://pennywyse:pennywyse@localhost:5672/'
+BROKER_URL = 'amqp://pennywyse:pennywyse@localhost:5672/pennywyse'
 CELERYBEAT_SCHEDULE = {
     'daily-coupons-update': {
-        'task': 'tasks.load_coupons',
+        'task': 'core.tasks.load_coupons',
         'schedule': crontab(hour=23),
-    },
+    }, 
 }
