@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block fbtags %}
+    <meta property="og:image" content="{{ BASE_URL_NO_APPENDED_SLASH }}{{ merchant.get_image }}"/>
+    <meta property="og:title" content="Hand Verified Coupon Codes for {{ merchant.name }} from PennyWyse"/>
+    <meta property="og:url" content="{{ CURRENT_URL }}"/>
+{% endblock %}
+
+{% block header_block %}
+  <h1 class="text-center">Stores</h1>
+{% endblock %} {# header #}
+
+{% block main %}
+<div class="stripe-regular items-carousel-wrap">
+              <div class="row collapse stores-container">
+                <div class="column">
+                  <div class="items-carousel flexslider" >
+                    <ul class="rr slides wrapper-3 ">
+						<div class="top-container">
+							<form action="" method="get" name="categories_filter">
+								<select id="categories_filter" name="category">
+		                			<option value="">Categories</option>
+		                			{% for cat in categories %}
+		                				<option {% if cat.id == category %}selected{% endif %} value="{{cat.id}}">{{cat.name}}</option>
+		                			{% endfor %}
+		                		</select>
+	                    	</form>
+                    	</div>
+                    	<div class="top-container">
+                    		<ul class="stores-pagination">
+                    			{% for page in pagination.all_pages %}
+				          			<li {% if pagination.page = page %}class="active-page"{% endif %}>
+				          				<a href="{% url 'web.views.main.stores' page %}{% if category %}?category={{category}}{% endif %}">{{ page }}</a>
+				          			</li>
+				          		{% endfor %}
+			        		</ul>
+                    	</div>
+                    	<br clear="both">
+                        {% for store in stores %}
+	                        <li class="store-container">
+	                            <div class="store-item" data-rid="{{ store.id }}">
+	                                <div>
+	                                    <a href="{% url 'web.views.main.coupons_for_company' store.name_slug store.id %}">
+	                                        <figure class="store-image">
+	                                            <img src="{{ store.get_image }}" alt="{{ store.name }} Coupons" >
+	                                        </figure>
+	                                    </a>
+	                                	<div class="store-link">
+	                                		<a href="{% url 'web.views.main.coupons_for_company' store.name_slug store.id %}">{{store.name}}</a>
+	                                	</div>
+	                                </div>
+	                            </div>
+	                        </li>
+                        	{% if forloop.counter|divisibleby:"6" %}
+                        		<hr class="stores-separator">
+                       		{% endif %}
+                        {% endfor %}
+
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+{% endblock %} {# main #}
+{% block popular_companies %}{% endblock %}
+{% block newsletter_subscription %}{% endblock %}
+{% block end_of_body %}
+<script type="text/javascript">
+    try{
+        mixpanel.track("Stores Index Page Opened",{
+            "utm_source"    : "{{ visitor.acquisition_source }}",
+            "utm_medium"    : "{{ visitor.acquisition_medium }}",
+            "utm_term"      : "{{ visitor.acquisition_term }}",
+            "utm_content"   : "{{ visitor.acquisition_content }}",
+            "utm_campaign"  : "{{ visitor.acquisition_campaign }}"
+        });
+    }catch(e){}
+</script>
+{% endblock %}
