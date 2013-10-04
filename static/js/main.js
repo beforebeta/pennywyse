@@ -173,6 +173,13 @@ $(function() {
                                     mixpanel.track("Email Subscribe");
                                 }catch(e){}
                             }
+                            try{
+                                _gaq.push(['_trackEvent', 'contact', 'email subscription', 'homepage',, false]);
+                            } catch(e){
+                                try {
+                                    console.log(e);
+                                } catch(e){}
+                            }
                         },
                         error: function (XMLHttpRequest, textStatus, errorThrown) {
                             try{
