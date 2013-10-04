@@ -12,7 +12,7 @@ from django.http import Http404
 from core.util import print_stack_trace
 
 from tracking import utils
-from tracking.models import Visitor, UntrackedUserAgent, BannedIP
+from tracking.models import Visitor, UntrackedUserAgent, BannedIP, AcquisitionSource
 import pytz
 
 log = logging.getLogger('tracking.middleware')
@@ -183,5 +183,11 @@ class VisitorTrackingMiddleware(object):
                 visitor.acquisition_term     = utm_term[:255]
                 visitor.acquisition_content  = utm_content[:255]
                 visitor.acquisition_campaign = utm_campaign[:255]
+                try:
+                    acq_src = AcquisitionSource.objects.get(tag=visitor.acquisition_source)
+                except AcquisitionSource.DoesNotExist:
+                    pass
+                else:
+                    request.session['acquisition_source_logo_url'] = acq_src.logo_url
         except:
             print_stack_trace()
