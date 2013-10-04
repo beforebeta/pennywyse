@@ -289,7 +289,7 @@ def stores(request, page='A'):
     category = request.GET.get('category', None)
     filters = {'name__istartswith': page}
     if category:
-        merchant_ids = Coupon.objects.filter(categories=category).only('merchant__id')
+        merchant_ids = [c['merchant__id'] for c in Coupon.objects.filter(categories=category).values('merchant__id').annotate()]
         filters['id__in'] = merchant_ids
     stores = Merchant.objects.filter(**filters)
     context={
