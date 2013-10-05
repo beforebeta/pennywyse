@@ -27,13 +27,9 @@ class Command(BaseCommand):
                     self._check_sitemap(location.text)
                 else:
                     self.urls.append(location.text)
-                    # when number of URLs has reached SITEMAP_CHECK_LIMIT, making concurrent requests for those URLs
-                    if len(self.urls) == settings.SITEMAP_CHECK_LIMIT:
-                        self._check_urls()
-            self._check_urls()
                     
         except Exception as e:
-            self.stdout.write('Error: %s' % str(e))
+            sys.stdout.write('\nError: %s' % str(e))
 
     def _check_urls(self):
         """
@@ -41,17 +37,25 @@ class Command(BaseCommand):
         displaying progress in console.
         """
         
-        r = (grequests.head(u) for u in self.urls)
-        rs = grequests.map(r)
-        self.error_urls += filter(lambda x: x.status_code not in [200, 301, 302], rs)
-        self.checked_urls += len(self.urls)
-        sys.stdout.write('\rChecked %s URLs, %s errors.' % (self.checked_urls, len(self.error_urls)))
-        sys.stdout.flush()
-        self.urls = []
+        total = len(self.urls)
+        for i in range(0, len(self.urls), settings.SITEMAP_CHECK_LIMIT):
+            r = (grequests.head(u) for u in self.urls[i:i+settings.SITEMAP_CHECK_LIMIT])
+            rs = grequests.map(r)
+            self.error_urls += filter(lambda x: x.status_code not in [200, 301, 302], rs)
+            self.checked_urls += len(self.urls[i:i+settings.SITEMAP_CHECK_LIMIT])
+            remained = total - self.checked_urls
+            progress = round(self.checked_urls / total, 2)
+            sys.stdout.write('\rChecked %.2f%% (%s URLs, %d errors, %d remained)' % (progress, self.checked_urls, 
+                                                                             len(self.error_urls), remained))
+            sys.stdout.flush()
 
     def handle(self, *args, **options):
-        sys.stdout.write('\rChecking sitemaps.')
+        sys.stdout.write('\rChecking sitemaps.\n')
+        sys.stdout.flush()
         self._check_sitemap(SITEMAP_URL)
+        sys.stdout.write('\rChecking extracted URLs.\n')
+        sys.stdout.flush()
+        self._check_urls()
         # if there any URLs that hasn't passed check - sending report by email to addresses, listed in SITEMAP_REPORT_RECIPIENTS
         if self.error_urls:
             report = '\n'.join(error_urls)
@@ -60,5 +64,4 @@ class Command(BaseCommand):
             email_message.attach('report.txt', report,'text/plain')
             email_message.send()
         else:
-            sys.stdout.flush()
-            sys.stdout.write('\rAll pages returned success response codes.')
+            sys.stdout.write('\nAll pages returned success response codes.\n')
