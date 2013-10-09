@@ -9,7 +9,7 @@
     <form action="/search/" id="search_form">
       {% if ACQUISITION_SOURCE_LOGO_URL %}
       <div class="large-2 columns">
-        <img src="{{ ACQUISITION_SOURCE_LOGO_URL }}">
+        <img style="padding-top:15px;" src="{{ ACQUISITION_SOURCE_LOGO_URL }}">
       </div>
       <div class="large-5 columns">
       {% else %}
@@ -36,6 +36,7 @@
       <span> Browse by: </span>
       <ul>
         <li><a class='top-tab blue {{category_tab_class}}' href="{{ categories_path }}">Category</a></li>
+        <li><a class='top-tab blue {{stores_tab_class}}' href="/stores">Stores</a></li>
         {# <li><a class='top-tab blue {{company_tab_class}}'>Company</a></li> #}
       </ul>
     </div>

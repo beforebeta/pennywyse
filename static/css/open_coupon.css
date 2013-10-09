@@ -1,0 +1,24 @@
+.coupon-header-row {
+	max-width:100% !important;
+}
+.coupon-description-container {
+	float:left;
+	width:690px !important;
+}
+.social-button-container {
+	float:left;
+	width:210px;
+	height:22px !important;
+	overflow:hidden;
+}
+.twitter-share-button {
+	margin:0px !important;
+	padding: 0px !important;
+	width:100px !important;
+}
+.fb-like {
+	margin:0px !important;
+	padding: 0px !important;
+	width:100px !important;
+	height:20px !important;
+}

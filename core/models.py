@@ -65,12 +65,8 @@ class Category(models.Model):
       return self.get_active_coupons().count()
 
     def get_coupon_categories(self):
-      categories = set()
-      for c in self.get_active_coupons():
-          for cat in c.categories.all():
-              categories.add(cat)
-      categories = sorted(list(categories), key=lambda cat: cat.name)
-      return categories
+      return Category.objects.filter(
+        coupon__id__in=self.get_active_coupons().values_list('id')).distinct().order_by('name')
 
     def coupons_in_categories(self, selected_categories):
       return Paginator(self.get_active_coupons().filter(
