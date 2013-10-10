@@ -4,13 +4,16 @@ __author__ = 'amrish'
 
 FMTC_ACCESS_KEY = '43a787c3f5f2cf2f675cbf86aff6a33b'
 
-BASE_DIR = "/Users/asingh/Dropbox/workspace/coupons/"
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+
+def abs_path(rel, base=BASE_DIR):
+    return os.path.join(base, rel)
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 IMAGE_LOCAL_COPY_DIR_NO_PREFIX = 'static/img/local/'
-IMAGE_LOCAL_COPY_DIR = 'static/img/local/'
+IMAGE_LOCAL_COPY_DIR = abs_path('static/img/local/')
 
 BASE_URL_NO_APPENDED_SLASH = "http://localhost:8002"
 try: os.makedirs(IMAGE_LOCAL_COPY_DIR)
@@ -20,7 +23,7 @@ ADMINS = (
 # ('Your Name', 'your_email@example.com'),
 )
 
-WEBSITE_NAME = 'PennyWyse'
+WEBSITE_NAME = 'PushPenny'
 
 MANAGERS = ADMINS
 
@@ -136,6 +139,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    abs_path('templates/'),
     )
 
 INSTALLED_APPS = (
@@ -185,7 +189,7 @@ LOGGING = {
         }
 }
 
-DEFAULT_IMAGE = "http://pennywyse.com/static/img/favicon.png"
+DEFAULT_IMAGE = "http://pushpenny.com/static/img/favicon.png"
 
 APP_NAME = "COUPONS_APP"
 APPEND_SLASH=True
@@ -209,7 +213,7 @@ DEVELOPER_KEY = "00a1be63fcdf4cc39b9fa1c4c9e021ed990814ac740758b6eae34a9f71c27e8
 # django-articles
 ######################
 DISQUS_USER_API_KEY = "xEJVgJlNeCV3gcCD9w5b67kP8QaZi2R51JCaQuycadblRxI29ADap9MC9EViXEzq"
-DISQUS_FORUM_SHORTNAME = "pennywyse"
+DISQUS_FORUM_SHORTNAME = "pushpenny"
 ARTICLES_AUTO_TAG = False
 ARTICLE_PAGINATION = 10
 
@@ -220,7 +224,7 @@ STATICFILES_STORAGE = 'coupons.storage.S3PipelineStorage'
 AWS_QUERYSTRING_AUTH = False
 AWS_S3_SECURE_URLS = False
 AWS_REDUCED_REDUNDANCY = True
-AWS_STORAGE_BUCKET_NAME = 'pennywyse'
+AWS_STORAGE_BUCKET_NAME = 'pushpenny'
 AWS_HEADERS = {
     'Cache-Control': 'max-age=31556926',
     'Expires': (datetime.datetime.today() + datetime.timedelta(days=365)).strftime('%a, %d %b %Y %H:%M:%S GMT')
@@ -230,4 +234,4 @@ AWS_SECRET_ACCESS_KEY = 'Jo1uMid8YQg7KABpueG7tlO/R2SFqe295NPZOLng'
 
 #Embedly
 EMBEDLY_KEY = "5918594fbe75489ea6f24784a3fff75d"
-DOWNLOADER_CACHE_LOCATION = 'tmp/embedly'
+DOWNLOADER_CACHE_LOCATION = abs_path('tmp/embedly')

@@ -31,7 +31,7 @@ def get_description(model):
     return get_description_tag_from_url(model.directlink)
 
 base_description = "PennyWyse | Hand Verified Coupon Codes"
-icon_url = "http://pennywyse.com/static/img/fbog.png"
+icon_url = "http://pushpenny.com/static/img/fbog.png"
 
 #######################################################################################################################
 #
