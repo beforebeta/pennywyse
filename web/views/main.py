@@ -71,7 +71,7 @@ def index(request):
     context = {
       "page_title" : base_description,
       "page_description" : base_description,
-      "og_title" : "PennyWyse",
+      "og_title" : "PushPenny",
       "og_description" : "Hand Verified Coupon Codes",
       "og_image" : icon_url,
       "og_url" : settings.BASE_URL_NO_APPENDED_SLASH,
