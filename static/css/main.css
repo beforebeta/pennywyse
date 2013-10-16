@@ -1899,11 +1899,11 @@ li.blog-teaser {
 }
 .coupon-description {
 	float:left;
-	padding: 30px;
-	font-size: 14pt !important;
+	padding: 20px;
+	font-size: 13pt !important;
 }
 .coupon-description h2{
-	font-size: 14pt !important;
+	font-size: 13pt !important;
 }
 .coupon-right {
 	width: 220px;
@@ -2084,14 +2084,15 @@ li.blog-teaser {
 }
 .popular-wrapper {
 	padding: 0px !important;
-	height: auto !important;
+	margin-bottom:20px;
 }
 .popular-column-wrapper {
 	padding: 10px;
+	height: 235px !important;
 }
 .right-wrapper {
 	border-left: 1px dashed #e3e3e3;
-	height: 185px !important;
+	height: 235px !important;
 	padding-top: 15px;
 }
 .social-data {
