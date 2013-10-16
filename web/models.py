@@ -65,4 +65,14 @@ class ShortenedURLComponent(models.Model):
     shortened_url = models.CharField(max_length=35, db_index=True)
     objects = ShortenedURLComponentManager()
 
+class PopularSocialCoupon(models.Model):
+    "Coupons, popular in social networks."
+
+    coupon = models.ForeignKey(Coupon)
+    date_added = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
+    last_modified = models.DateTimeField(auto_now=True, auto_now_add=True)
+
+    def __unicode__(self):
+        return str(self.coupon)
+
 ShortenedURLComponent_IDENTIFIER = 'sh_'

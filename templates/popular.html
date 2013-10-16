@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block fbtags %}
+    <meta property="og:image" content="{{ BASE_URL_NO_APPENDED_SLASH }}{{ merchant.get_image }}"/>
+    <meta property="og:title" content="Hand Verified Coupon Codes for {{ merchant.name }} from PennyWyse"/>
+    <meta property="og:url" content="{{ CURRENT_URL }}"/>
+{% endblock %}
+
+{% block header_block %}
+  <h1 class="text-center">Popular on social media</h1>
+{% endblock %} {# header #}
+
+{% block main %}
+<div class="stripe-regular items-carousel-wrap">
+	<div class="row">
+      <div class="large-9 columns">
+        <div class="coupons-wrapper">
+          <ul class="rr slides">
+            {% for coupon in coupons %}
+				{% with coupon.coupon as coupon %}
+				<li class="wrapper-3 popular-wrapper">
+				  <div class="row">
+				    <div class="large-3 small-12 columns popularity popular-column-wrapper">
+						<h2>Popularity:</h2>
+		                <a href="javascript:toggle_social_data('{{coupon.id}}');">
+		                <div id="polygon">
+		                	<div id="topchevron"></div>
+		                	<div class="sidelines">98</div>
+		                	<div id="bottomchevron"></div>
+		                </div>
+						<div id="chevron"></div>
+						</a>
+				    </div>
+				    <div class="large-5 small-8 columns ">
+				      <div class="col-middle coupon-description">
+				        <h2 class="alt"><a target="_blank" rel="comm" href="{{ coupon.local_path }}">{{ coupon.description }}</a></h2>
+				        <p class="text secondary">
+				          {{ coupon.get_description }}
+				            {% if coupon.end %}
+				            <br /><br />Offer ends: {{ coupon.end|naturalday }}
+				            {% endif %}
+				        </p>
+				      </div>
+				    </div>
+				    <div class="large-3 small-4 columns right-wrapper">
+				      <div class="col-right popular-column-wrapper">
+				        <p class="value secondary">{{ coupon.short_desc }}</p>
+				        <h6>&nbsp;</h6>
+				        <a target="_blank" rel="comm" href="{{ coupon.local_path }}" class="input button green secondary responsive">Use Coupon</a>
+				      </div>
+				    </div>
+				  </div>
+				  <div class="social-data" id="sd-{{coupon.id}}">
+				  	Statistics of coupon's popularity in social media goes here.
+				  </div>
+				</li>
+				{% endwith %}
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      <aside class="large-3 columns main-sidebar bg popular-right">
+        <div class="wrapper-3 secondary block">
+            <h2 class="alt inner">Trending Stores</h2>
+            <ul class="rr inner checklist">
+              	 {% for store in popular_stores %}
+	             	<li>
+	                	<div data-rid="{{ store.id }}">
+	                    	<div>
+	                        	<a href="{% url 'web.views.main.coupons_for_company' store.name_slug store.id %}">
+	                            	<figure class="store-image">
+	                                	<img src="{{ store.get_image }}" alt="{{ store.name }} Coupons" >
+	                                </figure>
+	                            </a>
+	                            <div class="popular-store-link">
+	                            	<a href="{% url 'web.views.main.coupons_for_company' store.name_slug store.id %}">{{store.name}}</a>
+	                            </div>
+	                        </div>
+	                	</div>
+	            	</li>
+            	{% endfor %}
+            </ul>
+        </div>
+      </aside>
+    </div>
+              
+              
+              
+              
+              
+            </div>
+{% endblock %} {# main #}
+{% block popular_companies %}{% endblock %}

@@ -13,7 +13,7 @@ from core.models import Category, Coupon, Merchant, base_description, icon_url
 from core.util import encode_uri_component, print_stack_trace
 from core.util.pagination import AlphabeticalPagination
 from tracking.views import log_click_track
-from web.models import FeaturedCoupon, NewCoupon, PopularCoupon, ShortenedURLComponent
+from web.models import FeaturedCoupon, NewCoupon, PopularCoupon, ShortenedURLComponent, PopularSocialCoupon
 from django.core.paginator import Paginator
 
 def build_base_context(request, context):
@@ -22,6 +22,7 @@ def build_base_context(request, context):
     context["categories_path"] = "/categories"
     context["companies_path"] = "/companies"
     context["blog_path"] = "/blog"
+    context["popular_path"] = "/popular"
     try:
         context["visitor"] = request.visitor
     except:
@@ -47,6 +48,8 @@ def set_active_tab(active_tab, context):
         context['blog_tab_class'] = 'active'
     elif active_tab == "stores":
         context['stores_tab_class'] = 'active'
+    elif active_tab == "popular":
+        context['popular_tab_class'] = 'active'
     else:
         context['coupon_tab_class'] = 'active'
 
@@ -306,3 +309,21 @@ def stores(request, page='A'):
     }
     set_active_tab('stores', context)
     return render_response("stores.html", request, context)
+
+@ensure_csrf_cookie
+def popular_coupons(request):
+    description = u"Popular Coupons | {0}".format(base_description)
+    coupons = PopularSocialCoupon.objects.all()
+    popular_stores = Merchant.objects.get_popular_companies(5)
+    context={
+        "coupons": coupons,
+        "popular_stores": popular_stores,
+        "page_description": description,
+        "page_title": description,
+        "og_title": "Stores List",
+        "og_description": description,
+        "og_image": icon_url,
+        "og_url": "{0}/categories/".format(settings.BASE_URL_NO_APPENDED_SLASH),
+    }
+    set_active_tab('popular', context)
+    return render_response("popular.html", request, context)
