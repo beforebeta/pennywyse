@@ -1928,7 +1928,7 @@ li.blog-teaser {
 	background: #e74c3c;
     line-height: 90px;
     text-align:center;
-    color: #fff;
+    color: #F6F8F8;
     font-size:24pt;
     font-weight: bold;
 }
@@ -2089,6 +2089,7 @@ li.blog-teaser {
 .popular-column-wrapper {
 	padding: 10px;
 	height: 235px !important;
+	text-align: center;
 }
 .right-wrapper {
 	border-left: 1px dashed #e3e3e3;
@@ -2099,4 +2100,20 @@ li.blog-teaser {
 	border-top: 1px solid #e3e3e3;
 	padding: 15px;
 	display: none;
+	font-weight: bold;
+	font-size: 11pt;
+}
+.social-data a{
+	text-decoration: underline;
+}
+.userpic {
+	width: 75px;
+	height: 75px;
+	float: left;
+	border: 1px solid #e3e3e3;
+	padding: 5px;
+}
+.social-details {
+	margin-left: 10px;
+	float: left;
 }
