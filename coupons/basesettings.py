@@ -1,4 +1,7 @@
 import os, datetime
+from celery.schedules import crontab
+import djcelery
+djcelery.setup_loader()
 
 __author__ = 'amrish'
 
@@ -154,6 +157,7 @@ INSTALLED_APPS = (
     'ads',
     'tracking',
     'articles',
+    'djcelery',
     )
 
 # A sample logging configuration. The only tangible logging
@@ -242,3 +246,11 @@ EMAIL_HOST_PASSWORD = 'GzGrtFjKlLO43N2EMClpmQ'
 
 SITEMAP_REPORT_RECIPIENTS = ['amrish@pennywyse.com']
 SITEMAP_CHECK_LIMIT = 20	# number of URLs for concurrent check
+# Celery settings
+BROKER_URL = 'amqp://pennywyse:pennywyse@localhost:5672/pennywyse'
+CELERYBEAT_SCHEDULE = {
+    'daily-coupons-update': {
+        'task': 'core.tasks.load_coupons',
+        'schedule': crontab(hour=23),
+    }, 
+}
