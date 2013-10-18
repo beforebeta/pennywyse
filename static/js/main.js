@@ -229,3 +229,6 @@ $(function() {
     	location.href = redirection_url;
     });
 });
+function toggle_social_data(id) {
+	$('#sd-'+id).toggle();
+}

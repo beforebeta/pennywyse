@@ -41,6 +41,7 @@ urlpatterns += patterns('web.views.main',
     url(r'^categories/$', 'categories'),
     url(r'^stores/(?P<page>[A-Za-z]+)/$', 'stores'),
     url(r'^stores/$', 'stores'),
+    url(r'^popular/$', 'popular_coupons'),
 
     url(r'^blog/', include('articles.urls')),
     url(r'^robots\.txt$', 'robots_txt'),
