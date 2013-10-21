@@ -65,14 +65,14 @@ class ShortenedURLComponent(models.Model):
     shortened_url = models.CharField(max_length=35, db_index=True)
     objects = ShortenedURLComponentManager()
 
-class PopularSocialCoupon(models.Model):
-    "Coupons, popular in social networks."
+class PopularSocialCoupon(Coupon):
+    """Coupons, scrapped from social networks."""
+    
+    popularity = models.IntegerField(null=True, blank=True)
 
-    coupon = models.ForeignKey(Coupon)
-    date_added = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
-    last_modified = models.DateTimeField(auto_now=True, auto_now_add=True)
-
-    def __unicode__(self):
-        return str(self.coupon)
+    social_username = models.CharField(max_length=50, null=True, blank=True)
+    social_userpic = models.CharField(max_length=255, null=True, blank=True)
+    social_item_id = models.CharField(max_length=255, null=True, blank=True)    # ID of facebook post or tweet
+    social_source = models.CharField(max_length=255, null=True, blank=True)    # post or tweet URL, which coupon was parsed from
 
 ShortenedURLComponent_IDENTIFIER = 'sh_'

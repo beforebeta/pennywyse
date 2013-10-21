@@ -17,7 +17,6 @@
         <div class="coupons-wrapper">
           <ul class="rr slides">
             {% for coupon in coupons %}
-				{% with coupon.coupon as coupon %}
 				<li class="wrapper-3 popular-wrapper">
 				  <div class="row">
 				    <div class="large-3 small-12 columns popularity popular-column-wrapper">
@@ -25,7 +24,7 @@
 		                <a href="javascript:toggle_social_data('{{coupon.id}}');">
 		                <div id="polygon">
 		                	<div id="topchevron"></div>
-		                	<div class="sidelines">98</div>
+		                	<div class="sidelines">{{coupon.popularity}}</div>
 		                	<div id="bottomchevron"></div>
 		                </div>
 						<div id="chevron"></div>
@@ -72,7 +71,6 @@
 				  	<br clear="both">
 				  </div>
 				</li>
-				{% endwith %}
             {% endfor %}
           </ul>
         </div>

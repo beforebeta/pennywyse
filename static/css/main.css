@@ -2081,6 +2081,7 @@ li.blog-teaser {
 }
 .popular-store-link {
 	text-align: center;
+	margin-bottom: 20px;
 }
 .popular-wrapper {
 	padding: 0px !important;
@@ -2100,8 +2101,6 @@ li.blog-teaser {
 	border-top: 1px solid #e3e3e3;
 	padding: 15px;
 	display: none;
-	font-weight: bold;
-	font-size: 11pt;
 }
 .social-data a{
 	text-decoration: underline;

@@ -313,11 +313,12 @@ def stores(request, page='A'):
 @ensure_csrf_cookie
 def popular_coupons(request):
     description = u"Popular Coupons | {0}".format(base_description)
-    coupons = PopularSocialCoupon.objects.all()
-    popular_stores = Merchant.objects.get_popular_companies(5)
+    coupons = PopularSocialCoupon.objects.all().order_by('-popularity')
+    merchant_ids = [c.merchant.id for c in PopularSocialCoupon.objects.order_by('-popularity')[:20]]
+    stores = Merchant.objects.filter(id__in=merchant_ids)
     context={
         "coupons": coupons,
-        "popular_stores": popular_stores,
+        "popular_stores": stores,
         "page_description": description,
         "page_title": description,
         "og_title": "Stores List",
