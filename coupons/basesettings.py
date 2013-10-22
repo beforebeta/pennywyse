@@ -1,4 +1,7 @@
 import os, datetime
+from celery.schedules import crontab
+import djcelery
+djcelery.setup_loader()
 
 __author__ = 'amrish'
 
@@ -154,6 +157,7 @@ INSTALLED_APPS = (
     'ads',
     'tracking',
     'articles',
+    'djcelery',
     )
 
 # A sample logging configuration. The only tangible logging
@@ -231,3 +235,22 @@ AWS_SECRET_ACCESS_KEY = 'Jo1uMid8YQg7KABpueG7tlO/R2SFqe295NPZOLng'
 #Embedly
 EMBEDLY_KEY = "5918594fbe75489ea6f24784a3fff75d"
 DOWNLOADER_CACHE_LOCATION = 'tmp/embedly'
+
+DEFAULT_FROM_EMAIL = "no-reply@pennywyse.com"
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.mandrillapp.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'amrishdfv@gmail.com'
+EMAIL_HOST_PASSWORD = 'GzGrtFjKlLO43N2EMClpmQ'
+
+SITEMAP_REPORT_RECIPIENTS = ['amrish@pennywyse.com']
+SITEMAP_CHECK_LIMIT = 20	# number of URLs for concurrent check
+# Celery settings
+BROKER_URL = 'amqp://pennywyse:pennywyse@localhost:5672/pennywyse'
+CELERYBEAT_SCHEDULE = {
+    'daily-coupons-update': {
+        'task': 'core.tasks.load_coupons',
+        'schedule': crontab(hour=23),
+    }, 
+}
