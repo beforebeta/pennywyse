@@ -10,6 +10,8 @@ from web.models import FeaturedCoupon, NewCoupon, PopularCoupon
 from websvcs.models import EmbedlyMerchant
 import HTMLParser
 
+IFRAME_DISALLOWED = ['eBay']
+
 class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
         make_option('--load',
@@ -237,6 +239,9 @@ def refresh_merchant_redirects():
                 print "{0} timed out connecting to {1}".format(coupon.merchant.name, coupon.link)
         else:
             print "{0}: else False".format(coupon.merchant.name)
+    
+    for merchant_name in IFRAME_DISALLOWED:
+        Merchant.objects.filter(name__icontains=merchant_name).update(redirect=True)
 
 def load():
     refresh_deal_types()
