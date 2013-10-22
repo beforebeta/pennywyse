@@ -39,8 +39,12 @@ class Command(BaseCommand):
         # prepending URL schema if it does not have it, to avoid error
         if not re.search(self.schema_pattern, url):
             url = 'http://' + url
-        r = requests.get(url)
-        return r.url
+        try:
+            r = requests.get(url)
+            return r.url
+        except Exception, e:
+            print str(e)
+        return url
 
     def _get_popularity(self, item_id):
         """Getting number of comments, shares and likes for facebook post, using FQL."""
@@ -60,28 +64,39 @@ class Command(BaseCommand):
         
         data = self.graph.request(path='/%s/posts' % path, args=args)
         for post in data['data']:
-            url = link_url = None
-            s = re.search(self.pattern, post['message'], re.I)
-            r = re.search(self.url_pattern, post['message'])
-            
-            # determining coupon URL based on facebook post type
-            if post['type'] == 'link':
-                link_url = post.get('link', None)
-                link_url = self._extract_full_url(link_url)
-            elif r: 
-                url = self._extract_full_url(r.group(0))
-            
-            if s and PopularSocialCoupon.objects.filter(social_item_id=post['id']).count() == 0:
-                merchant = Merchant.objects.filter(name=s.group(1))
-                if merchant:
-                    popularity = self._get_popularity(post['id'])
-                    c = PopularSocialCoupon.objects.create(merchant=merchant[0], ref_id='fb%s' % post['id'],
-                                                           link=link_url or url, social_item_id=post['id'],
-                                                           skimlinks=link_url or url, popularity=popularity,
-                                                           social_source='http://facebook.com/%s' % path)
-                    c.description = post['message']
-                    c.save()
-                    print 'Added %s' % post['id']
+            url = short_url = ''
+            message = post.get('message', None)
+            if message:
+                s = re.search(self.pattern, message, re.I)
+                r = re.search(self.url_pattern, message)
+                
+                # determining coupon URL based on facebook post type
+                if post['type'] == 'link':
+                    short_url = post.get('link', None)
+                    url = self._extract_full_url(short_url)
+                elif r:
+                    short_url = r.group(0)
+                    url = self._extract_full_url(short_url)
+                
+                if s and PopularSocialCoupon.objects.filter(social_item_id=post['id']).count() == 0 and url:
+                    merchant = Merchant.objects.filter(name=s.group(1))
+                    if merchant:
+                        popularity = self._get_popularity(post['id'])
+                        message = message.replace(short_url, '')
+                        c = PopularSocialCoupon.objects.create(merchant=merchant[0], ref_id='fb%s' % post['id'],
+                                                               link=url, social_item_id=post['id'],
+                                                               skimlinks=url, popularity=popularity,
+                                                               social_source='http://facebook.com/%s' % path)
+                        c.description = message
+                        c.save()
+                        print 'Imported facebook post %s' % post['id']
+                else:
+                    if not s:
+                        print 'Ignored %s, merchant is not recognized' % post['id']
+                    if not url:
+                        print 'Ignored %s, no URL attached to facebook post' % post['id']
+            else:
+                print 'Ignored %s, message is not attached, post type %s' % (post['id'], post['type'])
         
         if data['data']:
             next_page = data['paging']['next']
@@ -97,7 +112,7 @@ class Command(BaseCommand):
             params['since_id'] = since_id
         if max_id:
             params['max_id'] = max_id
-        print params
+        
         statuses = self.twitter_api.GetUserTimeline(**params)
         for status in statuses:
             s = re.search(self.pattern, status.text, re.I)
@@ -112,9 +127,11 @@ class Command(BaseCommand):
                                                            skimlinks=url, social_source='http://twitter.com/%s' % screen_name)
                     c.description = text
                     c.save()
-                    print 'Added %s' % status.id
+                    print 'Imported tweet %s' % status.id
                 else:
                     print 'Ignored %s, no coupon link attached' % status.id
+            else:
+                print 'Ignored %s, merchant is not recognized' % status.id
         if statuses:
             ids = [s.id for s in statuses]
             if since_id:
@@ -129,6 +146,7 @@ class Command(BaseCommand):
             access_token = facebook.get_app_access_token(settings.FACEBOOK_API_KEY, settings.FACEBOOK_API_SECRET)
             self.graph = facebook.GraphAPI(access_token)
             for path in FACEBOOK_SOURCES:   
+                print 'Processing facebook account: %s' % path
                 self._parse_posts(path)
         
         if options.get('get_twitter_coupons', None):
@@ -138,9 +156,10 @@ class Command(BaseCommand):
                                access_token_secret=settings.TWITTER_ACCESS_TOKEN_SECRET)
             
             for screen_name in TWITTER_SOURCES:
-                if PopularSocialCoupon.objects.filter(social_source='http://twitter.com/%s' % screen_name).count() == 0:
-                    self._parse_statuses(screen_name)
-                else:
-                    latest_coupon = PopularSocialCoupon.objects.filter(social_source='http://twitter.com/%s' % screen_name)\
-                                                                .order_by('-social_item_id')[0]
-                    self._parse_statuses(screen_name, since_id=latest_coupon.social_item_id)
+                print 'Processing twitter timeline: %s' % screen_name
+                #if PopularSocialCoupon.objects.filter(social_source='http://twitter.com/%s' % screen_name).count() == 0:
+                self._parse_statuses(screen_name)
+                #else:
+                #    latest_coupon = PopularSocialCoupon.objects.filter(social_source='http://twitter.com/%s' % screen_name)\
+                #                                                .order_by('-social_item_id')[0]
+                #    self._parse_statuses(screen_name, since_id=latest_coupon.social_item_id)
