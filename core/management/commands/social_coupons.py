@@ -157,9 +157,9 @@ class Command(BaseCommand):
             
             for screen_name in TWITTER_SOURCES:
                 print 'Processing twitter timeline: %s' % screen_name
-                #if PopularSocialCoupon.objects.filter(social_source='http://twitter.com/%s' % screen_name).count() == 0:
-                self._parse_statuses(screen_name)
-                #else:
-                #    latest_coupon = PopularSocialCoupon.objects.filter(social_source='http://twitter.com/%s' % screen_name)\
-                #                                                .order_by('-social_item_id')[0]
-                #    self._parse_statuses(screen_name, since_id=latest_coupon.social_item_id)
+                if PopularSocialCoupon.objects.filter(social_source='http://twitter.com/%s' % screen_name).count() == 0:
+                    self._parse_statuses(screen_name)
+                else:
+                    latest_coupon = PopularSocialCoupon.objects.filter(social_source='http://twitter.com/%s' % screen_name)\
+                                                                .order_by('-social_item_id')[0]
+                    self._parse_statuses(screen_name, since_id=latest_coupon.social_item_id)
