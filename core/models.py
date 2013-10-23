@@ -30,8 +30,8 @@ def get_description(model):
             return ""
     return get_description_tag_from_url(model.directlink)
 
-base_description = "PennyWyse | Hand Verified Coupon Codes"
-icon_url = "http://pennywyse.com/static/img/fbog.png"
+base_description = "PushPenny | Hand Verified Coupon Codes"
+icon_url = "http://pushpenny.com/static/img/fbog.png"
 
 #######################################################################################################################
 #
@@ -88,7 +88,7 @@ class Category(models.Model):
       return "Coupons for {0}".format(self.name)
 
     def og_description(self):
-      return "Hand Verified Coupon Codes for {0} from PennyWyse.".format(self.name)
+      return "Hand Verified Coupon Codes for {0} from PushPenny.".format(self.name)
 
     def og_image(self):
       return icon_url
@@ -254,7 +254,7 @@ class Merchant(models.Model):
       return "Coupons for {0}".format(self.name)
 
     def og_description(self):
-      return "{0} | Hand Verified Coupon Codes for {1} from PennyWyse.".format(self.description, self.name)
+      return "{0} | Hand Verified Coupon Codes for {1} from PushPenny.".format(self.description, self.name)
 
     def og_image(self):
       return "{0}{1}".format(settings.BASE_URL_NO_APPENDED_SLASH, self.get_image())
@@ -518,10 +518,10 @@ class Coupon(models.Model):
       return "{0} | {1}".format(self.description, self.merchant.page_title())
 
     def og_title(self):
-      return "{0}: {1}. A Hand Verified Coupon Code for {2} from PennyWyse.".format(self.merchant.name, self.description, self.merchant.name)
+      return "{0}: {1}. A Hand Verified Coupon Code for {2} from PushPenny.".format(self.merchant.name, self.description, self.merchant.name)
 
     def og_description(self):
-      return "{0}: {1}. A Hand Verified Coupon Code for {2} from PennyWyse.".format(self.merchant.name, self.description, self.merchant.name)
+      return "{0}: {1}. A Hand Verified Coupon Code for {2} from PushPenny.".format(self.merchant.name, self.description, self.merchant.name)
 
     def og_image(self):
       return "{0}{1}".format(settings.BASE_URL_NO_APPENDED_SLASH, self.merchant.get_image())

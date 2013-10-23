@@ -25,26 +25,26 @@ class Command(BaseCommand):
 
     def generate_category_urls(self):
         self.stdout.write('Generating Category URLs...')
-        file = open('/tmp/pennywyse_sitemap_category_urls.txt', 'w')
+        file = open('/tmp/pushpenny_sitemap_category_urls.txt', 'w')
         for category in Category.objects.all():
-            file.write('http://pennywyse.com/categories/%s/ changefreq=weekly priority=0.7\n' % category.code)
+            file.write('http://pushpenny.com/categories/%s/ changefreq=weekly priority=0.7\n' % category.code)
 
             page_count = int((category.get_active_coupons().count() / 10.0) + 0.5)
             for i in range(1, page_count):
-              file.write('http://pennywyse.com/categories/{0}/page/{1}/ changefreq=weekly priority=0.3\n'.format(category.code, i))
+              file.write('http://pushpenny.com/categories/{0}/page/{1}/ changefreq=weekly priority=0.3\n'.format(category.code, i))
         file.close()
 
     def generate_merchant_urls(self):
         self.stdout.write('Generating Merchant URLs...')
-        file = open('/tmp/pennywyse_sitemap_merchant_urls.txt', 'w')
+        file = open('/tmp/pushpenny_sitemap_merchant_urls.txt', 'w')
         for merchant in Merchant.objects.all():
-            file.write('http://pennywyse.com/coupons/{0}/{1}/ changefreq=weekly priority=0.7\n'.format(merchant.name_slug, merchant.id))
-            file.write('http://pennywyse.com/coupons/{0}/ changefreq=weekly priority=0.7\n'.format(merchant.name_slug))
+            file.write('http://pushpenny.com/coupons/{0}/{1}/ changefreq=weekly priority=0.7\n'.format(merchant.name_slug, merchant.id))
+            file.write('http://pushpenny.com/coupons/{0}/ changefreq=weekly priority=0.7\n'.format(merchant.name_slug))
 
             page_count = int((merchant.get_active_coupons().count() / 10.0) + 0.5)
             for i in range(1, page_count):
-              file.write('http://pennywyse.com/coupons/{0}/page/{1}/ changefreq=weekly priority=0.3\n'.format(merchant.name_slug, i))
-              file.write('http://pennywyse.com/coupons/{0}/{1}/page/{2}/ changefreq=weekly priority=0.3\n'.format(merchant.name_slug, merchant.id, i))
+              file.write('http://pushpenny.com/coupons/{0}/page/{1}/ changefreq=weekly priority=0.3\n'.format(merchant.name_slug, i))
+              file.write('http://pushpenny.com/coupons/{0}/{1}/page/{2}/ changefreq=weekly priority=0.3\n'.format(merchant.name_slug, merchant.id, i))
         file.close()
 
     def chunks(self, l, n):
@@ -55,11 +55,11 @@ class Command(BaseCommand):
         file_num = 0
         for c_ids in self.chunks([c.id for c in Coupon.objects.all()], 50000):
           file_num += 1
-          f = open('/tmp/pennywyse_sitemap_coupon_urls.txt'.format(file_num), 'w')
+          f = open('/tmp/pushpenny_sitemap_coupon_urls.txt'.format(file_num), 'w')
           for c_id in c_ids:
               coupon = Coupon.objects.get(id=c_id)
               if coupon.merchant:
-                  f.write('http://pennywyse.com{0} changefreq=weekly priority=0.7\n'.format(coupon.local_path()))
+                  f.write('http://pushpenny.com{0} changefreq=weekly priority=0.7\n'.format(coupon.local_path()))
           f.close()
 
       #build coupon in one place and move them to their own unique location
@@ -92,7 +92,7 @@ class Command(BaseCommand):
         category_url = default_storage.save('category_sitemap.xml', ContentFile(open('sitemap/category_sitemap.xml').read()))
         merchant_url = default_storage.save('merchant_sitemap.xml', ContentFile(open('sitemap/merchant_sitemap.xml').read()))
         last_updated = datetime.datetime.now().strftime('%Y-%m-%d')
-        root = 'http://s3.amazonaws.com/pennywyse/'
+        root = 'http://s3.amazonaws.com/pushpenny/'
 
 
         self.stdout.write('Updating the sitemap index...\n\n')

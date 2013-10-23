@@ -1,6 +1,7 @@
 static/img/local/*
 *.jpeg
 *.pyc
+*.pid
 .DS_Store
 *.log
 .pydevproject

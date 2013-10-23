@@ -21,7 +21,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         if args:
-            lines = file(args[0])
+            lines = chain(*(file(name) for name in args))
         else:
             lines = iter(sys.stdin)
 
