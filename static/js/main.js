@@ -228,6 +228,11 @@ $(function() {
     	}
     	location.href = redirection_url;
     });
+    
+    $('.popular-row').each(function() {
+    	var row_height = $(this).height();
+    	$(this).find('.child').css('height', row_height);
+    });
 });
 function toggle_social_data(id) {
 	$('#sd-'+id).toggle();

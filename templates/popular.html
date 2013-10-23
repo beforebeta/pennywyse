@@ -18,8 +18,8 @@
           <ul class="rr slides">
             {% for coupon in coupons %}
 				<li class="wrapper-3 popular-wrapper">
-				  <div class="row">
-				    <div class="large-3 small-12 columns popularity popular-column-wrapper">
+				  <div class="row popular-row">
+				    <div class="large-3 small-12 columns popularity popular-column-wrapper child">
 						<h2>Popularity:</h2>
 		                <a href="javascript:toggle_social_data('{{coupon.id}}');">
 		                <div id="polygon">
@@ -30,7 +30,7 @@
 						<div id="chevron"></div>
 						</a>
 				    </div>
-				    <div class="large-5 small-8 columns ">
+				    <div class="large-5 small-8 columns child">
 				      <div class="col-middle coupon-description">
 				        <h2 class="alt"><a target="_blank" rel="comm" href="{{ coupon.local_path }}">{{ coupon.description }}</a></h2>
 				        <p class="text secondary">
@@ -41,7 +41,7 @@
 				        </p>
 				      </div>
 				    </div>
-				    <div class="large-3 small-4 columns right-wrapper">
+				    <div class="large-3 small-4 columns right-wrapper child">
 				      <div class="col-right popular-column-wrapper">
 				        <p class="value secondary">{{ coupon.short_desc }}</p>
 				        <h4>{{coupon.merchant.name}}</h4>

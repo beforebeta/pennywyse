@@ -1909,7 +1909,6 @@ li.blog-teaser {
 	width: 220px;
 	float: right;
 	border-left: 1px dashed #e3e3e3;
-	height: 200px;
 }
 .right-content {
 	margin: 0 auto !important;
@@ -2089,12 +2088,10 @@ li.blog-teaser {
 }
 .popular-column-wrapper {
 	padding: 10px;
-	height: 235px !important;
 	text-align: center;
 }
 .right-wrapper {
 	border-left: 1px dashed #e3e3e3;
-	height: 235px !important;
 	padding-top: 15px;
 }
 .social-data {
