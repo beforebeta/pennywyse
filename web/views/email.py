@@ -15,7 +15,7 @@ def coupon_tuple(link_type):
         index += 1
         merchant = Merchant.objects.filter(name_slug=slug)[0]
         coupon = merchant.featured_coupon()
-        merchant_link = "http://pennywyse.com/coupons/{0}/{1}".format(merchant.name_slug, merchant.id)
+        merchant_link = "http://pushpenny.com/coupons/{0}/{1}".format(merchant.name_slug, merchant.id)
         if link_type == 'merchant':
           link_address = merchant_link
         else:

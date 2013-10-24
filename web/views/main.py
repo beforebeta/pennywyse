@@ -71,7 +71,7 @@ def index(request):
     context = {
       "page_title" : base_description,
       "page_description" : base_description,
-      "og_title" : "PennyWyse",
+      "og_title" : "PushPenny",
       "og_description" : "Hand Verified Coupon Codes",
       "og_image" : icon_url,
       "og_url" : settings.BASE_URL_NO_APPENDED_SLASH,
@@ -176,7 +176,7 @@ def open_coupon(request, company_name, coupon_label, coupon_id):
     try:
         logo_url = request.META["HTTP_REFERER"]
         back_url = logo_url
-        if "localhost" not in logo_url and "pennywyse.com" not in logo_url:
+        if "localhost" not in logo_url and "pushpenny.com" not in logo_url:
             logo_url="/"
     except:
         pass
@@ -185,7 +185,7 @@ def open_coupon(request, company_name, coupon_label, coupon_id):
         "coupon"        : coupon,
         "logo_url"      : logo_url,
         "back_url"      : back_url,
-        "path"          : encode_uri_component("%s://%s%s" % ("http", "www.pennywyse.com", request.path)),
+        "path"          : encode_uri_component("%s://%s%s" % ("http", "www.pushpenny.com", request.path)),
     }
     set_meta_tags(coupon, context)
 
@@ -274,12 +274,12 @@ def category(request, category_code, current_page=1, category_ids=-1):
 def robots_txt(request):
   robots = """User-agent: *
 Allow: /
-Sitemap: http://s3.amazonaws.com/pennywyse/sitemap.xml
+Sitemap: http://s3.amazonaws.com/pushpenny/sitemap.xml
 """
   return HttpResponse(robots, content_type="text/plain")
 
 def sitemap(request):
-  return HttpResponseRedirect('http://s3.amazonaws.com/pennywyse/sitemap.xml')
+  return HttpResponseRedirect('http://s3.amazonaws.com/pushpenny/sitemap.xml')
 
 @ensure_csrf_cookie
 def stores(request, page='A'):

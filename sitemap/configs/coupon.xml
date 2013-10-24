@@ -36,7 +36,7 @@
                  (Example: sitemap_type="news")
 -->
  <site
-  base_url="http://pennywyse.com"
+  base_url="http://pushpenny.com"
   store_into="./sitemap/coupon_sitemap.xml"
   verbose="1"
   sitemap_type="web"
@@ -84,7 +84,7 @@
   />
 -->
 
-  <urllist path="/tmp/pennywyse_sitemap_coupon_urls.txt" encoding="UTF-8" />
+  <urllist path="/tmp/pushpenny_sitemap_coupon_urls.txt" encoding="UTF-8" />
 
   <!-- ** MODIFY or DELETE **
     "urllist" nodes name text files with lists of URLs.
