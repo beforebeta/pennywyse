@@ -1,3 +1,4 @@
+from urlparse import urlparse, parse_qs
 from optparse import make_option
 from BeautifulSoup import BeautifulStoneSoup
 import datetime
@@ -161,6 +162,14 @@ def refresh_deals():
             coupon.end = get_dt(deal.enddate.text)
             coupon.lastupdated = get_dt(deal.lastupdated.text)
             coupon.created = get_dt(deal.created.text)
+
+            # removing skimlinks prefix from coupon link
+            parsed_link = urlparse(deal.link.text)
+            if str(parsed_link.netloc) == 'go.redirectingat.com':
+                qs = parse_qs(parsed_link.query)
+                coupon_link = qs.get('url')
+                if coupon_link:
+                    coupon.link = coupon_link[0]
 
             coupon.link = deal.link.text
             coupon.directlink = deal.directlink.text
