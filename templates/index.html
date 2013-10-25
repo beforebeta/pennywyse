@@ -1,9 +1,15 @@
 {% extends "base.html" %}
+{% load static %}
+{% load compress %}
 
 {% block head_tags %}
-	<link rel="stylesheet" href="/static/css/carousel.css" type="text/css" media="screen" />
-    <script src="/static/js/vendor/jcarousellite.min.js"></script>
-    <script src="/static/js/carousel.js"></script>
+    {% compress css %}
+    <link rel="stylesheet" href="{% static "css/carousel.css" %}" type="text/css" media="screen" />
+    {% endcompress %}
+    {% compress js %}
+    <script src="{% static "js/vendor/jcarousellite.min.js" %}"></script>
+    <script src="{% static "js/carousel.js" %}"></script>
+    {% endcompress %}
 {% endblock %}
 
 {% block header_block %}
@@ -13,7 +19,6 @@
 {% block main %}
 
           <div role="main">
-
 
             <div class="stripe-regular items-carousel-wrap">
               <div class="row">

@@ -8,6 +8,7 @@ distribute==0.6.45
 django-debug-toolbar==0.9.4
 django-picklefield==0.3.0
 django-pipeline==1.3.14
+django-compressor==1.3
 django-storages==1.1.8
 futures==2.1.4
 pylibmc==1.2.3
@@ -16,4 +17,8 @@ raven==3.4.1
 requests==1.2.3
 six==1.3.0
 wsgiref==0.1.2
+grequests
+django-celery==3.0.23
 httplib2
+uWSGI==1.9.17.1
+cssmin==0.2.0
