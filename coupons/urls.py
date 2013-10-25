@@ -42,7 +42,8 @@ urlpatterns += patterns('web.views.main',
     url(r'^stores/(?P<page>[A-Za-z]+)/$', 'stores'),
     url(r'^stores/$', 'stores'),
 
-    url(r'^blog/', include('articles.urls')),
+# /blog/ is being served by WordPress
+#    url(r'^blog/', include('articles.urls')),
     url(r'^robots\.txt$', 'robots_txt'),
     url(r'^sitemap\.xml$', 'sitemap'),
 )

@@ -1,3 +1,4 @@
+from urlparse import urlparse, parse_qs
 from optparse import make_option
 from BeautifulSoup import BeautifulStoneSoup
 import datetime
@@ -9,6 +10,8 @@ from core.util import print_stack_trace
 from web.models import FeaturedCoupon, NewCoupon, PopularCoupon
 from websvcs.models import EmbedlyMerchant
 import HTMLParser
+
+IFRAME_DISALLOWED = ['eBay']
 
 class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
@@ -162,6 +165,14 @@ def refresh_deals():
             coupon.lastupdated = get_dt(deal.lastupdated.text)
             coupon.created = get_dt(deal.created.text)
 
+            # removing skimlinks prefix from coupon link
+            parsed_link = urlparse(deal.link.text)
+            if str(parsed_link.netloc) == 'go.redirectingat.com':
+                qs = parse_qs(parsed_link.query)
+                coupon_link = qs.get('url')
+                if coupon_link:
+                    coupon.link = coupon_link[0]
+
             coupon.link = deal.link.text
             coupon.directlink = deal.directlink.text
             coupon.skimlinks = deal.skimlinks.text
@@ -237,6 +248,9 @@ def refresh_merchant_redirects():
                 print "{0} timed out connecting to {1}".format(coupon.merchant.name, coupon.link)
         else:
             print "{0}: else False".format(coupon.merchant.name)
+    
+    for merchant_name in IFRAME_DISALLOWED:
+        Merchant.objects.filter(name__icontains=merchant_name).update(redirect=True)
 
 def load():
     refresh_deal_types()
