@@ -18,6 +18,14 @@ TEMPLATE_DEBUG = DEBUG
 IMAGE_LOCAL_COPY_DIR_NO_PREFIX = 'static/img/local/'
 IMAGE_LOCAL_COPY_DIR = abs_path('static/img/local/')
 
+COMPRESS_ENABLED = True
+COMPRESS_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+COMPRESS_OFFLINE = True
+COMPRESS_CSS_FILTERS = [
+    'compressor.filters.css_default.CssAbsoluteFilter',
+    'compressor.filters.cssmin.CSSMinFilter',
+]
+
 BASE_URL_NO_APPENDED_SLASH = "http://localhost:8002"
 try: os.makedirs(IMAGE_LOCAL_COPY_DIR)
 except: pass
@@ -81,7 +89,7 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = ''
+STATIC_ROOT = abs_path('static')
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -98,6 +106,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    'compressor.finders.CompressorFinder',
     )
 
 # Make this unique, and don't share it with anybody.
@@ -154,6 +163,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'django.contrib.humanize',
+    'compressor',
     'south',
     'core',
     'web',
@@ -182,7 +192,7 @@ LOGGING = {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
-        }
+        },
     },
     'loggers': {
         'django.request': {
@@ -190,7 +200,7 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
             },
-        }
+    },
 }
 
 DEFAULT_IMAGE = "http://pushpenny.com/static/img/favicon.png"
@@ -223,7 +233,7 @@ ARTICLE_PAGINATION = 10
 
 #S3
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-STATICFILES_STORAGE = 'coupons.storage.S3PipelineStorage'
+# STATICFILES_STORAGE = 'coupons.storage.S3PipelineStorage'
 
 AWS_QUERYSTRING_AUTH = False
 AWS_S3_SECURE_URLS = False
