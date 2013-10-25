@@ -306,3 +306,9 @@ def stores(request, page='A'):
     }
     set_active_tab('stores', context)
     return render_response("stores.html", request, context)
+
+@ensure_csrf_cookie
+def coupon_success_page(request, company_name, coupon_label, coupon_id):
+    coupon = Coupon.objects.get(id=coupon_id)
+    context={"coupon": coupon}
+    return render_response("coupon_success_page.html",request, context)

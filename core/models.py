@@ -5,6 +5,7 @@ import datetime
 import urlparse
 
 from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models.query_utils import Q
 from django.template.defaultfilters import slugify
@@ -510,6 +511,9 @@ class Coupon(models.Model):
 
     def local_path(self):
       return "/coupons/{0}/{1}/{2}/".format(self.merchant.name_slug, self.desc_slug, self.id)
+
+    def success_path(self):
+        return reverse('web.views.main.coupon_success_page', args=(self.merchant.name_slug, self.desc_slug, self.id))
 
     def page_description(self):
       return "{0} | {1}".format(self.get_description(), self.merchant.page_description())

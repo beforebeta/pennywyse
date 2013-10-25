@@ -71,7 +71,7 @@
                               </div>
                               <div class="large-5 small-8 columns">
                                 <div class="col-middle">
-                                  <h2 class="alt"><a href="{{ coupon.local_path }}">{{ coupon.description }}</a></h2>
+                                  <h2 class="alt"><a href="{{ coupon.success_path }}">{{ coupon.description }}</a></h2>
                                     <p class="text secondary">
                                         {{ coupon.merchant.name }}: {{ coupon.description }}
                                         {% if coupon.end %}
@@ -84,7 +84,7 @@
                                     <div class="col-right">
                                         <p class="value secondary">{{ coupon.short_desc }}</p>
                                         <h6>&nbsp;</h6>
-                                        <a href="{{ coupon.local_path }}" class="input button green secondary responsive">Use Coupon</a>
+                                        <a href="{{ coupon.success_path }}" class="input button green secondary responsive">Use Coupon</a>
                                     </div>
                                 </div>
                             </div>
