@@ -267,4 +267,8 @@ CELERYBEAT_SCHEDULE = {
         'task': 'core.tasks.load_coupons',
         'schedule': crontab(hour=23),
     },
+    'daily-skimlinks-commissions-update': {
+        'task': 'core.tasks.load_skimlinks_commissions',
+        'schedule': crontab(hour=23),
+    },
 }
