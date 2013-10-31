@@ -36,7 +36,9 @@
                           <div class="text-content">
                             <p>{{ merchant.description }}</p>
                           </div>
+                          {% if not EXTRA_TAB_ACTIVE %}
                           <a class="input button green secondary responsive fixed" href="{% assign_visitor_tag merchant.skimlinks %}" target="_blank" rel="comm">Visit Store</a>
+                          {% endif %}
                         </div>
                       </div>
                     </div>
