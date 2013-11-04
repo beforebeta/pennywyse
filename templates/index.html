@@ -39,12 +39,12 @@
                                             <img src="{{ coupon.get_image }}" alt="{{ coupon.description }}" style="display:normal">
                                         </figure>
                                     </a>
-                                    <h2 class="alt" style="max-height: 45px; overflow: hidden;"><a target="_blank" href="{{ coupon.local_path }}">{{ coupon.description }}</a></h2>
+                                    <h2 class="alt" style="max-height: 45px; overflow: hidden;"><a target="_blank" href="{{ coupon.success_path }}">{{ coupon.description }}</a></h2>
                                 </div>
                                 <div class="bottom">
                                     <p class="value secondary">{{ coupon.short_desc }}</p>
                                     <h6><a href="/coupons/{{ coupon.merchant.name_slug }}/">{{ coupon.merchant.name }}</a></h6>
-                                    <a href="{{ coupon.local_path }}" target="_blank" class="input button green secondary">Learn more</a>
+                                    <a href="{{ coupon.success_path }}" target="_blank" class="input button green secondary">Learn more</a>
                                 </div>
                             </div>
                         </li>
@@ -76,12 +76,12 @@
                                             <img src="{{ coupon.get_image }}" alt="{{ coupon.description }}" style="display:normal">
                                         </figure>
                                     </a>
-                                    <h2 class="alt" style="max-height: 45px; overflow: hidden;"><a target="_blank" href="{{ coupon.local_path }}">{{ coupon.description }}</a></h2>
+                                    <h2 class="alt" style="max-height: 45px; overflow: hidden;"><a target="_blank" href="{{ coupon.success_path }}">{{ coupon.description }}</a></h2>
                                 </div>
                                 <div class="bottom">
                                     <p class="value secondary">{{ coupon.short_desc }}</p>
                                     <h6><a href="/coupons/{{ coupon.merchant.name_slug }}/">{{ coupon.merchant.name }}</a></h6>
-                                    <a target="_blank" href="{{ coupon.local_path }}/" class="input button green secondary">Learn More</a>
+                                    <a target="_blank" href="{{ coupon.success_path }}/" class="input button green secondary">Learn More</a>
                                 </div>
                             </div>
                         </li>
