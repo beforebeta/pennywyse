@@ -6,7 +6,8 @@ import urlparse
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
-from django.db import models
+# from django.db import models
+from django.contrib.gis.db import models # Switching to GeoDjango models
 from django.db.models.query_utils import Q
 from django.template.defaultfilters import slugify
 from django.core.paginator import Paginator
