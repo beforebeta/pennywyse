@@ -6,7 +6,7 @@ djcelery.setup_loader()
 __author__ = 'amrish'
 
 FMTC_ACCESS_KEY = '43a787c3f5f2cf2f675cbf86aff6a33b'
-SQOOT = 'xhtihz'
+SQOOT_PUBLIC_KEY = 'xhtihz'
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -41,7 +41,8 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        # 'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': 'django.contrib.gis.db.backends.mysql', # Switching to use GeoDjango
         'NAME': 'coupons',                      # Or path to database file if using sqlite3.
         'USER': 'dbuser',                      # Not used with sqlite3.
         'PASSWORD': 'dbuser',                  # Not used with sqlite3.
@@ -164,6 +165,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'django.contrib.humanize',
+    'django.contrib.gis', # GeoDjango
     'compressor',
     'south',
     'core',
