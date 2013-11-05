@@ -95,7 +95,7 @@
 	                        <ul class="rr slides pop-companies">
 	                            {% for pop_company in pop_companies %}
 	                            <li>
-	                                <a href="{% url 'web.views.main.coupons_for_company' pop_company.name_slug pop_company.id %}" class="wrapper-5 small">
+	                                <a href="{% url 'web.views.main.coupons_for_company' company_name=pop_company.name_slug company_id=pop_company.id %}" class="wrapper-5 small">
 	                                  <img src="{{ pop_company.get_image }}" alt="{{ pop_company.name }}">
 	                                </a>
 	                            </li>
