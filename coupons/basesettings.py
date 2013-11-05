@@ -97,7 +97,7 @@ STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    "./static/",
+    # "./static/", # TSY: Throws an error "ImproperlyConfigured: The STATICFILES_DIRS setting should not contain the STATIC_ROOT setting"
     )
 
 # List of finder classes that know how to find static files in
