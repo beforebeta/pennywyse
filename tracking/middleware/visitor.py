@@ -8,7 +8,7 @@ from django.contrib.auth.models import AnonymousUser
 from django.core.cache import cache
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.db.utils import DatabaseError
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
 from core.util import print_stack_trace
 
 from tracking import utils
@@ -162,6 +162,14 @@ class VisitorTrackingMiddleware(object):
         # make the visitor available to others
         request.visitor = visitor
 
+        # redirect to custom landing page
+        if request.session['acquisition_source_name'] == 'denverpost.com':
+            request.session['custom_landing_url'] = redirect_url = reverse(
+                'web.views.main.coupons_for_company',
+                kwargs={'company_name': 'denver'})
+            request.session.save()
+            return HttpResponseRedirect(redirect_url)
+
     def _assign_acquisition_source(self, visitor, request):
         try:
             utm_source      = request.GET.get("utm_source", "unknown")
@@ -169,6 +177,9 @@ class VisitorTrackingMiddleware(object):
             utm_campaign    = request.GET.get("utm_campaign", "unknown")
             utm_term        = request.GET.get("utm_term", "unknown")
             utm_content     = request.GET.get("utm_content", "unknown")
+
+            request.session['acquisition_source_name'] = utm_source
+
             if utm_source != "unknown":
                 # utm_source: Identify the advertiser, site, publication, etc. that is sending traffic to your property, e.g. google, citysearch, newsletter4, billboard.
                 # utm_medium: The advertising or marketing medium, e.g.: cpc, banner, email newsletter.
