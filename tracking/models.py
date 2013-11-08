@@ -354,3 +354,27 @@ class Commission(models.Model):
             if visitor_id and visitor_id > 0:
                 if RevenueVisitor.objects.filter(visitor_id=visitor_id).count() == 0:
                     RevenueVisitor(visitor=Visitor.objects.get(id=visitor_id)).save()
+
+
+class AdCost(models.Model):
+    """Storing data for exporting to RJ Metrics"""
+    
+    cost_id = models.CharField(max_length=255)
+    start_date = models.CharField(max_length=255)
+    campaign = models.CharField(max_length=255)
+    ad = models.CharField(max_length=255)
+    keyword = models.CharField(max_length=255)
+    impression = models.CharField(max_length=255)
+    social_impression = models.CharField(max_length=255)
+    clicks = models.CharField(max_length=255)
+    social_clicks = models.CharField(max_length=255)
+    costs = models.CharField(max_length=255)
+    average_cpc = models.CharField(max_length=255)
+    frequency = models.CharField(max_length=255)
+    actions = models.CharField(max_length=255)
+    unique_clicks = models.CharField(max_length=255)
+    acquisition_source = models.CharField(max_length=255, default="direct")
+    acquisition_medium = models.CharField(max_length=255, default="direct")
+    acquisition_term = models.CharField(max_length=255, default="direct")
+    acquisition_campaign = models.CharField(max_length=255, default="direct")
+    synchronized = models.BooleanField(default=False)

@@ -1,9 +1,13 @@
 from django.conf import settings
+import csv
 import re
 import unicodedata
 
 # this is not intended to be an all-knowing IP address regex
 IP_RE = re.compile('\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}')
+
+ADWORDS_EXPORT_FILE = 'adwords_report.csv'
+FB_ADS_EXPORT_FILE = 'fb_report.csv'
 
 def get_ip(request):
     """
@@ -69,3 +73,39 @@ def u_clean(s):
 
     return uni.encode('ascii', 'xmlcharrefreplace')
 
+def fetch_ad_costs():
+    from tracking.models import AdCost
+    try:
+        with open(ADWORDS_EXPORT_FILE, 'rb') as csvfile:
+            print 'Importing Ad Costs data from AdWords'
+            rows = csv.reader(csvfile, delimiter=',')
+            for row in rows:
+                if len(row) == 18:
+                    adcost, created = AdCost.objects.get_or_create(start_date=row[0], campaign=row[3], ad=row[4], keyword=row[2],
+                                                 impression=row[10], clicks=row[9], costs=row[13], average_cpc=row[11],
+                                                 acquisition_source='PPC', acquisition_medium='PPCad', acquisition_term=row[2],
+                                                 acquisition_campaign=row[3])
+                    if created:
+                        print 'Exported campaign %s' % row[3]
+                    else:
+                        print 'Skipped campaign %s' % row[3]
+    except IOError:
+        print '%s cannot be opened' % ADWORDS_EXPORT_FILE
+    
+    try:
+        with open(FB_ADS_EXPORT_FILE, 'rb') as csvfile:
+            print 'Importing Ad Costs data from Facebook Ads'
+            rows = csv.reader(csvfile, delimiter=',')
+            rows.next()    # skipping first line
+            for row in rows:
+                if len(row) >= 15:
+                    adcost, created = AdCost.objects.get_or_create(start_date=row[0], campaign=row[3], impression=row[3], 
+                                                social_impression=row[4], clicks=row[5], costs=row[10], average_cpc=row[8], 
+                                                frequency=row[11], actions=row[12], unique_clicks=row[13], acquisition_source='mw', 
+                                                acquisition_medium='facebook', acquisition_campaign=row[3])
+                    if created:
+                        print 'Exported campaign %s' % row[3]
+                    else:
+                        print 'Skipped campaign %s' % row[3]
+    except IOError:
+        print '%s cannot be opened' % FB_ADS_EXPORT_FILE
