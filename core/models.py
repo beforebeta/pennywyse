@@ -131,6 +131,7 @@ class MerchantManager(models.Manager):
 
 class Merchant(models.Model):
     ref_id          = models.CharField(max_length=255, db_index=True, blank=True, null=True)
+    ref_id_source   = models.CharField(max_length=255, db_index=True, blank=True, null=True)
     name            = models.CharField(max_length=255, db_index=True, blank=True, null=True)
     name_slug       = models.CharField(max_length=255, db_index=True, blank=True, null=True)
     image           = models.TextField(blank=True, null=True)
@@ -272,6 +273,7 @@ class Merchant(models.Model):
 
 class CouponNetwork(models.Model):
     name            = models.CharField(max_length=255, db_index=True, blank=True, null=True)
+    code            = models.CharField(max_length=255, db_index=True, blank=True, null=True)
 
     date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
     last_modified   = models.DateTimeField(default=datetime.datetime.now(), auto_now=True, auto_now_add=True)
@@ -360,6 +362,8 @@ class Coupon(models.Model):
     """
     #Our proprietary coupon ID - especially useful in identifying deals that are delivered more than once because they have changed.
     ref_id          = models.CharField(max_length=255, db_index=True, blank=True, null=True)
+    ref_id_source   = models.CharField(max_length=255, db_index=True, blank=True, null=True)
+    online          = models.NullBooleanField()
     merchant        = models.ForeignKey(Merchant, blank=True, null=True)
     categories      = models.ManyToManyField(Category, blank=True, null=True)
     dealtypes       = models.ManyToManyField(DealType, blank=True, null=True)
@@ -378,6 +382,7 @@ class Coupon(models.Model):
     lastupdated     = models.DateTimeField(blank=True, null=True)
     created         = models.DateTimeField(blank=True, null=True)
     countries       = models.ManyToManyField(Country, blank=True, null=True)
+    coupon_network  = models.ForeignKey(CouponNetwork, blank=True, null=True)
     price           = models.FloatField(default=0)
     listprice       = models.FloatField(default=0)
     discount        = models.FloatField(default=0)
@@ -533,3 +538,26 @@ class Coupon(models.Model):
 
     def og_url(self):
       return "{0}{1}".format(settings.BASE_URL_NO_APPENDED_SLASH, self.local_path())
+
+#######################################################################################################################
+#
+# MerchantLocation
+#
+#######################################################################################################################
+
+class MerchantLocation(models.Model):
+    merchant        = models.ForeignKey(Merchant, blank=True, null=True)
+    geometry        = models.PointField(srid=4326)
+    address         = models.CharField(max_length=255, blank=True, null=True)
+    locality        = models.CharField(max_length=255, blank=True, null=True)
+    region          = models.CharField(max_length=255, blank=True, null=True)
+    postal_code     = models.CharField(max_length=255, blank=True, null=True)
+    country         = models.CharField(max_length=255, blank=True, null=True)
+
+    date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
+    last_modified   = models.DateTimeField(default=datetime.datetime.now(), auto_now=True, auto_now_add=True)
+
+    objects = models.GeoManager()
+
+    def __unicode__(self):
+        return '{} {}'.format(self.geometry.x, self.geometry.y)
