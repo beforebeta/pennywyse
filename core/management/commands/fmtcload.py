@@ -1,17 +1,22 @@
-from urlparse import urlparse, parse_qs
-from optparse import make_option
 from BeautifulSoup import BeautifulStoneSoup
 import datetime
+from lxml import etree
+from optparse import make_option
+from urlparse import urlparse, parse_qs
+
 from django.core.management.base import BaseCommand
 from django.conf import settings
-import requests
-from core.models import DealType, Category, Coupon, Merchant, Country
+from core.models import Category, Country, Coupon, DealType, Merchant, MerchantAffiliateData
 from core.util import print_stack_trace
 from web.models import FeaturedCoupon, NewCoupon, PopularCoupon
 from websvcs.models import EmbedlyMerchant
-import HTMLParser
 
-IFRAME_DISALLOWED = ['eBay']
+import HTMLParser
+import requests
+
+
+IFRAME_DISALLOWED = ['eBay', 'eBay Canada']
+DATETIME_FORMAT = '%b-%d-%I%M%p-%G'
 
 class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
@@ -44,30 +49,38 @@ def section(message):
 def unescape_html(html):
     return HTMLParser.HTMLParser().unescape(html)
 
+def _download_content(url, filename):
+    print 'Downloading content from %s' % url
+    r = requests.get(url, stream=True)
+    with open(filename, 'w') as f:
+        for c in r.iter_content(chunk_size=2048):
+            if c:
+                f.write(c)
+                f.flush()
+    return open(filename, 'r') 
+
 def refresh_deal_types():
     section("Loading Deal Types")
-    data = requests.get("http://services.formetocoupon.com/getTypes?key=%s" % settings.FMTC_ACCESS_KEY)
-    content = data.content
-    open("Deal_Types_Content_%s" % datetime.datetime.now().strftime('%b-%d-%I%M%p-%G'), "w").write(content)
-    data = BeautifulStoneSoup(content)
-    for type in data.findAll("type"):
-        code = type.filter.text
-        name = type.find("name").text
+    fh = _download_content("http://services.formetocoupon.com/getTypes?key=%s" % settings.FMTC_ACCESS_KEY,
+                           "Deal_Types_Content_%s" % datetime.datetime.now().strftime(DATETIME_FORMAT))
+    data = etree.iterparse(fh, tag='type')
+    for event, deal_type in data:
+        code = deal_type.find('filter').text
+        name = deal_type.find("name").text
         print "\t%s,%s" % (code,name)
         if DealType.objects.filter(code=code).count() > 0:
             continue
         DealType.objects.filter(code=code).delete()
-        DealType(code=code,name=name,description=name).save()
+        DealType(code=code, name=name, description=name).save()
 
 def refresh_categories():
     section("Loading Categories")
-    data = requests.get("http://services.formetocoupon.com/getCategories?key=%s" % settings.FMTC_ACCESS_KEY)
-    content = data.content
-    open("Categories_Content_%s" % datetime.datetime.now().strftime('%b-%d-%I%M%p-%G'), "w").write(content)
-    data = BeautifulStoneSoup(content)
-    for cat in data.findAll("category"):
+    fh = _download_content("http://services.formetocoupon.com/getCategories?key=%s" % settings.FMTC_ACCESS_KEY,
+                           "Categories_Content_%s" % datetime.datetime.now().strftime(DATETIME_FORMAT))
+    data = etree.iterparse(fh, tag='category')
+    for event, cat in data:
         ref_id = cat.find("id").text
-        code = unescape_html(cat.filter.text)
+        code = unescape_html(cat.find('filter').text)
         name = unescape_html(cat.find("name").text)
         parent = cat.find("parent").text
         if parent:
@@ -83,36 +96,39 @@ def refresh_categories():
             existing_category.parent=parent
             existing_category.save()
         except:
-            Category(ref_id=ref_id,code=code,name=name,parent=parent).save()
+            Category(ref_id=ref_id, code=code, name=name, parent=parent).save()
         print "\t%s,%s" % (code,name)
 
 def refresh_merchants():
     section("Loading Merchants")
-    data = requests.get("http://services.formetocoupon.com/getMerchants?key=%s" % settings.FMTC_ACCESS_KEY)
-    content = data.content
-    open("Merchants_Content_%s" % datetime.datetime.now().strftime('%b-%d-%I%M%p-%G'), "w").write(content)
-    data = BeautifulStoneSoup(content)
-    for merchant in data.findAll("merchant"):
+    fh = _download_content("http://services.formetocoupon.com/getMerchants?key=%s" % settings.FMTC_ACCESS_KEY,
+                               "Merchants_Content_%s" % datetime.datetime.now().strftime(DATETIME_FORMAT))
+    data = etree.iterparse(fh, tag='merchant')
+    for event, merchant in data:
         try:
             name = unescape_html(merchant.find("name").text)
             id = merchant.find("id").text
             print "\t%s,%s" % (id,name)
-            link = merchant.link.text
-            skimlinks = merchant.skimlinks.text
-            homepageurl = merchant.homepageurl.text
-            model = None
-            try:
-                model = Merchant.objects.get(ref_id = id)
-            except:
-                model = Merchant()
-            model.ref_id = id
-            model.name = name
+            print '=' * 40
+            link = merchant.find('link').text
+            skimlinks = merchant.find('skimlinks').text
+            homepageurl = merchant.find('homepageurl').text
+            model, created = Merchant.objects.get_or_create(name=name)
             model.directlink = homepageurl
             model.skimlinks = skimlinks
             model.link = homepageurl
             model.save()
+            affiliate_data, created = MerchantAffilateData.objects.get_or_create(ref_id=id, merchant=model)
+            affiliate_data.network = merchant.find('network').text
+            affiliate_data.networkid = merchant.find('networkid').text
+            affiliate_data.networknote = merchant.find('networknote').text
+            affiliate_data.link = link
+            if merchant.find('network').text == 'CJ':
+                affiliate_data.primary = True
+            affiliate_data.save()
         except:
             print_stack_trace()
+
 
 def get_dt(dt_str):
     if dt_str:
@@ -123,79 +139,65 @@ def get_dt(dt_str):
 
 def refresh_deals():
     section("Loading Deals/Coupons")
-    data = requests.get("http://services.formetocoupon.com/getDeals?key=%s" % settings.FMTC_ACCESS_KEY)
-    content = data.content
-    open("Deals_Content_%s" % datetime.datetime.now().strftime('%b-%d-%I%M%p-%G'), "w").write(content)
-    data = BeautifulStoneSoup(content)
-    for deal in data.findAll("item"):
+    fh = _download_content("http://services.formetocoupon.com/getDeals?key=%s" % settings.FMTC_ACCESS_KEY,
+                           "Deals_Content_%s" % datetime.datetime.now().strftime(DATETIME_FORMAT))
+    data = etree.iterparse(fh, tag='item')
+    for event, deal in data:
         try:
-            id = deal.couponid.text
-            coupon=None
-            try:
-                coupon = Coupon.active_objects.get(ref_id = id)
-            except:
-                coupon=Coupon(ref_id=id)
-                coupon.save()
+            id = deal.find('couponid').text
+            coupon, created = Coupon.active_objects.get_or_create(ref_id=id)
 
-            merchant_name = deal.merchantname.text
-            merchantid = deal.merchantid.text
-            merchant=None
-
-            try:
-                merchant = Merchant.objects.get(ref_id=merchantid)
-            except:
-                merchant=Merchant(ref_id=merchantid, name=merchant_name)
-                merchant.save()
+            merchant_name = deal.find('merchantname').text
+            merchantid = deal.find('merchantid').text
+            merchant, created = Merchant.objects.get_or_create(name=merchant_name)
             coupon.merchant=merchant
 
             coupon.categories.clear()
-            for category in deal.findAll("category"):
+            for category in deal.findall("category"):
                 coupon.categories.add(Category.objects.get(code=category.text))
 
             coupon.dealtypes.clear()
-            for dealtype in deal.dealtypes.findAll("type"):
+            dealtypes = deal.find('dealtypes')
+            for dealtype in dealtypes.findall("type"):
                 coupon.dealtypes.add(DealType.objects.get(code=dealtype.text))
 
-            coupon.description = unescape_html(deal.label.text)
-            coupon.restrictions = unescape_html(deal.restrictions.text)
-            coupon.code = unescape_html(deal.couponcode.text)
+            coupon.description = unescape_html(deal.find('label').text)
+            restrictions = deal.find('restrictions').text or ''
+            coupon.restrictions = unescape_html(restrictions)
+            coupon_code = deal.find('couponcode').text or ''
+            coupon.code = unescape_html(coupon_code)
 
-            coupon.start = get_dt(deal.startdate.text)
-            coupon.end = get_dt(deal.enddate.text)
-            coupon.lastupdated = get_dt(deal.lastupdated.text)
-            coupon.created = get_dt(deal.created.text)
+            coupon.start = get_dt(deal.find('startdate').text)
+            coupon.end = get_dt(deal.find('enddate').text)
+            coupon.lastupdated = get_dt(deal.find('lastupdated').text)
+            coupon.created = get_dt(deal.find('created').text)
 
             # removing skimlinks prefix from coupon link
-            parsed_link = urlparse(deal.link.text)
+            parsed_link = urlparse(deal.find('link').text)
             if str(parsed_link.netloc) == 'go.redirectingat.com':
                 qs = parse_qs(parsed_link.query)
                 coupon_link = qs.get('url')
                 if coupon_link:
                     coupon.link = coupon_link[0]
 
-            coupon.link = deal.link.text
-            coupon.directlink = deal.directlink.text
-            coupon.skimlinks = deal.skimlinks.text
-            coupon.status = deal.status.text
+            coupon.link = deal.find('link').text
+            coupon.directlink = deal.find('directlink').text
+            coupon.skimlinks = deal.find('skimlinks').text
+            coupon.status = deal.find('status').text
 
             coupon.countries.clear()
 
-            for country in deal.findAll("country"):
-                c=None
-                try:
-                    c=Country.objects.get(code=country.text)
-                except:
-                    c=Country(code=country.text,name=country.text)
-                    c.save()
+            for country in deal.findall("country"):
+                c, created = Country.objects.get_or_create(code=country.text)
+                c.name = country.text
+                c.save()
                 coupon.countries.add(c)
 
-            coupon.price = deal.price.text
-            coupon.discount = deal.discount.text
-            coupon.listprice = deal.listprice.text
-            coupon.percent = deal.percent.text
-
-            coupon.image = deal.image.text
-
+            coupon.price = deal.find('price').text
+            coupon.discount = deal.find('discount').text
+            coupon.listprice = deal.find('listprice').text
+            coupon.percent = deal.find('percent').text
+            coupon.image = deal.find('image').text
             coupon.save()
         except:
             print_stack_trace()
@@ -250,7 +252,7 @@ def refresh_merchant_redirects():
             print "{0}: else False".format(coupon.merchant.name)
     
     for merchant_name in IFRAME_DISALLOWED:
-        Merchant.objects.filter(name__icontains=merchant_name).update(redirect=True)
+        Merchant.objects.filter(name=merchant_name).update(redirect=True)
 
 def load():
     refresh_deal_types()
