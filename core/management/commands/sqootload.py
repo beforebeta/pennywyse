@@ -54,15 +54,16 @@ def refresh_sqoot_data():
 
         for i in range(0, len(deals_data_array)):
             each_deal_data_dict = deals_data_array[i]['deal']
+            is_online_bool = each_deal_data_dict['online']
             merchant_data_dict = each_deal_data_dict['merchant']
 
-            merchant_model       = get_or_create_merchant(merchant_data_dict)
-            category_model       = get_or_create_category(each_deal_data_dict, categories_dict)
-            dealtype_model       = get_or_create_dealtype()
-            country_model        = get_or_create_country()
-            couponnetwork_model  = get_or_create_couponnetwork(each_deal_data_dict)
-            coupon_model         = get_or_create_coupon(each_deal_data_dict, merchant_model, category_model, dealtype_model, country_model, couponnetwork_model)
-            get_or_create_merchantlocation(merchant_data_dict, coupon_model)
+            merchant_model          = get_or_create_merchant(merchant_data_dict)
+            category_model          = get_or_create_category(each_deal_data_dict, categories_dict)
+            dealtype_model          = get_or_create_dealtype()
+            country_model           = get_or_create_country()
+            couponnetwork_model     = get_or_create_couponnetwork(each_deal_data_dict)
+            merchantlocation_model  = get_or_create_merchantlocation(merchant_data_dict, merchant_model, is_online_bool)
+            coupon_model            = get_or_create_coupon(each_deal_data_dict, merchant_model, category_model, dealtype_model, country_model, couponnetwork_model, merchantlocation_model)
 
             deal_download_counter += 1
             print "...total of {} deals saved so far\n".format(deal_download_counter)
@@ -145,7 +146,6 @@ def get_or_create_dealtype():
         dealtype_model.code = 'local'
         dealtype_model.name = 'Local'
         dealtype_model.save()
-    print "\t...get_or_create a dealtype"
     return dealtype_model
 
 def get_or_create_country():
@@ -175,9 +175,34 @@ def get_or_create_couponnetwork(each_deal_data_dict):
         couponnetwork_model.save()
     return couponnetwork_model
 
-# Might need to set up a seperate save function
-def get_or_create_coupon(each_deal_data_dict, merchant_model, category_model, dealtype_model, country_model, couponnetwork_model):
-    print "\t...get_or_create a coupon: {} {}".format(each_deal_data_dict['id'], each_deal_data_dict['title'])
+def get_or_create_merchantlocation(merchant_data_dict, merchant_model, is_online_bool):
+    '''
+    If it's an online deal or lat/long data aren't available, this function does nothing.
+    '''
+    print "\t...get_or_create a merchant_location"
+    longitude = merchant_data_dict['longitude']
+    latitude = merchant_data_dict['latitude']
+    point_wkt = 'POINT({} {})'.format(longitude, latitude)
+
+    if is_online_bool.online == True or longitude == None or latitude == None:
+        return
+    else:
+        try:
+            merchantlocation_model = MerchantLocation.objects.get(geometry__equals = point_wkt, merchant = merchant_model)
+        except:
+            merchantlocation_model              = MerchantLocation()
+            merchantlocation_model.merchant     = merchant_model
+            merchantlocation_model.geometry     = point_wkt
+            merchantlocation_model.address      = merchant_data_dict['address']
+            merchantlocation_model.locality     = merchant_data_dict['locality']
+            merchantlocation_model.region       = merchant_data_dict['region']
+            merchantlocation_model.postal_code  = merchant_data_dict['postal_code']
+            merchantlocation_model.country      = merchant_data_dict['country']
+            merchantlocation_model.save()
+        return merchantlocation_model
+
+def get_or_create_coupon(each_deal_data_dict, merchant_model, category_model, dealtype_model, country_model, couponnetwork_model, merchantlocation_model):
+    print "\t...get_or_create a coupon: ID({})-{}".format(each_deal_data_dict['id'], each_deal_data_dict['title'])
     ref_id = each_deal_data_dict['id']
     try:
         coupon_model                     = Coupon.objects.get(ref_id=ref_id, ref_id_source='sqoot')
@@ -187,6 +212,7 @@ def get_or_create_coupon(each_deal_data_dict, merchant_model, category_model, de
         coupon_model.ref_id_source       = 'sqoot'
         coupon_model.online              = each_deal_data_dict['online']
         coupon_model.merchant            = merchant_model
+        coupon_model.merchant_location   = merchantlocation_model
         coupon_model.description         = strip_tags(each_deal_data_dict['description'])
         coupon_model.restrictions        = strip_tags(each_deal_data_dict['fine_print'])
         coupon_model.start               = get_date(each_deal_data_dict['created_at'])
@@ -212,32 +238,8 @@ def get_or_create_coupon(each_deal_data_dict, merchant_model, category_model, de
         coupon_model.dealtypes.add(dealtype_model)
         coupon_model.countries.add(country_model)
         coupon_model.save()
-    return coupon_model
+    print "\t~~~all deal related data saved!"
 
-def get_or_create_merchantlocation(merchant_data_dict, coupon_model):
-    '''
-    If it's an online deal or lat/long data aren't available, this function does nothing.
-    '''
-    print "\t...get_or_create a merchant_location"
-    longitude = merchant_data_dict['longitude']
-    latitude = merchant_data_dict['latitude']
-    point_wkt = 'POINT({} {})'.format(longitude, latitude)
-
-    if coupon_model.online == True or longitude == None or latitude == None:
-        return
-    else:
-        try:
-            merchantlocation_model = MerchantLocation.objects.get(geometry__equals = point_wkt, coupon = coupon_model)
-        except:
-            merchantlocation_model              = MerchantLocation()
-            merchantlocation_model.coupon       = coupon_model
-            merchantlocation_model.geometry     = point_wkt
-            merchantlocation_model.address      = merchant_data_dict['address']
-            merchantlocation_model.locality     = merchant_data_dict['locality']
-            merchantlocation_model.region       = merchant_data_dict['region']
-            merchantlocation_model.postal_code  = merchant_data_dict['postal_code']
-            merchantlocation_model.country      = merchant_data_dict['country']
-            merchantlocation_model.save()
 
 #############################################################################################################
 #
