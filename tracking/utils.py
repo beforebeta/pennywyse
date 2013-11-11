@@ -1,7 +1,12 @@
-from django.conf import settings
 import csv
+import datetime
+import os
 import re
+import shutil
 import unicodedata
+
+from django.conf import settings
+
 
 # this is not intended to be an all-knowing IP address regex
 IP_RE = re.compile('\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}')
@@ -75,20 +80,28 @@ def u_clean(s):
 
 def fetch_ad_costs():
     from tracking.models import AdCost
+    if not os.path.exists('processed'):
+        os.mkdir('processed')
     try:
         with open(ADWORDS_EXPORT_FILE, 'rb') as csvfile:
             print 'Importing Ad Costs data from AdWords'
             rows = csv.reader(csvfile, delimiter=',')
             for row in rows:
-                if len(row) == 18:
-                    adcost, created = AdCost.objects.get_or_create(start_date=row[0], campaign=row[3], ad=row[4], keyword=row[2],
+                if len(row) == 19:
+                    try:
+                        datetime.datetime.strptime(row[0], "%Y-%m-%d")
+                        adcost, created = AdCost.objects.get_or_create(start_date=row[0], campaign=row[3], ad=row[4], keyword=row[2],
                                                  impression=row[10], clicks=row[9], costs=row[13], average_cpc=row[11],
                                                  acquisition_source='PPC', acquisition_medium='PPCad', acquisition_term=row[2],
                                                  acquisition_campaign=row[3])
-                    if created:
-                        print 'Exported campaign %s' % row[3]
-                    else:
-                        print 'Skipped campaign %s' % row[3]
+                        if created:
+                            print 'Exported campaign %s' % row[3]
+                        else:
+                            print 'Skipped campaign %s' % row[3]
+                    except:
+                        print 'Row skipped, incorrect date format, %s' % row[0]
+        destination_path = os.path.join('processed', 'adword_costs_%s.csv' % datetime.datetime.now().strftime('%b-%d-%I%M%p-%G'))
+        shutil.move(ADWORDS_EXPORT_FILE, destination_path)
     except IOError:
         print '%s cannot be opened' % ADWORDS_EXPORT_FILE
     
@@ -107,5 +120,7 @@ def fetch_ad_costs():
                         print 'Exported campaign %s' % row[3]
                     else:
                         print 'Skipped campaign %s' % row[3]
+        destination_path = os.path.join('processed', 'fb_costs_%s.csv' % datetime.datetime.now().strftime('%b-%d-%I%M%p-%G'))
+        shutil.move(FB_ADS_EXPORT_FILE, destination_path)
     except IOError:
         print '%s cannot be opened' % FB_ADS_EXPORT_FILE
