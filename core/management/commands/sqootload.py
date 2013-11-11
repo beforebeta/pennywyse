@@ -10,7 +10,6 @@ from django.conf import settings
 from core.models import DealType, Category, Coupon, Merchant, Country, CouponNetwork, MerchantLocation
 
 # from coupons.basesettings import SQOOT_PUBLIC_KEY
-# Need a scheduled task to delete expired deals?
 
 class Command(BaseCommand):
 
@@ -37,7 +36,7 @@ def refresh_sqoot_data():
     print "{} deals detected, estimating {} pages to iterate\n".format(active_deal_count, page_count)
 
     describe_section("STARTING TO DOWNLOAD SQOOT DEALS..\n")
-    current_page_counter = 1130
+    current_page_counter = 1
     deal_download_counter = 0
     while True:
         request_parameters['page'] = current_page_counter
