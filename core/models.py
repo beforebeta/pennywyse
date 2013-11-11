@@ -43,6 +43,7 @@ icon_url = "http://pushpenny.com/static/img/fbog.png"
 
 class Category(models.Model):
     ref_id          = models.CharField(max_length=255, db_index=True, blank=True, null=True)
+    ref_id_source   = models.CharField(max_length=255, db_index=True, blank=True, null=True)
     code            = models.CharField(max_length=255,blank=True, null=True, db_index=True)
     name            = models.CharField(max_length=255,blank=True, null=True, db_index=True)
     description     = models.CharField(max_length=255,blank=True, null=True)
