@@ -9,6 +9,7 @@ from coupons.basesettings import SQOOT_PUBLIC_KEY
 from core.models import DealType, Category, Coupon, Merchant, Country, CouponNetwork
 
 ## Need a scheduled task to delete expired deals?
+## Need to swap out api key
 
 class Command(BaseCommand):
 
@@ -56,6 +57,7 @@ def refresh_sqoot_data():
 
             merchant_model = get_or_create_merchant(merchant_data_dict)
             category_model = get_or_create_category(each_deal_data_dict, categories_dict)
+            dealtype_model = get_or_create_dealtype()
 
 
 #############################################################################################################
@@ -116,6 +118,16 @@ def get_or_create_category(each_deal_data_dict, categories_dict):
     category_model.name = each_deal_data_dict['category_name'] # In case it was already created as another category's parent
     category_model.save()
     return category_model
+
+def get_or_create_dealtype():
+    try:
+        dealtype_model      = DealType.objects.get(code='local')
+    except:
+        dealtype_model      = DealType()
+        dealtype_model.code = 'local'
+        dealtype_model.name = 'Local'
+        dealtype_model.save()
+    return dealtype_model
 
 def describe_section(message):
     print " "
