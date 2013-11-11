@@ -7,9 +7,9 @@ from django.utils.html import strip_tags
 from django.core.management.base import BaseCommand
 from django.conf import settings
 
-# from coupons.basesettings import SQOOT_PUBLIC_KEY
 from core.models import DealType, Category, Coupon, Merchant, Country, CouponNetwork, MerchantLocation
 
+# from coupons.basesettings import SQOOT_PUBLIC_KEY
 ## Need a scheduled task to delete expired deals?
 ## Category-Parent category
 
