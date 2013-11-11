@@ -295,6 +295,9 @@ class CouponNetwork(models.Model):
     date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
     last_modified   = models.DateTimeField(default=datetime.datetime.now(), auto_now=True, auto_now_add=True)
 
+    def __unicode__(self):  # Python 3: def __str__(self):
+        return "%s" % (self.code)
+
 #######################################################################################################################
 #
 # Country
