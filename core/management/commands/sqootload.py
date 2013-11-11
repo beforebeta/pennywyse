@@ -10,8 +10,7 @@ from django.conf import settings
 from core.models import DealType, Category, Coupon, Merchant, Country, CouponNetwork, MerchantLocation
 
 # from coupons.basesettings import SQOOT_PUBLIC_KEY
-## Need a scheduled task to delete expired deals?
-## Category-Parent category
+# Need a scheduled task to delete expired deals?
 
 class Command(BaseCommand):
 
@@ -32,16 +31,15 @@ def refresh_sqoot_data():
     categories_dict = establish_categories_dict(categories_array)
 
     describe_section("CHECKING THE LATEST DEAL DATA FROM SQOOT..\n")
-    request_parameters['per_page'] = 10
+    request_parameters['per_page'] = 100
     active_deal_count = requests.get(api_root + 'deals', params=request_parameters).json()['query']['total']
     page_count = int(math.ceil(active_deal_count / float(request_parameters['per_page'])))
     print "{} deals detected, estimating {} pages to iterate\n".format(active_deal_count, page_count)
 
     describe_section("STARTING TO DOWNLOAD SQOOT DEALS..\n")
-    current_page_counter = 11300
+    current_page_counter = 1130
     deal_download_counter = 0
     while True:
-    # while (current_page_counter < 10):
         request_parameters['page'] = current_page_counter
 
         print '## Fetching page {}...\n'.format(current_page_counter)
@@ -63,7 +61,7 @@ def refresh_sqoot_data():
             country_model           = get_or_create_country()
             couponnetwork_model     = get_or_create_couponnetwork(each_deal_data_dict)
             merchantlocation_model  = get_or_create_merchantlocation(merchant_data_dict, merchant_model, is_online_bool)
-            coupon_model            = get_or_create_coupon(each_deal_data_dict, merchant_model, category_model, dealtype_model, country_model, couponnetwork_model, merchantlocation_model)
+            get_or_create_coupon(each_deal_data_dict, merchant_model, category_model, dealtype_model, country_model, couponnetwork_model, merchantlocation_model)
 
             deal_download_counter += 1
             print "...total of {} deals saved so far\n".format(deal_download_counter)
@@ -124,6 +122,7 @@ def get_or_create_category(each_deal_data_dict, categories_dict):
             parent_category               = Category()
             parent_category.ref_id_source = 'sqoot'
             parent_category.code          = parent_slug
+            parent_category.save()
             category_model.parent         = parent_category
     else:
         category_model.parent             = None
@@ -184,7 +183,7 @@ def get_or_create_merchantlocation(merchant_data_dict, merchant_model, is_online
     latitude = merchant_data_dict['latitude']
     point_wkt = 'POINT({} {})'.format(longitude, latitude)
 
-    if is_online_bool.online == True or longitude == None or latitude == None:
+    if is_online_bool == True or longitude == None or latitude == None:
         return
     else:
         try:
