@@ -55,9 +55,11 @@ def refresh_sqoot_data():
             each_deal_data_dict = deals_data_array[i]['deal']
             merchant_data_dict = each_deal_data_dict['merchant']
 
-            merchant_model = get_or_create_merchant(merchant_data_dict)
-            category_model = get_or_create_category(each_deal_data_dict, categories_dict)
-            dealtype_model = get_or_create_dealtype()
+            merchant_model       = get_or_create_merchant(merchant_data_dict)
+            category_model       = get_or_create_category(each_deal_data_dict, categories_dict)
+            dealtype_model       = get_or_create_dealtype()
+            country_model        = get_or_create_country()
+            couponnetwork_model  = get_or_create_couponnetwork()
 
 
 #############################################################################################################
@@ -120,6 +122,10 @@ def get_or_create_category(each_deal_data_dict, categories_dict):
     return category_model
 
 def get_or_create_dealtype():
+    '''
+    Treat all deals from sqoot are 'local' deals.
+    '''
+
     try:
         dealtype_model      = DealType.objects.get(code='local')
     except:
@@ -128,6 +134,30 @@ def get_or_create_dealtype():
         dealtype_model.name = 'Local'
         dealtype_model.save()
     return dealtype_model
+
+def get_or_create_country():
+    '''
+    All deals from sqoot are US deals for now
+    (They say they are going to add international deals at some point)
+    '''
+    try:
+        country_model      = Country.objects.get(code='usa')
+    except:
+        country_model      = Country()
+        country_model.code = 'usa'
+        country_model.name = 'usa'
+        country_model.save()
+    return country_model
+
+def get_or_create_couponnetwork():
+    try:
+        couponnetwork_model      = CouponNetwork.objects.get(code='sqoot')
+    except:
+        couponnetwork_model      = CouponNetwork()
+        couponnetwork_model.code = 'sqoot'
+        couponnetwork_model.name = 'sqoot'
+        couponnetwork_model.save()
+    return couponnetwork_model
 
 def describe_section(message):
     print " "
