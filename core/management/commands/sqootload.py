@@ -1,12 +1,13 @@
 import requests
 import math
+import datetime
 
-from django.template.defaultfilters import slugify
+from django.utils.html import strip_tags
 from django.core.management.base import BaseCommand
 # from django.conf import settings
 
 from coupons.basesettings import SQOOT_PUBLIC_KEY
-from core.models import DealType, Category, Coupon, Merchant, Country, CouponNetwork
+from core.models import DealType, Category, Coupon, Merchant, Country, CouponNetwork, MerchantLocation
 
 ## Need a scheduled task to delete expired deals?
 ## Need to swap out api key
@@ -38,7 +39,7 @@ def refresh_sqoot_data():
     print "{} deals detected, estimating {} pages to iterate\n".format(active_deal_count, page_count)
 
     describe_section("Start retrieving Sqoot data...\n")
-    current_page_counter = 100
+    current_page_counter = 201
     # while True:
     while (current_page_counter < 10):
         request_parameters['page'] = current_page_counter
@@ -60,11 +61,12 @@ def refresh_sqoot_data():
             dealtype_model       = get_or_create_dealtype()
             country_model        = get_or_create_country()
             couponnetwork_model  = get_or_create_couponnetwork()
-
+            coupon_model         = get_or_create_coupon(each_deal_data_dict, merchant_model, category_model, dealtype_model, country_model, couponnetwork_model)
+            get_or_create_merchantlocation(merchant_data_dict, coupon_model)
 
 #############################################################################################################
 #
-# Helper Methods
+# Helper Methods - Data
 #
 #############################################################################################################
 
@@ -117,13 +119,14 @@ def get_or_create_category(each_deal_data_dict, categories_dict):
     else:
         category_model.parent             = None
 
-    category_model.name = each_deal_data_dict['category_name'] # In case it was already created as another category's parent
+    # In case it was already created as another category's parent (hence save outside try-except)
+    category_model.name = each_deal_data_dict['category_name']
     category_model.save()
     return category_model
 
 def get_or_create_dealtype():
     '''
-    Treat all deals from sqoot are 'local' deals.
+    Treat all deals from sqoot as 'local' deals.
     '''
 
     try:
@@ -159,8 +162,81 @@ def get_or_create_couponnetwork():
         couponnetwork_model.save()
     return couponnetwork_model
 
+# Might need to set up a seperate save function
+def get_or_create_coupon(each_deal_data_dict, merchant_model, category_model, dealtype_model, country_model, couponnetwork_model):
+    ref_id = each_deal_data_dict['id']
+    try:
+        coupon_model                     = Coupon.objects.get(ref_id=ref_id, ref_id_source='sqoot')
+    except:
+        coupon_model                     = Coupon()
+        coupon_model.ref_id              = ref_id
+        coupon_model.ref_id_source       = 'sqoot'
+        coupon_model.online              = each_deal_data_dict['online']
+        coupon_model.merchant            = merchant_model
+        coupon_model.categories.add(category_model)
+        coupon_model.dealtypes.add(dealtype_model)
+        coupon_model.description         = strip_tags(each_deal_data_dict['description'])
+        coupon_model.restrictions        = strip_tags(each_deal_data_dict['fine_tags'])
+        coupon_model.start               = get_date(each_deal_data_dict['created_at'])
+        coupon_model.end                 = get_date(each_deal_data_dict['expires_at'])
+        coupon_model.link                = each_deal_data_dict['url']
+        coupon_model.directlink          = each_deal_data_dict['untracked_url']
+        coupon_model.skimlinks           = each_deal_data_dict['url']
+        coupon_model.status              = 'active'
+        coupon_model.lastupdated         = get_date(each_deal_data_dict['updated_at'])
+        coupon_model.created             = get_date(each_deal_data_dict['created_at'])
+        coupon_model.countries.add(country_model)
+        coupon_model.coupon_network      = couponnetwork_model
+        coupon_model.price               = each_deal_data_dict['price']
+        coupon_model.price               = each_deal_data_dict['value']
+        coupon_model.discount            = each_deal_data_dict['discount_amount']
+        coupon_model.percent             = int(each_deal_data_dict['discount_percentage'] * 100)
+        coupon_model.image               = each_deal_data_dict['image_url']
+        coupon_model.embedly_title       = each_deal_data_dict['title']
+        coupon_model.embedly_description = each_deal_data_dict['short_title']
+        coupon_model.embedly_image_url   = each_deal_data_dict['image_url']
+        coupon_model.save()
+    return coupon_model
+
+def get_or_create_merchantlocation(merchant_data_dict, coupon_model):
+    '''
+    If it's an online deal or lat/long data aren't available, this function does nothing.
+    '''
+
+    longitude = merchant_data_dict['longitude']
+    latitude = merchant_data_dict['latitude']
+    point_wkt = 'POINT({} {})'.format(longitude, latitude)
+
+    if coupon_model.online == True or longitude == None or latitude == None:
+        return
+    else:
+        try:
+            merchantlocation_model = MerchantLocation.objects.get(geometry__equals = point_wkt, coupon = coupon_model)
+        except:
+            merchantlocation_model              = MerchantLocation()
+            merchantlocation_model.coupon       = coupon_model
+            merchantlocation_model.geometry     = point_wkt
+            merchantlocation_model.address      = merchant_data_dict['address']
+            merchantlocation_model.locality     = merchant_data_dict['locality']
+            merchantlocation_model.region       = merchant_data_dict['region']
+            merchantlocation_model.postal_code  = merchant_data_dict['postal_code']
+            merchantlocation_model.country      = merchant_data_dict['country']
+            merchantlocation_model.save()
+
+
+#############################################################################################################
+#
+# Helper Methods - Formatting
+#
+#############################################################################################################
+
 def describe_section(message):
     print " "
     print "*~"*30
     print message
 
+def get_date(raw_date_string):
+    if raw_date_string:
+        clean_date_string = raw_date_string[:-4].replace('T', ' ')
+        return datetime.datetime.strptime(clean_date_string, "%Y-%m-%d %H:%M")
+    return None
