@@ -547,7 +547,7 @@ class Coupon(models.Model):
 #######################################################################################################################
 
 class MerchantLocation(models.Model):
-    merchant        = models.ForeignKey(Merchant, blank=True, null=True)
+    coupon          = models.ForeignKey(Coupon, blank=True, null=True)
     geometry        = models.PointField(srid=4326)
     address         = models.CharField(max_length=255, blank=True, null=True)
     locality        = models.CharField(max_length=255, blank=True, null=True)
