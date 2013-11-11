@@ -271,4 +271,8 @@ CELERYBEAT_SCHEDULE = {
         'task': 'core.tasks.load_skimlinks_commissions',
         'schedule': crontab(hour=23),
     },
+    'periodic-fetch-ad-costs': {
+        'task': 'core.tasks.fetch_ad_costs',
+        'schedule': crontab()
+    }
 }
