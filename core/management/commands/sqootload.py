@@ -38,13 +38,13 @@ def refresh_sqoot_data():
     print "{} deals detected, estimating {} pages to iterate\n".format(active_deal_count, page_count)
 
     describe_section("STARTING TO DOWNLOAD SQOOT DEALS..\n")
-    current_page_counter = 11311
+    current_page_counter = 11300
     deal_download_counter = 0
     while True:
     # while (current_page_counter < 10):
         request_parameters['page'] = current_page_counter
 
-        print 'Fetching page {}...\n'.format(current_page_counter)
+        print '## Fetching page {}...\n'.format(current_page_counter)
         response_in_json = requests.get(api_root + 'deals', params=request_parameters).json()
         deals_data_array = response_in_json['deals']
 
@@ -60,12 +60,12 @@ def refresh_sqoot_data():
             category_model       = get_or_create_category(each_deal_data_dict, categories_dict)
             dealtype_model       = get_or_create_dealtype()
             country_model        = get_or_create_country()
-            couponnetwork_model  = get_or_create_couponnetwork()
+            couponnetwork_model  = get_or_create_couponnetwork(each_deal_data_dict)
             coupon_model         = get_or_create_coupon(each_deal_data_dict, merchant_model, category_model, dealtype_model, country_model, couponnetwork_model)
             get_or_create_merchantlocation(merchant_data_dict, coupon_model)
 
             deal_download_counter += 1
-            print "...total of {} deals saved so far".format(deal_download_counter)
+            print "...total of {} deals saved so far\n".format(deal_download_counter)
 
         current_page_counter += 1
 
@@ -88,6 +88,7 @@ def establish_categories_dict(categories_array):
     return categories_dict
 
 def get_or_create_merchant(merchant_data_dict):
+    print "\t...get_or_create a merchant: {}".format(merchant_data_dict['name'])
     ref_id = merchant_data_dict['id']
     try:
         merchant_model = Merchant.objects.get(ref_id=ref_id, ref_id_source='sqoot')
@@ -101,10 +102,10 @@ def get_or_create_merchant(merchant_data_dict):
     merchant_model.directlink           = merchant_data_dict['url']
     merchant_model.skimlinks            = None
     merchant_model.save()
-    print "\t...get_or_create a merchant"
     return merchant_model
 
 def get_or_create_category(each_deal_data_dict, categories_dict):
+    print "\t...get_or_create a category: {}".format(each_deal_data_dict['category_slug'])
     category_slug = each_deal_data_dict['category_slug']
     parent_slug = categories_dict[category_slug]
     try:
@@ -129,13 +130,13 @@ def get_or_create_category(each_deal_data_dict, categories_dict):
     # In case it was already created as another category's parent (hence save outside try-except)
     category_model.name = each_deal_data_dict['category_name']
     category_model.save()
-    print "\t...get_or_create a category"
     return category_model
 
 def get_or_create_dealtype():
     '''
     Treat all deals from sqoot as 'local' deals.
     '''
+    print "\t...get_or_create a dealtype"
 
     try:
         dealtype_model      = DealType.objects.get(code='local')
@@ -152,6 +153,7 @@ def get_or_create_country():
     All deals from sqoot are US deals for now
     (They say they are going to add international deals at some point)
     '''
+    print "\t...get_or_create a country"
     try:
         country_model      = Country.objects.get(code='usa')
     except:
@@ -159,22 +161,23 @@ def get_or_create_country():
         country_model.code = 'usa'
         country_model.name = 'usa'
         country_model.save()
-    print "\t...get_or_create a country"
     return country_model
 
-def get_or_create_couponnetwork():
+def get_or_create_couponnetwork(each_deal_data_dict):
+    print "\t...get_or_create a coupon_network"
+    provider_slug = each_deal_data_dict['provider_slug']
     try:
-        couponnetwork_model      = CouponNetwork.objects.get(code='sqoot')
+        couponnetwork_model      = CouponNetwork.objects.get(code=provider_slug)
     except:
         couponnetwork_model      = CouponNetwork()
-        couponnetwork_model.code = 'sqoot'
-        couponnetwork_model.name = 'sqoot'
+        couponnetwork_model.code = provider_slug
+        couponnetwork_model.name = each_deal_data_dict['provider_name']
         couponnetwork_model.save()
-    print "\t...get_or_create a coupon network"
     return couponnetwork_model
 
 # Might need to set up a seperate save function
 def get_or_create_coupon(each_deal_data_dict, merchant_model, category_model, dealtype_model, country_model, couponnetwork_model):
+    print "\t...get_or_create a coupon: {} {}".format(each_deal_data_dict['id'], each_deal_data_dict['title'])
     ref_id = each_deal_data_dict['id']
     try:
         coupon_model                     = Coupon.objects.get(ref_id=ref_id, ref_id_source='sqoot')
@@ -209,14 +212,13 @@ def get_or_create_coupon(each_deal_data_dict, merchant_model, category_model, de
         coupon_model.dealtypes.add(dealtype_model)
         coupon_model.countries.add(country_model)
         coupon_model.save()
-    print "\t...get_or_create a coupon"
     return coupon_model
 
 def get_or_create_merchantlocation(merchant_data_dict, coupon_model):
     '''
     If it's an online deal or lat/long data aren't available, this function does nothing.
     '''
-
+    print "\t...get_or_create a merchant_location"
     longitude = merchant_data_dict['longitude']
     latitude = merchant_data_dict['latitude']
     point_wkt = 'POINT({} {})'.format(longitude, latitude)
@@ -236,7 +238,6 @@ def get_or_create_merchantlocation(merchant_data_dict, coupon_model):
             merchantlocation_model.postal_code  = merchant_data_dict['postal_code']
             merchantlocation_model.country      = merchant_data_dict['country']
             merchantlocation_model.save()
-    print "\t...get_or_create a merchant_location"
 
 #############################################################################################################
 #
