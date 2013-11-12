@@ -200,5 +200,12 @@ class VisitorTrackingMiddleware(object):
                     pass
                 else:
                     request.session['acquisition_source_logo_url'] = acq_src.logo_url
+            else:
+                utm_source = request.META.get('HTTP_REFERER', None)
+                if utm_source:
+                    visitor.bump_past_acquisition_info()
+                    visitor.acquisition_source = utm_source[:255]
+                    visitor.acquisition_medium = 'organic'
+                    visitor.save()
         except:
             print_stack_trace()
