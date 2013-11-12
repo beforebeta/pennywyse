@@ -175,8 +175,14 @@ def redirect_to_open_coupon(request, company_name, coupon_label, coupon_id):
 @ensure_csrf_cookie
 def open_coupon(request, company_name, coupon_label, coupon_id):
     log_click_track(request)
-
-    coupon = Coupon.objects.get(id=coupon_id)
+    try:
+        coupon = Coupon.objects.get(id=coupon_id)
+    except Coupon.DoesNotExist:
+        coupon = Coupon.objects.filter(desc_slug=coupon_label).order_by('-id')[0]
+        original_coupon_url = reverse('web.views.main.open_coupon', kwargs={'company_name': company_name,
+                                                                            'coupon_label': coupon_label,
+                                                                            'coupon_id': coupon.id})
+        return HttpResponsePermanentRedirect(original_coupon_url)
     if coupon.merchant.redirect:
       return HttpResponseRedirect(coupon.merchant.link)
 
@@ -318,6 +324,13 @@ def stores(request, page='A'):
 
 @ensure_csrf_cookie
 def coupon_success_page(request, company_name, coupon_label, coupon_id):
-    coupon = Coupon.objects.get(id=coupon_id)
+    try:
+        coupon = Coupon.objects.get(id=coupon_id)
+    except Coupon.DoesNotExist:
+        coupon = Coupon.objects.filter(desc_slug=coupon_label).order_by('-id')[0]
+        original_coupon_url = reverse('web.views.main.coupon_success_page', kwargs={'company_name': company_name,
+                                                                                    'coupon_label': coupon_label,
+                                                                                    'coupon_id': coupon.id})
+        return HttpResponsePermanentRedirect(original_coupon_url)
     context={"coupon": coupon}
     return render_response("coupon_success_page.html",request, context)
