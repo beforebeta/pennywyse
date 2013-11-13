@@ -6,6 +6,7 @@ djcelery.setup_loader()
 __author__ = 'amrish'
 
 FMTC_ACCESS_KEY = '43a787c3f5f2cf2f675cbf86aff6a33b'
+SQOOT_PUBLIC_KEY = 'h7n8we'
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -40,13 +41,15 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        # 'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': 'django.contrib.gis.db.backends.mysql', # Switching to use GeoDjango
         'NAME': 'coupons',                      # Or path to database file if using sqlite3.
         'USER': 'dbuser',                      # Not used with sqlite3.
         'PASSWORD': 'dbuser',                  # Not used with sqlite3.
         'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '8001',                      # Set to empty string for default. Not used with sqlite3.
-        'DEFAULT_STORAGE_ENGINE': 'MyISAM'
+        'DEFAULT_STORAGE_ENGINE': 'MyISAM',
+        'OPTIONS': { 'init_command': 'SET storage_engine=MYISAM' },
     }
 }
 
@@ -96,8 +99,9 @@ STATIC_ROOT = abs_path('static')
 STATIC_URL = '/static/'
 
 # Additional locations of static files
-STATICFILES_DIRS = (
-    "./static/",
+if not DEBUG:
+    STATICFILES_DIRS = (
+        "./static/",
     )
 
 # List of finder classes that know how to find static files in
@@ -163,6 +167,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'django.contrib.humanize',
+    'django.contrib.gis', # GeoDjango
     'compressor',
     'south',
     'core',
