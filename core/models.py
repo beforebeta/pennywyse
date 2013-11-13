@@ -130,6 +130,10 @@ class MerchantManager(models.Manager):
     def get_popular_companies(self, how_many=8):
         return Merchant.objects.exclude(coupon__isnull=True)[:how_many]
 
+    #def get_query_set(self):
+    #    #filter(ref_id_source__isnull=True) -> added this to ignore all coupons from sqoot
+    #    return super(MerchantManager, self).get_query_set().filter(ref_id_source__isnull=True)
+
 class Merchant(models.Model):
     """Storing companies, which provides coupons."""
     
@@ -375,6 +379,7 @@ class CouponManager(models.Manager):
 
 class ActiveCouponManager(models.Manager):
     def get_query_set(self):
+        #filter(ref_id_source__isnull=True) -> added this to ignore all coupons from sqoot
         return super(ActiveCouponManager, self).get_query_set().filter(Q(end__gt=datetime.datetime.now()) | Q(end__isnull=True))
 
 
