@@ -99,8 +99,9 @@ STATIC_ROOT = abs_path('static')
 STATIC_URL = '/static/'
 
 # Additional locations of static files
-STATICFILES_DIRS = (
-    # "./static/", # TSY: Throws an error "ImproperlyConfigured: The STATICFILES_DIRS setting should not contain the STATIC_ROOT setting"
+if not DEBUG:
+    STATICFILES_DIRS = (
+        "./static/",
     )
 
 # List of finder classes that know how to find static files in
