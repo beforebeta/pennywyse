@@ -4,6 +4,7 @@ import os
 import re
 import shutil
 import unicodedata
+from urlparse import urlparse, parse_qs
 
 from django.conf import settings
 
@@ -124,3 +125,22 @@ def fetch_ad_costs():
         shutil.move(FB_ADS_EXPORT_FILE, destination_path)
     except IOError:
         print '%s cannot be opened' % FB_ADS_EXPORT_FILE
+        
+def aggregate_visitor_data():
+    from tracking.models import Visitor
+    for visitor in Visitor.objects.filter(referrer='unknown'):
+        parsed_url = urlparse(visitor.referrer)
+        params = parse_qs(parsed_url.query)
+        search_query = None
+        if parsed_url.netloc == 'www.bing.com' and parsed_url.path == '/search/':
+            qsearch_query = params.get('q', [])
+        if parsed_url.netloc.contains('search.yahoo.com') and parsed_url.path == '/search':
+            search_query = params.get('p', [])
+        if re.search('.*google[\.][a-z]{1,4}', parsed_url.netloc) and parsed_url.path == '/search':
+            search_query = params.get('q', [])
+        if search_query:
+            visitor.bump_past_acquisition_info()
+            visitor.acquisition_source = parsed_url.netloc
+            visitor.acquisition_term = search_query[0]
+            visitor.acquisition_medium = 'organic'
+            visitor.save()
