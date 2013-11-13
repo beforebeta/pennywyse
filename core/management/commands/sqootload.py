@@ -43,7 +43,7 @@ def refresh_sqoot_data():
     except:
         pass
     describe_section("STARTING TO DOWNLOAD SQOOT DEALS..\n")
-    current_page_counter = 30
+    current_page_counter = 0
     deal_download_counter = 0
     while True:
         try:
@@ -83,8 +83,8 @@ def refresh_sqoot_data():
         except:
             print_stack_trace()
         current_page_counter += 1
-        if current_page_counter > 100:
-            break
+        #if current_page_counter > 100:
+        #    break
 
 #############################################################################################################
 #
