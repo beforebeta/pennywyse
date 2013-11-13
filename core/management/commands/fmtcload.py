@@ -118,7 +118,7 @@ def refresh_merchants():
             model.skimlinks = skimlinks
             model.link = homepageurl
             model.save()
-            affiliate_data, created = MerchantAffilateData.objects.get_or_create(ref_id=id, merchant=model)
+            affiliate_data, created = MerchantAffiliateData.objects.get_or_create(ref_id=id, merchant=model)
             affiliate_data.network = merchant.find('network').text
             affiliate_data.networkid = merchant.find('networkid').text
             affiliate_data.networknote = merchant.find('networknote').text
