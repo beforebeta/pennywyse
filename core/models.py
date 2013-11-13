@@ -29,7 +29,7 @@ def get_description(model):
             return model.name
         else:
             return ""
-    return get_description_tag_from_url(model.directlink)
+    return ''
 
 base_description = "PushPenny | Hand Verified Coupon Codes"
 icon_url = "http://pushpenny.com/static/img/fbog.png"
@@ -129,7 +129,10 @@ class MerchantManager(models.Manager):
         return Merchant.objects.exclude(coupon__isnull=True)[:how_many]
 
 class Merchant(models.Model):
-    ref_id          = models.CharField(max_length=255, db_index=True, blank=True, null=True)
+    """Storing companies, which provides coupons."""
+    
+    # deprecated field
+    ref_id          = models.CharField(max_length=255, db_index=True, default='refid', blank=True, null=True)
     name            = models.CharField(max_length=255, db_index=True, blank=True, null=True)
     name_slug       = models.CharField(max_length=255, db_index=True, blank=True, null=True)
     image           = models.TextField(blank=True, null=True)
@@ -262,6 +265,18 @@ class Merchant(models.Model):
 
     def og_url(self):
       return "{0}{1}".format(settings.BASE_URL_NO_APPENDED_SLASH, self.local_path())
+
+class MerchantAffiliateData(models.Model):
+    """Storing data, related to affiliate networks."""
+    
+    merchant = models.ForeignKey(Merchant, related_name='affiliate_data')
+    ref_id = models.CharField(max_length=255, blank=True, null=True)
+    network = models.CharField(max_length=255, blank=True, null=True)
+    networkid = models.CharField(max_length=255, blank=True, null=True)
+    networknote = models.CharField(max_length=255, blank=True, null=True)
+    link = models.TextField(blank=True, null=True)
+    primary = models.BooleanField(default=False)
+
 
 #######################################################################################################################
 #

@@ -1,6 +1,7 @@
 # Create your views here.
 import math, random, re
 import string
+from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.contrib.sites.models import get_current_site
 from django.db.models.query_utils import Q
@@ -92,7 +93,7 @@ def _search(itm,lst,f):
     return False
 
 @ensure_csrf_cookie
-def coupons_for_company(request, company_name, company_id=-1, current_page=1, category_ids=-1):
+def coupons_for_company(request, company_name, company_id=None, current_page=1, category_ids=-1):
     selected_cat_ids = category_ids
     if selected_cat_ids != -1:
         selected_cat_ids = ShortenedURLComponent.objects.get_original_url(selected_cat_ids)
@@ -106,11 +107,19 @@ def coupons_for_company(request, company_name, company_id=-1, current_page=1, ca
         selected_cat_ids=",".join(selected_cat_ids)
     merchant=None
     current_page = int(current_page)
-    if company_id == -1:
-        # merchant = Merchant.objects.get(name_slug= slugify(company_name)) -> this will error out if two merchants have the same slug
+    if company_id:
+        try:
+            merchant = Merchant.objects.get(id=company_id)
+        except Merchant.DoesNotExist:
+            pass
+    if not merchant:
         merchant = Merchant.objects.filter(name_slug= slugify(company_name)).order_by("-id")[0]
-    else:
-        merchant = Merchant.objects.get(id=company_id)
+        # if merchant wasn't found by ID - redirecting to merchant page URL with proper ID in it
+        if company_id:
+            original_merchant_url = reverse('web.views.main.coupons_for_company', kwargs={'company_name': merchant.name_slug,
+                                                                                          'company_id': merchant.id})
+            return HttpResponsePermanentRedirect(original_merchant_url)
+    
     selected_categories = ""
     if selected_cat_ids == -1:
         selected_categories = ",".join(set([str(x["categories__id"]) for x in merchant.get_active_coupons().values("categories__id") if x["categories__id"]]))
@@ -166,8 +175,14 @@ def redirect_to_open_coupon(request, company_name, coupon_label, coupon_id):
 @ensure_csrf_cookie
 def open_coupon(request, company_name, coupon_label, coupon_id):
     log_click_track(request)
-
-    coupon = Coupon.objects.get(id=coupon_id)
+    try:
+        coupon = Coupon.objects.get(id=coupon_id)
+    except Coupon.DoesNotExist:
+        coupon = Coupon.objects.filter(desc_slug=coupon_label).order_by('-id')[0]
+        original_coupon_url = reverse('web.views.main.open_coupon', kwargs={'company_name': company_name,
+                                                                            'coupon_label': coupon_label,
+                                                                            'coupon_id': coupon.id})
+        return HttpResponsePermanentRedirect(original_coupon_url)
     if coupon.merchant.redirect:
       return HttpResponseRedirect(coupon.merchant.link)
 
@@ -309,6 +324,13 @@ def stores(request, page='A'):
 
 @ensure_csrf_cookie
 def coupon_success_page(request, company_name, coupon_label, coupon_id):
-    coupon = Coupon.objects.get(id=coupon_id)
+    try:
+        coupon = Coupon.objects.get(id=coupon_id)
+    except Coupon.DoesNotExist:
+        coupon = Coupon.objects.filter(desc_slug=coupon_label).order_by('-id')[0]
+        original_coupon_url = reverse('web.views.main.coupon_success_page', kwargs={'company_name': company_name,
+                                                                                    'coupon_label': coupon_label,
+                                                                                    'coupon_id': coupon.id})
+        return HttpResponsePermanentRedirect(original_coupon_url)
     context={"coupon": coupon}
     return render_response("coupon_success_page.html",request, context)
