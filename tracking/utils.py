@@ -4,6 +4,7 @@ import os
 import re
 import shutil
 import unicodedata
+import urllib
 from urlparse import urlparse, parse_qs
 
 from django.conf import settings
@@ -144,3 +145,21 @@ def aggregate_visitor_data():
             visitor.acquisition_term = search_query[0]
             visitor.acquisition_medium = 'organic'
             visitor.save()
+
+def get_visitor_tag(url, visitor_id):
+    from core.util import print_stack_trace
+    try:
+        if 'go.redirectingat.com' in url:
+            parsed = urlparse(url)
+            query_dict = parse_qs(parsed.query)
+            for key in query_dict.keys():
+                query_dict[key] = query_dict[key][0]
+            if not 'xcust' in query_dict.keys():
+                query_dict['xcust'] = ''
+            query_dict['xcust'] = visitor_id
+            return 'http://go.redirectingat.com/?%s' % urllib.urlencode(query_dict).replace('&','&amp;')
+        else:
+            return url
+    except:
+        print_stack_trace()
+        return url
