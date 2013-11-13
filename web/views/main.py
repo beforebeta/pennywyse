@@ -1,6 +1,7 @@
 # Create your views here.
 import math, random, re
 import string
+from django.core.paginator import Paginator
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.contrib.sites.models import get_current_site
@@ -14,8 +15,9 @@ from core.models import Category, Coupon, Merchant, base_description, icon_url
 from core.util import encode_uri_component, print_stack_trace
 from core.util.pagination import AlphabeticalPagination
 from tracking.views import log_click_track
+from tracking.utils import get_visitor_tag
 from web.models import FeaturedCoupon, NewCoupon, PopularCoupon, ShortenedURLComponent
-from django.core.paginator import Paginator
+
 
 def build_base_context(request, context):
     context["pop_companies"] = Merchant.objects.get_popular_companies(21)
@@ -183,8 +185,10 @@ def open_coupon(request, company_name, coupon_label, coupon_id):
                                                                             'coupon_label': coupon_label,
                                                                             'coupon_id': coupon.id})
         return HttpResponsePermanentRedirect(original_coupon_url)
+
     if coupon.merchant.redirect:
-      return HttpResponseRedirect(coupon.merchant.link)
+        coupon_url = get_visitor_tag(coupon.skimlinks, request.visitor.id)
+        return HttpResponseRedirect(coupon_url)
 
     logo_url = "/"
     back_url = "/"

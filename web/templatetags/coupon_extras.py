@@ -1,7 +1,9 @@
+import urllib
+import urlparse
 from django import template
 from core.util import print_stack_trace
-import urlparse
-import urllib
+from tracking.utils import get_visitor_tag
+
 
 register = template.Library()
 
@@ -16,17 +18,7 @@ def show_category_filters(categories, form_path):
 @register.simple_tag(takes_context=True)
 def assign_visitor_tag(context, url):
     try:
-        if 'go.redirectingat.com' in url:
-            parsed = urlparse.urlparse(url)
-            query_dict = urlparse.parse_qs(parsed.query)
-            for key in query_dict.keys():
-                query_dict[key] = query_dict[key][0]
-            if not 'xcust' in query_dict.keys():
-                query_dict['xcust'] = ''
-            query_dict['xcust'] = context["visitor"].id
-            return 'http://go.redirectingat.com/?%s' % urllib.urlencode(query_dict).replace('&','&amp;')
-        else:
-            return url
+        return get_visitor_tag(url, context['visitor'].id)
     except:
         print_stack_trace()
         return url
