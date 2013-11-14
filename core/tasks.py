@@ -4,7 +4,7 @@ from django.core.mail import send_mail
 from celery import task
 from core.management.commands.fmtcload import load
 from tracking.management.commands.skimlinks import load_commissions
-from tracking.utils import fetch_ad_costs, ADWORDS_EXPORT_FILE, FB_ADS_EXPORT_FILE
+from tracking.utils import ADWORDS_EXPORT_FILE, FB_ADS_EXPORT_FILE, fetch_ad_costs, aggregate_visitor_data
 
 @task(max_retries=1)
 def load_coupons():
@@ -36,3 +36,10 @@ def load_ad_costs():
         fb_ads_changed = False
     if adwords_changed or fb_ads_changed:
         fetch_ad_costs()
+        
+def process_visitor_data():
+    try:
+        aggregate_visitor_data()
+    except Exception as e:
+        process_visitor_data.retry(exc=e)
+        

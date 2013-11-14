@@ -41,13 +41,13 @@
 	                        <li class="store-container">
 	                            <div class="store-item" data-rid="{{ store.id }}">
 	                                <div>
-	                                    <a href="{% url 'web.views.main.coupons_for_company' store.name_slug store.id %}">
+	                                    <a href="{% url 'web.views.main.coupons_for_company' company_name=store.name_slug company_id=store.id %}">
 	                                        <figure class="store-image">
 	                                            <img src="{{ store.get_image }}" alt="{{ store.name }} Coupons" >
 	                                        </figure>
 	                                    </a>
 	                                	<div class="store-link">
-	                                		<a href="{% url 'web.views.main.coupons_for_company' store.name_slug store.id %}">{{store.name}}</a>
+	                                		<a href="{% url 'web.views.main.coupons_for_company' company_name=store.name_slug company_id=store.id %}">{{store.name}}</a>
 	                                	</div>
 	                                </div>
 	                            </div>

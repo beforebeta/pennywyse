@@ -1,16 +1,17 @@
 from __future__ import unicode_literals
+
+import datetime
 import os
 import urllib
-import datetime
 import urlparse
 
 from django.conf import settings
+from django.core.paginator import Paginator
 from django.core.urlresolvers import reverse
-# from django.db import models
 from django.contrib.gis.db import models # Switching to GeoDjango models
 from django.db.models.query_utils import Q
 from django.template.defaultfilters import slugify
-from django.core.paginator import Paginator
+
 from core.util import print_stack_trace, get_first_google_image_result, get_description_tag_from_url
 from tracking.commission.skimlinks import get_merchant_description
 
@@ -30,7 +31,7 @@ def get_description(model):
             return model.name
         else:
             return ""
-    return get_description_tag_from_url(model.directlink)
+    return ''
 
 base_description = "PushPenny | Hand Verified Coupon Codes"
 icon_url = "http://pushpenny.com/static/img/fbog.png"
@@ -42,7 +43,7 @@ icon_url = "http://pushpenny.com/static/img/fbog.png"
 #######################################################################################################################
 
 class Category(models.Model):
-    ref_id          = models.CharField(max_length=255, db_index=True, blank=True, null=True)
+    ref_id          = models.CharField(max_length=255, db_index=True, blank=True, null=True, default='refid')
     ref_id_source   = models.CharField(max_length=255, db_index=True, blank=True, null=True)
     code            = models.CharField(max_length=255,blank=True, null=True, db_index=True)
     name            = models.CharField(max_length=255,blank=True, null=True, db_index=True)
@@ -130,18 +131,20 @@ class MerchantManager(models.Manager):
     def get_popular_companies(self, how_many=8):
         return Merchant.objects.exclude(coupon__isnull=True)[:how_many]
 
-    #def get_query_set(self):
-    #    #filter(ref_id_source__isnull=True) -> added this to ignore all coupons from sqoot
-    #    return super(MerchantManager, self).get_query_set().filter(ref_id_source__isnull=True)
+    def get_query_set(self):
+        return super(MerchantManager, self).get_query_set().filter(ref_id_source__isnull=True)
 
 class Merchant(models.Model):
-    ref_id          = models.CharField(max_length=255, db_index=True, blank=True, null=True)
+    """Storing companies, which provides coupons."""
+    
+    # deprecated field
+    ref_id          = models.CharField(max_length=255, db_index=True, default='refid', blank=True, null=True)
     ref_id_source   = models.CharField(max_length=255, db_index=True, blank=True, null=True)
     name            = models.CharField(max_length=255, db_index=True, blank=True, null=True)
     name_slug       = models.CharField(max_length=255, db_index=True, blank=True, null=True)
     image           = models.TextField(blank=True, null=True)
 
-    description     = models.TextField(blank=True, null=True) #loaded from the target link
+    description     = models.TextField(blank=True, null=True)   #loaded from the target link
     coupon_count    = models.IntegerField(default=0)
 
     link            = models.TextField(blank=True, null=True)
@@ -270,6 +273,18 @@ class Merchant(models.Model):
     def og_url(self):
       return "{0}{1}".format(settings.BASE_URL_NO_APPENDED_SLASH, self.local_path())
 
+class MerchantAffiliateData(models.Model):
+    """Storing data, related to affiliate networks."""
+    
+    merchant = models.ForeignKey(Merchant, related_name='affiliate_data')
+    ref_id = models.CharField(max_length=255, blank=True, null=True)
+    network = models.CharField(max_length=255, blank=True, null=True)
+    networkid = models.CharField(max_length=255, blank=True, null=True)
+    networknote = models.CharField(max_length=255, blank=True, null=True)
+    link = models.TextField(blank=True, null=True)
+    primary = models.BooleanField(default=False)
+
+
 #######################################################################################################################
 #
 # CouponNetwork
@@ -277,7 +292,7 @@ class Merchant(models.Model):
 #######################################################################################################################
 
 class CouponNetwork(models.Model):
-    name            = models.CharField(max_length=255, db_index=True, blank=True, null=True)
+    name            = models.CharField(max_length=255, db_index=True, blank=True, null=True, default='')
     code            = models.CharField(max_length=255, db_index=True, blank=True, null=True)
 
     date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
@@ -310,6 +325,8 @@ class Country(models.Model):
 #######################################################################################################################
 
 class MerchantLocation(models.Model):
+    """GEO data about merchants, related to local coupons"""
+    
     merchant        = models.ForeignKey(Merchant, blank=True, null=True)
     geometry        = models.PointField(srid=4326)
     address         = models.CharField(max_length=255, blank=True, null=True)
@@ -363,7 +380,6 @@ class CouponManager(models.Manager):
 
 class ActiveCouponManager(models.Manager):
     def get_query_set(self):
-        #filter(ref_id_source__isnull=True) -> added this to ignore all coupons from sqoot
         return super(ActiveCouponManager, self).get_query_set().filter(Q(end__gt=datetime.datetime.now()) | Q(end__isnull=True))
 
 
@@ -395,7 +411,7 @@ class Coupon(models.Model):
     Percent      (Product Discount Percent, not applied to all deals)
     """
     #Our proprietary coupon ID - especially useful in identifying deals that are delivered more than once because they have changed.
-    ref_id          = models.CharField(max_length=255, db_index=True, blank=True, null=True)
+    ref_id          = models.CharField(max_length=255, db_index=True, blank=True, null=True, default='refid')
     ref_id_source   = models.CharField(max_length=255, db_index=True, blank=True, null=True)
     online          = models.NullBooleanField()
     merchant        = models.ForeignKey(Merchant, blank=True, null=True)
