@@ -250,7 +250,7 @@ def refresh_merchant_redirects():
                 print "{0} timed out connecting to {1}".format(coupon.merchant.name, coupon.link)
         else:
             print "{0}: else False".format(coupon.merchant.name)
-    
+
     for merchant_name in IFRAME_DISALLOWED:
         Merchant.objects.filter(name=merchant_name).update(redirect=True)
 

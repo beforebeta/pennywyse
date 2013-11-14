@@ -39,7 +39,9 @@ def get_query(query_string, search_fields):
             query = query & or_query
     return query
 
-def search_model(model, query, fields, order_by="-date_added"):
+def search_model(model, query, fields, order_by="-date_added", objects=None):
+    if not objects:
+        objects=model.objects
     entry_query = get_query(query.lower(), fields)
     return model.objects.filter(entry_query).order_by(order_by)
 
@@ -49,7 +51,7 @@ def search(request):
         query = request.GET.get("q","").strip()
         context["query"] = query
         merchants = search_model(Merchant, query, ["name"], "-coupon_count")[:5]
-        coupons = search_model(Coupon, query, ["description"])[:10]
+        coupons = search_model(Coupon, query, ["description"], objects=Coupon.active_objects)[:10]
 
         context["merchants"] = merchants
         context["coupons"] = coupons
