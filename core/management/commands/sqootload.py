@@ -27,11 +27,11 @@ def refresh_sqoot_data():
     request_parameters = {
         'api_key': settings.SQOOT_PUBLIC_KEY,
     }
-    api_root = "http://api.sqoot.com/v2/"
     print "\nSQOOT DATA LOAD STARTING..\n"
 
+    # loading categories
     describe_section("ESTABLISHING CATEGORY DICTIONARY..\n")
-    categories_array = requests.get(api_root + 'categories', params=request_parameters).json()['categories']
+    categories_array = requests.get(SQOOT_API_URL + 'categories', params=request_parameters).json()['categories']
     categories_dict = establish_categories_dict(categories_array)
     reorganized_categories_array = reorganize_categories_list(categories_array)
     for category_dict in reorganized_categories_array:
@@ -82,9 +82,8 @@ def refresh_sqoot_data():
 def reorganize_categories_list(categories_array):
     categories_list = []
     for category in categories_array:
-        category_dict = {}
-        category_dict['category_name'] = category['category']['name']
-        category_dict['category_slug'] = category['category']['slug']
+        category_dict = {'category_name': category['category']['name'],
+                         'category_slug': category['category']['slug']}
         categories_list.append(category_dict)
     return categories_list
 
@@ -122,7 +121,7 @@ def get_or_create_category(each_deal_data_dict, categories_dict):
     parent_slug = categories_dict[category_slug]
     try:
         category_model = Category.all_objects.get(code=category_slug, ref_id_source='sqoot')
-    except:
+    except Category.DoesNotExist:
         category_model                    = Category()
         category_model.ref_id_source      = 'sqoot'
         category_model.code               = category_slug
@@ -131,10 +130,8 @@ def get_or_create_category(each_deal_data_dict, categories_dict):
         try:
             parent_category               = Category.all_objects.get(code=parent_slug, ref_id_source='sqoot')
             category_model.parent         = parent_category
-        except:
-            parent_category               = Category()
-            parent_category.ref_id_source = 'sqoot'
-            parent_category.code          = parent_slug
+        except Category.DoesNotExist:
+            parent_category = Category(ref_id_source='sqoot', code=parent_slug)
             parent_category.save()
             category_model.parent         = parent_category
     else:

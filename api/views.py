@@ -3,17 +3,17 @@ import requests
 from django.http import HttpResponse
 from core.models import Category
 
+SQOOT_API_URL = "http://api.sqoot.com/v2/deals"
+
 def deals(request):
-    API_URL = "http://api.sqoot.com/v2/deals"
     parameters = {}
-    for item in request.GET.items():
-        parameters[item[0]] = item[1]
-    parameters['per_page'] = 100
+    for k,v in request.GET.items():
+        parameters[k] = v
     query = request.GET.get("query","")
 
     response = {}
     if query:
-        query_response = requests.get(API_URL, params=parameters).json()
+        query_response = requests.get(SQOOT_API_URL, params=parameters).json()
 
         try:
             checked_category = Category.all_objects.get(ref_id_source='sqoot', name__iexact=query.lower())
@@ -27,7 +27,7 @@ def deals(request):
                 pass
             finally:
                 parameters["category_slugs"] = checked_category.code
-            category_response = requests.get(API_URL, params=parameters).json()
+            category_response = requests.get(SQOOT_API_URL, params=parameters).json()
 
             response = {'deals': query_response['deals'], 'query': {}}
             query_response_deal_ids_list = [a['deal']['id'] for a in query_response['deals']]
@@ -44,7 +44,7 @@ def deals(request):
         else:
             response = query_response
     else:
-        response = requests.get(API_URL, params=parameters).json()
+        response = requests.get(SQOOT_API_URL, params=parameters).json()
     return HttpResponse(json.dumps(response), mimetype='application/json; charset=utf-8;')
 
 def localinfo(request):
