@@ -27,13 +27,15 @@ def refresh_sqoot_data():
     request_parameters = {
         'api_key': settings.SQOOT_PUBLIC_KEY,
     }
+    api_root = "http://api.sqoot.com/v2/"
     print "\nSQOOT DATA LOAD STARTING..\n"
 
-    describe_section("ESTABLISHING CATEGORY DISCTIONARY..\n")
-    
-    # loading categories
-    categories_array = requests.get(SQOOT_API_URL + 'categories', params=request_parameters).json()['categories']
+    describe_section("ESTABLISHING CATEGORY DICTIONARY..\n")
+    categories_array = requests.get(api_root + 'categories', params=request_parameters).json()['categories']
     categories_dict = establish_categories_dict(categories_array)
+    reorganized_categories_array = reorganize_categories_list(categories_array)
+    for category_dict in reorganized_categories_array:
+        get_or_create_category(category_dict, categories_dict)
 
     # loading coupons and merchants
     describe_section("CHECKING THE LATEST DEAL DATA FROM SQOOT..\n")
@@ -77,6 +79,15 @@ def refresh_sqoot_data():
 #
 #############################################################################################################
 
+def reorganize_categories_list(categories_array):
+    categories_list = []
+    for category in categories_array:
+        category_dict = {}
+        category_dict['category_name'] = category['category']['name']
+        category_dict['category_slug'] = category['category']['slug']
+        categories_list.append(category_dict)
+    return categories_list
+
 def establish_categories_dict(categories_array):
     categories_dict = {}
     for category in categories_array:
@@ -98,7 +109,7 @@ def get_or_create_merchant(merchant_data_dict):
 
     if created:
         print "Created merchant %s" % merchant_data_dict['name']
-    
+
     merchant_model.link                 = merchant_data_dict['url']
     merchant_model.directlink           = merchant_data_dict['url']
     merchant_model.save()
@@ -106,21 +117,32 @@ def get_or_create_merchant(merchant_data_dict):
 
 def get_or_create_category(each_deal_data_dict, categories_dict):
     category_slug = each_deal_data_dict['category_slug']
-    
     if not category_slug:
         return None
-
     parent_slug = categories_dict[category_slug]
-    category_model, created = Category.all_objects.get_or_create(code=category_slug, ref_id_source='sqoot',
-                                                                 name=each_deal_data_dict['category_name'])
-    if created:
-        print "Created category %s" % each_deal_data_dict['category_slug']
+    try:
+        category_model = Category.all_objects.get(code=category_slug, ref_id_source='sqoot')
+    except:
+        category_model                    = Category()
+        category_model.ref_id_source      = 'sqoot'
+        category_model.code               = category_slug
 
     if parent_slug:
-        parent_category, created = Category.objects.get_or_create(code=parent_slug, ref_id_source='sqoot')
-        if created:
-            category_model.parent = parent_category
-    
+        try:
+            parent_category               = Category.all_objects.get(code=parent_slug, ref_id_source='sqoot')
+            category_model.parent         = parent_category
+        except:
+            parent_category               = Category()
+            parent_category.ref_id_source = 'sqoot'
+            parent_category.code          = parent_slug
+            parent_category.save()
+            category_model.parent         = parent_category
+    else:
+        category_model.parent             = None
+
+    # In case it was already created as another category's parent (hence save outside try-except)
+    category_model.name = each_deal_data_dict['category_name']
+    category_model.save()
     return category_model
 
 def get_or_create_dealtype():

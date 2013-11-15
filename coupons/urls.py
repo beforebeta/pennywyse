@@ -81,3 +81,12 @@ urlpatterns += patterns('websvcs.views.image',
 urlpatterns += patterns('websvcs.views.subscriptions',
     url(r'^e/subscribe/$', 'email_subscribe')
 )
+
+########################################################################################
+# API
+########################################################################################
+
+urlpatterns += patterns('api.views',
+    url(r'^v2/deals', 'deals'),
+    url(r'^v2/localinfo', 'localinfo'),
+)

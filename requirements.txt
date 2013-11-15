@@ -23,3 +23,5 @@ httplib2
 uWSGI==1.9.17.1
 cssmin==0.2.0
 lxml==3.2.4
+django-tastypie==0.10.0
+python-mimeparse==0.1.4

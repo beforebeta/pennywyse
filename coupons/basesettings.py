@@ -177,6 +177,7 @@ INSTALLED_APPS = (
     'tracking',
     'articles',
     'djcelery',
+    'api',
     )
 
 # A sample logging configuration. The only tangible logging
