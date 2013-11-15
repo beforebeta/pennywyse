@@ -1,15 +1,17 @@
 from __future__ import unicode_literals
+
+import datetime
 import os
 import urllib
-import datetime
 import urlparse
 
 from django.conf import settings
+from django.core.paginator import Paginator
 from django.core.urlresolvers import reverse
-from django.db import models
+from django.contrib.gis.db import models as models# Switching to GeoDjango models
 from django.db.models.query_utils import Q
 from django.template.defaultfilters import slugify
-from django.core.paginator import Paginator
+
 from core.util import print_stack_trace, get_first_google_image_result, get_description_tag_from_url
 from tracking.commission.skimlinks import get_merchant_description
 
@@ -39,9 +41,14 @@ icon_url = "http://pushpenny.com/static/img/fbog.png"
 # Category
 #
 #######################################################################################################################
+class CategoryManager(models.Manager):
+
+    def get_query_set(self):
+        return super(CategoryManager, self).get_query_set().filter(ref_id_source__isnull=True)
 
 class Category(models.Model):
-    ref_id          = models.CharField(max_length=255, db_index=True, blank=True, null=True)
+    ref_id          = models.CharField(max_length=255, db_index=True, blank=True, null=True, default='refid')
+    ref_id_source   = models.CharField(max_length=255, db_index=True, blank=True, null=True)
     code            = models.CharField(max_length=255,blank=True, null=True, db_index=True)
     name            = models.CharField(max_length=255,blank=True, null=True, db_index=True)
     description     = models.CharField(max_length=255,blank=True, null=True)
@@ -50,6 +57,9 @@ class Category(models.Model):
 
     date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
     last_modified   = models.DateTimeField(default=datetime.datetime.now(), auto_now=True, auto_now_add=True)
+
+    objects = CategoryManager()
+    all_objects = models.Manager()
 
     def save(self, *args, **kwargs):
       if not self.image:
@@ -122,22 +132,26 @@ class DealType(models.Model):
 # Merchant
 #
 #######################################################################################################################
-
 class MerchantManager(models.Manager):
 
     def get_popular_companies(self, how_many=8):
         return Merchant.objects.exclude(coupon__isnull=True)[:how_many]
+
+    def get_query_set(self):
+        return super(MerchantManager, self).get_query_set().filter(ref_id_source__isnull=True)
 
 class Merchant(models.Model):
     """Storing companies, which provides coupons."""
     
     # deprecated field
     ref_id          = models.CharField(max_length=255, db_index=True, default='refid', blank=True, null=True)
+    ref_id          = models.CharField(max_length=255, db_index=True, blank=True, null=True)
+    ref_id_source   = models.CharField(max_length=255, db_index=True, blank=True, null=True)
     name            = models.CharField(max_length=255, db_index=True, blank=True, null=True)
     name_slug       = models.CharField(max_length=255, db_index=True, blank=True, null=True)
     image           = models.TextField(blank=True, null=True)
 
-    description     = models.TextField(blank=True, null=True) #loaded from the target link
+    description     = models.TextField(blank=True, null=True)   #loaded from the target link
     coupon_count    = models.IntegerField(default=0)
 
     link            = models.TextField(blank=True, null=True)
@@ -148,6 +162,7 @@ class Merchant(models.Model):
     date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
     last_modified   = models.DateTimeField(default=datetime.datetime.now(), auto_now=True, auto_now_add=True)
 
+    all_objects = models.Manager()
     objects = MerchantManager()
 
     def get_top_coupon(self):
@@ -285,10 +300,14 @@ class MerchantAffiliateData(models.Model):
 #######################################################################################################################
 
 class CouponNetwork(models.Model):
-    name            = models.CharField(max_length=255, db_index=True, blank=True, null=True)
+    name            = models.CharField(max_length=255, db_index=True, blank=True, null=True, default='')
+    code            = models.CharField(max_length=255, db_index=True, blank=True, null=True)
 
     date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
     last_modified   = models.DateTimeField(default=datetime.datetime.now(), auto_now=True, auto_now_add=True)
+
+    def __unicode__(self):  # Python 3: def __str__(self):
+        return "%s" % (self.code)
 
 #######################################################################################################################
 #
@@ -306,13 +325,42 @@ class Country(models.Model):
     def __unicode__(self):  # Python 3: def __str__(self):
         return "%s %s" % (self.code, self.name)
 
+
+#######################################################################################################################
+#
+# MerchantLocation
+#
+#######################################################################################################################
+
+class MerchantLocation(models.Model):
+    """GEO data about merchants, related to local coupons"""
+    
+    merchant        = models.ForeignKey(Merchant, blank=True, null=True)
+    geometry        = models.PointField(srid=4326)
+    address         = models.CharField(max_length=255, blank=True, null=True)
+    locality        = models.CharField(max_length=255, blank=True, null=True)
+    region          = models.CharField(max_length=255, blank=True, null=True)
+    postal_code     = models.CharField(max_length=255, blank=True, null=True)
+    country         = models.CharField(max_length=255, blank=True, null=True)
+
+    date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
+    last_modified   = models.DateTimeField(default=datetime.datetime.now(), auto_now=True, auto_now_add=True)
+
+    objects = models.GeoManager()
+
+    def __unicode__(self):
+        return '{} {}'.format(self.geometry.x, self.geometry.y)
+
+
 #######################################################################################################################
 #
 # Coupon
 #
 #######################################################################################################################
-
 class CouponManager(models.Manager):
+    def get_query_set(self):
+        return super(CouponManager, self).get_query_set().filter(ref_id_source__isnull=True)
+    
     def get_new_coupons(self,how_many=10):
         #TODO: Improve
         return self.all().order_by("-created")[:how_many]
@@ -342,7 +390,9 @@ class CouponManager(models.Manager):
 
 class ActiveCouponManager(models.Manager):
     def get_query_set(self):
-        return super(ActiveCouponManager, self).get_query_set().filter(Q(end__gt=datetime.datetime.now()) | Q(end__isnull=True))
+        return super(ActiveCouponManager, self).get_query_set()\
+                                                .filter(Q(end__gt=datetime.datetime.now()) | Q(end__isnull=True))\
+                                                .filter(ref_id_source__isnull=True)
 
 
 class Coupon(models.Model):
@@ -373,8 +423,11 @@ class Coupon(models.Model):
     Percent      (Product Discount Percent, not applied to all deals)
     """
     #Our proprietary coupon ID - especially useful in identifying deals that are delivered more than once because they have changed.
-    ref_id          = models.CharField(max_length=255, db_index=True, blank=True, null=True)
+    ref_id          = models.CharField(max_length=255, db_index=True, blank=True, null=True, default='refid')
+    ref_id_source   = models.CharField(max_length=255, db_index=True, blank=True, null=True)
+    online          = models.NullBooleanField()
     merchant        = models.ForeignKey(Merchant, blank=True, null=True)
+    merchant_location = models.ForeignKey(MerchantLocation, blank=True, null=True)
     categories      = models.ManyToManyField(Category, blank=True, null=True)
     dealtypes       = models.ManyToManyField(DealType, blank=True, null=True)
     #The main description text the merchant describes the deal with. May be have been modified to fix typos.
@@ -392,6 +445,7 @@ class Coupon(models.Model):
     lastupdated     = models.DateTimeField(blank=True, null=True)
     created         = models.DateTimeField(blank=True, null=True)
     countries       = models.ManyToManyField(Country, blank=True, null=True)
+    coupon_network  = models.ForeignKey(CouponNetwork, blank=True, null=True)
     price           = models.FloatField(default=0)
     listprice       = models.FloatField(default=0)
     discount        = models.FloatField(default=0)
@@ -408,8 +462,9 @@ class Coupon(models.Model):
     date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
     last_modified   = models.DateTimeField(default=datetime.datetime.now(), auto_now=True, auto_now_add=True)
 
-    objects = models.Manager()
+    objects = CouponManager()
     active_objects = ActiveCouponManager()
+    all_objects = models.Manager()
 
     def get_image(self):
         if self.embedly_image_url:
@@ -547,3 +602,4 @@ class Coupon(models.Model):
 
     def og_url(self):
       return "{0}{1}".format(settings.BASE_URL_NO_APPENDED_SLASH, self.local_path())
+
