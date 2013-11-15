@@ -91,7 +91,7 @@ def fetch_ad_costs():
             for row in rows:
                 if len(row) == 19:
                     try:
-                        datetime.datetime.strptime(row[0], "%Y-%m-%d")
+                        datetime.datetime.strptime(row[0], "%m/%d/%y")
                         adcost, created = AdCost.objects.get_or_create(start_date=row[0], campaign=row[3], ad=row[4], keyword=row[2],
                                                  impression=row[10], clicks=row[9], costs=row[13], average_cpc=row[11],
                                                  acquisition_source='PPC', acquisition_medium='PPCad', acquisition_term=row[2],

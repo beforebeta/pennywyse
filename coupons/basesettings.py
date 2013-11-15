@@ -249,8 +249,8 @@ AWS_HEADERS = {
     'Cache-Control': 'max-age=31556926',
     'Expires': (datetime.datetime.today() + datetime.timedelta(days=365)).strftime('%a, %d %b %Y %H:%M:%S GMT')
 }
-AWS_ACCESS_KEY_ID = 'AKIAISPVNQL76YJWH4WQ'
-AWS_SECRET_ACCESS_KEY = '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'
+AWS_ACCESS_KEY_ID = 'AKIAI22SZIJA336XJZIQ'
+AWS_SECRET_ACCESS_KEY = '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'
 
 #Embedly
 EMBEDLY_KEY = "5918594fbe75489ea6f24784a3fff75d"
