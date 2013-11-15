@@ -93,12 +93,12 @@ def establish_categories_dict(categories_array):
 
 def get_or_create_merchant(merchant_data_dict):
     ref_id = merchant_data_dict['id']
-    merchant_model, created = Merchant.objects.get_or_create(ref_id=ref_id, ref_id_source='sqoot',
+    merchant_model, created = Merchant.all_objects.get_or_create(ref_id=ref_id, ref_id_source='sqoot',
                                                              name=merchant_data_dict['name'])
 
     if created:
         print "Created merchant %s" % merchant_data_dict['name']
-
+    
     merchant_model.link                 = merchant_data_dict['url']
     merchant_model.directlink           = merchant_data_dict['url']
     merchant_model.save()
@@ -109,20 +109,18 @@ def get_or_create_category(each_deal_data_dict, categories_dict):
     
     if not category_slug:
         return None
-    
+
     parent_slug = categories_dict[category_slug]
-    category_model, created = Category.objects.get_or_create(code=category_slug, ref_id_source='sqoot')
+    category_model, created = Category.all_objects.get_or_create(code=category_slug, ref_id_source='sqoot',
+                                                                 name=each_deal_data_dict['category_name'])
     if created:
         print "Created category %s" % each_deal_data_dict['category_slug']
 
     if parent_slug:
-        parent_category = Category.objects.get_or_create(code=parent_slug, ref_id_source='sqoot')
+        parent_category, created = Category.objects.get_or_create(code=parent_slug, ref_id_source='sqoot')
         if created:
             category_model.parent = parent_category
     
-    # In case it was already created as another category's parent (hence save outside try-except)
-    category_model.name = each_deal_data_dict['category_name']
-    category_model.save()
     return category_model
 
 def get_or_create_dealtype():
@@ -183,7 +181,7 @@ def get_or_create_merchantlocation(merchant_data_dict, merchant_model, is_online
 def get_or_create_coupon(each_deal_data_dict, merchant_model, category_model, dealtype_model, 
                          country_model, couponnetwork_model, merchantlocation_model):
     ref_id = each_deal_data_dict['id']
-    coupon_model, created = Coupon.objects.get_or_create(ref_id=ref_id, ref_id_source='sqoot')
+    coupon_model, created = Coupon.all_objects.get_or_create(ref_id=ref_id, ref_id_source='sqoot')
     if created:
         print 'Created coupon %s' % each_deal_data_dict['title']
         coupon_model.online              = each_deal_data_dict['online']
