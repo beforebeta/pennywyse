@@ -8,7 +8,7 @@ import urlparse
 from django.conf import settings
 from django.core.paginator import Paginator
 from django.core.urlresolvers import reverse
-from django.contrib.gis.db import models # Switching to GeoDjango models
+from django.contrib.gis.db import models as models# Switching to GeoDjango models
 from django.db.models.query_utils import Q
 from django.template.defaultfilters import slugify
 
@@ -41,6 +41,10 @@ icon_url = "http://pushpenny.com/static/img/fbog.png"
 # Category
 #
 #######################################################################################################################
+class CategoryManager(models.Manager):
+
+    def get_query_set(self):
+        return super(CategoryManager, self).get_query_set().filter(ref_id_source__isnull=True)
 
 class Category(models.Model):
     ref_id          = models.CharField(max_length=255, db_index=True, blank=True, null=True, default='refid')
@@ -53,6 +57,9 @@ class Category(models.Model):
 
     date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
     last_modified   = models.DateTimeField(default=datetime.datetime.now(), auto_now=True, auto_now_add=True)
+
+    objects = CategoryManager()
+    all_objects = models.Manager()
 
     def save(self, *args, **kwargs):
       if not self.image:
@@ -125,7 +132,6 @@ class DealType(models.Model):
 # Merchant
 #
 #######################################################################################################################
-
 class MerchantManager(models.Manager):
 
     def get_popular_companies(self, how_many=8):
@@ -156,6 +162,7 @@ class Merchant(models.Model):
     date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
     last_modified   = models.DateTimeField(default=datetime.datetime.now(), auto_now=True, auto_now_add=True)
 
+    all_objects = models.Manager()
     objects = MerchantManager()
 
     def get_top_coupon(self):
@@ -350,8 +357,10 @@ class MerchantLocation(models.Model):
 # Coupon
 #
 #######################################################################################################################
-
 class CouponManager(models.Manager):
+    def get_query_set(self):
+        return super(CouponManager, self).get_query_set().filter(ref_id_source__isnull=True)
+    
     def get_new_coupons(self,how_many=10):
         #TODO: Improve
         return self.all().order_by("-created")[:how_many]
@@ -381,7 +390,9 @@ class CouponManager(models.Manager):
 
 class ActiveCouponManager(models.Manager):
     def get_query_set(self):
-        return super(ActiveCouponManager, self).get_query_set().filter(Q(end__gt=datetime.datetime.now()) | Q(end__isnull=True))
+        return super(ActiveCouponManager, self).get_query_set()\
+                                                .filter(Q(end__gt=datetime.datetime.now()) | Q(end__isnull=True))\
+                                                .filter(ref_id_source__isnull=True)
 
 
 class Coupon(models.Model):
@@ -451,8 +462,9 @@ class Coupon(models.Model):
     date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
     last_modified   = models.DateTimeField(default=datetime.datetime.now(), auto_now=True, auto_now_add=True)
 
-    objects = models.Manager()
+    objects = CouponManager()
     active_objects = ActiveCouponManager()
+    all_objects = models.Manager()
 
     def get_image(self):
         if self.embedly_image_url:
