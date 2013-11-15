@@ -43,7 +43,17 @@ class Command(BaseCommand):
             # cleaning up duplicated coupons
             coupon_data = Coupon.objects.values('ref_id').annotate(duplicates=Count('ref_id')).filter(duplicates__gt=1)
             for data in coupon_data:
-                coupons =  Coupon.objects.filter(name=data['ref_id']).order_by('id')
+                coupons =  Coupon.objects.filter(ref_id=data['ref_id']).order_by('id')
                 coupon = coupons[0]
                 for duplicated_coupon in coupons[1:]:
                     print 'Removed duplicated coupon ID - %s, ref_id - %s' % (duplicated_coupon.id, duplicated_coupon.ref_id)
+                    if ClickTrack.objects.filter(coupon=duplicated_coupon).count() > 0:
+                        print 'updated clicktracks %s' % ClickTrack.objects.filter(coupon=duplicated_coupon).update(coupon=coupon)
+                   if FeaturedCoupon.objects.filter(coupon=duplicated_coupon).count() > 0:
+                        print 'updated featured coupons %s' % FeaturedCoupon.objects.filter(coupon=duplicated_coupon).update(coupon=coupon)
+                    if NewCoupon.objects.filter(coupon=duplicated_coupon).count() > 0:
+                        print 'updated new coupons %s' % NewCoupon.objects.filter(coupon=duplicated_coupon).update(coupon=coupon)
+                    if PopularCoupon.objects.filter(coupon=duplicated_coupon).count() > 0:
+                        print 'updated popular coupons %s' % PopularCoupon.objects.filter(coupon=duplicated_coupon).update(coupon=coupon)
+                ids = [c.id for c in coupons[1:]]
+                print Coupon.objects.filter(id__in=ids).delete()
