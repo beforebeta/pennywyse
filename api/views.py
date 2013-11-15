@@ -4,13 +4,11 @@ from django.http import HttpResponse
 from core.models import Category
 
 SQOOT_API_URL = "http://api.sqoot.com/v2/deals"
-ITEMS_PER_PAGE = 100
 
 def deals(request):
     parameters = {}
     for k,v in request.GET.items():
         parameters[k] = v
-    parameters['per_page'] = ITEMS_PER_PAGE
     query = request.GET.get("query","")
 
     response = {}
