@@ -44,7 +44,7 @@ def deals(request):
         else:
             response = query_response
     else:
-        response = requests.get(API_URL, params=parameters).json()
+        response = requests.get(SQOOT_API_URL, params=parameters).json()
     return HttpResponse(json.dumps(response), mimetype='application/json; charset=utf-8;')
 
 def localinfo(request):
