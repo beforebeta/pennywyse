@@ -45,7 +45,7 @@ def deals(request):
             response = query_response
     else:
         response = requests.get(API_URL, params=parameters).json()
-    return HttpResponse(json.dumps(response), mimetype='text/html; charset=utf-8;')
+    return HttpResponse(json.dumps(response), mimetype='application/json; charset=utf-8;')
 
 def localinfo(request):
     response = {
@@ -59,4 +59,4 @@ def localinfo(request):
              "image"    : c.image
             }
         )
-    return HttpResponse(json.dumps(response), mimetype='text/html; charset=utf-8;')
+    return HttpResponse(json.dumps(response), mimetype='application/json; charset=utf-8;')
