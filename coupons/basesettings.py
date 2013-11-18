@@ -178,6 +178,7 @@ INSTALLED_APPS = (
     'articles',
     'djcelery',
     'api',
+    'django_nose',
     )
 
 # A sample logging configuration. The only tangible logging
@@ -282,3 +283,6 @@ CELERYBEAT_SCHEDULE = {
         'schedule': crontab()
     }
 }
+
+# Testing
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
