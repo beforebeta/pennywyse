@@ -172,6 +172,7 @@ INSTALLED_APPS = (
     'djcelery',
     'haystack',
     'south',
+    'django_nose',
     'ads',
     'api',
     'core',
@@ -283,6 +284,7 @@ CELERYBEAT_SCHEDULE = {
     }
 }
 
+<<<<<<< HEAD
 CONSTANCE_CONFIG = {
     'CATEGORY_PAGE_TEXT': ('', 'Category text.')
 }
@@ -294,3 +296,7 @@ CONSTANCE_REDIS_CONNECTION = {
     'port': 6379,
     'db': 0,
 }
+=======
+# Testing
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+>>>>>>> 385c24d... Configured settings to use nose for testing
