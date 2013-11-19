@@ -129,22 +129,28 @@ def fetch_ad_costs():
         
 def aggregate_visitor_data():
     from tracking.models import Visitor
-    for visitor in Visitor.objects.filter(utm_source__in=['unknown','direct']):
+    for visitor in Visitor.objects.filter(acquisition_source__in=['unknown','direct']):
         parsed_url = urlparse(visitor.referrer)
         params = parse_qs(parsed_url.query)
-        search_query = None
-        if parsed_url.netloc == 'www.bing.com' and parsed_url.path == '/search/':
-            qsearch_query = params.get('q', [])
-        if parsed_url.netloc.contains('search.yahoo.com') and parsed_url.path == '/search':
+        source = search_query = None
+        if parsed_url.netloc == 'www.bing.com' or parsed_url.netloc.find('search.yahoo.') != -1\
+                                            or re.search('.*google[\.][a-z]{1,4}', parsed_url.netloc):
+            source = parsed_url.netloc
+        if parsed_url.netloc == 'www.bing.com' and parsed_url.path == '/search':
+            search_query = params.get('q', [])
+        if parsed_url.netloc.find('search.yahoo.') != -1 and parsed_url.path == '/search':
             search_query = params.get('p', [])
         if re.search('.*google[\.][a-z]{1,4}', parsed_url.netloc) and parsed_url.path == '/search':
             search_query = params.get('q', [])
-        if search_query:
-            print 'Updated visitor info, source: %s, keyword: %s' % (parsed_url.netloc, search_query[0])
+        if source:
             visitor.bump_past_acquisition_info()
-            visitor.acquisition_source = parsed_url.netloc
-            visitor.acquisition_term = search_query[0]
+            visitor.acquisition_source = source
             visitor.acquisition_medium = 'organic'
+            if search_query:
+                print 'Updated visitor info, source: %s, keyword: %s' % (source, search_query[0])
+                visitor.acquisition_term = search_query[0]
+            else:
+                print 'Updated visitor info, source: %s' % source
             visitor.save()
 
 def get_visitor_tag(url, visitor_id):
