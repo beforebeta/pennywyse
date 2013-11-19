@@ -18,7 +18,10 @@ def deals(request):
         try:
             checked_category = Category.all_objects.get(ref_id_source='sqoot', name__iexact=query.lower())
         except:
-            checked_category = None
+            try:
+                checked_category = Category.all_objects.get(ref_id_source='sqoot', code__iexact=query.lower())
+            except:
+                checked_category = None
 
         if checked_category:
             try:
@@ -49,8 +52,9 @@ def deals(request):
 
 def localinfo(request):
     response = {
-        "popular_categories": [],
-        "popular_nearby":[ "Restaurants", "Spa", "Gym"]
+        "popular_categories"    : [],
+        "popular_nearby"        :[ "Restaurants", "Spa", "Gym"],
+        "default_image"         : "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg"
     }
     for c in Category.all_objects.filter(ref_id_source='sqoot', parent__isnull=True):
         response["popular_categories"].append(
