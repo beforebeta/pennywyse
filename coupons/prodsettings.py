@@ -2,7 +2,7 @@ from basesettings import *
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
-ALLOWED_HOSTS = ["pushpenny.com","www.pushpenny.com"]
+ALLOWED_HOSTS = ["pushpenny.com","www.pushpenny.com", "api.pushpenny.com"]
 
 BASE_URL_NO_APPENDED_SLASH = "http://pushpenny.com"
 SVCS_HOST = "http://pushpenny.com"
@@ -22,3 +22,35 @@ IMAGE_LOCAL_COPY_DIR = abs_path('static/img/local/')
 try: os.makedirs(IMAGE_LOCAL_COPY_DIR)
 except: pass
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler'
+        },
+        'logfile': {
+            'class': 'logging.handlers.WatchedFileHandler',
+            'filename': 'pushpenny.log'
+        },
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+            },
+        'django': {
+            'handlers': ['logfile'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+    },
+}

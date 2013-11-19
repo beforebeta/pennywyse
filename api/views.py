@@ -17,10 +17,10 @@ def deals(request):
 
         try:
             checked_category = Category.all_objects.get(ref_id_source='sqoot', name__iexact=query.lower())
-        except:
+        except Category.DoesNotExist:
             try:
                 checked_category = Category.all_objects.get(ref_id_source='sqoot', code__iexact=query.lower())
-            except:
+            except Category.DoesNotExist:
                 checked_category = None
 
         if checked_category:
