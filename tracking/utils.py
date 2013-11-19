@@ -129,7 +129,7 @@ def fetch_ad_costs():
         
 def aggregate_visitor_data():
     from tracking.models import Visitor
-    for visitor in Visitor.objects.filter(utm_source='unknown'):
+    for visitor in Visitor.objects.filter(utm_source__in=['unknown','direct']):
         parsed_url = urlparse(visitor.referrer)
         params = parse_qs(parsed_url.query)
         search_query = None
