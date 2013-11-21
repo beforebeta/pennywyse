@@ -1,16 +1,16 @@
 # Create your views here.
 import math, random, re
 import string
-from django.core.paginator import Paginator
-from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.contrib.sites.models import get_current_site
+from django.core.paginator import Paginator
+from django.core.urlresolvers import reverse
 from django.db.models.query_utils import Q
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect, Http404
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 from django.template.defaultfilters import slugify
 from django.views.decorators.csrf import ensure_csrf_cookie
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 from core.models import Category, Coupon, Merchant, base_description, icon_url
 from core.util import encode_uri_component, print_stack_trace
 from core.util.pagination import AlphabeticalPagination
@@ -115,11 +115,13 @@ def coupons_for_company(request, company_name, company_id=None, current_page=1, 
         except Merchant.DoesNotExist:
             pass
     if not merchant:
-        merchant = Merchant.objects.filter(name_slug= slugify(company_name)).order_by("-id")[0]
+        merchant = Merchant.objects.filter(name_slug= slugify(company_name)).order_by("-id")
+        if not merchant:
+            raise Http404
         # if merchant wasn't found by ID - redirecting to merchant page URL with proper ID in it
         if company_id:
-            original_merchant_url = reverse('web.views.main.coupons_for_company', kwargs={'company_name': merchant.name_slug,
-                                                                                          'company_id': merchant.id})
+            original_merchant_url = reverse('web.views.main.coupons_for_company', kwargs={'company_name': merchant[0].name_slug,
+                                                                                          'company_id': merchant[0].id})
             return HttpResponsePermanentRedirect(original_merchant_url)
     
     selected_categories = ""
