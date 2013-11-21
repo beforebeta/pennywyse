@@ -284,7 +284,6 @@ CELERYBEAT_SCHEDULE = {
     }
 }
 
-<<<<<<< HEAD
 CONSTANCE_CONFIG = {
     'CATEGORY_PAGE_TEXT': ('', 'Category text.')
 }
@@ -296,7 +295,18 @@ CONSTANCE_REDIS_CONNECTION = {
     'port': 6379,
     'db': 0,
 }
-=======
+
+########################################################################
 # Testing
+########################################################################
+
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
->>>>>>> 385c24d... Configured settings to use nose for testing
+
+# Tell nose to measure coverage
+NOSE_ARGS = [
+    '--with-coverage',
+    '--cover-package=api,web',
+    '--with-progressive',
+    '--logging-clear-handlers',
+]
+
