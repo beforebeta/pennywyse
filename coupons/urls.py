@@ -22,24 +22,24 @@ urlpatterns = patterns('',
 urlpatterns += patterns('web.views.main',
     url(r'^$', 'index'),
     url(r'^privacy-and-terms/$', 'privacy'),
-    url(r'^coupons/(?P<company_name>[a-z0-9-_]+)/$', 'coupons_for_company'),
-    url(r'^coupons/(?P<company_name>[a-z0-9-_]+)/(?P<company_id>[\d]+)/$', 'coupons_for_company'),
+    url(r'^coupons/(?P<company_name>[a-zA-Z0-9-_]+)/$', 'coupons_for_company'),
+    url(r'^coupons/(?P<company_name>[a-zA-Z0-9-_]+)/(?P<company_id>[\d]+)/$', 'coupons_for_company'),
 
-    url(r'^coupons/(?P<company_name>[a-z0-9-_]+)/page/(?P<current_page>[\d]+)/$', 'coupons_for_company'),
-    url(r'^coupons/(?P<company_name>[a-z0-9-_]+)/(?P<company_id>[\d]+)/page/(?P<current_page>[\d]+)/$', 'coupons_for_company'),
+    url(r'^coupons/(?P<company_name>[a-zA-Z0-9-_]+)/page/(?P<current_page>[\d]+)/$', 'coupons_for_company'),
+    url(r'^coupons/(?P<company_name>[a-zA-Z0-9-_]+)/(?P<company_id>[\d]+)/page/(?P<current_page>[\d]+)/$', 'coupons_for_company'),
 
-    url(r'^coupons/(?P<company_name>[a-z0-9-_]+)/page/(?P<current_page>[\d]+)/categories/(?P<category_ids>sh_[a-fA-F0-9]+)/$', 'coupons_for_company'),
-    url(r'^coupons/(?P<company_name>[a-z0-9-_]+)/(?P<company_id>[\d]+)/page/(?P<current_page>[\d]+)/categories/(?P<category_ids>sh_[a-fA-F0-9]+)/$', 'coupons_for_company'),
+    url(r'^coupons/(?P<company_name>[a-zA-Z0-9-_]+)/page/(?P<current_page>[\d]+)/categories/(?P<category_ids>sh_[a-fA-F0-9]+)/$', 'coupons_for_company'),
+    url(r'^coupons/(?P<company_name>[a-zA-Z0-9-_]+)/(?P<company_id>[\d]+)/page/(?P<current_page>[\d]+)/categories/(?P<category_ids>sh_[a-fA-F0-9]+)/$', 'coupons_for_company'),
 
-    url(r'^coupons/(?P<company_name>[a-z0-9-_]+)/(?P<coupon_label>[a-z0-9-]+)/(?P<coupon_id>[\d]+)/$', 'open_coupon'),
+    url(r'^coupons/(?P<company_name>[a-zA-Z0-9-_]+)/(?P<coupon_label>[a-z0-9-]+)/(?P<coupon_id>[\d]+)/$', 'open_coupon'),
     #do not kill old links:
-    url(r'^coupon/(?P<company_name>[a-z0-9-_]+)/(?P<coupon_label>[a-z0-9-]+)/(?P<coupon_id>[\d]+)/$', 'redirect_to_open_coupon'),
-    url(r'^coupons/(?P<company_name>[a-z0-9-_]+)/(?P<coupon_label>[a-z0-9-]+)/(?P<coupon_id>[\d]+)/ty/$', 'coupon_success_page'),
+    url(r'^coupon/(?P<company_name>[a-zA-Z0-9-_]+)/(?P<coupon_label>[a-z0-9-]+)/(?P<coupon_id>[\d]+)/$', 'redirect_to_open_coupon'),
+    url(r'^coupons/(?P<company_name>[a-zA-Z0-9-_]+)/(?P<coupon_label>[a-z0-9-]+)/(?P<coupon_id>[\d]+)/ty/$', 'coupon_success_page'),
 
-    url(r'^categories/(?P<category_code>[A-z0-9-]+)/page/(?P<current_page>[\d]+)/$', 'category'),
-    url(r'^categories/(?P<category_code>[A-z0-9-]+)/$', 'category'),
+    url(r'^categories/(?P<category_code>[a-zA-Z0-9-]+)/page/(?P<current_page>[\d]+)/$', 'category'),
+    url(r'^categories/(?P<category_code>[a-zA-Z0-9-]+)/$', 'category'),
     url(r'^categories/$', 'categories'),
-    url(r'^stores/(?P<page>[A-Za-z]+)/$', 'stores'),
+    url(r'^stores/(?P<page>[a-zA-Z]+)/$', 'stores'),
     url(r'^stores/$', 'stores'),
 
 # /blog/ is being served by WordPress
