@@ -4,6 +4,7 @@ from django.db.models import Q
 from django.http import HttpResponseRedirect
 from core.models import Merchant, Coupon
 from web.views.main import render_response
+from haystack.query import SearchQuerySet
 
 def normalize_query(query_string,
                     findterms=re.compile(r'"([^"]+)"|(\S+)').findall,
@@ -46,29 +47,16 @@ def search_model(model, query, fields, order_by="-date_added", objects=None):
     return model.objects.filter(entry_query).order_by(order_by)
 
 def search(request):
-    try:
-        context={}
-        query = request.GET.get("q","").strip()
-        context["query"] = query
-        merchants = search_model(Merchant, query, ["name"], "-coupon_count")[:5]
-        coupons = search_model(Coupon, query, ["description"], objects=Coupon.active_objects)[:10]
-
-        context["merchants"] = merchants
-        context["coupons"] = coupons
-        context["relevant_merchants"] = Merchant.objects.filter(id__in=list(set([c.merchant_id for c in coupons])))
-        return render_response(template_file="search-results.html", request=request, context=context)
-    except:
-        return HttpResponseRedirect("/")
-#def search(request):
-#    query_string = ''
-#    found_entries = None
-#    if ('q' in request.GET) and request.GET['q'].strip():
-#        query_string = request.GET['q']
-#
-#        entry_query = get_query(query_string.lower(), ['title', 'body',])
-#
-#        found_entries = Entry.objects.filter(entry_query).order_by('-pub_date')
-#
-#    return render_to_response('search/search_results.html',
-#            { 'query_string': query_string, 'found_entries': found_entries },
-#        context_instance=RequestContext(request))
+    query = request.GET.get("q","").strip()
+    merchants = SearchQuerySet().filter(django_ct='core.merchant').filter(content=query).order_by('-coupon_count')[:5]
+    coupons = SearchQuerySet().filter(django_ct='core.coupon').filter(content=query)[:10]
+    merchant_ids = ['core.merchant.%s' % c.merchant_id for c in coupons]
+    if merchant_ids:
+        relevant_merchants = SearchQuerySet().filter(django_ct='core.merchant').filter(id__in=merchant_ids)
+    else:
+        relevant_merchants = None
+    context = {'query': query,
+               'merchants': merchants,
+               'coupons': coupons,
+               'relevant_merchants': relevant_merchants}
+    return render_response(template_file="search-results.html", request=request, context=context)
