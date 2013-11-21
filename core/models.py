@@ -145,7 +145,6 @@ class Merchant(models.Model):
     
     # deprecated field
     ref_id          = models.CharField(max_length=255, db_index=True, default='refid', blank=True, null=True)
-    ref_id          = models.CharField(max_length=255, db_index=True, blank=True, null=True)
     ref_id_source   = models.CharField(max_length=255, db_index=True, blank=True, null=True)
     name            = models.CharField(max_length=255, db_index=True, blank=True, null=True)
     name_slug       = models.CharField(max_length=255, db_index=True, blank=True, null=True)
@@ -583,7 +582,9 @@ class Coupon(models.Model):
       return "/coupons/{0}/{1}/{2}/".format(self.merchant.name_slug, self.desc_slug, self.id)
 
     def success_path(self):
-        return reverse('web.views.main.coupon_success_page', args=(self.merchant.name_slug, self.desc_slug, self.id))
+        return reverse('web.views.main.coupon_success_page', kwargs={'company_name': self.merchant.name_slug, 
+                                                                     'coupon_label': self.desc_slug, 
+                                                                     'coupon_id': self.id})
 
     def page_description(self):
       return "{0} | {1}".format(self.get_description(), self.merchant.page_description())

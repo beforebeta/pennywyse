@@ -41,7 +41,6 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
         'ENGINE': 'django.contrib.gis.db.backends.mysql', # Switching to use GeoDjango
         'NAME': 'coupons',                      # Or path to database file if using sqlite3.
         'USER': 'dbuser',                      # Not used with sqlite3.
@@ -170,6 +169,7 @@ INSTALLED_APPS = (
     'django.contrib.gis', # GeoDjango
     'compressor',
     'south',
+    'haystack',
     'core',
     'web',
     'websvcs',

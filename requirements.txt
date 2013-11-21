@@ -31,3 +31,6 @@ coverage==3.7
 nose-progressive==1.5
 webtest==2.0.10
 django-webtest==1.7.5
+django-haystack==2.1.0
+pysolr==3.1.0
+whoosh==2.5.5
