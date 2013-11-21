@@ -34,7 +34,7 @@
                                   </div>
                                   <div class="large-5 small-8 columns">
                                     <div class="col-middle">
-                                      <h2 class="alt"><a href="/coupons/{{ merchant.name_slug }}/{{ merchant.id }}/">{{ merchant.text }}</a></h2>
+                                      <h2 class="alt"><a href="{{merchant.local_path}}">{{ merchant.text }}</a></h2>
                                       <p class="text secondary">
                                         {{ merchant.description }}
                                       </p>
@@ -104,7 +104,7 @@
                         <ul class="rr inne sidebar-list popular-companies-list">
                             {% for merchant in relevant_merchants %}
                             <li class="cf">
-                                <a href="/coupons/{{ merchant.name_slug }}/">{{ merchant.text }} <span class="count-bullet">{{ merchant.coupon_count }}</span></a>
+                                <a href="{{merchant.local_path}}">{{ merchant.text }} <span class="count-bullet">{{ merchant.coupon_count }}</span></a>
                             </li>
                             {% endfor %}
                         </ul>
