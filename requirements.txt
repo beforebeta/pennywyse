@@ -27,3 +27,7 @@ django-tastypie==0.10.0
 python-mimeparse==0.1.4
 newrelic
 django-nose
+coverage==3.7
+nose-progressive==1.5
+webtest==2.0.10
+django-webtest==1.7.5
