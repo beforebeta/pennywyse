@@ -17,10 +17,9 @@ class Command(BaseCommand):
 
         self.generate_category_urls()
         self.generate_merchant_urls()
-        coupon_file_count = self.generate_coupon_urls()
         self.build_sitemaps()
         # self.gzip_sitemaps() # commented out because of trouble getting S3 tp serve gziped files
-        self.build_sitemap_index(coupon_file_count)
+        self.build_sitemap_index()
         self.cleanup()
 
     def generate_category_urls(self):
@@ -82,11 +81,10 @@ class Command(BaseCommand):
 
         call(['gzip', '-f', 'sitemap/base_sitemap.xml'])
         call(['gzip', '-f', 'sitemap/category_sitemap.xml'])
-        call(['gzip', '-f', 'sitemap/coupon_sitemap.xml'])
         call(['gzip', '-f', 'sitemap/merchant_sitemap.xml'])
 
 
-    def build_sitemap_index(self, coupon_file_count):
+    def build_sitemap_index(self):
         self.stdout.write('Uploading sitemaps to S3...\n\n')
         base_url = default_storage.save('base_sitemap.xml', ContentFile(open('sitemap/base_sitemap.xml').read()))
         category_url = default_storage.save('category_sitemap.xml', ContentFile(open('sitemap/category_sitemap.xml').read()))
@@ -113,17 +111,6 @@ class Command(BaseCommand):
     <lastmod>{0}</lastmod>\n\
   </sitemap>\n'.format(last_updated, root, base_url, category_url, merchant_url))
 
-
-# Write each coupon file
-        for file_num in range(1, (coupon_file_count + 1)):
-          file_name = "coupon_sitemap_{0}.xml".format(file_num)
-          coupon_url = default_storage.save(file_name, ContentFile(open('./sitemap/{0}'.format(file_name)).read()))
-          file.write('\
-  <sitemap>\n\
-    <loc>{1}{2}</loc>\n\
-    <lastmod>{0}</lastmod>\n\
-  </sitemap>\n'.format(last_updated, root, file_name))
-
         file.write('</sitemapindex>')
         file.close()
 
@@ -144,6 +131,5 @@ class Command(BaseCommand):
 
         self.remove_sitemap('base_sitemap.xml')
         self.remove_sitemap('category_sitemap.xml')
-        self.remove_sitemap('coupon_sitemap.xml')
         self.remove_sitemap('merchant_sitemap.xml')
         self.remove_sitemap('sitemap.xml')
