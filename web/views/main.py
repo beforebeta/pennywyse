@@ -182,10 +182,12 @@ def open_coupon(request, company_name, coupon_label, coupon_id):
     try:
         coupon = Coupon.objects.get(id=coupon_id)
     except Coupon.DoesNotExist:
-        coupon = Coupon.objects.filter(desc_slug=coupon_label).order_by('-id')[0]
+        coupon = Coupon.objects.filter(desc_slug=coupon_label).order_by('-id')
+        if not coupon:
+            raise Http404
         original_coupon_url = reverse('web.views.main.open_coupon', kwargs={'company_name': company_name,
                                                                             'coupon_label': coupon_label,
-                                                                            'coupon_id': coupon.id})
+                                                                            'coupon_id': coupon[0].id})
         return HttpResponsePermanentRedirect(original_coupon_url)
 
     if coupon.merchant.redirect:
@@ -333,10 +335,12 @@ def coupon_success_page(request, company_name, coupon_label, coupon_id):
     try:
         coupon = Coupon.objects.get(id=coupon_id)
     except Coupon.DoesNotExist:
-        coupon = Coupon.objects.filter(desc_slug=coupon_label).order_by('-id')[0]
+        coupon = Coupon.objects.filter(desc_slug=coupon_label).order_by('-id')
+        if not coupon:
+            raise Http404
         original_coupon_url = reverse('web.views.main.coupon_success_page', kwargs={'company_name': company_name,
                                                                                     'coupon_label': coupon_label,
-                                                                                    'coupon_id': coupon.id})
+                                                                                    'coupon_id': coupon[0].id})
         return HttpResponsePermanentRedirect(original_coupon_url)
     context={"coupon": coupon}
     return render_response("coupon_success_page.html",request, context)
