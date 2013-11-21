@@ -52,7 +52,7 @@ def search(request):
     coupons = SearchQuerySet().filter(django_ct='core.coupon').filter(content=query)[:10]
     merchant_ids = ['core.merchant.%s' % c.merchant_id for c in coupons]
     if merchant_ids:
-        relevant_merchants = SearchQuerySet().filter(django_ct='core.merchant').filter(id__in=merchant_ids)
+        relevant_merchants = SearchQuerySet().filter(django_ct='core.merchant').filter(id__in=merchant_ids).order_by('-coupon_count')
     else:
         relevant_merchants = None
     context = {'query': query,
