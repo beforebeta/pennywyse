@@ -288,12 +288,12 @@ CELERYBEAT_SCHEDULE = {
 # Testing
 ########################################################################
 
+# Nose settings
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
-# Tell nose to measure coverage
 NOSE_ARGS = [
-    '--with-coverage',
-    '--cover-package=api,web',
+    # '--with-coverage',
+    # '--cover-package=api,web',
     '--with-progressive',
     '--logging-clear-handlers',
 ]

@@ -57,7 +57,7 @@ def _download_content(url, filename):
             if c:
                 f.write(c)
                 f.flush()
-    return open(filename, 'r') 
+    return open(filename, 'r')
 
 def refresh_deal_types():
     section("Loading Deal Types")
@@ -214,14 +214,14 @@ def setup_web_coupons():
 
     try:
         if NewCoupon.objects.all().count()<=0:
-            for coupon in Coupon.active_objects.get_new_coupons(8):
+            for coupon in Coupon.objects.get_new_coupons(8):
                 NewCoupon(coupon=coupon).save()
     except:
         print_stack_trace()
 
     try:
         if PopularCoupon.objects.all().count()<=0:
-            for coupon in Coupon.active_objects.get_popular_coupons(8):
+            for coupon in Coupon.objects.get_popular_coupons(8):
                 PopularCoupon(coupon=coupon).save()
     except:
         print_stack_trace()

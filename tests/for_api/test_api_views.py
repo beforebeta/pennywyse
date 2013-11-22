@@ -1,15 +1,17 @@
 import requests
 import random
-# from django.conf import settings
-from api.tests.sample_data_feed import top_50_us_cities_dict, sample_query_strings
+
+from django.conf import settings
 from django.template.defaultfilters import slugify
+
+from .sample_data_feed import top_50_us_cities_dict, sample_query_strings
 
 PUSHPENNY_API_URL = "http://api.pushpenny.com/v2/"
 SQOOT_API_URL = "http://api.sqoot.com/v2/"
 
 request_parameters = {
-        # 'api_key': settings.SQOOT_PUBLIC_KEY,
-        'api_key': 'xhtihz',
+        'api_key': settings.SQOOT_PUBLIC_KEY,
+        # 'api_key': 'xhtihz',
         'order': 'distance',
         'per_page': 100,
         'radius': 10,
