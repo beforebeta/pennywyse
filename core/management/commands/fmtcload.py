@@ -84,19 +84,16 @@ def refresh_categories():
         name = unescape_html(cat.find("name").text)
         parent = cat.find("parent").text
         if parent:
-            parent=Category.objects.get(code=parent)
+            parent = Category.objects.get(code=parent)
         else:
-            parent=None
+            parent = None
         if Category.objects.filter(code=code).count() > 1:
             print "WARNING: Multiple categories with the same code: ", code
-        try:
-            existing_category = Category.objects.get(code=code)
-            existing_category.ref_id = ref_id
-            existing_category.name=name
-            existing_category.parent=parent
-            existing_category.save()
-        except:
-            Category(ref_id=ref_id, code=code, name=name, parent=parent).save()
+        existing_category, created = Category.objects.get_or_create(code=code)
+        existing_category.ref_id = ref_id
+        existing_category.name=name
+        existing_category.parent=parent
+        existing_category.save()
         print "\t%s,%s" % (code,name)
 
 def refresh_merchants():
@@ -205,24 +202,27 @@ def refresh_deals():
 def setup_web_coupons():
     section("Setup Web Coupons")
     try:
-        if FeaturedCoupon.objects.all().count()<=0:
-            FeaturedCoupon(coupon=Merchant.objects.get(name="best buy").get_top_coupon()).save()
-            FeaturedCoupon(coupon=Merchant.objects.get(name="sears").get_top_coupon()).save()
-            FeaturedCoupon(coupon=Merchant.objects.get(name="target").get_top_coupon()).save()
+        if Coupon.objects.filter(is_featured=True).count() == 0:
+            for name in ['best_buy', 'sears', 'target']:
+                coupon = Merchant.objects.get(name=name).get_top_coupon()
+                coupon.is_featured = True
+                coupon.save()
     except:
         print_stack_trace()
 
     try:
-        if NewCoupon.objects.all().count()<=0:
+        if Coupon.objects.filter(is_new=True).count() == 0:
             for coupon in Coupon.active_objects.get_new_coupons(8):
-                NewCoupon(coupon=coupon).save()
+                coupon.is_new = True
+                coupon.save()
     except:
         print_stack_trace()
 
     try:
-        if PopularCoupon.objects.all().count()<=0:
+        if Coupon.objects.filter(is_popular=True).count() == 0:
             for coupon in Coupon.active_objects.get_popular_coupons(8):
-                PopularCoupon(coupon=coupon).save()
+                coupon.is_popular = True
+                coupon.save()
     except:
         print_stack_trace()
 
@@ -257,11 +257,11 @@ def refresh_merchant_redirects():
 def load():
     refresh_deal_types()
     refresh_categories()
-    refresh_merchants()
-    refresh_deals()
-    setup_web_coupons()
-    refresh_calculated_fields()
-    refresh_merchant_redirects()
+    #refresh_merchants()
+    #refresh_deals()
+    #setup_web_coupons()
+    #refresh_calculated_fields()
+    #refresh_merchant_redirects()
 
 def embedly(args):
     _from = 0

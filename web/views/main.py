@@ -1,6 +1,6 @@
 # Create your views here.
-import math, random, re
-import string
+import random
+import re
 from django.conf import settings
 from django.contrib.sites.models import get_current_site
 from django.core.paginator import Paginator
@@ -16,7 +16,7 @@ from core.util import encode_uri_component, print_stack_trace
 from core.util.pagination import AlphabeticalPagination
 from tracking.views import log_click_track
 from tracking.utils import get_visitor_tag
-from web.models import FeaturedCoupon, NewCoupon, PopularCoupon, ShortenedURLComponent
+from web.models import ShortenedURLComponent
 
 
 def build_base_context(request, context):
@@ -78,9 +78,9 @@ def index(request):
       "og_description" : "Hand Verified Coupon Codes",
       "og_image" : icon_url,
       "og_url" : settings.BASE_URL_NO_APPENDED_SLASH,
-      "featured_coupons" : list(FeaturedCoupon.objects.all()),
-      "new_coupons" : [Coupon.objects.get(id=nc.coupon_id) for nc in NewCoupon.objects.all().order_by("-date_added")[:8]],
-      "pop_coupons" : [Coupon.objects.get(id=pc.coupon_id) for pc in PopularCoupon.objects.all().order_by("-date_added")[:8]],
+      "featured_coupons" : list(Coupon.objects.filter(is_featured=True)),
+      "new_coupons" : Coupon.objects.filter(is_new=True).order_by("-date_added")[:8],
+      "pop_coupons" : Coupon.objects.filter(is_popular=True).order_by("-date_added")[:8],
     }
     random.shuffle(context['featured_coupons'])
 
@@ -179,7 +179,7 @@ def coupons_for_company(request, company_name, company_id=None, current_page=1, 
     }
     set_meta_tags(merchant, context)
     if current_page > 1:
-      context['canonical_url'] = "{0}pages/{1}/".format(merchant.og_url(), current_page)
+        context['canonical_url'] = "{0}pages/{1}/".format(merchant.og_url(), current_page)
 
     if len(all_categories) != len(selected_categories):
         context["comma_categories"] = ShortenedURLComponent.objects.shorten_url_component(comma_categories).shortened_url
@@ -188,7 +188,7 @@ def coupons_for_company(request, company_name, company_id=None, current_page=1, 
 
 @ensure_csrf_cookie
 def redirect_to_open_coupon(request, company_name, coupon_label, coupon_id):
-  return HttpResponsePermanentRedirect('{0}/coupons/{1}/{2}/{3}'.format(settings.BASE_URL_NO_APPENDED_SLASH, company_name, coupon_label, coupon_id))
+    return HttpResponsePermanentRedirect('{0}/coupons/{1}/{2}/{3}'.format(settings.BASE_URL_NO_APPENDED_SLASH, company_name, coupon_label, coupon_id))
 
 @ensure_csrf_cookie
 def open_coupon(request, company_name, coupon_label, coupon_id):
@@ -236,8 +236,9 @@ def privacy(request):
 def categories(request):
     description = "Coupon Categories | {0}".format(base_description)
     context={
-        "categories"        : sorted(Category.objects.filter(parent=None), key=lambda category: category.name),
-        "page_description" : description,
+        "categories": Category.objects.filter(parent__isnull=True, is_featured=False).order_by('name'),
+        "featured_categories": Category.objects.filter(parent__isnull=True, is_featured=True).order_by('name'),
+        "page_description": description,
         "page_title": description,
         "og_title": "Coupon Categories",
         "og_description": description,
@@ -312,7 +313,7 @@ def category(request, category_code, current_page=1, category_ids=-1):
     }
     set_meta_tags(category, context)
     if current_page > 1:
-      context['canonical_url'] = "{0}pages/{1}/".format(category.og_url(), current_page)
+        context['canonical_url'] = "{0}pages/{1}/".format(category.og_url(), current_page)
     set_active_tab('category', context)
 
     if len(all_categories) != len(selected_categories):
@@ -321,14 +322,14 @@ def category(request, category_code, current_page=1, category_ids=-1):
     return render_response("category.html", request, context)
 
 def robots_txt(request):
-  robots = """User-agent: *
+    robots = """User-agent: *
 Allow: /
 Sitemap: http://s3.amazonaws.com/pushpenny/sitemap.xml
 """
-  return HttpResponse(robots, content_type="text/plain")
+    return HttpResponse(robots, content_type="text/plain")
 
 def sitemap(request):
-  return HttpResponseRedirect('http://s3.amazonaws.com/pushpenny/sitemap.xml')
+    return HttpResponseRedirect('http://s3.amazonaws.com/pushpenny/sitemap.xml')
 
 @ensure_csrf_cookie
 def stores(request, page='A'):

@@ -13,6 +13,34 @@
 
 {% block main %}
 <div class="stripe-regular" style="border-bottom: 2px solid #DDDDDD">
+  {% if featured_categories %}
+	  <div role="main">
+	    <section class="row category-index">
+	      <ul class='categories-list rr'>
+	        {% for category in featured_categories %}
+	          <li class='category'>
+	            <a class='round3' href='/categories/{{ category.code }}'>
+	              {{ category.name }}
+	            {% if category.category_set.all.exists %}
+	                <span class='arrow-down'/>
+	              </a>
+	              <div class='subcategories'>
+	                {% for subcat in category.category_set.all %}
+	                <div class='subcategory'><div class='centering'>
+	                  <a href='/categories/{{ subcat.code }}'>{{ subcat.name }}</a>
+	                </div></div>
+	                {% endfor %}
+	              </div>
+	            {% else %}
+	              </a>
+	            {% endif %}
+	          </li>
+	        {% endfor %}
+	      </ul>
+	    </section>
+	  </div>
+	  <br><br>
+  {% endif %}
   <div role="main">
     <section class="row category-index">
       <ul class='categories-list rr'>
