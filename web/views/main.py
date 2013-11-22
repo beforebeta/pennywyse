@@ -134,7 +134,7 @@ def coupons_for_company(request, company_name, company_id=None, current_page=1, 
         selected_categories=[int(s) for s in selected_categories.split(",") if s]
     except:
         selected_categories=[]
-#        selected_categories = list(set([int(x["categories__id"]) for x in merchant.coupon_set.all().values("categories__id") if x["categories__id"]]))
+
     all_categories = merchant.get_coupon_categories()
     coupon_categories = []
     for category in all_categories:
@@ -154,10 +154,23 @@ def coupons_for_company(request, company_name, company_id=None, current_page=1, 
                         ), 10)
     if current_page > pages.num_pages:
         current_page=pages.num_pages
+    ppages = range(1, pages.num_pages+1)
+    separators = 0
+    if pages.num_pages > 12:
+        if current_page <= 5 or current_page >= pages.num_pages - 3:
+            ppages = ppages[:8] + ppages[-3:]
+            separators = 1
+        else:
+            next = current_page + 2
+            prev = current_page - 2
+            ppages = ppages[:3] + ppages[prev:next] + ppages[-3:]
+            separators = 2
     context={
         "merchant"              : merchant,
-        "pages"                 : range(1, pages.num_pages+1),
+        "pages"                 : ppages,
+        "num_pages"             : pages.num_pages,
         "current_page"          : int(current_page),
+        "separators"            : separators, 
         "coupons"               : pages.page(current_page).object_list,
         "num_coupons"           : pages.count,
         "total_coupon_count"    : merchant.coupon_count,
@@ -271,15 +284,26 @@ def category(request, category_code, current_page=1, category_ids=-1):
         })
 
     pages = category.coupons_in_categories(selected_categories)
-
+    ppages = range(1, pages.num_pages+1)
+    separators = 0
+    if pages.num_pages > 12:
+        if current_page <= 5 or current_page >= pages.num_pages - 3:
+            ppages = ppages[:8] + ppages[-3:]
+            separators = 1
+        else:
+            next = current_page + 2
+            prev = current_page - 2
+            ppages = ppages[:3] + ppages[prev:next] + ppages[-3:]
+            separators = 2
     if current_page > pages.num_pages:
         current_page=pages.num_pages
     context={
-        "category"              : category,
-        "pages"                 : range(1, pages.num_pages+1),
+        "pages"                 : ppages,
+        "num_pages"             : pages.num_pages,
         "current_page"          : int(current_page),
+        "separators"            : separators, 
+        "category"              : category,
         "coupons"               : pages.page(current_page).object_list,
-        "num_coupons"           : pages.count,
         "total_coupon_count"    : category.get_coupon_count(),
         "coupon_categories"     : coupon_categories,
         "form_path"             : "/categories/{0}/".format(category.code),

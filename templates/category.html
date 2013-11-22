@@ -73,6 +73,13 @@
             <li style="width: 55px;text-align: center;" {% if current_page = page %}class="current"{% endif %}>
               <a style="padding:10px 0px;" href="/categories/{{ category.code }}/page/{{ page }}/">{{ page }}</a>
             </li>
+            {% if num_pages > 12 %}
+		          {% if separators == 2 and forloop.counter == 3 or separators == 2 and forloop.counter == 7 or separators == 1 and forloop.counter == 8 %}
+		          		<li style="width: 55px;text-align: center;">
+		          			...
+		          		</li>
+		          {% endif %}
+	          {% endif %}
           {% endfor %}
         </ul>
       </div>
