@@ -16,6 +16,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="{% static "img/favicon.ico" %}">
     <link rel="apple-touch-icon" href="{% static "img/favicon.png" %}" />
     <link rel="canonical" href="{{ canonical_url }}">
+	{% block pagination_links %}{% endblock %}
 
     <!--<link href='http://fonts.googleapis.com/css?family=Ubuntu:400,300,700' rel='stylesheet' type='text/css'>-->
     <link href='https://fonts.googleapis.com/css?family=Lato:400,700,700italic,900,400italic,300' rel='stylesheet' type='text/css'>
