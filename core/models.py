@@ -49,11 +49,12 @@ class CategoryManager(models.Manager):
 class Category(models.Model):
     ref_id          = models.CharField(max_length=255, db_index=True, blank=True, null=True, default='refid')
     ref_id_source   = models.CharField(max_length=255, db_index=True, blank=True, null=True)
-    code            = models.CharField(max_length=255,blank=True, null=True, db_index=True)
-    name            = models.CharField(max_length=255,blank=True, null=True, db_index=True)
-    description     = models.CharField(max_length=255,blank=True, null=True)
+    code            = models.CharField(max_length=255, blank=True, null=True, db_index=True)
+    name            = models.CharField(max_length=255, blank=True, null=True, db_index=True)
+    description     = models.CharField(max_length=255, blank=True, null=True)
     parent          = models.ForeignKey("Category", blank=True, null=True)
     image           = models.TextField(blank=True, null=True)
+    is_featured     = models.BooleanField('Featured', blank=True, default=False)
 
     date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
     last_modified   = models.DateTimeField(default=datetime.datetime.now(), auto_now=True, auto_now_add=True)
@@ -62,53 +63,53 @@ class Category(models.Model):
     all_objects = models.Manager()
 
     def save(self, *args, **kwargs):
-      if not self.image:
-          self.image = get_descriptive_image(self.code)
-      super(Category, self).save(*args, **kwargs)
+        if not self.image:
+            self.image = get_descriptive_image(self.code)
+        super(Category, self).save(*args, **kwargs)
 
     def get_coupons(self):
-      return self.coupon_set.all().order_by("-created")
+        return self.coupon_set.all().order_by("-created")
 
     def get_active_coupons(self):
         return self.coupon_set.all().exclude(merchant_id__isnull=True).filter(Q(end__gt=datetime.datetime.now()) | Q(end__isnull=True)).order_by("-created")
 
     def get_coupon_count(self):
-      return self.get_active_coupons().count()
+        return self.get_active_coupons().count()
 
     def get_coupon_categories(self):
-      return Category.objects.filter(
-        coupon__id__in=self.get_active_coupons().values_list('id')).distinct().order_by('name')
+        return Category.objects.filter(
+                coupon__id__in=self.get_active_coupons().values_list('id')).distinct().order_by('name')
 
     def coupons_in_categories(self, selected_categories):
-      return Paginator(self.get_active_coupons().filter(
-        Q(categories__id__in=selected_categories) | Q(categories__id__isnull=True)), 10)
+        return Paginator(self.get_active_coupons().filter(
+                Q(categories__id__in=selected_categories) | Q(categories__id__isnull=True)), 10)
 
     def display_name(self):
-      return self.name
+        return self.name
 
     def local_path(self):
-      return "/categories/{0}/".format(self.code)
+        return "/categories/{0}/".format(self.code)
 
     def page_description(self):
-      return "Coupons for {0} | {1}".format(self.name, base_description)
+        return "Coupons for {0} | {1}".format(self.name, base_description)
 
     def page_title(self):
-      return "Coupons for {0} | {1}".format(self.name, base_description)
+        return "Coupons for {0} | {1}".format(self.name, base_description)
 
     def og_title(self):
-      return "Coupons for {0}".format(self.name)
+        return "Coupons for {0}".format(self.name)
 
     def og_description(self):
-      return "Hand Verified Coupon Codes for {0} from PushPenny.".format(self.name)
+        return "Hand Verified Coupon Codes for {0} from PushPenny.".format(self.name)
 
     def og_image(self):
-      return icon_url
+        return icon_url
 
     def og_url(self):
-      return "{0}{1}".format(settings.BASE_URL_NO_APPENDED_SLASH, self.local_path())
+        return "{0}{1}".format(settings.BASE_URL_NO_APPENDED_SLASH, self.local_path())
 
     def __unicode__(self):  # Python 3: def __str__(self):
-      return "%s %s" % (self.code, self.name)
+        return "%s %s" % (self.code, self.name)
 
 #######################################################################################################################
 #
@@ -451,8 +452,10 @@ class Coupon(models.Model):
     percent         = models.IntegerField(default=0)
     image           = models.TextField(blank=True, null=True)
     short_desc      = models.CharField(max_length=50, default="COUPON")
-
     desc_slug       = models.CharField(max_length=175, default="COUPON")
+    is_featured     = models.BooleanField('Featured', blank=True, default=False)
+    is_new          = models.BooleanField('New', blank=True, default=False)
+    is_popular      = models.BooleanField('Popular', blank=True, default=False)
 
     embedly_title = models.TextField(blank=True, null=True)
     embedly_description = models.TextField(blank=True, null=True)
