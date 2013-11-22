@@ -203,7 +203,7 @@ def setup_web_coupons():
     section("Setup Web Coupons")
     try:
         if Coupon.objects.filter(is_featured=True).count() == 0:
-            for name in ['best_buy', 'sears', 'target']:
+            for name in ['best buy', 'sears', 'target']:
                 coupon = Merchant.objects.get(name=name).get_top_coupon()
                 coupon.is_featured = True
                 coupon.save()
@@ -257,11 +257,11 @@ def refresh_merchant_redirects():
 def load():
     refresh_deal_types()
     refresh_categories()
-    #refresh_merchants()
-    #refresh_deals()
-    #setup_web_coupons()
-    #refresh_calculated_fields()
-    #refresh_merchant_redirects()
+    refresh_merchants()
+    refresh_deals()
+    setup_web_coupons()
+    refresh_calculated_fields()
+    refresh_merchant_redirects()
 
 def embedly(args):
     _from = 0

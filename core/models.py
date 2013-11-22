@@ -357,6 +357,27 @@ class MerchantLocation(models.Model):
 # Coupon
 #
 #######################################################################################################################
+def _get_popular_coupons(how_many):
+    merchants = list(Merchant.objects.exclude(coupon__isnull=True)[:10])
+    coupons_by_merchant = {}
+    popular_coupons = []
+    curr_merchant_idx = 0
+    tries = 0
+    while len(popular_coupons) < how_many:
+        tries += 1
+        if tries > how_many * 10:
+            break
+        if curr_merchant_idx == len(merchants):
+            curr_merchant_idx = 0
+        curr_merchant_id = merchants[curr_merchant_idx].id
+        if curr_merchant_id not in coupons_by_merchant:
+            coupons_by_merchant[curr_merchant_id] = list(Coupon.active_objects.filter(merchant_id=curr_merchant_id).order_by("-created")[:how_many])
+        if len(coupons_by_merchant[curr_merchant_id]) > 0:
+            popular_coupons.append(coupons_by_merchant[curr_merchant_id][0])
+            coupons_by_merchant[curr_merchant_id] = coupons_by_merchant[curr_merchant_id][1:]
+        curr_merchant_idx += 1
+    return popular_coupons
+
 class CouponManager(models.Manager):
     def get_query_set(self):
         return super(CouponManager, self).get_query_set().filter(ref_id_source__isnull=True)
@@ -366,27 +387,7 @@ class CouponManager(models.Manager):
         return self.all().order_by("-created")[:how_many]
 
     def get_popular_coupons(self, how_many=10):
-        #TODO: Improve
-        #find merchants that have coupons associated with them
-        merchants = list(Merchant.objects.exclude(coupon__isnull=True)[:10])
-        coupons_by_merchant = {}
-        popular_coupons = []
-        curr_merchant_idx = 0
-        tries = 0
-        while len(popular_coupons) < how_many:
-            tries += 1
-            if tries > how_many * 10:
-                break
-            if curr_merchant_idx == len(merchants):
-                curr_merchant_idx = 0
-            curr_merchant_id = merchants[curr_merchant_idx].id
-            if curr_merchant_id not in coupons_by_merchant:
-                coupons_by_merchant[curr_merchant_id] = list(Coupon.active_objects.filter(merchant_id=curr_merchant_id).order_by("-created")[:how_many])
-            if len(coupons_by_merchant[curr_merchant_id]) > 0:
-                popular_coupons.append(coupons_by_merchant[curr_merchant_id][0])
-                coupons_by_merchant[curr_merchant_id] = coupons_by_merchant[curr_merchant_id][1:]
-            curr_merchant_idx += 1
-        return popular_coupons
+        return _get_popular_coupons(how_many=how_many)
 
 class ActiveCouponManager(models.Manager):
     def get_query_set(self):
@@ -394,6 +395,12 @@ class ActiveCouponManager(models.Manager):
                                                 .filter(Q(end__gt=datetime.datetime.now()) | Q(end__isnull=True))\
                                                 .filter(ref_id_source__isnull=True)
 
+    def get_new_coupons(self,how_many=10):
+        #TODO: Improve
+        return self.all().order_by("-created")[:how_many]
+    
+    def get_popular_coupons(self, how_many=10):
+        return _get_popular_coupons(how_many=how_many)
 
 class Coupon(models.Model):
     """
