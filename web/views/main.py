@@ -143,15 +143,18 @@ def coupons_for_company(request, company_name, company_id=None, current_page=1, 
             "active"    : _search(category, selected_categories, lambda a,b:a.id==b)
         })
 
-    pages = Paginator(
-                        list(
-                                set(
-                                    merchant.get_active_coupons().filter(
-                                        Q(categories__id__in=selected_categories) |
-                                        Q(categories__id__isnull=True)
-                                    )
-                                )
-                        ), 10)
+    show_expired_coupons = False
+    coupons = merchant.get_active_coupons()
+    if coupons.count() == 0:
+        coupons = merchant.get_coupons()
+        show_expired_coupons = True
+        
+    coupons = coupons.filter(Q(categories__id__in=selected_categories) |\
+                             Q(categories__id__isnull=True))
+    if show_expired_coupons:
+        coupons = coupons[:100]
+    
+    pages = Paginator(coupons, 10)
     if current_page > pages.num_pages:
         current_page=pages.num_pages
     ppages = range(1, pages.num_pages+1)
@@ -161,9 +164,9 @@ def coupons_for_company(request, company_name, company_id=None, current_page=1, 
             ppages = ppages[:8] + ppages[-3:]
             separators = 1
         else:
-            next = current_page + 2
-            prev = current_page - 2
-            ppages = ppages[:3] + ppages[prev:next] + ppages[-3:]
+            page_next = current_page + 2
+            page_prev = current_page - 2
+            ppages = ppages[:3] + ppages[page_prev:page_next] + ppages[-3:]
             separators = 2
     context={
         "merchant"              : merchant,
@@ -293,9 +296,9 @@ def category(request, category_code, current_page=1, category_ids=-1):
             ppages = ppages[:8] + ppages[-3:]
             separators = 1
         else:
-            next = current_page + 2
-            prev = current_page - 2
-            ppages = ppages[:3] + ppages[prev:next] + ppages[-3:]
+            page_next = current_page + 2
+            page_prev = current_page - 2
+            ppages = ppages[:3] + ppages[page_prev:page_next] + ppages[-3:]
             separators = 2
     if current_page > pages.num_pages:
         current_page=pages.num_pages
@@ -332,19 +335,23 @@ def sitemap(request):
     return HttpResponseRedirect('http://s3.amazonaws.com/pushpenny/sitemap.xml')
 
 @ensure_csrf_cookie
-def stores(request, page='A'):
+def stores(request, page='#'):
     """List of stores, ordered by alphabet."""
     
     description = u"Stores List | {0}".format(base_description)
     category = request.GET.get('category', None)
-    filters = {'name__istartswith': page}
+    if page == '#':
+        filters = {'name__regex': r'^[0-9]'}
+    else:
+        filters = {'name__istartswith': page}
     if category:
         merchant_ids = [c['merchant__id'] for c in Coupon.objects.filter(categories=category).values('merchant__id').annotate()]
         filters['id__in'] = merchant_ids
+    filters['total_coupon_count__gt'] = 0
     stores = Merchant.objects.filter(**filters)
     context={
         "stores": stores,
-        "categories": Category.objects.filter(parent=None).order_by('name'),
+        "categories": Category.objects.filter(parent__isnull=True).order_by('name'),
         "category": int(category) if category else None,
         "page_description": description,
         "page_title": description,

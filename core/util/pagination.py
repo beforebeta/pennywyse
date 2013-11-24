@@ -13,7 +13,7 @@ class AlphabeticalPagination(object):
     Calculates pages beyond row limit that can be displayed for back and forth navigation.
     """
     
-    all_pages = list(string.uppercase)
+    all_pages = ['#'] + list(string.uppercase)
     
     def __init__(self, page):
         self.page = page

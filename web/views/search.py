@@ -48,11 +48,12 @@ def search_model(model, query, fields, order_by="-date_added", objects=None):
 
 def search(request):
     query = request.GET.get("q","").strip()
-    merchants = SearchQuerySet().filter(django_ct='core.merchant').filter(content=query).order_by('-coupon_count')[:5]
-    coupons = SearchQuerySet().filter(django_ct='core.coupon').filter(content=query)[:10]
+    merchants = SearchQuerySet().filter(django_ct='core.merchant', content=query,
+                                        total_coupon_count__gt=0).order_by('-coupon_count')[:5]
+    coupons = SearchQuerySet().filter(django_ct='core.coupon', content=query)[:10]
     merchant_ids = ['core.merchant.%s' % c.merchant_id for c in coupons]
     if merchant_ids:
-        relevant_merchants = SearchQuerySet().filter(django_ct='core.merchant').filter(id__in=merchant_ids).order_by('-coupon_count')
+        relevant_merchants = SearchQuerySet().filter(django_ct='core.merchant', id__in=merchant_ids).order_by('-coupon_count')
     else:
         relevant_merchants = None
     context = {'query': query,

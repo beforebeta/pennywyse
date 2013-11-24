@@ -12,6 +12,9 @@
 {% endblock %}
 
 {% block pagination_links %}
+	{% if not coupons %}
+		<meta name="robots" content="noindex">
+	{% endif %}
 	{% if current_page.has_previous %}
 		<link rel="prev" href="/coupons/{{merchant.name_slug}}/{{merchant.id}}/page/{{current_page.previous_page_number}}/{% if comma_categories %}categories/{{comma_categories}}/{% endif %}" />
 	{% endif %}
