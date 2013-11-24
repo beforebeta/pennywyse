@@ -34,6 +34,7 @@ class MerchantIndex(indexes.SearchIndex, indexes.Indexable):
     image = indexes.CharField(model_attr='get_image', null=True)
     description = indexes.CharField(model_attr='description', null=True)
     coupon_count = indexes.IntegerField(model_attr='coupon_count', null=True)
+    total_coupon_count = indexes.IntegerField(model_attr='total_coupon_count', null=True)
     link = indexes.CharField(model_attr='link', null=True)
     local_path = indexes.CharField(model_attr='local_path', null=True)
 

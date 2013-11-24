@@ -1,5 +1,5 @@
 {% load humanize %}
-<li class="wrapper-3">
+<li class="wrapper-3{% if coupon.is_expired %} dark-bg{% endif %}">
   <div class="row">
     <div class="large-4 small-12 columns">
       <figure>
@@ -13,7 +13,9 @@
         <h2 class="alt"><a target="_blank" rel="comm" href="{{ coupon.success_path }}">{{ coupon.description }}</a></h2>
         <p class="text secondary">
           {{ coupon.get_description }}
-            {% if coupon.end %}
+            {% if coupon.is_expired %}
+            <br /><br />EXPIRED
+            {% elif coupon.end %}
             <br /><br />Offer ends: {{ coupon.end|naturalday }}
             {% endif %}
         </p>

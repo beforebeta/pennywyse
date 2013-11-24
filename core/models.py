@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 import datetime
+import pytz
 import os
 import urllib
 import urlparse
@@ -81,8 +82,11 @@ class Category(models.Model):
                 coupon__id__in=self.get_active_coupons().values_list('id')).distinct().order_by('name')
 
     def coupons_in_categories(self, selected_categories):
-        return Paginator(self.get_active_coupons().filter(
-                Q(categories__id__in=selected_categories) | Q(categories__id__isnull=True)), 10)
+        coupons = self.get_active_coupons()
+        if coupons.count() == 0:
+            coupons = self.get_coupons()
+        return Paginator(coupons.filter(Q(categories__id__in=selected_categories) |\
+                                        Q(categories__id__isnull=True)), 10)
 
     def display_name(self):
         return self.name
@@ -153,6 +157,7 @@ class Merchant(models.Model):
 
     description     = models.TextField(blank=True, null=True)   #loaded from the target link
     coupon_count    = models.IntegerField(default=0)
+    total_coupon_count = models.IntegerField(default=0)
 
     link            = models.TextField(blank=True, null=True)
     directlink      = models.TextField(blank=True, null=True)
@@ -194,13 +199,17 @@ class Merchant(models.Model):
         return categories
 
     def get_coupon_count(self):
-        return self.get_active_coupons().count()
+        active_coupons = self.get_active_coupons().count()
+        total_coupons = self.get_coupons().count()
+        return active_coupons, total_coupons
 
     def get_image(self):
         return get_directed_image(self.image)
 
     def refresh_coupon_count(self):
-        self.coupon_count = self.get_coupon_count()
+        active_coupons, total_coupons = self.get_coupon_count()
+        self.coupon_count = active_coupons
+        self.total_coupon_count = total_coupons
         self.save()
 
     def save(self, *args, **kwargs):
@@ -230,7 +239,7 @@ class Merchant(models.Model):
     def skimlinks_description(self):
         skim_desc = get_merchant_description(self.name_slug)
         if skim_desc == None:
-          skim_desc = self.description
+            skim_desc = self.description
         return skim_desc
 
     def featured_coupon(self):
@@ -258,28 +267,28 @@ class Merchant(models.Model):
         return featured
 
     def display_name(self):
-      return self.name
+        return self.name
 
     def local_path(self):
-      return "/coupons/{0}/{1}/".format(self.name_slug, self.id)
+        return "/coupons/{0}/{1}/".format(self.name_slug, self.id)
 
     def page_description(self):
-      return "Coupons for {0} | {1} | {2}".format(self.name, self.description, base_description)
+        return "Coupons for {0} | {1} | {2}".format(self.name, self.description, base_description)
 
     def page_title(self):
-      return "Coupons for {0} | {1}".format(self.name, base_description)
+        return "Coupons for {0} | {1}".format(self.name, base_description)
 
     def og_title(self):
-      return "Coupons for {0}".format(self.name)
+        return "Coupons for {0}".format(self.name)
 
     def og_description(self):
-      return "{0} | Hand Verified Coupon Codes for {1} from PushPenny.".format(self.description, self.name)
+        return "{0} | Hand Verified Coupon Codes for {1} from PushPenny.".format(self.description, self.name)
 
     def og_image(self):
-      return "{0}{1}".format(settings.BASE_URL_NO_APPENDED_SLASH, self.get_image())
+        return "{0}{1}".format(settings.BASE_URL_NO_APPENDED_SLASH, self.get_image())
 
     def og_url(self):
-      return "{0}{1}".format(settings.BASE_URL_NO_APPENDED_SLASH, self.local_path())
+        return "{0}{1}".format(settings.BASE_URL_NO_APPENDED_SLASH, self.local_path())
 
 class MerchantAffiliateData(models.Model):
     """Storing data, related to affiliate networks."""
@@ -586,10 +595,10 @@ class Coupon(models.Model):
             return "%s %s" % (self.ref_id, self.description)
 
     def in_category(self, category):
-      return category in [c.code for c in self.categories.all()]
+        return category in [c.code for c in self.categories.all()]
 
     def local_path(self):
-      return "/coupons/{0}/{1}/{2}/".format(self.merchant.name_slug, self.desc_slug, self.id)
+        return "/coupons/{0}/{1}/{2}/".format(self.merchant.name_slug, self.desc_slug, self.id)
 
     def success_path(self):
         return reverse('web.views.main.coupon_success_page', kwargs={'company_name': self.merchant.name_slug, 
@@ -597,20 +606,29 @@ class Coupon(models.Model):
                                                                      'coupon_id': self.id})
 
     def page_description(self):
-      return "{0} | {1}".format(self.get_description(), self.merchant.page_description())
+        return "{0} | {1}".format(self.get_description(), self.merchant.page_description())
 
     def page_title(self):
-      return "{0} | {1}".format(self.description, self.merchant.page_title())
+        return "{0} | {1}".format(self.description, self.merchant.page_title())
 
     def og_title(self):
-      return "{0}: {1}. A Hand Verified Coupon Code for {2} from PushPenny.".format(self.merchant.name, self.description, self.merchant.name)
+        return "{0}: {1}. A Hand Verified Coupon Code for {2} from PushPenny.".format(self.merchant.name, self.description, self.merchant.name)
 
     def og_description(self):
-      return "{0}: {1}. A Hand Verified Coupon Code for {2} from PushPenny.".format(self.merchant.name, self.description, self.merchant.name)
+        return "{0}: {1}. A Hand Verified Coupon Code for {2} from PushPenny.".format(self.merchant.name, self.description, self.merchant.name)
 
     def og_image(self):
-      return "{0}{1}".format(settings.BASE_URL_NO_APPENDED_SLASH, self.merchant.get_image())
+        return "{0}{1}".format(settings.BASE_URL_NO_APPENDED_SLASH, self.merchant.get_image())
 
     def og_url(self):
-      return "{0}{1}".format(settings.BASE_URL_NO_APPENDED_SLASH, self.local_path())
+        return "{0}{1}".format(settings.BASE_URL_NO_APPENDED_SLASH, self.local_path())
 
+    @property
+    def is_expired(self):
+        now = datetime.datetime.utcnow()
+        now = now.replace(tzinfo=pytz.utc)
+        if now > self.end:
+            return True
+        return False
+    
+    
