@@ -168,16 +168,16 @@ INSTALLED_APPS = (
     'django.contrib.humanize',
     'django.contrib.gis', # GeoDjango
     'compressor',
-    'south',
+    'constance',
+    'djcelery',
     'haystack',
+    'south',
+    'ads',
+    'api',
     'core',
+    'tracking',
     'web',
     'websvcs',
-    'ads',
-    'tracking',
-    'articles',
-    'djcelery',
-    'api',
     )
 
 # A sample logging configuration. The only tangible logging
@@ -281,4 +281,16 @@ CELERYBEAT_SCHEDULE = {
         'task': 'core.tasks.fetch_ad_costs',
         'schedule': crontab()
     }
+}
+
+CONSTANCE_CONFIG = {
+    'CATEGORY_PAGE_TEXT': ('', 'Category text.')
+}
+
+CONSTANCE_BACKEND = 'constance.backends.redisd.RedisBackend'
+
+CONSTANCE_REDIS_CONNECTION = {
+    'host': 'localhost',
+    'port': 6379,
+    'db': 0,
 }

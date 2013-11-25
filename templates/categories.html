@@ -13,6 +13,13 @@
 
 {% block main %}
 <div class="stripe-regular" style="border-bottom: 2px solid #DDDDDD">
+  	{% if CATEGORY_PAGE_TEXT %}
+		<div class="row">
+        	<div class="large-9 columns category-text">
+  				<p>{{ CATEGORY_PAGE_TEXT | safe }}</p>
+            </div>
+	  	</div>
+  	{% endif %}
   {% if featured_categories %}
 	  <div role="main">
 	    <section class="row category-index">

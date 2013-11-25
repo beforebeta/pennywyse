@@ -17,7 +17,7 @@ from core.util.pagination import AlphabeticalPagination
 from tracking.views import log_click_track
 from tracking.utils import get_visitor_tag
 from web.models import ShortenedURLComponent
-
+from constance import config
 
 def build_base_context(request, context):
     context["pop_companies"] = Merchant.objects.get_popular_companies(21)
@@ -119,10 +119,9 @@ def coupons_for_company(request, company_name, company_id=None, current_page=1, 
         if not merchant:
             raise Http404
         # if merchant wasn't found by ID - redirecting to merchant page URL with proper ID in it
-        if company_id:
-            original_merchant_url = reverse('web.views.main.coupons_for_company', kwargs={'company_name': merchant[0].name_slug,
-                                                                                          'company_id': merchant[0].id})
-            return HttpResponsePermanentRedirect(original_merchant_url)
+        original_merchant_url = reverse('web.views.main.coupons_for_company', kwargs={'company_name': merchant[0].name_slug,
+                                                                                      'company_id': merchant[0].id})
+        return HttpResponsePermanentRedirect(original_merchant_url)
     
     selected_categories = ""
     if selected_cat_ids == -1:
@@ -247,6 +246,7 @@ def categories(request):
         "og_description": description,
         "og_image": icon_url,
         "og_url": "{0}/categories/".format(settings.BASE_URL_NO_APPENDED_SLASH),
+        "CATEGORY_PAGE_TEXT": getattr(config, 'CATEGORY_PAGE_TEXT', ''),
     }
     set_active_tab('category', context)
     set_canonical_url(request, context)
