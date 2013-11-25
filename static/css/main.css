@@ -1856,7 +1856,7 @@ li.blog-teaser {
 }
 .store-image img{
 	height: auto;
-	weidth: auto;
+	width: auto;
 	max-height: 60px;
 	max-width: 120px;
 	display:normal;
@@ -1869,4 +1869,7 @@ li.blog-teaser {
 	text-overflow:ellipsis;
 	overflow:hidden;
 	white-space: nowrap;
+}
+.category-text {
+	text-align: center;
 }
