@@ -71,6 +71,9 @@ class Category(models.Model):
     def get_coupons(self):
         return self.coupon_set.all().order_by("-created")
 
+    def get_expired_coupons(self):
+        return self.coupon_set.all().filter(end__lt=datetime.datetime.now()).order_by("-created")[:100]
+
     def get_active_coupons(self):
         return self.coupon_set.all().exclude(merchant_id__isnull=True).filter(Q(end__gt=datetime.datetime.now()) | Q(end__isnull=True)).order_by("-created")
 
@@ -83,10 +86,10 @@ class Category(models.Model):
 
     def coupons_in_categories(self, selected_categories):
         coupons = self.get_active_coupons()
-        if coupons.count() == 0:
-            coupons = self.get_coupons()
-        return Paginator(coupons.filter(Q(categories__id__in=selected_categories) |\
-                                        Q(categories__id__isnull=True)), 10)
+        coupons = list(coupons.filter(Q(categories__id__in=selected_categories) |\
+                                      Q(categories__id__isnull=True)))
+        coupons = coupons + list(self.get_expired_coupons())
+        return Paginator(coupons, 10)
 
     def display_name(self):
         return self.name
@@ -189,6 +192,9 @@ class Merchant(models.Model):
 
     def get_active_coupons(self):
         return self.coupon_set.all().filter(Q(end__gt=datetime.datetime.now()) | Q(end__isnull=True)).order_by("-created")
+
+    def get_expired_coupons(self):
+        return self.coupon_set.all().filter(end__lt=datetime.datetime.now()).order_by("-created")[:100]
 
     def get_coupon_categories(self):
         categories = set()
