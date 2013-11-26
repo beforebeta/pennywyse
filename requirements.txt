@@ -37,4 +37,4 @@ webtest==2.0.10
 django-webtest==1.7.5
 ipdb==0.8
 factory_boy==2.2.1
-
+selenium
