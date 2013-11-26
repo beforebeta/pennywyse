@@ -34,7 +34,6 @@ class TestCoreModels(unittest.TestCase):
     def test_can_create_merchantlocation(self):
         longitude = random.uniform(-180.0, 180.0)
         latitude = random.uniform(-90.0, 90.0)
-        import ipdb; ipdb.set_trace()
         point_wkt = 'POINT({} {})'.format(longitude, latitude)
         m = MerchantLocation.objects.create(geometry=point_wkt)
         self.assertTrue(isinstance(m, MerchantLocation))
