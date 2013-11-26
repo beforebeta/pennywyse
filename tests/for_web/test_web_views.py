@@ -77,17 +77,17 @@ class TestViewsSelenium(unittest.TestCase):
     def tearDown(self):
         self.browser.quit()
 
-    def test_index_page(self):
-        # User goes to pushpenny site (done in setUp)
-
+    def test_index_has_featured_deal(self):
         # User sees the featured deal in the slider
         featured_deal_link = self.browser.find_elements_by_link_text('Use Coupon')
         self.assertEqual(len(featured_deal_link), 1)
 
+    def test_index_has_new_or_popular_coupons(self):
         # User also sees at least one 'New' or 'Popular' coupons
         deal_links_list = self.browser.find_elements_by_xpath('/html/body/div/div/div[2]/div[2]/div/div/ul/li')
         self.assertGreater(len(deal_links_list), 0)
 
+    def test_index_has_new_or_popular_companies(self):
         # User also sees at least one 'Popular' companies
         popular_companies_list = self.browser.find_elements_by_xpath('/html/body/div/footer/div[1]/div[2]/div/div/ul/li')
         self.assertGreater(len(popular_companies_list), 0)
