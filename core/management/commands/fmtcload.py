@@ -168,7 +168,8 @@ def refresh_deals():
             coupon.end = get_dt(deal.find('enddate').text)
             coupon.lastupdated = get_dt(deal.find('lastupdated').text)
             coupon.created = get_dt(deal.find('created').text)
-
+            coupon.link = deal.find('link').text
+            
             # removing skimlinks prefix from coupon link
             parsed_link = urlparse(deal.find('link').text)
             if str(parsed_link.netloc) == 'go.redirectingat.com':
@@ -176,8 +177,7 @@ def refresh_deals():
                 coupon_link = qs.get('url')
                 if coupon_link:
                     coupon.link = coupon_link[0]
-
-            coupon.link = deal.find('link').text
+            
             coupon.directlink = deal.find('directlink').text
             coupon.skimlinks = deal.find('skimlinks').text
             coupon.status = deal.find('status').text
