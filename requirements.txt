@@ -30,3 +30,11 @@ django-haystack==2.1.0
 pysolr==3.1.0
 whoosh==2.5.5
 django-constance==0.6
+django-nose
+coverage==3.7
+nose-progressive==1.5
+webtest==2.0.10
+django-webtest==1.7.5
+ipdb==0.8
+factory_boy==2.2.1
+selenium

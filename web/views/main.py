@@ -122,7 +122,7 @@ def coupons_for_company(request, company_name, company_id=None, current_page=1, 
         original_merchant_url = reverse('web.views.main.coupons_for_company', kwargs={'company_name': merchant[0].name_slug,
                                                                                       'company_id': merchant[0].id})
         return HttpResponsePermanentRedirect(original_merchant_url)
-    
+
     selected_categories = ""
     if selected_cat_ids == -1:
         selected_categories = ",".join(set([str(x["categories__id"]) for x in merchant.get_active_coupons().values("categories__id") if x["categories__id"]]))
@@ -145,7 +145,7 @@ def coupons_for_company(request, company_name, company_id=None, current_page=1, 
     coupons = list(merchant.get_active_coupons().filter(Q(categories__id__in=selected_categories) |\
                                                         Q(categories__id__isnull=True)))
     coupons += list(merchant.get_expired_coupons())
-   
+
     pages = Paginator(coupons, 10)
     if current_page > pages.num_pages:
         current_page=pages.num_pages
@@ -166,7 +166,7 @@ def coupons_for_company(request, company_name, company_id=None, current_page=1, 
         "num_pages"             : pages.num_pages,
         "current_page"          : pages.page(current_page),
         "current_page_idx"      : int(current_page),
-        "separators"            : separators, 
+        "separators"            : separators,
         "coupons"               : pages.page(current_page).object_list,
         "num_coupons"           : pages.count,
         "total_coupon_count"    : merchant.coupon_count,
@@ -299,7 +299,7 @@ def category(request, category_code, current_page=1, category_ids=-1):
         "num_pages"             : pages.num_pages,
         "current_page"          : pages.page(current_page),
         "current_page_idx"      : int(current_page),
-        "separators"            : separators, 
+        "separators"            : separators,
         "category"              : category,
         "coupons"               : pages.page(current_page).object_list,
         "total_coupon_count"    : category.get_coupon_count(),
@@ -329,7 +329,7 @@ def sitemap(request):
 @ensure_csrf_cookie
 def stores(request, page='#'):
     """List of stores, ordered by alphabet."""
-    
+
     description = u"Stores List | {0}".format(base_description)
     category = request.GET.get('category', None)
     if page == '#':

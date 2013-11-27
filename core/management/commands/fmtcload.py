@@ -57,7 +57,7 @@ def _download_content(url, filename):
             if c:
                 f.write(c)
                 f.flush()
-    return open(filename, 'r') 
+    return open(filename, 'r')
 
 def refresh_deal_types():
     section("Loading Deal Types")
@@ -169,7 +169,7 @@ def refresh_deals():
             coupon.lastupdated = get_dt(deal.find('lastupdated').text)
             coupon.created = get_dt(deal.find('created').text)
             coupon.link = deal.find('link').text
-            
+
             # removing skimlinks prefix from coupon link
             parsed_link = urlparse(deal.find('link').text)
             if str(parsed_link.netloc) == 'go.redirectingat.com':
@@ -177,7 +177,7 @@ def refresh_deals():
                 coupon_link = qs.get('url')
                 if coupon_link:
                     coupon.link = coupon_link[0]
-            
+
             coupon.directlink = deal.find('directlink').text
             coupon.skimlinks = deal.find('skimlinks').text
             coupon.status = deal.find('status').text
@@ -211,18 +211,22 @@ def setup_web_coupons():
         print_stack_trace()
 
     try:
+
         if Coupon.objects.filter(is_new=True).count() == 0:
             for coupon in Coupon.active_objects.get_new_coupons(8):
                 coupon.is_new = True
                 coupon.save()
+
     except:
         print_stack_trace()
 
     try:
+
         if Coupon.objects.filter(is_popular=True).count() == 0:
             for coupon in Coupon.active_objects.get_popular_coupons(8):
                 coupon.is_popular = True
                 coupon.save()
+
     except:
         print_stack_trace()
 

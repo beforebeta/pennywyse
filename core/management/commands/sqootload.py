@@ -42,12 +42,12 @@ def refresh_sqoot_data():
     request_parameters['per_page'] = ITEMS_PER_PAGE
     active_deal_count = requests.get(SQOOT_API_URL + 'deals', params=request_parameters).json()['query']['total']
     page_count = int(math.ceil(active_deal_count / float(request_parameters['per_page'])))
-    
+
     print '%s deals detected, estimating %s pages to iterate\n' % (active_deal_count, page_count)
-    
+
     describe_section("STARTING TO DOWNLOAD SQOOT DEALS..\n")
     deal_download_counter = 0
-    
+
     country_model = get_or_create_country()     # since there's only one country for all deals - no need to check it for each coupon
     for p in range(page_count):
         request_parameters['page'] = p
@@ -65,13 +65,13 @@ def refresh_sqoot_data():
                 dealtype_model          = get_or_create_dealtype()
                 couponnetwork_model     = get_or_create_couponnetwork(deal_data['deal'])
                 merchantlocation_model  = get_or_create_merchantlocation(merchant_data_dict, merchant_model, is_online_bool)
-                get_or_create_coupon(deal_data['deal'], merchant_model, category_model, 
+                get_or_create_coupon(deal_data['deal'], merchant_model, category_model,
                                      dealtype_model, country_model, couponnetwork_model, merchantlocation_model)
 
                 print '-' * 20
             except:
                 print_stack_trace()
-        
+
 
 #############################################################################################################
 #
@@ -197,7 +197,7 @@ def get_or_create_merchantlocation(merchant_data_dict, merchant_model, is_online
             merchantlocation_model.save()
     return merchantlocation_model
 
-def get_or_create_coupon(each_deal_data_dict, merchant_model, category_model, dealtype_model, 
+def get_or_create_coupon(each_deal_data_dict, merchant_model, category_model, dealtype_model,
                          country_model, couponnetwork_model, merchantlocation_model):
     ref_id = each_deal_data_dict['id']
     coupon_model, created = Coupon.all_objects.get_or_create(ref_id=ref_id, ref_id_source='sqoot')

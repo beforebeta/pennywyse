@@ -172,6 +172,7 @@ INSTALLED_APPS = (
     'djcelery',
     'haystack',
     'south',
+    'django_nose',
     'ads',
     'api',
     'core',
@@ -294,3 +295,18 @@ CONSTANCE_REDIS_CONNECTION = {
     'port': 6379,
     'db': 0,
 }
+
+########################################################################
+# Testing
+########################################################################
+
+# Nose settings
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+
+NOSE_ARGS = [
+    # '--with-coverage',
+    # '--cover-package=api,web',
+    '--with-progressive',
+    '--logging-clear-handlers',
+]
+
