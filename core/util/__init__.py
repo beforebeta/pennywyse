@@ -1,11 +1,14 @@
 import base64
 import json
+import sys
+import time
+import traceback
 import urllib
-import sys, traceback
+from urlparse import urlparse, parse_qs
+
 from BeautifulSoup import BeautifulSoup
 from django.conf import settings
 import requests
-import time
 
 def url2path(url):
     return base64.urlsafe_b64encode(url)
@@ -53,3 +56,12 @@ def get_description_tag_from_url(url):
         pass
 
     return description if description else title if title else url
+
+def extract_url_from_skimlinks(url):
+    parsed_link = urlparse(url)
+    if str(parsed_link.netloc) == 'go.redirectingat.com':
+        qs = parse_qs(parsed_link.query)
+        link = qs.get('url')
+        if link:
+            return link[0]
+    return url

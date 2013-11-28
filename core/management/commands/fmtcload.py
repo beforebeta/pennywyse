@@ -7,8 +7,7 @@ from urlparse import urlparse, parse_qs
 from django.core.management.base import BaseCommand
 from django.conf import settings
 from core.models import Category, Country, Coupon, DealType, Merchant, MerchantAffiliateData
-from core.util import print_stack_trace
-from web.models import FeaturedCoupon, NewCoupon, PopularCoupon
+from core.util import print_stack_trace, extract_url_from_skimlinks
 from websvcs.models import EmbedlyMerchant
 
 import HTMLParser
@@ -171,13 +170,8 @@ def refresh_deals():
             coupon.link = deal.find('link').text
 
             # removing skimlinks prefix from coupon link
-            parsed_link = urlparse(deal.find('link').text)
-            if str(parsed_link.netloc) == 'go.redirectingat.com':
-                qs = parse_qs(parsed_link.query)
-                coupon_link = qs.get('url')
-                if coupon_link:
-                    coupon.link = coupon_link[0]
-
+            coupon.link = extract_url_from_skimlinks(deal.find('link').text)
+            
             coupon.directlink = deal.find('directlink').text
             coupon.skimlinks = deal.find('skimlinks').text
             coupon.status = deal.find('status').text
@@ -243,7 +237,8 @@ def refresh_merchant_redirects():
     for coupon in Coupon.objects.all():
         if coupon.link and not coupon.merchant.redirect:
             try:
-                request = requests.get(coupon.link, timeout=20)
+                link = extract_url_from_skimlinks(coupon.link)
+                request = requests.get(link, timeout=20)
                 if request.headers.get('x-frame-options', False) == 'SAMEORIGIN':
                     coupon.merchant.redirect = True
                     coupon.merchant.save()

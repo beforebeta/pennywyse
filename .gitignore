@@ -13,3 +13,5 @@ data
 sitemap/*.xml.gz
 sitemap/*.xml
 .idea/*
+coupons/whoosh_index/*
+processed/*
