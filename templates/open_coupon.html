@@ -101,7 +101,7 @@
         <div class="large-1 small-12 columns">
             <p class="meta-data">
                 <a class="purchase" href="{{ back_url }}">&lt;&lt;</a>
-                <a class="close" href="{% if coupon.merchant.use_skimlinks %}{% assign_visitor_tag coupon.skimlinks %}{% else %}{{ coupon.link }}">X</a>
+                <a class="close" href="{% if coupon.merchant.use_skimlinks %}{% assign_visitor_tag coupon.skimlinks %}{% else %}{{ coupon.link }}{% endif %}">X</a>
             </p>
             
         </div>
