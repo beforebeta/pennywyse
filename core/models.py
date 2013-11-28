@@ -43,6 +43,7 @@ icon_url = "http://pushpenny.com/static/img/fbog.png"
 #
 #######################################################################################################################
 class CategoryManager(models.Manager):
+    """Custom model manager, which excludes local categories."""
 
     def get_query_set(self):
         return super(CategoryManager, self).get_query_set().filter(ref_id_source__isnull=True)
@@ -141,12 +142,14 @@ class DealType(models.Model):
 #
 #######################################################################################################################
 class MerchantManager(models.Manager):
+    """Custom model manager, which excludes local merchants."""
 
     def get_popular_companies(self, how_many=8):
         return Merchant.objects.exclude(coupon__isnull=True)[:how_many]
 
     def get_query_set(self):
         return super(MerchantManager, self).get_query_set().filter(ref_id_source__isnull=True)
+
 
 class Merchant(models.Model):
     """Storing companies, which provides coupons."""
@@ -169,6 +172,7 @@ class Merchant(models.Model):
 
     date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
     last_modified   = models.DateTimeField(default=datetime.datetime.now(), auto_now=True, auto_now_add=True)
+    use_skimlinks   = models.BooleanField(default=True)
 
     all_objects = models.Manager()
     objects = MerchantManager()
@@ -296,6 +300,7 @@ class Merchant(models.Model):
     def og_url(self):
         return "{0}{1}".format(settings.BASE_URL_NO_APPENDED_SLASH, self.local_path())
 
+
 class MerchantAffiliateData(models.Model):
     """Storing data, related to affiliate networks."""
     
@@ -393,7 +398,10 @@ def _get_popular_coupons(how_many):
         curr_merchant_idx += 1
     return popular_coupons
 
+
 class CouponManager(models.Manager):
+    """Custom model manager, which excludes local coupons."""
+    
     def get_query_set(self):
         return super(CouponManager, self).get_query_set().filter(ref_id_source__isnull=True)
     
@@ -404,18 +412,13 @@ class CouponManager(models.Manager):
     def get_popular_coupons(self, how_many=10):
         return _get_popular_coupons(how_many=how_many)
 
-class ActiveCouponManager(models.Manager):
+
+class ActiveCouponManager(CouponManager):
+    """Custom model manager, which returns only not expired coupons."""
+    
     def get_query_set(self):
         return super(ActiveCouponManager, self).get_query_set()\
-                                                .filter(Q(end__gt=datetime.datetime.now()) | Q(end__isnull=True))\
-                                                .filter(ref_id_source__isnull=True)
-
-    def get_new_coupons(self,how_many=10):
-        #TODO: Improve
-        return self.all().order_by("-created")[:how_many]
-    
-    def get_popular_coupons(self, how_many=10):
-        return _get_popular_coupons(how_many=how_many)
+                                                .filter(Q(end__gt=datetime.datetime.now()) | Q(end__isnull=True))
 
 class Coupon(models.Model):
     """
