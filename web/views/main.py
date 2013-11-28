@@ -1,4 +1,3 @@
-# Create your views here.
 import random
 import re
 from django.conf import settings
@@ -208,7 +207,10 @@ def open_coupon(request, company_name, coupon_label, coupon_id):
         return HttpResponsePermanentRedirect(original_coupon_url)
 
     if coupon.merchant.redirect:
-        coupon_url = get_visitor_tag(coupon.skimlinks, request.visitor.id)
+        if coupon.merchant.use_skimlinks:
+            coupon_url = get_visitor_tag(coupon.skimlinks, request.visitor.id)
+        else:
+            coupon_url = coupon.link
         return HttpResponseRedirect(coupon_url)
 
     logo_url = "/"
