@@ -119,10 +119,18 @@ def coupons_for_company(request, company_name, company_id=None, current_page=1, 
         if not merchant:
             raise Http404
         # if merchant wasn't found by ID - redirecting to merchant page URL with proper ID in it
-        original_merchant_url = reverse('web.views.main.coupons_for_company', kwargs={'company_name': merchant[0].name_slug,
-                                                                                      'company_id': merchant[0].id})
+        kwargs={'company_name': merchant[0].name_slug,
+                'company_id': merchant[0].id}
+        if current_page > 1:
+            kwargs['current_page'] = current_page
+        original_merchant_url = reverse('web.views.main.coupons_for_company', kwargs=kwargs)
         return HttpResponsePermanentRedirect(original_merchant_url)
-
+    
+    if current_page == 1:
+        return HttpResponsePermanentRedirect(reverse('web.views.main.coupons_for_company', 
+                                                     kwargs={'company_name': merchant.name_slug,
+                                                             'company_id': merchant.id}))
+    
     selected_categories = ""
     if selected_cat_ids == -1:
         selected_categories = ",".join(set([str(x["categories__id"]) for x in merchant.get_active_coupons().values("categories__id") if x["categories__id"]]))

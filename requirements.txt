@@ -26,7 +26,6 @@ lxml==3.2.4
 django-tastypie==0.10.0
 python-mimeparse==0.1.4
 newrelic
-django-haystack==2.1.0
 pysolr==3.1.0
 whoosh==2.5.5
 django-constance==0.6
@@ -38,3 +37,5 @@ django-webtest==1.7.5
 ipdb==0.8
 factory_boy==2.2.1
 selenium
+-e git+https://github.com/toastdriven/django-haystack#egg=django-haystack
+redis-py==2.8.0
