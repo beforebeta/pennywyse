@@ -94,7 +94,7 @@ def _search(itm,lst,f):
     return False
 
 @ensure_csrf_cookie
-def coupons_for_company(request, company_name, company_id=None, current_page=1, category_ids=-1):
+def coupons_for_company(request, company_name, company_id=None, current_page=None, category_ids=-1):
     selected_cat_ids = category_ids
     if selected_cat_ids != -1:
         selected_cat_ids = ShortenedURLComponent.objects.get_original_url(selected_cat_ids)
@@ -107,7 +107,6 @@ def coupons_for_company(request, company_name, company_id=None, current_page=1, 
                 pass
         selected_cat_ids=",".join(selected_cat_ids)
     merchant=None
-    current_page = int(current_page)
     if company_id:
         try:
             merchant = Merchant.objects.get(id=company_id)
@@ -124,8 +123,8 @@ def coupons_for_company(request, company_name, company_id=None, current_page=1, 
             kwargs['current_page'] = current_page
         original_merchant_url = reverse('web.views.main.coupons_for_company', kwargs=kwargs)
         return HttpResponsePermanentRedirect(original_merchant_url)
-    
-    if current_page == 1:
+
+    if current_page and int(current_page) == 1:
         return HttpResponsePermanentRedirect(reverse('web.views.main.coupons_for_company', 
                                                      kwargs={'company_name': merchant.name_slug,
                                                              'company_id': merchant.id}))
@@ -153,13 +152,14 @@ def coupons_for_company(request, company_name, company_id=None, current_page=1, 
                                                         Q(categories__id__isnull=True)))
     coupons += list(merchant.get_expired_coupons())
 
+    page = current_page or 1
     pages = Paginator(coupons, 10)
-    if current_page > pages.num_pages:
-        current_page=pages.num_pages
+    if page > pages.num_pages:
+        page=pages.num_pages
     ppages = range(1, pages.num_pages+1)
     separators = 0
     if pages.num_pages > 12:
-        if current_page <= 5 or current_page >= pages.num_pages - 3:
+        if page <= 5 or page >= pages.num_pages - 3:
             ppages = ppages[:8] + ppages[-3:]
             separators = 1
         else:
@@ -171,10 +171,10 @@ def coupons_for_company(request, company_name, company_id=None, current_page=1, 
         "merchant"              : merchant,
         "pages"                 : ppages,
         "num_pages"             : pages.num_pages,
-        "current_page"          : pages.page(current_page),
-        "current_page_idx"      : int(current_page),
+        "current_page"          : pages.page(page),
+        "current_page_idx"      : int(page),
         "separators"            : separators,
-        "coupons"               : pages.page(current_page).object_list,
+        "coupons"               : pages.page(page).object_list,
         "num_coupons"           : pages.count,
         "total_coupon_count"    : merchant.coupon_count,
         "coupon_categories"     : coupon_categories,
