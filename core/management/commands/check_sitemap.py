@@ -6,6 +6,8 @@ from django.core.management.base import BaseCommand
 import requests
 import grequests
 
+from core.util import extract_url_from_skimlinks
+
 SITEMAP_URL = 'http://s3.amazonaws.com/pennywyse/sitemap.xml'
 
 class Command(BaseCommand):
@@ -26,7 +28,8 @@ class Command(BaseCommand):
                 if location.text.endswith('.xml'):
                     self._check_sitemap(location.text)
                 else:
-                    self.urls.append(location.text)
+                    url = extract_url_from_skimlinks(location.text)
+                    self.urls.append(url)
                     
         except Exception as e:
             sys.stdout.write('\nError: %s' % str(e))

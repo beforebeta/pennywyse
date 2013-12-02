@@ -196,11 +196,11 @@ def refresh_deals():
 def setup_web_coupons():
     section("Setup Web Coupons")
     try:
-        if Coupon.objects.filter(is_featured=True).count() == 0:
-            for name in ['best buy', 'sears', 'target']:
-                coupon = Merchant.objects.get(name=name).get_top_coupon()
-                coupon.is_featured = True
-                coupon.save()
+        Coupon.objects.filter(is_featured=True).update(is_featured=False)
+        for name in ['Amazon', 'Bed Bath & Beyond', 'Best Buy', 'Neiman Marcus', 'Macy\'s', 'Sears', 'Target', 'ToysRUs']:
+            coupon = Merchant.objects.get(name=name).get_top_coupon()
+            coupon.is_featured = True
+            coupon.save()
     except:
         print_stack_trace()
 
