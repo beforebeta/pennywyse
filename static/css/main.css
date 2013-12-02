@@ -823,6 +823,11 @@ header[role="banner"] {
   margin: 0;
   /*text-transform: uppercase;*/
 }
+.logo h1{
+  font-size: 33px !important;
+  font-weight: 700;
+  margin: 0;
+}
 .main-menu,
 .popular-companies-list {
   display: none;
