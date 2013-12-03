@@ -12,6 +12,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.gis.db import models as models# Switching to GeoDjango models
 from django.db.models.query_utils import Q
 from django.template.defaultfilters import slugify
+from django.contrib.gis.geos import Point
 
 from core.util import print_stack_trace, get_first_google_image_result, get_description_tag_from_url
 from tracking.commission.skimlinks import get_merchant_description
@@ -153,7 +154,7 @@ class MerchantManager(models.Manager):
 
 class Merchant(models.Model):
     """Storing companies, which provides coupons."""
-    
+
     # deprecated field
     ref_id          = models.CharField(max_length=255, db_index=True, default='refid', blank=True, null=True)
     ref_id_source   = models.CharField(max_length=255, db_index=True, blank=True, null=True)
@@ -303,7 +304,7 @@ class Merchant(models.Model):
 
 class MerchantAffiliateData(models.Model):
     """Storing data, related to affiliate networks."""
-    
+
     merchant = models.ForeignKey(Merchant, related_name='affiliate_data')
     ref_id = models.CharField(max_length=255, blank=True, null=True)
     network = models.CharField(max_length=255, blank=True, null=True)
@@ -354,7 +355,7 @@ class Country(models.Model):
 
 class MerchantLocation(models.Model):
     """GEO data about merchants, related to local coupons"""
-    
+
     merchant        = models.ForeignKey(Merchant, blank=True, null=True)
     geometry        = models.PointField(srid=4326)
     address         = models.CharField(max_length=255, blank=True, null=True)
@@ -370,6 +371,10 @@ class MerchantLocation(models.Model):
 
     def __unicode__(self):
         return '{} {}'.format(self.geometry.x, self.geometry.y)
+
+    def get_location(self):
+        # Remember, longitude FIRST!
+        return Point(self.longitude, self.latitude)
 
 
 #######################################################################################################################
@@ -401,10 +406,10 @@ def _get_popular_coupons(how_many):
 
 class CouponManager(models.Manager):
     """Custom model manager, which excludes local coupons."""
-    
+
     def get_query_set(self):
         return super(CouponManager, self).get_query_set().filter(ref_id_source__isnull=True)
-    
+
     def get_new_coupons(self,how_many=10):
         #TODO: Improve
         return self.all().order_by("-created")[:how_many]
@@ -415,7 +420,7 @@ class CouponManager(models.Manager):
 
 class ActiveCouponManager(CouponManager):
     """Custom model manager, which returns only not expired coupons."""
-    
+
     def get_query_set(self):
         return super(ActiveCouponManager, self).get_query_set()\
                                                 .filter(Q(end__gt=datetime.datetime.now()) | Q(end__isnull=True))
@@ -610,8 +615,8 @@ class Coupon(models.Model):
         return "/coupons/{0}/{1}/{2}/".format(self.merchant.name_slug, self.desc_slug, self.id)
 
     def success_path(self):
-        return reverse('web.views.main.coupon_success_page', kwargs={'company_name': self.merchant.name_slug, 
-                                                                     'coupon_label': self.desc_slug, 
+        return reverse('web.views.main.coupon_success_page', kwargs={'company_name': self.merchant.name_slug,
+                                                                     'coupon_label': self.desc_slug,
                                                                      'coupon_id': self.id})
 
     def page_description(self):
@@ -639,5 +644,5 @@ class Coupon(models.Model):
         if now > self.end:
             return True
         return False
-    
-    
+
+

@@ -179,6 +179,7 @@ INSTALLED_APPS = (
     'tracking',
     'web',
     'websvcs',
+    'tastypie',
     )
 
 # A sample logging configuration. The only tangible logging
@@ -310,3 +311,9 @@ NOSE_ARGS = [
     '--logging-clear-handlers',
 ]
 
+
+########################################################################
+# Tastypie REST API settings
+########################################################################
+
+TASTYPIE_DEFAULT_FORMATS = ['json',]
