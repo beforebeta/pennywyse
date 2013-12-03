@@ -1,6 +1,8 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
+from api.mobile_api import DealsResource
 admin.autodiscover()
+deals_resource = DealsResource()
 
 # Uncomment the next two lines to enable the admin:
 
@@ -89,4 +91,5 @@ urlpatterns += patterns('websvcs.views.subscriptions',
 urlpatterns += patterns('api.views',
     url(r'^v2/deals', 'deals'),
     url(r'^v2/localinfo', 'localinfo'),
+    url(r'^api/', include(deals_resource.urls)),
 )
