@@ -377,7 +377,7 @@ class MerchantLocation(models.Model):
 
     def get_location(self):
         # Remember, longitude FIRST!
-        return Point(self.longitude, self.latitude)
+        return Point(self.geometry.x, self.geometry.y)
 
 
 #######################################################################################################################

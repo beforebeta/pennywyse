@@ -91,5 +91,8 @@ urlpatterns += patterns('websvcs.views.subscriptions',
 urlpatterns += patterns('api.views',
     url(r'^v2/deals', 'deals'),
     url(r'^v2/localinfo', 'localinfo'),
-    url(r'^api/', include(deals_resource.urls)),
+)
+
+urlpatterns += patterns('',
+    url(r'^v3/deals', deals_resource.return_response),
 )
