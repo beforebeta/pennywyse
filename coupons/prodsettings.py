@@ -57,7 +57,7 @@ LOGGING = {
 
 HAYSTACK_CONNECTIONS = {
     'default': {
-        'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
+        'ENGINE': 'web.utils.CustomSolrEngine',
         'URL': 'http://127.0.0.1:8080/solr'
     },
 }
