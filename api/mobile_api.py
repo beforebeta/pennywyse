@@ -1,121 +1,76 @@
-import json
-
-import requests
 from tastypie.resources import ModelResource
+from haystack.query import SearchQuerySet
 
 from core.models import Coupon
-
-# from core.models import Coupon
 
 class DealsResource(ModelResource):
     class Meta:
         queryset = Coupon.all_objects.filter(ref_id_source='sqoot')
         resource_name = 'deals'
 
+    def return_response(self, request, **kwargs):
+        self.method_check(request, allowed=['get'])
 
+        # import ipdb; ipdb.set_trace()
+        # request.GET.keys()
+        # query = request.GET.get("q","") #.strip()
+        deals = []
 
+        query = {
+            'total': 999,
+            'page': 999,
+            'per_page': 999,
+            'query': None,
+            'location': None,
+            'radius': 999,
+            'online': None,
+            'category_slugs': [],
+            'provider_slugs': [],
+            'updated_after': None,
+        }
 
+        each_deal = {
+            'id': 1522115,
+            'title': "Hair Straightening",
+            'short_title': "40% off at MARIO At Design HairCut",
+            'description': "<ul><li>Results last for months</li><li>Skilled and talented stylists</li><li>Straight hair with low maintenance</li><li>Straighten hair while keeping volume</li><li>Safe for highlights and color</li></ul>",
+            'fine_print': None,
+            'number_sold': None,
+            'url': "http://api.sqoot.com/v2/deals/1522115/click?api_key=xhtihz",
+            'untracked_url': "http://www.mytime.com/deals/CA/Santa-Monica/Health-&-Beauty/Hair-Straightening/MARIO-At-Design-HairCut/15518",
+            'price': 150,
+            'value': 250,
+            'discount_amount': 100,
+            'discount_percentage': 0.4,
+            'commission': 7.5,
+            'provider_name': "OfferSlot",
+            'provider_slug': "offerslot",
+            'category_name': "Health & Beauty",
+            'category_slug': "health-beauty",
+            'image_url': "https://api.sqoot.com/v2/deals/1522115/image?api_key=xhtihz",
+            'online': False,
+            'expires_at': None,
+            'created_at': "2013-08-28T02:19:20Z",
+            'updated_at': "2013-12-04T13:29:35Z",
+            'merchant': {
+                'id': 435407,
+                'name': "MARIO At Design HairCut",
+                'address': "7603 Santa Monica Blvd",
+                'locality': "Los Angeles",
+                'region': "CA",
+                'postal_code': "90046",
+                'country': "United States",
+                'country_code': "US",
+                'latitude': 34.09085,
+                'longitude': -118.355079,
+                'url': None
+            }
+        }
 
+        deals.append(each_deal)
 
-
-
-
-# class dict2obj(object):
-#     """
-#     Convert dictionary to object
-#     @source http://stackoverflow.com/a/1305561/383912
-#     """
-#     def __init__(self, d):
-#         self.__dict__['d'] = d
-
-#     def __getattr__(self, key):
-#         value = self.__dict__['d'][key]
-#         if type(value) == type({}):
-#             return dict2obj(value)
-#         return value
-
-
-# class DealsResource(Resource):
-#     #deals = fields.ListField(attribute='deal')
-#     #deal = fields.DictField(attribute='deal')
-#     title = fields.CharField(attribute='title')
-#     content = fields.CharField(attribute='content')
-#     author = fields.CharField(attribute='author_name')
-
-#     class Meta:
-#         resource_name = 'deals'
-
-#     def obj_get_list(self, bundle, **kwargs):
-#         api_root        = "http://api.sqoot.com/v2/"
-
-#         api_key         = bundle.request.GET.get('api_key', None)
-#         query           = bundle.request.GET.get('query', None)
-#         location        = bundle.request.GET.get('location', None)
-#         radius          = bundle.request.GET.get('radius', 10)
-#         online          = 'false'
-#         provider_slugs  = bundle.request.GET.get('provider_slugs', None)
-#         updated_after   = bundle.request.GET.get('updated_after', None)
-#         per_page        = 100
-#         order           = bundle.request.GET.get('order', None)
-
-#         request_parameters = {
-#             'api_key': api_key,
-#             'query': query,
-#             'location': location,
-#             'radius': radius,
-#             'online': online,
-#             'provider_slugs': provider_slugs,
-#             'updated_after': updated_after,
-#             'per_page': per_page,
-#             'order': order,
-#         }
-
-#         # sqoot_response_json = requests.get(api_root + 'deals', params=request_parameters).json()
-#         #one_deal = requests.get(api_root + 'deals', params=request_parameters).json()['deals'][0]
-#         deals = requests.get(api_root + 'deals', params=request_parameters).json()['deals']
-#         _deals = []
-#         for deal in deals:
-#             _deals.append(deal["deal"])
-#         #one_deal = deals[0]
-#         #print one_deal
-#         #
-#         ##one_deal = json.loads(one_deal)
-#         ## deals = []q
-#         ## sample_dict = {'untracked_url': 'http://www.yelp.com/deals/dinner-and-massage-atlanta', 'updated_at': '2013-11-14T18:00:53Z'}
-#         #
-#         ## deals.append(dict2obj(
-#         ##     {
-#         ##         'deal': one_merchant,
-#         ##     }
-#         ## ))
-#         #
-#         posts = []
-#         posts.append(dict2obj(
-#             {
-#                 'title': 'Test Blog Title 1',
-#                 'content': 'Blog Content',
-#                 'author_name': 'User 1',
-#             }
-#         ))
-#         #posts.append(
-#         #    {
-#         #        'title': 'Test Blog Title 1',
-#         #        'content': 'Blog Content',
-#         #        'author_name': 'User 1',
-#         #    }
-#         #)
-
-
-#         #posts.append(
-#         #    {
-#         #        'deal': one_deal,
-#         #    }
-#         #)
-#         #
-#         ##pdb.set_trace()
-#         #return one_deal
-#         #print deals[0]
-#         #print type(deals[0])
-#         #return deals
-#         #return _deals
-#         return posts
+        response = {
+            'query': query,
+            'deals': deals,
+        }
+        return self.create_response(request, response)

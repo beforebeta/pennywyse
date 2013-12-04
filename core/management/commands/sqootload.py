@@ -227,6 +227,7 @@ def get_or_create_coupon(each_deal_data_dict, merchant_model, category_model, de
         coupon_model.embedly_image_url   = each_deal_data_dict['image_url']
         coupon_model.save()
 
+        # import ipdb; ipdb.set_trace()
         if category_model:
             categories = []
             categories.append(category_model)
