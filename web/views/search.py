@@ -3,8 +3,9 @@ import re
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from core.models import Merchant, Coupon
-from web.views.main import render_response
 from haystack.query import SearchQuerySet
+from web.views.main import render_response
+from web.utils import FuzzySearchQuerySet
 
 def normalize_query(query_string,
                     findterms=re.compile(r'"([^"]+)"|(\S+)').findall,
@@ -48,14 +49,17 @@ def search_model(model, query, fields, order_by="-date_added", objects=None):
 
 def search(request):
     query = request.GET.get("q","").strip()
-    merchants = SearchQuerySet().filter(django_ct='core.merchant', content=query,
-                                        total_coupon_count__gt=0).order_by('-coupon_count')[:5]
-    coupons = SearchQuerySet().filter(django_ct='core.coupon', content=query)[:10]
-    merchant_ids = ['core.merchant.%s' % c.merchant_id for c in coupons]
-    if merchant_ids:
-        relevant_merchants = SearchQuerySet().filter(django_ct='core.merchant', id__in=merchant_ids).order_by('-coupon_count')
+    if query:
+        merchants = FuzzySearchQuerySet().combined_filter(django_ct='core.merchant',
+                                            total_coupon_count__gt=0, content=query)[:5]
+        coupons = SearchQuerySet().filter(django_ct='core.coupon', content=query)[:10]
+        merchant_ids = ['core.merchant.%s' % c.merchant_id for c in coupons]
+        if merchant_ids:
+            relevant_merchants = SearchQuerySet().filter(django_ct='core.merchant', id__in=merchant_ids).order_by('-coupon_count')
+        else:
+            relevant_merchants = None
     else:
-        relevant_merchants = None
+        merchants = coupons = relevant_merchants = None
     context = {'query': query,
                'merchants': merchants,
                'coupons': coupons,
