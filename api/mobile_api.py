@@ -1,5 +1,7 @@
 from tastypie.resources import ModelResource
-from haystack.query import SearchQuerySet
+from geopy import geocoders
+from haystack.query import SearchQuerySet, SQ
+from haystack.utils.geo import Point, D
 
 from core.models import Coupon
 
@@ -11,9 +13,38 @@ class DealsResource(ModelResource):
     def return_response(self, request, **kwargs):
         self.method_check(request, allowed=['get'])
 
-        # import ipdb; ipdb.set_trace()
-        # request.GET.keys()
-        # query = request.GET.get("q","") #.strip()
+        g = geocoders.GoogleV3()
+        params_dict = request.GET
+        params_keys = params_dict.keys()
+
+        try:
+            location_param = params_dict['location']
+            user_location, (lat, lng) = g.geocode(location_param)
+        except:
+            response = {
+                'error': {'message': "You must supply a valid user location information."}
+            }
+            return self.create_response(request, response)
+
+        # Retrieve all Sqoot local coupons
+        sqs = SearchQuerySet().filter(django_ct='core.coupon', coupon_source='sqoot', online=False)
+
+        # NEED TO ADD PROVIDER_SLUG & CATEGORY_SLUG FILTER & UPDATED_AFTER
+
+        # Check the presense of 'query' param and execute/filter a full-text search ('OR' argument on all fields)
+        if 'query' in params_keys:
+            query = sqs.query.clean(params_dict['query'])
+            sqs = sqs.filter(SQ(title=query) | SQ(content=query) | SQ(restrictions=query) | SQ(merchant_name=query) | SQ(categories=query))
+            # sqs = sqs.filter_or(title=query, content=query, restrictions=query, merchant_name=query, categories=query)
+            # sqs = sqs.filter_and(title=query, content=query, restrictions=query, merchant_name=query, categories=query)
+
+        # Filter per location parameters AND re-order the query result based on proximity
+        # REMINDER: Location filter must come last for ordering
+        radius = D(mi=float(params_dict['radius'])) if 'radius' in params_keys else D(mi=10)
+        pnt = Point(lng, lat)
+        sqs = sqs.dwithin('merchant_location', pnt, radius).distance('merchant_location', pnt).order_by('distance')
+
+        import ipdb; ipdb.set_trace()
         deals = []
 
         query = {
