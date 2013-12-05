@@ -7,10 +7,13 @@ import urllib
 import urlparse
 
 from django.conf import settings
+from django.core.cache import cache
 from django.core.paginator import Paginator
 from django.core.urlresolvers import reverse
 from django.contrib.gis.db import models as models# Switching to GeoDjango models
 from django.db.models.query_utils import Q
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.template.defaultfilters import slugify
 
 from core.util import print_stack_trace, get_first_google_image_result, get_description_tag_from_url
@@ -640,4 +643,9 @@ class Coupon(models.Model):
             return True
         return False
     
-    
+@receiver(post_save, sender=Category)
+@receiver(post_save, sender=Coupon)
+@receiver(post_save, sender=Merchant)
+@receiver(post_save, sender=MerchantAffiliateData)
+def invalidate_cache(sender, instance, **kwargs):
+    cache.clear()
