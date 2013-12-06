@@ -67,6 +67,7 @@
 {% block popular_companies %}{% endblock %}
 {% block newsletter_subscription %}{% endblock %}
 {% block end_of_body %}
+{% comment %}
 <script type="text/javascript">
     try{
         mixpanel.track("Stores Index Page Opened",{
@@ -78,4 +79,5 @@
         });
     }catch(e){}
 </script>
+{% endcomment %}
 {% endblock %}

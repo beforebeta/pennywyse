@@ -98,6 +98,7 @@
 {% endblock %}
 
 {% block end_of_body %}
+{% comment %}
 <script type="text/javascript">
     try{
         mixpanel.track("Home Page Opened", {
@@ -109,6 +110,7 @@
         });
     }catch(e){}
 </script>
+{% endcomment %}
 {% endblock %}
 
 

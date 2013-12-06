@@ -9,6 +9,7 @@ from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanen
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 from django.template.defaultfilters import slugify
+from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import ensure_csrf_cookie
 from core.models import Category, Coupon, Merchant, base_description, icon_url
 from core.util import encode_uri_component, print_stack_trace
@@ -69,6 +70,7 @@ def set_canonical_url(request, context):
 
 
 @ensure_csrf_cookie
+@cache_page(60 * 60 * 24)
 def index(request):
     context = {
       "page_title" : base_description,
@@ -234,10 +236,12 @@ def open_coupon(request, company_name, coupon_label, coupon_id):
     return render_response("open_coupon.html",request, context)
 
 @ensure_csrf_cookie
+@cache_page(60 * 60 * 24)
 def privacy(request):
     return render_response("privacy.html", request, {})
 
 @ensure_csrf_cookie
+@cache_page(60 * 60 * 24)
 def categories(request):
     description = "Coupon Categories | {0}".format(base_description)
     context={
@@ -256,6 +260,7 @@ def categories(request):
     return render_response("categories.html", request, context)
 
 @ensure_csrf_cookie
+@cache_page(60 * 60 * 24)
 def category(request, category_code, current_page=1, category_ids=-1):
     current_page = int(current_page)
     category = Category.objects.get(code=category_code)
@@ -337,6 +342,7 @@ def sitemap(request):
     return HttpResponseRedirect('http://s3.amazonaws.com/pushpenny/sitemap.xml')
 
 @ensure_csrf_cookie
+@cache_page(60 * 60 * 24)
 def stores(request, page='#'):
     """List of stores, ordered by alphabet."""
 
