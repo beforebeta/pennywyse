@@ -120,7 +120,8 @@ def get_or_create_category(each_deal_data_dict, categories_dict):
         return None
     parent_slug = categories_dict[category_slug]
     try:
-        category_model = Category.all_objects.get(code=category_slug, ref_id_source='sqoot')
+        # category_model = Category.all_objects.get(code=category_slug, ref_id_source='sqoot')
+        category_model = Category.objects.get(code=category_slug, ref_id_source='sqoot')
     except Category.DoesNotExist:
         category_model                    = Category()
         category_model.ref_id_source      = 'sqoot'
@@ -128,7 +129,8 @@ def get_or_create_category(each_deal_data_dict, categories_dict):
 
     if parent_slug:
         try:
-            parent_category               = Category.all_objects.get(code=parent_slug, ref_id_source='sqoot')
+            # parent_category               = Category.all_objects.get(code=parent_slug, ref_id_source='sqoot')
+            parent_category               = Category.objects.get(code=parent_slug, ref_id_source='sqoot')
             category_model.parent         = parent_category
         except Category.DoesNotExist:
             parent_category = Category(ref_id_source='sqoot', code=parent_slug)
@@ -227,7 +229,6 @@ def get_or_create_coupon(each_deal_data_dict, merchant_model, category_model, de
         coupon_model.embedly_image_url   = each_deal_data_dict['image_url']
         coupon_model.save()
 
-        # import ipdb; ipdb.set_trace()
         if category_model:
             categories = []
             categories.append(category_model)
@@ -239,7 +240,6 @@ def get_or_create_coupon(each_deal_data_dict, merchant_model, category_model, de
         coupon_model.dealtypes.add(dealtype_model)
         coupon_model.countries.add(country_model)
         coupon_model.save()
-
 
 #############################################################################################################
 #
