@@ -1,3 +1,4 @@
+# Lat, Lng
 top_50_us_cities_dict = {
     "New York, NY": "40.75170,-73.99420",
     "Los Angeles, CA": "34.02000,-118.15300",

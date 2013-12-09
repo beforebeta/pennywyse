@@ -34,6 +34,7 @@ class DealsResource(ModelResource):
         radius = D(mi=float(params_dict['radius'])) if 'radius' in params_keys else D(mi=10)
         user_pnt = Point(lng, lat)
         sqs = SearchQuerySet().filter(django_ct='core.coupon', coupon_source='sqoot', online=False).dwithin('merchant_location', user_pnt, radius).distance('merchant_location', user_pnt).order_by('distance')
+        # sqs = SearchQuerySet().filter(django_ct='core.coupon', coupon_source='sqoot', online=False).dwithin('merchant_location', user_pnt, radius).distance('merchant_location', user_pnt)
 
         if 'query' in params_keys:
             query = params_dict['query']
@@ -66,7 +67,7 @@ class DealsResource(ModelResource):
             coupon = Coupon.all_objects.get(pk=int(sqs_coupon_obj.pk))
             merchant = coupon.merchant
             merchant_location = coupon.merchant_location
-            dist_to_user = geopy_distance((user_pnt.x, user_pnt.y), (merchant_location.geometry.x, merchant_location.geometry.y))
+            dist_to_user = geopy_distance((user_pnt.y, user_pnt.x), (merchant_location.geometry.y, merchant_location.geometry.x)).miles
             coupon_network = coupon.coupon_network
 
             each_deal = {'deal':
@@ -104,7 +105,7 @@ class DealsResource(ModelResource):
                         'country_code':     "US",
                         'latitude':         merchant_location.geometry.y,
                         'longitude':        merchant_location.geometry.x,
-                        'dist_to_user_mi':  dist_to_user.mi,
+                        'dist_to_user_mi':  dist_to_user,
                         'url':              merchant.link,
                     }
                 }
@@ -132,4 +133,5 @@ class DealsResource(ModelResource):
             'query': query,
             'deals': deals,
         }
+
         return self.create_response(request, response)
