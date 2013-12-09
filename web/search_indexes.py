@@ -2,16 +2,14 @@ from haystack import indexes
 from core.models import Coupon, Merchant
 
 class CouponIndex(indexes.SearchIndex, indexes.Indexable):
-    merchant_name = indexes.CharField(model_attr='merchant__name', null=True) # edited
     coupon_source = indexes.CharField(model_attr='ref_id_source', null=True) # added
     merchant_location = indexes.LocationField(model_attr='merchant_location__get_location', null=True) # added
-    restrictions = indexes.CharField(model_attr='restrictions', null=True) # added
-    title = indexes.CharField(model_attr='embedly_title', null=True) # added
     online = indexes.BooleanField(model_attr='online', null=True) # added
     lastupdated = indexes.DateTimeField(model_attr='lastupdated', null=True) # added
+    mobilequery = indexes.CharField(use_template=True, null=True) # added
+    provider_slugs = indexes.CharField(model_attr='coupon_network__code', null=True) # added
+    category_slugs = indexes.MultiValueField(null=True) # added
     categories = indexes.MultiValueField(null=True) # added
-    # provider_slugs = indexes.CharField(model_attr='embedly_title', null=True) # NEED TO REVISIT
-    # category_slugs = indexes.CharField(model_attr='embedly_title', null=True) # NEED TO REVISIT
     text = indexes.CharField(document=True, model_attr='description', null=True)
     code = indexes.CharField(model_attr='code', null=True)
     start = indexes.DateTimeField(model_attr='start', null=True)
@@ -40,6 +38,9 @@ class CouponIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_categories(self, obj):
         return [c.name for c in obj.categories.all()]
+
+    def prepare_category_slugs(self, obj):
+        return [c.code for c in obj.categories.all()]
 
 class MerchantIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, model_attr='name')
