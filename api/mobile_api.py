@@ -1,5 +1,6 @@
 from tastypie.resources import ModelResource
 from geopy import geocoders
+from geopy.distance import distance as geopy_distance
 from haystack.query import SearchQuerySet
 from haystack.utils.geo import Point, D
 
@@ -31,8 +32,8 @@ class DealsResource(ModelResource):
         # NEED UPDATED_AFTER
         '''
         radius = D(mi=float(params_dict['radius'])) if 'radius' in params_keys else D(mi=10)
-        pnt = Point(lng, lat)
-        sqs = SearchQuerySet().filter(django_ct='core.coupon', coupon_source='sqoot', online=False).dwithin('merchant_location', pnt, radius).distance('merchant_location', pnt).order_by('distance')
+        user_pnt = Point(lng, lat)
+        sqs = SearchQuerySet().filter(django_ct='core.coupon', coupon_source='sqoot', online=False).dwithin('merchant_location', user_pnt, radius).distance('merchant_location', user_pnt).order_by('distance')
 
         if 'query' in params_keys:
             query = params_dict['query']
@@ -60,47 +61,52 @@ class DealsResource(ModelResource):
         end_point = page * per_page
 
         deals = []
+
         for sqs_coupon_obj in sqs[start_point:end_point]:
             coupon = Coupon.all_objects.get(pk=int(sqs_coupon_obj.pk))
             merchant = coupon.merchant
             merchant_location = coupon.merchant_location
+            dist_to_user = geopy_distance((user_pnt.x, user_pnt.y), (merchant_location.geometry.x, merchant_location.geometry.y))
             coupon_network = coupon.coupon_network
 
-            each_deal = {
-                'id':                   int(coupon.ref_id),
-                'title':                coupon.embedly_title,
-                'short_title':          coupon.embedly_description,
-                'description':          coupon.description,
-                'fine_print':           coupon.restrictions,
-                'number_sold':          None,
-                'url':                  coupon.link,
-                'untracked_url':        coupon.directlink,
-                'price':                coupon.price,
-                'value':                coupon.listprice,
-                'discount_amount':      coupon.discount,
-                'discount_percentage':  float(coupon.percent) / 100,
-                'commission':           None,
-                'provider_name':        coupon_network.name,
-                'provider_slug':        coupon_network.code,
-                'category_name':        ', '.join([c.name for c in coupon.categories.all()]),
-                'category_slug':        ', '.join([c.code for c in coupon.categories.all()]),
-                'image_url':            coupon.embedly_image_url,
-                'online':               coupon.online,
-                'expires_at':           coupon.end,
-                'created_at':           coupon.start,
-                'updated_at':           coupon.lastupdated,
-                'merchant': {
-                    'id':               int(merchant.ref_id),
-                    'name':             merchant.name,
-                    'address':          merchant_location.address,
-                    'locality':         merchant_location.locality,
-                    'region':           merchant_location.region,
-                    'postal_code':      merchant_location.postal_code,
-                    'country':          "United States",
-                    'country_code':     "US",
-                    'latitude':         merchant_location.geometry.y,
-                    'longitude':        merchant_location.geometry.x,
-                    'url':              merchant.link,
+            each_deal = {'deal':
+                {
+                    'id':                   int(coupon.ref_id),
+                    'title':                coupon.embedly_title,
+                    'short_title':          coupon.embedly_description,
+                    'description':          coupon.description,
+                    'fine_print':           coupon.restrictions,
+                    'number_sold':          None,
+                    'url':                  coupon.link,
+                    'untracked_url':        coupon.directlink,
+                    'price':                coupon.price,
+                    'value':                coupon.listprice,
+                    'discount_amount':      coupon.discount,
+                    'discount_percentage':  float(coupon.percent) / 100,
+                    'commission':           None,
+                    'provider_name':        coupon_network.name,
+                    'provider_slug':        coupon_network.code,
+                    'category_name':        ', '.join([c.name for c in coupon.categories.all()]),
+                    'category_slug':        ', '.join([c.code for c in coupon.categories.all()]),
+                    'image_url':            coupon.embedly_image_url,
+                    'online':               coupon.online,
+                    'expires_at':           coupon.end,
+                    'created_at':           coupon.start,
+                    'updated_at':           coupon.lastupdated,
+                    'merchant': {
+                        'id':               int(merchant.ref_id),
+                        'name':             merchant.name,
+                        'address':          merchant_location.address,
+                        'locality':         merchant_location.locality,
+                        'region':           merchant_location.region,
+                        'postal_code':      merchant_location.postal_code,
+                        'country':          "United States",
+                        'country_code':     "US",
+                        'latitude':         merchant_location.geometry.y,
+                        'longitude':        merchant_location.geometry.x,
+                        'dist_to_user_mi':  dist_to_user.mi,
+                        'url':              merchant.link,
+                    }
                 }
             }
             deals.append(each_deal)
