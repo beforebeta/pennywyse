@@ -46,11 +46,10 @@ def refresh_sqoot_data():
     print '%s deals detected, estimating %s pages to iterate\n' % (active_deal_count, page_count)
 
     describe_section("STARTING TO DOWNLOAD SQOOT DEALS..\n")
-    deal_download_counter = 0
 
     country_model = get_or_create_country()     # since there's only one country for all deals - no need to check it for each coupon
     for p in range(page_count):
-        request_parameters['page'] = p
+        request_parameters['page'] = p + 1
         print '## Fetching page %s...\n' % p
         response_in_json = requests.get(SQOOT_API_URL + 'deals', params=request_parameters).json()
         deals_data = response_in_json['deals']
