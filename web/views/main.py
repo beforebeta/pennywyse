@@ -152,12 +152,13 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
 
     coupons = list(merchant.get_active_coupons().filter(Q(categories__id__in=selected_categories) |\
                                                         Q(categories__id__isnull=True)))
-    coupons += list(merchant.get_expired_coupons())
+    expired_coupons = list(merchant.get_expired_coupons())
+    coupons += expired_coupons
 
     page = current_page or 1
     pages = Paginator(coupons, 10)
-    if page > pages.num_pages:
-        page=pages.num_pages
+    if int(page) > pages.num_pages:
+        page = pages.num_pages
     ppages = range(1, pages.num_pages+1)
     separators = 0
     if pages.num_pages > 12:
@@ -178,7 +179,7 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
         "separators"            : separators,
         "coupons"               : pages.page(page).object_list,
         "num_coupons"           : pages.count,
-        "total_coupon_count"    : merchant.coupon_count,
+        "total_coupon_count"    : merchant.coupon_count + len(expired_coupons),
         "coupon_categories"     : coupon_categories,
     }
     set_meta_tags(merchant, context)
@@ -307,7 +308,7 @@ def category(request, category_code, current_page=1, category_ids=-1):
             page_prev = current_page - 2
             ppages = ppages[:3] + ppages[page_prev:page_next] + ppages[-3:]
             separators = 2
-    if current_page > pages.num_pages:
+    if int(current_page) > pages.num_pages:
         current_page=pages.num_pages
     context={
         "pages"                 : ppages,
@@ -317,6 +318,7 @@ def category(request, category_code, current_page=1, category_ids=-1):
         "separators"            : separators,
         "category"              : category,
         "coupons"               : pages.page(current_page).object_list,
+        "num_coupons"           : pages.count,
         "total_coupon_count"    : category.get_coupon_count(),
         "coupon_categories"     : coupon_categories,
         "form_path"             : "/categories/{0}/".format(category.code),

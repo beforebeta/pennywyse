@@ -80,7 +80,7 @@
         </div>
         <ul class="rr pagination">
           {% for page in pages %}
-            <li style="width: 55px;text-align: center;" {% if current_page_idx = page %}class="current"{% endif %}>
+            <li style="width: 55px;text-align: center;" {% if current_page_idx == page %}class="current"{% endif %}>
               <a style="padding:10px 0px;" href="/categories/{{ category.code }}/page/{{ page }}/">{{ page }}</a>
             </li>
             {% if num_pages > 12 %}

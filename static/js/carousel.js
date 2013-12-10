@@ -6,8 +6,9 @@ $(function(){
     $('#carousel .selected img').attr('src', db.image);
     $('#carousel .selected h1').text(db.shortdesc + ' at ' + db.merchantname);
     $('#carousel .selected .description').text(db.description);
+    $('#carousel .selected .coupon-title').text(db.shortdesc + ' at ' + db.merchantname);
     $('#carousel .selected .button').attr('href', db.couponurl);
-    $('#carousel .selected .merchantlink').attr('href', db.merchanturl);
+    $('#carousel .selected .merchantlink, #carousel .selected .logolink').attr('href', db.merchanturl);
     $('#carousel .selected .merchantlink').text(db.merchantname);
   });
 
