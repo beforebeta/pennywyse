@@ -486,6 +486,8 @@ class Coupon(models.Model):
     is_featured     = models.BooleanField('Featured', blank=True, default=False)
     is_new          = models.BooleanField('New', blank=True, default=False)
     is_popular      = models.BooleanField('Popular', blank=True, default=False)
+    is_duplicate    = models.BooleanField('Duplicate', blank=True, default=False)
+    related_deal    = models.ForeignKey('Coupon', blank=True, null=True)
 
     embedly_title = models.TextField(blank=True, null=True)
     embedly_description = models.TextField(blank=True, null=True)
@@ -494,9 +496,9 @@ class Coupon(models.Model):
     date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
     last_modified   = models.DateTimeField(default=datetime.datetime.now(), auto_now=True, auto_now_add=True)
 
-    objects = CouponManager()
-    active_objects = ActiveCouponManager()
-    all_objects = models.Manager()
+    # objects = CouponManager()
+    # active_objects = ActiveCouponManager()
+    # all_objects = models.Manager()
 
     def get_image(self):
         if self.embedly_image_url:

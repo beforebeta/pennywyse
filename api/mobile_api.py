@@ -8,7 +8,8 @@ from core.models import Coupon
 
 class DealsResource(ModelResource):
     class Meta:
-        queryset = Coupon.all_objects.filter(ref_id_source='sqoot')
+        # queryset = Coupon.all_objects.filter(ref_id_source='sqoot')
+        queryset = Coupon.objects.filter(ref_id_source='sqoot')
         resource_name = 'deals'
 
     def return_response(self, request, **kwargs):
@@ -64,7 +65,8 @@ class DealsResource(ModelResource):
         deals = []
 
         for sqs_coupon_obj in sqs[start_point:end_point]:
-            coupon = Coupon.all_objects.get(pk=int(sqs_coupon_obj.pk))
+            # coupon = Coupon.all_objects.get(pk=int(sqs_coupon_obj.pk))
+            coupon = Coupon.objects.get(pk=int(sqs_coupon_obj.pk))
             merchant = coupon.merchant
             merchant_location = coupon.merchant_location
             dist_to_user = geopy_distance((user_pnt.y, user_pnt.x), (merchant_location.geometry.y, merchant_location.geometry.x)).miles

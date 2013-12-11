@@ -13,6 +13,7 @@ from core.util import print_stack_trace
 
 SQOOT_API_URL = "http://api.sqoot.com/v2/"
 ITEMS_PER_PAGE = 100
+SAVED_MERCHANT_ID_LIST = []
 
 class Command(BaseCommand):
 
@@ -64,10 +65,15 @@ def refresh_sqoot_data():
                 dealtype_model          = get_or_create_dealtype()
                 couponnetwork_model     = get_or_create_couponnetwork(deal_data['deal'])
                 merchantlocation_model  = get_or_create_merchantlocation(merchant_data_dict, merchant_model, is_online_bool)
-                get_or_create_coupon(deal_data['deal'], merchant_model, category_model,
-                                     dealtype_model, country_model, couponnetwork_model, merchantlocation_model)
+                coupon_model            = get_or_create_coupon(deal_data['deal'], merchant_model, category_model, dealtype_model,
+                                                                country_model, couponnetwork_model, merchantlocation_model)
 
-                print '-' * 20
+                if coupon_model.merchant.ref_id not in SAVED_MERCHANT_ID_LIST:
+                    SAVED_MERCHANT_ID_LIST.append(coupon_model.merchant.ref_id)
+                else:
+                    check_and_mark_duplicate(coupon_model)
+
+                print '-' * 60
             except:
                 print_stack_trace()
 
@@ -201,7 +207,8 @@ def get_or_create_merchantlocation(merchant_data_dict, merchant_model, is_online
 def get_or_create_coupon(each_deal_data_dict, merchant_model, category_model, dealtype_model,
                          country_model, couponnetwork_model, merchantlocation_model):
     ref_id = each_deal_data_dict['id']
-    coupon_model, created = Coupon.all_objects.get_or_create(ref_id=ref_id, ref_id_source='sqoot')
+    # coupon_model, created = Coupon.all_objects.get_or_create(ref_id=ref_id, ref_id_source='sqoot')
+    coupon_model, created = Coupon.objects.get_or_create(ref_id=ref_id, ref_id_source='sqoot')
     if created:
         print 'Created coupon %s' % each_deal_data_dict['title']
         coupon_model.online              = each_deal_data_dict['online']
@@ -239,6 +246,36 @@ def get_or_create_coupon(each_deal_data_dict, merchant_model, category_model, de
         coupon_model.dealtypes.add(dealtype_model)
         coupon_model.countries.add(country_model)
         coupon_model.save()
+    return coupon_model
+
+def check_and_mark_duplicate(coupon_model):
+    # coupons_from_this_merchant = Coupon.all_objects.filter(merchant__ref_id=coupon_model.merchant.ref_id)
+    coupons_from_this_merchant = Coupon.objects.filter(merchant__ref_id=coupon_model.merchant.ref_id)
+    coupon_model_dump = coupon_model.description + coupon_model.embedly_title + coupon_model.embedly_description + str(coupon_model.price) + str(coupon_model.listprice)
+    for c in coupons_from_this_merchant:
+        c_dump = c.description + c.embedly_title + c.embedly_description + str(c.price) + str(c.listprice)
+        if c_dump == coupon_model_dump:
+            coupon_model.is_duplicate = True
+            coupon_model.coupon_set.clear()
+            coupon_model.save()
+            break
+
+        if c.is_duplicate == True:
+            continue
+
+        if coupon_model.percent >= c.percent:
+            c.is_duplicate = True
+            coupons_folded_under_c = c.coupon_set.all()
+            for coupon_obj in coupons_folded_under_c:
+                coupon_obj.related_deal = coupon_model
+            c.coupon_set.clear()
+            c.related_deal = coupon_model
+            c.save()
+        else:
+            coupon_model.is_duplicate = True
+            coupon_model.related_deal = c
+            coupon_model.save()
+
 
 #############################################################################################################
 #

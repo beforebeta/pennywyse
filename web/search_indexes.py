@@ -29,7 +29,8 @@ class CouponIndex(indexes.SearchIndex, indexes.Indexable):
 
     def index_queryset(self, using=None):
         # return self.get_model().active_objects
-        return self.get_model().all_objects
+        # return self.get_model().all_objects
+        return self.get_model().objects
 
     # def prepare_success_path(self, obj):
     #     if obj.merchant:
