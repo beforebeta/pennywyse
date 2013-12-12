@@ -1,5 +1,7 @@
+import json
 import random
 import re
+import string
 from django.conf import settings
 from django.contrib.sites.models import get_current_site
 from django.core.paginator import Paginator
@@ -97,6 +99,17 @@ def _search(itm,lst,f):
 
 @ensure_csrf_cookie
 def coupons_for_company(request, company_name, company_id=None, current_page=None, category_ids=-1):
+    merchants_data = []
+    merchants = Merchant.objects.values('id', 'name', 'name_slug')
+    for char in list(string.uppercase):
+        i = 0
+        for m in merchants:
+            if i <= 2 and m['name'].startswith(char):
+                merchants_data.append(m)
+                i += 1
+            if i > 2:
+                break
+            
     selected_cat_ids = category_ids
     if selected_cat_ids != -1:
         selected_cat_ids = ShortenedURLComponent.objects.get_original_url(selected_cat_ids)
@@ -133,7 +146,8 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
     
     selected_categories = ""
     if selected_cat_ids == -1:
-        selected_categories = ",".join(set([str(x["categories__id"]) for x in merchant.get_active_coupons().values("categories__id") if x["categories__id"]]))
+        selected_categories = ",".join(set([str(x["categories__id"]) for x in merchant.get_active_coupons()\
+                                                                                    .values("categories__id") if x["categories__id"]]))
     else:
         selected_categories = selected_cat_ids
     comma_categories = selected_categories
@@ -145,10 +159,11 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
     all_categories = merchant.get_coupon_categories()
     coupon_categories = []
     for category in all_categories:
-        coupon_categories.append({
-            "category"  : category,
-            "active"    : _search(category, selected_categories, lambda a,b:a.id==b)
-        })
+        if not category.parent:
+            coupon_categories.append({
+                "category"  : category,
+                "active"    : _search(category, selected_categories, lambda a,b:a.id==b)
+            })
 
     coupons = list(merchant.get_active_coupons().filter(Q(categories__id__in=selected_categories) |\
                                                         Q(categories__id__isnull=True)))
@@ -156,7 +171,7 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
     coupons += expired_coupons
 
     page = current_page or 1
-    pages = Paginator(coupons, 10)
+    pages = Paginator(coupons, 12)
     if int(page) > pages.num_pages:
         page = pages.num_pages
     ppages = range(1, pages.num_pages+1)
@@ -170,8 +185,21 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
             page_prev = current_page - 2
             ppages = ppages[:3] + ppages[page_prev:page_next] + ppages[-3:]
             separators = 2
+            
+    if request.is_ajax():
+        data = []
+        for c in pages.page(page).object_list:
+            item = {'merchant_name': c.merchant.name,
+                    'short_desc': c.short_desc,
+                    'description': c.get_description(),
+                    'end': c.end.strftime('%m/%d/%y') if c.end else ''}
+            data.append(item)
+        return HttpResponse(json.dumps({'items': data,
+                                        'total_pages': pages.num_pages}), content_type="application/json")
+    
     context={
         "merchant"              : merchant,
+        "merchants"             : merchants_data,
         "pages"                 : ppages,
         "num_pages"             : pages.num_pages,
         "current_page"          : pages.page(page),
@@ -181,6 +209,7 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
         "num_coupons"           : pages.count,
         "total_coupon_count"    : merchant.coupon_count + len(expired_coupons),
         "coupon_categories"     : coupon_categories,
+        "similar_stores"        : Merchant.objects.all()[:6],
     }
     set_meta_tags(merchant, context)
     if current_page > 1:

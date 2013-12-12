@@ -1,146 +1,399 @@
-{% extends "base.html" %}
-{% load coupon_extras %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Merchant Store Page</title>
+		<link href="/static/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+		<link href="/static/css/grid.css" rel="stylesheet">
+		<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+		<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+		<script src="/static/js/waypoints.min.js"></script>
+		<script type="text/javascript" src="/static/js/store.js"></script>
+		<script type="text/javascript" src="/static/js/mustache.js"></script>
+	</head>
+	<body>
+		<div class="header-container  header">
+				<div class="row">
+					<div class="logo"><img src="/static/img/logo.png">
+					</div>
+					<div class="search-container">
+						<input type="text" placeholder="Search over 50,000+ coupons from 6,000+ stores" class="search">
+						<a href="#">Sign Up</a> |
+						<a href="#">Login</a>
+					</div>
+				</div>
+		</div>
+		<div class="header-container menu-row">
+			<div class="row">
+				<ul class="menu">
+					<li class="menu-item current-menu-item">
+						<a href="#">Stores</a>
+						<ul class="row main-row dropdown-row stores-row"><li>
+								{% for merchant in merchants %}
+									{% if forloop.counter == 1 %}
+										<div class="category-container store-row">
+									{% endif %}
+									{% if forloop.counter|divisibleby:"19" %}
+										</div><div class="category-container store-row">
+									{% endif %}
+									<a href="#">{{ merchant.name }}</a><br>
+									{% if forloop.counter|divisibleby:"3" %}
+										<hr>
+									{% endif %}
+									{% if forloop.last %}
+										</div>
+									{% endif %}
+								{% endfor %}
+							<hr>
+							<div class="more-categories">
+								See all stores &#187;
+							</div>
+						</li></ul>
+					</li>
+					<li class="menu-item category-item">
+						<a href="#">Categories</a>
+						<ul class="row main-row dropdown-row category-row"><li>
+							<div class="category-label">Special Events</div>
+							<div class="category-label">Apparalel</div>
+							<div class="category-label">Home</div>
+							<div class="category-label">Babies/Kids</div>
+							<div class="category-label">Beauty/Health</div>
+							<div class="category-label">Electronics</div>
+							<hr>
+							<div class="category-container">
+								Category 1<br>
+								Category 2<br>
+								Category 3<br>
+								Category 4<br>
+								Category 5<br>
+								Category 6<br>
+								Category 7<br>
+							</div>
+							<div class="category-container">
+								Category 1<br>
+								Category 2<br>
+								Category 3<br>
+								Category 4<br>
+								Category 5<br>
+								Category 6<br>
+								Category 7<br>
+							</div>
+							<div class="category-container">
+								Category 1<br>
+								Category 2<br>
+								Category 3<br>
+								Category 4<br>
+								Category 5<br>
+								Category 6<br>
+								Category 7<br>
+							</div>
+							<div class="category-container">
+								Category 1<br>
+								Category 2<br>
+								Category 3<br>
+								Category 4<br>
+								Category 5<br>
+								Category 6<br>
+								Category 7<br>
+							</div>
+							<div class="category-container">
+								Category 1<br>
+								Category 2<br>
+								Category 3<br>
+								Category 4<br>
+								Category 5<br>
+								Category 6<br>
+								Category 7<br>
+							</div>
+							<div class="category-container">
+								Category 1<br>
+								Category 2<br>
+								Category 3<br>
+								Category 4<br>
+								Category 5<br>
+								Category 6<br>
+								Category 7<br>
+							</div>
+							<hr>
+							<div class="more-categories">
+								See all categories &#187;
+							</div>
+						</li></ul>
+					</li>
+					<li class="menu-item">
+						<a href="#">Groceries</a>
+						<ul class="row main-row dropdown-row groceries-row"><li>
+							<div class="category-container">
+								Grocery 1<br>
+								Grocery 2<br>
+								Grocery 3<br>
+								Grocery 4<br>
+								Grocery 5<br>
+								Grocery 6<br>
+							</div>
+							<div class="category-container">
+								Grocery 1<br>
+								Grocery 2<br>
+								Grocery 3<br>
+								Grocery 4<br>
+								Grocery 5<br>
+								Grocery 6<br>
+							</div>
+							<div class="category-container">
+								Grocery 1<br>
+								Grocery 2<br>
+								Grocery 3<br>
+								Grocery 4<br>
+								Grocery 5<br>
+								Grocery 6<br>
+							</div>
+							<div class="category-container">
+								Grocery 1<br>
+								Grocery 2<br>
+								Grocery 3<br>
+								Grocery 4<br>
+								Grocery 5<br>
+								Grocery 6<br>
+							</div>
+							<div class="category-container">
+								Grocery 1<br>
+								Grocery 2<br>
+								Grocery 3<br>
+								Grocery 4<br>
+								Grocery 5<br>
+								Grocery 6<br>
+							</div>
+							<div class="category-container">
+								Grocery 1<br>
+								Grocery 2<br>
+								Grocery 3<br>
+								Grocery 4<br>
+								Grocery 5<br>
+								Grocery 6<br>
+							</div>
+							<hr>
+							<div class="more-categories">
+								See all groceries &#187;
+							</div>
+						</li></ul>
+					</li>
+					<li class="menu-item">
+						<a href="#">Local</a>
+						<ul class="row main-row dropdown-row local-row"><li>
+							<div class="local-search-container">
+								<input type="text" placeholder="Search by city, state or zip code" class="local-search">
+								<input type="button" value="Search" class="btn-search">
+							</div>
+							<hr>
+							<div class="category-container">
+								Atlanta<br>
+								Boston<br>
+								Chicago<br>
+							</div>
+							<div class="category-container">
+								New York<br>
+								Philadelphia<br>
+								Washington, DC<br>
+							</div>
+							<div class="category-container">
+								Miami<br>
+								Atlanta<br>
+								Dallas<br>
+							</div>
+							<div class="category-container">
+								Phenix<br>
+								Los Angeles<br>
+								San Francisco<br>
+							</div>
+							<div class="category-container">
+								Seattle<br>
+								Portland<br>
+								Denver<br>
+							</div>
+							<div class="category-container">
+								Detroit<br>
+								Baltimore<br>
+								Cleveland<br>
+							</div>
+							<hr>
+							<div class="more-categories">
+								See all cities &#187;
+							</div>
+						</li></ul>
+					</li>
+					<li class="menu-item menu-item-latest">
+						<a href="#">Mazagine</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="main-container">
+			<div class="row middle-container">
+				<div class="left-rail">
+					<div class="top-labels">
+						<h4>{{ merchant.name }}</h4>
+						<h4>Coupons</h4>
+						{{ merchant.link }}
+					</div>
+					<button type="button" class="btn-follow"><img src="/static/img/follow_icon.png">Follow</button>
+					<div class="merchant">
+						<div class="merchant-left">
+							<img src="{{ merchant.get_image }}" class="merchant-logo">
+						</div>
+						<div class="merchant-right">
+							<span>{{ num_coupons }}</span>
+							<br>
+							coupons
+						</div>
+					</div>
+					<hr>
+					<div class="filters">
+						<h4>Filters</h4>
+						<b>TYPE</b>
+						<div class="filter-links">
+							Select: <a href="javascript:select_filters('all');">All</a> | <a href="javascript:select_filters('none');">None</a>
+						</div>
+						<div class="filter-icons">
+							<div class="filter-container coupon-code">
+								<div class="filter-icon coupon-code-icon"></div>
+								Coupon Codes
+							</div>
+							<div class="filter-container shipping">
+								<div class="filter-icon shipping-icon"></div>
+								Free Shipping
+							</div>
+							<div class="filter-container on-sale last">
+								<div class="filter-icon on-sale-icon">
+									<!--<a href="javascript:void(null);" class="close-tag"><img src="images/close_tag.png"></a>-->
+								</div>
+								On Sale
+							</div>
+							<div class="filter-container groceries">
+								<div class="filter-icon groceries-icon"></div>
+								Groceries
+							</div>
+							<div class="filter-container printable">
+								<div class="filter-icon printable-icon"></div>
+								Printables
+							</div>
+							<div class="filter-container freebies last">
+								<div class="filter-icon freebies-icon"></div>
+								Freebies
+							</div>
+						</div>
 
-{% block header_block %}
-  <h1 class="text-center">{{ merchant.name }} Coupons</h1>
-{% endblock %}  {# header_block #}
-
-{% block fbtags %}
-    <meta property="og:image" content="{{ BASE_URL_NO_APPENDED_SLASH }}{{ merchant.get_image }}"/>
-    <meta property="og:title" content="Hand Verified Coupon Codes for {{ merchant.name }} from PushPenny"/>
-    <meta property="og:url" content="{{ CURRENT_URL }}"/>
-{% endblock %}
-
-{% block pagination_links %}
-	{% if not coupons %}
-		<meta name="robots" content="noindex">
-	{% endif %}
-	{% if current_page.has_previous %}
-		<link rel="prev" href="/coupons/{{merchant.name_slug}}/{{merchant.id}}/page/{{current_page.previous_page_number}}/{% if comma_categories %}categories/{{comma_categories}}/{% endif %}" />
-	{% endif %}
-	{% if current_page.has_next %}
-		<link rel="next" href="/coupons/{{merchant.name_slug}}/{{merchant.id}}/page/{{current_page.next_page_number}}/{% if comma_categories %}categories/{{comma_categories}}/{% endif %}" />
-	{% endif %}
-{% endblock %}
-
-{% block main %}
-<div role="main">
-  <div class="stripe-regular" style="border-bottom: 2px solid #DDDDDD">
-    <section class="company-box">
-      <div class="row">
-        <div class="column">
-          <div class="wrapper-3 tertiary">
-            <div class="row collapse">
-              <div class="large-8 columns">
-                <div class="splitter-right">
-                  <div class="inner">
-                    <div class="row collapse">
-                      <div class="large-4 columns">
-                        <a href="/coupons/{{ merchant.name_slug }}/{{ merchant.id }}/">
-                          <figure>
-                            <img src="{{ merchant.get_image }}" alt="{{ merchant.name }}" >
-                          </figure>
-                        </a>
-                      </div>
-                      <div class="large-8 columns">
-                        <div class="space-left">
-                          <h2 class="alt" style="font-size:2em;"><a href="/coupons/{{ merchant.name_slug }}/{{ merchant.id }}/">{{ merchant.name }}</a></h2>
-                          <div class="text-content">
-                            <p>{{ merchant.description }}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="large-4 columns">
-                <div class="splitter-left">
-                  <div class="inner dark-bg">
-                    <div class="row">
-                      <div class="large-6 columns text-center">
-                        <h3>Total Coupons</h3>
-                      </div>
-                      <div class="large-6 columns">
-                        <div class="coupons-count">
-                          <p class="value primary">{{ num_coupons }}</p>
-                          <h4>coupons</h4>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <div class="row">
-      <div class="large-9 columns">
-        <div class="coupons-wrapper">
-          <div class="row">
-            <div class="large-12 columns">
-              <h2>Coupons <span class="alt">by</span> <a href="/coupons/{{ merchant.name_slug }}/{{ merchant.id }}/">{{ merchant.name }}</a> <span>- {{ num_coupons }} of {{ total_coupon_count }} coupons</span></h2>
-            </div>
-          </div>
-          <ul class="rr items-landscape">
-            {% for coupon in coupons %}
-              {% show_coupon coupon %}
-            {% endfor %}
-          </ul>
-        </div>
-        <ul class="rr pagination">
-          {% for page in pages %}
-	          <li style="width: 55px;text-align: center;" {% if current_page_idx == page %}class="current"{% endif %}>
-	          <a style="padding:10px 0px;" href="/coupons/{{ merchant.name_slug }}/{{ merchant.id }}/page/{{ page }}/{% if comma_categories %}categories/{{ comma_categories }}/{% endif %}">{{ page }}</a>
-	          </li>
-	          {% if num_pages > 12 %}
-		          {% if separators == 2 and forloop.counter == 3 or separators == 2 and forloop.counter == 7 or separators == 1 and forloop.counter == 8 %}
-		          		<li style="width: 55px;text-align: center;">
-		          			...
-		          		</li>
-		          {% endif %}
-	          {% endif %}
-          {% endfor %}
-        </ul>
-      </div>
-      <aside class="large-3 columns main-sidebar bg">
-        <div class="wrapper-3 secondary block">
-          <h2 class="alt inner">Filter Coupons</h2>
-          <h5 class="inner">Categories &nbsp;(<a id="clear_categories" href="">clear</a>)</h5>
-          <ul class="rr inner checklist">
-            <form method="POST" action="/coupons/{{ merchant.name_slug }}/{{ merchant.id }}/page/1/" id="filter_form">
-              {% csrf_token %}
-              {% for category in coupon_categories %}
-              <li class="cf">
-              <label>
-                <span class="checkbox"><input name="{{ category.category.id}}" type="checkbox" {% if category.active %}checked="checked"{% endif %}></span>
-                <span>{{ category.category.name }}</span>
-              </label>
-              </li>
-              {% endfor %}
-            </form>
-          </ul>
-        </div>
-      </aside>
-    </div>
-  </div>
-</div>
-{% endblock %} {# main #}
-
-{% block end_of_body %}
-<script type="text/javascript">
-    try{
-        mixpanel.track("Company Page Opened", {
-            "company" : "{{ merchant.name_slug }}",
-            "id"      : "{{ merchant.id }}",
-            "utm_source"    : "{{ visitor.acquisition_source }}",
-            "utm_medium"    : "{{ visitor.acquisition_medium }}",
-            "utm_term"      : "{{ visitor.acquisition_term }}",
-            "utm_content"   : "{{ visitor.acquisition_content }}",
-            "utm_campaign"  : "{{ visitor.acquisition_campaign }}"
-        });
-    }catch(e){}
-</script>
-{% endblock %}
+					</div>
+					<div class="categories">
+						<b>CATEGORY</b>
+						<div class="filter-links">
+							Select: <a href="javascript:select_categories('all');">All</a> | <a href="javascript:select_categories('none');">None</a>
+						</div>
+						{% for category in coupon_categories %}
+							<div class="category {% if forloop.counter > 9 %}hidden{% endif %}">
+								<a href="javascript:void(null);">{{ category.category.name }}</a>
+							</div>
+							{% if forloop.counter == 9 %}
+								<div class="more-categories">
+									<a href="#"><img src="/static/img/category-arrow.png">
+										<span>See more categories</span>
+										<img src="/static/img/category-arrow.png"></a>
+								</div>
+							{% endif %}
+						{% endfor %}
+					</div>
+					<hr>
+					<div class="similar-stores">
+						<h4>Similar Stores</h4>
+						{% for store in similar_stores %}
+							<div class="similar-store">
+								<img src="{{store.get_image}}" class="merchant-logo">
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+				<div class="main-rail">
+					<div class="top-labels-container">
+						<div class="main-labels">
+							<a href="#">Home</a>
+							>
+							<a href="#">Retailers</a>
+							>
+							<a href="#">{{ merchant.name }}</a>
+						</div>
+						<div class="sorting">
+							Sort by
+							<div class="sorting-toggle">
+								<div class="sorting-item">
+									<a href="javascript:void(null);">Expiring soon</a>
+								</div>
+								<div class="sorting-item selected-sorting">
+									<a href="javascript:void(null);">Popularity</a>
+								</div>
+								<div class="sorting-item sorting-item-last">
+									<a href="javascript:void(null);">Newest</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="coupons {% if num_pages > 1 %}more-coupons{% endif %}">
+						{% for coupon in coupons %}
+							<div class="coupon-container {% if forloop.counter|divisibleby:3 %}coupon-last{% endif %}">
+								<div class="coupon-body">
+									<div class="coupon-header">
+										<div class="coupon-left-label on-sale-label">
+											<img src="/static/img/on_sale_coupon.png">On Sale
+										</div>
+										<div class="coupon-right-label">
+											{{ coupon.merchant.name }}
+										</div>
+									</div>
+									<hr>
+									<h1 class="short-description">{{ coupon.short_desc }}</h1>
+									{{ coupon.get_description }}<br>
+									<span class="ends">Ends {{ coupon.end|date:"m/d/y" }}</span>
+									<div class="description">
+									</div>
+								</div>
+								<div class="use-coupon">
+									<a href="#">Use Coupon</a>
+								</div>
+								<div class="coupon-bottom">
+									<div class="coupon-left-bottom">
+										<a href="#">
+											<img src="/static/img/save_coupon.png">
+											Save
+										</a>
+									</div>
+									<div class="coupon-right-bottom">
+										Share
+										<a href="#"><img src="/static/img/facebook_share_icon.png"></a>
+										<a href="#"><img src="/static/img/twitter_share_icon.png"></a>
+									</div>
+								</div>
+							</div>
+						{% endfor %}
+						<!--<div class="coupon-container coupon-banner coupon-last"></div>-->
+						<br clear="both">
+					</div>
+					
+				</div>
+			</div>
+			<hr>
+			<div class="footer">
+				&copy; PushPenny. All rights reserved.
+				<a href="#">About</a>
+				<a href="#">Help</a>
+				<a href="#">Terms & Conditions</a>
+				<a href="#">Privacy Policy</a>
+				<a href="#">Contact</a>
+				<div class="footer-right">
+					<a href="#"><img src="/static/img/twitter_icon.png"></a>
+					<a href="#"><img src="/static/img/facebook_icon.png"></a>
+					<a href="#"><img src="/static/img/linkedin_icon.png"></a>
+				</div>
+			</div>
+		</div>
+		<!-- /container -->
+	</body>
+</html>
