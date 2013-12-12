@@ -13,7 +13,7 @@ from core.util import print_stack_trace
 
 SQOOT_API_URL = "http://api.sqoot.com/v2/"
 ITEMS_PER_PAGE = 100
-SAVED_MERCHANT_ID_LIST = []
+SAVED_MERCHANT_ID_LIST = [int(m.ref_id) for m in Merchant.all_objects.filter(ref_id_source='sqoot')]
 
 class Command(BaseCommand):
 
@@ -26,7 +26,8 @@ class Command(BaseCommand):
 
 def refresh_sqoot_data():
     request_parameters = {
-        'api_key': settings.SQOOT_PUBLIC_KEY,
+        # 'api_key': settings.SQOOT_PUBLIC_KEY,
+        'api_key': 'xhtihz',
     }
     print "\nSQOOT DATA LOAD STARTING..\n"
 
@@ -47,11 +48,15 @@ def refresh_sqoot_data():
     print '%s deals detected, estimating %s pages to iterate\n' % (active_deal_count, page_count)
 
     describe_section("STARTING TO DOWNLOAD SQOOT DEALS..\n")
+    request_parameters['location'] = '10011'
+    request_parameters['order'] = 'distance'
+    # request_parameters['query'] = 'Pace For Success'
 
     country_model = get_or_create_country()     # since there's only one country for all deals - no need to check it for each coupon
-    for p in range(page_count):
+    # for p in range(page_count):
+    for p in range(10):
         request_parameters['page'] = p + 1
-        print '## Fetching page %s...\n' % p
+        print '## Fetching page %s...\n' % (p + 1)
         response_in_json = requests.get(SQOOT_API_URL + 'deals', params=request_parameters).json()
         deals_data = response_in_json['deals']
 
@@ -68,8 +73,9 @@ def refresh_sqoot_data():
                 coupon_model            = get_or_create_coupon(deal_data['deal'], merchant_model, category_model, dealtype_model,
                                                                 country_model, couponnetwork_model, merchantlocation_model)
 
-                if coupon_model.merchant.ref_id not in SAVED_MERCHANT_ID_LIST:
-                    SAVED_MERCHANT_ID_LIST.append(coupon_model.merchant.ref_id)
+                coupon_ref_id = int(coupon_model.merchant.ref_id)
+                if coupon_ref_id not in SAVED_MERCHANT_ID_LIST:
+                    SAVED_MERCHANT_ID_LIST.append(coupon_ref_id)
                 else:
                     check_and_mark_duplicate(coupon_model)
 
@@ -214,8 +220,8 @@ def get_or_create_coupon(each_deal_data_dict, merchant_model, category_model, de
         coupon_model.online              = each_deal_data_dict['online']
         coupon_model.merchant            = merchant_model
         coupon_model.merchant_location   = merchantlocation_model
-        coupon_model.description         = strip_tags(each_deal_data_dict['description'])
-        coupon_model.restrictions        = strip_tags(each_deal_data_dict['fine_print'])
+        coupon_model.description         = strip_tags(each_deal_data_dict['description']) if each_deal_data_dict['description'] else None
+        coupon_model.restrictions        = strip_tags(each_deal_data_dict['fine_print']) if each_deal_data_dict['fine_print'] else None
         coupon_model.start               = get_date(each_deal_data_dict['created_at'])
         coupon_model.end                 = get_date(each_deal_data_dict['expires_at'])
         coupon_model.link                = each_deal_data_dict['url']
@@ -249,12 +255,16 @@ def get_or_create_coupon(each_deal_data_dict, merchant_model, category_model, de
     return coupon_model
 
 def check_and_mark_duplicate(coupon_model):
-    # coupons_from_this_merchant = Coupon.all_objects.filter(merchant__ref_id=coupon_model.merchant.ref_id)
-    coupons_from_this_merchant = Coupon.objects.filter(merchant__ref_id=coupon_model.merchant.ref_id)
-    coupon_model_dump = coupon_model.description + coupon_model.embedly_title + coupon_model.embedly_description + str(coupon_model.price) + str(coupon_model.listprice)
-    for c in coupons_from_this_merchant:
-        c_dump = c.description + c.embedly_title + c.embedly_description + str(c.price) + str(c.listprice)
-        if c_dump == coupon_model_dump:
+    # other_coupons_from_this_merchant = Coupon.all_objects.filter(merchant__ref_id=coupon_model.merchant.ref_id)
+    other_coupons_from_this_merchant = Coupon.objects.filter(merchant__ref_id=coupon_model.merchant.ref_id).exclude(ref_id=coupon_model.ref_id)
+    for c in other_coupons_from_this_merchant:
+        info_match_count = 0
+        info_match_count += 1 if coupon_model.description == c.description else 0
+        info_match_count += 1 if coupon_model.embedly_title == c.embedly_title else 0
+        info_match_count += 1 if coupon_model.embedly_description == c.embedly_description else 0
+        info_match_count += 1 if coupon_model.price == c.price else 0
+        info_match_count += 1 if coupon_model.listprice == c.listprice else 0
+        if info_match_count == 5:
             coupon_model.is_duplicate = True
             coupon_model.coupon_set.clear()
             coupon_model.save()
@@ -263,7 +273,7 @@ def check_and_mark_duplicate(coupon_model):
         if c.is_duplicate == True:
             continue
 
-        if coupon_model.percent >= c.percent:
+        if coupon_model.percent > c.percent:
             c.is_duplicate = True
             coupons_folded_under_c = c.coupon_set.all()
             for coupon_obj in coupons_folded_under_c:
@@ -271,11 +281,12 @@ def check_and_mark_duplicate(coupon_model):
             c.coupon_set.clear()
             c.related_deal = coupon_model
             c.save()
+            break
         else:
             coupon_model.is_duplicate = True
             coupon_model.related_deal = c
             coupon_model.save()
-
+            break
 
 #############################################################################################################
 #

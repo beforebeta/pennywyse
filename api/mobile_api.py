@@ -1,5 +1,5 @@
 from tastypie.resources import ModelResource
-from geopy import geocoders
+# from geopy import geocoders
 from geopy.distance import distance as geopy_distance
 from haystack.query import SearchQuerySet
 from haystack.utils.geo import Point, D
@@ -15,13 +15,16 @@ class DealsResource(ModelResource):
     def return_response(self, request, **kwargs):
         self.method_check(request, allowed=['get'])
 
-        g = geocoders.GoogleV3()
+        # g = geocoders.GoogleV3()
         params_dict = request.GET
         params_keys = params_dict.keys()
 
         try:
             location_param = params_dict['location']
-            location, (lat, lng) = g.geocode(location_param)
+            lat_lng_in_list = location_param.split(',')
+            lat = float(lat_lng_in_list[0])
+            lng = float(lat_lng_in_list[1])
+            # location, (lat, lng) = g.geocode(location_param)
         except:
             response = {
                 'error': {'message': "You must supply a valid user location information."}
@@ -34,8 +37,7 @@ class DealsResource(ModelResource):
         '''
         radius = D(mi=float(params_dict['radius'])) if 'radius' in params_keys else D(mi=10)
         user_pnt = Point(lng, lat)
-        sqs = SearchQuerySet().filter(django_ct='core.coupon', coupon_source='sqoot', online=False).dwithin('merchant_location', user_pnt, radius).distance('merchant_location', user_pnt).order_by('distance')
-        # sqs = SearchQuerySet().filter(django_ct='core.coupon', coupon_source='sqoot', online=False).dwithin('merchant_location', user_pnt, radius).distance('merchant_location', user_pnt)
+        sqs = SearchQuerySet().filter(django_ct='core.coupon', coupon_source='sqoot', online=False, is_duplicate=False).dwithin('merchant_location', user_pnt, radius).distance('merchant_location', user_pnt).order_by('distance')
 
         if 'query' in params_keys:
             query = params_dict['query']
@@ -72,12 +74,20 @@ class DealsResource(ModelResource):
             dist_to_user = geopy_distance((user_pnt.y, user_pnt.x), (merchant_location.geometry.y, merchant_location.geometry.x)).miles
             coupon_network = coupon.coupon_network
 
+            deal_description = coupon.description
+            related_coupons = coupon.coupon_set.all()
+            if len(related_coupons) is not 0:
+                deal_description = deal_description if coupon.description else ""
+                deal_description += "\nFind More Deals From This Vendor on {}:\n".format(coupon_network.name)
+                for c in related_coupons[:5]:
+                    deal_description += c.embedly_title + "\n"
+
             each_deal = {'deal':
                 {
                     'id':                   int(coupon.ref_id),
                     'title':                coupon.embedly_title,
                     'short_title':          coupon.embedly_description,
-                    'description':          coupon.description,
+                    'description':          deal_description,
                     'fine_print':           coupon.restrictions,
                     'number_sold':          None,
                     'url':                  coupon.link,
@@ -96,6 +106,7 @@ class DealsResource(ModelResource):
                     'expires_at':           coupon.end,
                     'created_at':           coupon.start,
                     'updated_at':           coupon.lastupdated,
+                    'is_duplicate':         coupon.is_duplicate,
                     'merchant': {
                         'id':               int(merchant.ref_id),
                         'name':             merchant.name,
@@ -120,7 +131,6 @@ class DealsResource(ModelResource):
             'per_page':                 per_page,
             'query':                    query if 'query' in params_keys else None,
             'location': {
-                 'address':             location,
                  'latitude':            lat,
                  'longitude':           lng,
             },
