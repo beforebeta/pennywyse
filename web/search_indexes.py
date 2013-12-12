@@ -2,14 +2,15 @@ from haystack import indexes
 from core.models import Coupon, Merchant
 
 class CouponIndex(indexes.SearchIndex, indexes.Indexable):
-    coupon_source = indexes.CharField(model_attr='ref_id_source', null=True) # added
-    merchant_location = indexes.LocationField(model_attr='merchant_location__get_location', null=True) # added
-    online = indexes.BooleanField(model_attr='online', null=True) # added
-    lastupdated = indexes.DateTimeField(model_attr='lastupdated', null=True) # added
-    mobilequery = indexes.CharField(use_template=True, null=True) # added
-    provider_slugs = indexes.CharField(model_attr='coupon_network__code', null=True) # added
-    category_slugs = indexes.MultiValueField(null=True) # added
-    categories = indexes.MultiValueField(null=True) # added
+    coupon_source = indexes.CharField(model_attr='ref_id_source', null=True)
+    merchant_location = indexes.LocationField(model_attr='merchant_location__get_location', null=True)
+    online = indexes.BooleanField(model_attr='online', null=True)
+    lastupdated = indexes.DateTimeField(model_attr='lastupdated', null=True)
+    mobilequery = indexes.CharField(use_template=True, null=True)
+    provider_slugs = indexes.CharField(model_attr='coupon_network__code', null=True)
+    category_slugs = indexes.MultiValueField(null=True)
+    categories = indexes.MultiValueField(null=True)
+    is_duplicate = indexes.BooleanField(model_attr='is_duplicate', null=True)
     text = indexes.CharField(document=True, model_attr='description', null=True)
     code = indexes.CharField(model_attr='code', null=True)
     start = indexes.DateTimeField(model_attr='start', null=True)
@@ -32,10 +33,10 @@ class CouponIndex(indexes.SearchIndex, indexes.Indexable):
         # return self.get_model().all_objects
         return self.get_model().objects
 
-    # def prepare_success_path(self, obj):
-    #     if obj.merchant:
-    #         return obj.success_path()
-    #     return
+    def prepare_success_path(self, obj):
+        if obj.merchant:
+            return obj.success_path()
+        return
 
     def prepare_categories(self, obj):
         return [c.name for c in obj.categories.all()]
