@@ -40,3 +40,4 @@ selenium
 -e git+https://github.com/toastdriven/django-haystack#egg=django-haystack
 redis==2.8.0
 geopy==0.96.2
+elasticsearch==0.4.3
