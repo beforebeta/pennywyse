@@ -281,12 +281,10 @@ def check_and_mark_duplicate(coupon_model):
             c.coupon_set.clear()
             c.related_deal = coupon_model
             c.save()
-            break
         else:
             coupon_model.is_duplicate = True
             coupon_model.related_deal = c
             coupon_model.save()
-            break
 
 #############################################################################################################
 #
