@@ -2,12 +2,15 @@ from BeautifulSoup import BeautifulStoneSoup
 import datetime
 from lxml import etree
 from optparse import make_option
+import re
 from urlparse import urlparse, parse_qs
 
 from django.core.management.base import BaseCommand
 from django.conf import settings
+from django.db.models import Count
 from core.models import Category, Country, Coupon, DealType, Merchant, MerchantAffiliateData
 from core.util import print_stack_trace, extract_url_from_skimlinks
+from tracking.models import ClickTrack
 from websvcs.models import EmbedlyMerchant
 
 import HTMLParser
@@ -110,6 +113,7 @@ def refresh_merchants():
             skimlinks = merchant.find('skimlinks').text
             homepageurl = merchant.find('homepageurl').text
             model, created = Merchant.objects.get_or_create(name=name)
+            model.name = name.strip()
             model.directlink = homepageurl
             model.skimlinks = skimlinks
             model.link = homepageurl
@@ -149,9 +153,8 @@ def refresh_deals():
             coupon.merchant=merchant
 
             coupon.categories.clear()
-            for category in deal.findall("category"):
+            for category in deal.find("categories"):
                 coupon.categories.add(Category.objects.get(code=category.text))
-
             coupon.dealtypes.clear()
             dealtypes = deal.find('dealtypes')
             for dealtype in dealtypes.findall("type"):
@@ -232,6 +235,20 @@ def refresh_calculated_fields():
         except:
             print "Error with: ", m.name, m.id
             print_stack_trace()
+    regex = r'coupons/(?P<company_name>[a-zA-Z0-9-_]+)/(?P<coupon_label>[a-z0-9-_]+)/(?P<coupon_id>[\d]+)/$'
+    for ct in ClickTrack.objects.filter(coupon__isnull=True):
+        r = re.search(regex, ct.target_url)
+        if r:
+            try:
+                coupon = Coupon.objects.get(pk=r.groups()[2])
+                ct.coupon = coupon
+            except Coupon.DoesNotExist:
+                ct.coupon = None
+            ct.save()
+    tracks = ClickTrack.objects.exclude(coupon__isnull=True).values('coupon_id')\
+                                                            .annotate(popularity=Count('coupon__id'))
+    for track in tracks:
+        Coupon.objects.filter(id=track['coupon_id']).update(popularity=track['popularity'])
 
 def refresh_merchant_redirects():
     for coupon in Coupon.objects.all():

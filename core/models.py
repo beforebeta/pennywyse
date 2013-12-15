@@ -10,7 +10,8 @@ from django.conf import settings
 from django.core.cache import cache
 from django.core.paginator import Paginator
 from django.core.urlresolvers import reverse
-from django.contrib.gis.db import models as models# Switching to GeoDjango models
+from django.contrib.gis.db import models as models  # Switching to GeoDjango models
+from django.contrib.sites.models import Site
 from django.db.models.query_utils import Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -483,6 +484,7 @@ class Coupon(models.Model):
     is_popular      = models.BooleanField('Popular', blank=True, default=False)
     is_duplicate    = models.BooleanField('Duplicate', blank=True, default=False)
     related_deal    = models.ForeignKey('Coupon', blank=True, null=True)
+    popularity      = models.IntegerField(blank=True, null=True, default=0)
 
     embedly_title = models.TextField(blank=True, null=True)
     embedly_description = models.TextField(blank=True, null=True)
@@ -574,6 +576,20 @@ class Coupon(models.Model):
             print_stack_trace()
         return "coupon"
 
+    @property
+    def coupon_type(self):
+        if self.has_deal_type('gift'):
+            return 'gift'
+        if self.has_deal_type('sale'):
+            return 'on_sale'
+        if self.has_deal_type('offer'):
+            return 'offer'
+        if self.has_deal_type('freeshipping') or self.has_deal_type('totallyfreeshipping'):
+            return 'free_shipping'
+        if self.has_deal_type('printable'):
+            return 'printable'
+        return 'coupon'
+
     def create_image(self):
         if self.merchant:
             return self.merchant.image
@@ -641,7 +657,10 @@ class Coupon(models.Model):
         if now > self.end:
             return True
         return False
-
+    
+    def full_success_path(self):
+        return 'http://%s%s' % (Site.objects.get_current().domain, self.success_path())
+    
 @receiver(post_save, sender=Category)
 @receiver(post_save, sender=Coupon)
 @receiver(post_save, sender=Merchant)
