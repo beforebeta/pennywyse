@@ -2,6 +2,8 @@ var page = 2;
 var sorting = '';
 var category_ids = new Array();
 var coupon_types = new Array();
+var is_new = false;
+var is_tranding = false;
 $(function() {
 	init_waypoint();
 	$('.sorting-item a').click(function(){
@@ -66,6 +68,19 @@ $(function() {
 			$(this).find('.use-coupon').hide();
 		}
 	});
+	$('.index-labels a').click(function() {
+		var filter_type = $(this).attr('id');
+		if (filter_type == 'new') {
+			is_new = true;
+			is_tranding = false;
+		}
+		else {
+			is_tranding = true;
+			is_new = false;
+		}
+		fetch_items(reset_items=true);
+		init_waypoint();
+	});
 });
 function select_categories(criteria) {
 	if (criteria == 'all') {
@@ -109,6 +124,10 @@ function select_filters(criteria) {
 }
 function render_coupons(data, reset_items) {
 	var count = 0;
+	var coupons_limit = 3;
+	if ($('.main-rail').hasClass('index-rail')) {
+		coupons_limit = 4;
+	}
 	template = '{{#items}} \
 						<div class="coupon-container {{#count}}coupon-last{{/count}}"> \
 						<div class="coupon-body"> \
@@ -119,7 +138,7 @@ function render_coupons(data, reset_items) {
 							<h1 class="short-description">{{ short_desc }}</h1> \
 							{{ description }}<br> \
 										<span class="ends">Ends {{ end }}</span> \
-										<div class="description"> \
+										<div class="description">{{#image}}<img src="{{ image }}">{{/image}} \
 										</div> \
 									</div> \
 									<div class="use-coupon"> \
@@ -137,7 +156,7 @@ function render_coupons(data, reset_items) {
 				{{/items}}<br clear="both">';
 	data.count = function () {
     	count++;
-    	if (count % 3 == 0) {
+    	if (count % coupons_limit == 0) {
     		return true;
     	}
     	return false;
@@ -194,33 +213,49 @@ function init_waypoint() {
 }
 function fetch_items(reset_items) {
 	var url = window.location.pathname;
+	var parameters = new Array();
+	var i = 0;
 	if (reset_items) {
 		page = 1;
 	}
 	if (page > 1) { 
 		url += 'page/' + page + '/';
 	}
-	if (sorting || category_ids) {
-		url += '?';
-	}
 	if (sorting) {
-		url += 'sorting=' + sorting;
+		parameters['sorting'] = sorting;
 	}
-	if (category_ids) {
-		for (i=0;i<category_ids.length;i++) {
-			if ((sorting && i == 0) || i > 0) {
-				url += '&';
-			}
-			url += 'category_id=' + category_ids[i];
-		}
+	if (category_ids.length > 0) {
+		parameters['category_id'] = category_ids;
 	}
-	if (coupon_types) {
-		for (i=0;i<coupon_types.length;i++) {
-			if (((sorting || category_ids) && i == 0) || i > 0) {
-				url += '&';
-			}
-			url += 'coupon_type=' + coupon_types[i];
+	if (coupon_types.length > 0) {
+		parameters['coupon_type'] = coupon_types;
+	}
+	if (is_new) {
+		parameters['is_new'] = is_new;
+	}
+	if (is_tranding) {
+		parameters['is_tranding'] = is_tranding;
+	}
+	for (key in parameters) {
+		var value = parameters[key];
+		if (i == 0) {
+			url += '?';
 		}
+		else {
+			url += '&';
+		}
+		if (!$.isArray(value)) {
+			url += key + '=' + value;
+		}
+		else {
+			for (j=0;j<value.length;j++) {
+				if (j > 0) {
+					url += '&';
+				}
+				url += key + '=' + value[j];
+			}
+		}
+		i++;
 	}
 	$.get(url, function(data) {
 		render_coupons(data, reset_items);

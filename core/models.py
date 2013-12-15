@@ -40,7 +40,6 @@ def get_description(model):
     return ''
 
 base_description = "PushPenny | Hand Verified Coupon Codes"
-icon_url = "http://pushpenny.com/static/img/fbog.png"
 
 #######################################################################################################################
 #
@@ -582,8 +581,6 @@ class Coupon(models.Model):
             return 'gift'
         if self.has_deal_type('sale'):
             return 'on_sale'
-        if self.has_deal_type('offer'):
-            return 'offer'
         if self.has_deal_type('freeshipping') or self.has_deal_type('totallyfreeshipping'):
             return 'free_shipping'
         if self.has_deal_type('printable'):

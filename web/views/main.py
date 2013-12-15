@@ -13,7 +13,7 @@ from django.template.context import RequestContext
 from django.template.defaultfilters import slugify
 from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import ensure_csrf_cookie
-from core.models import Category, Coupon, Merchant, base_description, icon_url
+from core.models import Category, Coupon, Merchant, base_description
 from core.util import encode_uri_component, print_stack_trace
 from core.util.pagination import AlphabeticalPagination
 from tracking.views import log_click_track
@@ -22,22 +22,25 @@ from web.models import ShortenedURLComponent
 
 
 def build_base_context(request, context):
-    context["pop_companies"] = Merchant.objects.get_popular_companies(21)
-    context["coupons_path"] = "/"
-    context["categories_path"] = "/categories"
-    context["companies_path"] = "/companies"
-    context["blog_path"] = "/blog"
-    try:
-        context["visitor"] = request.visitor
-    except:
-        try:
-            if '/favicon.ico' in request.path:
-                pass
-            else:
-                print "Error happened at ", request.path
-                print_stack_trace()
-        except:
-            pass
+    merchants_data = []
+    
+    # aggregating merchants - first three merchants, starting with every alphabet letter
+    merchants = Merchant.objects.values('id', 'name', 'name_slug')
+    for char in list(string.uppercase):
+        i = 0
+        for m in merchants:
+            if i <= 2 and m['name'].startswith(char):
+                merchants_data.append(m)
+                i += 1
+            if i > 2:
+                break
+
+    base_context = {"visitor": getattr(request, 'visitor', None),
+               "merchants": merchants_data,
+                "categories": Category.objects.filter(parent__isnull=True)[:6],
+                "groceries": Category.objects.filter(name='Grocery Coupons')[0],}
+    context.update(**base_context)
+    return context
 
 def render_response(template_file, request, context={}):
     build_base_context(request, context)
@@ -72,23 +75,43 @@ def set_canonical_url(request, context):
 
 
 @ensure_csrf_cookie
-@cache_page(60 * 60 * 24)
-def index(request):
+#@cache_page(60 * 60 * 24)
+def index(request, current_page=1):
+    # handling AJAX request 
+    if request.is_ajax():
+        data = []
+        parameters = {}
+        is_new = request.GET.get('is_new', None)
+        is_tranding = request.GET.get('is_tranding', None)
+        if is_new:
+            parameters['is_new'] = True
+        if is_tranding:
+            parameters['is_popular'] = True
+        coupons = Coupon.objects.filter(**parameters).order_by("-date_added")
+        pages = Paginator(coupons, 12)
+        for c in pages.page(current_page).object_list:
+            item = {'merchant_name': c.merchant.name,
+                    'short_desc': c.short_desc,
+                    'description': c.get_description(),
+                    'end': c.end.strftime('%m/%d/%y') if c.end else '',
+                    'coupon_type': c.coupon_type,
+                    'full_success_path': c.full_success_path(),
+                    'image': c.merchant.get_image()}
+            data.append(item)
+        return HttpResponse(json.dumps({'items': data,
+                                        'total_pages': pages.num_pages}), content_type="application/json")
+    
     context = {
-      "page_title" : base_description,
-      "page_description" : base_description,
-      "og_title" : "PushPenny",
-      "og_description" : "Hand Verified Coupon Codes",
-      "og_image" : icon_url,
-      "og_url" : settings.BASE_URL_NO_APPENDED_SLASH,
-      "featured_coupons" : list(Coupon.objects.filter(is_featured=True)),
-      "new_coupons" : Coupon.objects.filter(is_new=True).order_by("-date_added")[:8],
-      "pop_coupons" : Coupon.objects.filter(is_popular=True).order_by("-date_added")[:8],
+      "page_title": base_description,
+      "page_description": base_description,
+      "og_title": "PushPenny",
+      "og_description": "Hand Verified Coupon Codes",
+      "og_url": settings.BASE_URL_NO_APPENDED_SLASH,
+      "new_coupons": Coupon.objects.filter(is_new=True).order_by("-date_added")[:8],
+      "pop_coupons": Coupon.objects.filter(is_popular=True).order_by("-date_added")[:8],
     }
-    random.shuffle(context['featured_coupons'])
 
     set_canonical_url(request, context)
-    set_active_tab('coupon', context)
     return render_response("index.html", request, context)
 
 def _search(itm,lst,f):
@@ -104,19 +127,7 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
     category_ids = request.GET.getlist('category_id', [])
     coupon_types = request.GET.getlist('coupon_type', [])
     sorting = request.GET.get('sorting', None)
-    merchants_data = []
-    
-    # aggregating merchants - first three merchants, starting with every alphabet letter
-    merchants = Merchant.objects.values('id', 'name', 'name_slug')
-    for char in list(string.uppercase):
-        i = 0
-        for m in merchants:
-            if i <= 2 and m['name'].startswith(char):
-                merchants_data.append(m)
-                i += 1
-            if i > 2:
-                break
-            
+
     merchant = None
     if company_id:
         try:
@@ -191,9 +202,8 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
         return HttpResponse(json.dumps({'items': data,
                                         'total_pages': pages.num_pages}), content_type="application/json")
     
-    context={
+    context = {
         "merchant"              : merchant,
-        "merchants"             : merchants_data,
         "pages"                 : ppages,
         "num_pages"             : pages.num_pages,
         "current_page"          : pages.page(page),
@@ -204,8 +214,6 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
         "total_coupon_count"    : merchant.coupon_count + len(expired_coupons),
         "coupon_categories"     : all_categories,
         "similar_stores"        : Merchant.objects.all()[:6],
-        "categories"            : Category.objects.filter(parent__isnull=True)[:6],
-        "groceries"             : Category.objects.filter(name='Grocery Coupons')[0],
     }
     set_meta_tags(merchant, context)
     if current_page > 1:

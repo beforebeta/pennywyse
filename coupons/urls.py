@@ -23,6 +23,7 @@ urlpatterns = patterns('',
 ########################################################################################
 urlpatterns += patterns('web.views.main',
     url(r'^$', 'index'),
+    url(r'^page/(?P<current_page>[\d]+)/$', 'index'),
     url(r'^privacy-and-terms/$', 'privacy'),
     url(r'^coupons/(?P<company_name>[a-zA-Z0-9-_]+)/$', 'coupons_for_company'),
     url(r'^coupons/(?P<company_name>[a-zA-Z0-9-_]+)/(?P<company_id>[\d]+)/$', 'coupons_for_company'),
