@@ -99,7 +99,14 @@ def _search(itm,lst,f):
 
 @ensure_csrf_cookie
 def coupons_for_company(request, company_name, company_id=None, current_page=None, category_ids=-1):
+    """List of coupons for given merchant."""
+    
+    category_ids = request.GET.getlist('category_id', [])
+    coupon_types = request.GET.getlist('coupon_type', [])
+    sorting = request.GET.get('sorting', None)
     merchants_data = []
+    
+    # aggregating merchants - first three merchants, starting with every alphabet letter
     merchants = Merchant.objects.values('id', 'name', 'name_slug')
     for char in list(string.uppercase):
         i = 0
@@ -110,18 +117,7 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
             if i > 2:
                 break
             
-    selected_cat_ids = category_ids
-    if selected_cat_ids != -1:
-        selected_cat_ids = ShortenedURLComponent.objects.get_original_url(selected_cat_ids)
-    if request.POST:
-        selected_cat_ids = []
-        for param in request.POST:
-            try:
-                selected_cat_ids.append(str(int(param)))
-            except:
-                pass
-        selected_cat_ids=",".join(selected_cat_ids)
-    merchant=None
+    merchant = None
     if company_id:
         try:
             merchant = Merchant.objects.get(id=company_id)
@@ -143,33 +139,28 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
         return HttpResponsePermanentRedirect(reverse('web.views.main.coupons_for_company', 
                                                      kwargs={'company_name': merchant.name_slug,
                                                              'company_id': merchant.id}))
-    
-    selected_categories = ""
-    if selected_cat_ids == -1:
-        selected_categories = ",".join(set([str(x["categories__id"]) for x in merchant.get_active_coupons()\
-                                                                                    .values("categories__id") if x["categories__id"]]))
-    else:
-        selected_categories = selected_cat_ids
-    comma_categories = selected_categories
-    try:
-        selected_categories=[int(s) for s in selected_categories.split(",") if s]
-    except:
-        selected_categories=[]
 
     all_categories = merchant.get_coupon_categories()
-    coupon_categories = []
-    for category in all_categories:
-        if not category.parent:
-            coupon_categories.append({
-                "category"  : category,
-                "active"    : _search(category, selected_categories, lambda a,b:a.id==b)
-            })
-
-    coupons = list(merchant.get_active_coupons().filter(Q(categories__id__in=selected_categories) |\
-                                                        Q(categories__id__isnull=True)))
+    coupons_list = merchant.get_active_coupons()
+    if category_ids:
+        coupons_list.filter(Q(categories__id__in=category_ids) |\
+                            Q(categories__id__isnull=True))
+    
+    if coupon_types:
+        coupons_list.filter(dealtypes__code__in=coupon_types)
+ 
+    ordering = 'popularity'
+    if sorting == 'newest':
+        ordering = '-date_added'
+    elif sorting == 'expiring_soon':
+        ordering = 'end'
+    if sorting:
+        coupons_list = coupons_list.order_by(ordering)
+    coupons = list(coupons_list)
     expired_coupons = list(merchant.get_expired_coupons())
     coupons += expired_coupons
 
+    # preparing pagination
     page = current_page or 1
     pages = Paginator(coupons, 12)
     if int(page) > pages.num_pages:
@@ -185,14 +176,17 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
             page_prev = current_page - 2
             ppages = ppages[:3] + ppages[page_prev:page_next] + ppages[-3:]
             separators = 2
-            
+    
+    # handling AJAX request 
     if request.is_ajax():
         data = []
         for c in pages.page(page).object_list:
             item = {'merchant_name': c.merchant.name,
                     'short_desc': c.short_desc,
                     'description': c.get_description(),
-                    'end': c.end.strftime('%m/%d/%y') if c.end else ''}
+                    'end': c.end.strftime('%m/%d/%y') if c.end else '',
+                    'coupon_type': c.coupon_type,
+                    'full_success_path': c.full_success_path()}
             data.append(item)
         return HttpResponse(json.dumps({'items': data,
                                         'total_pages': pages.num_pages}), content_type="application/json")
@@ -208,15 +202,14 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
         "coupons"               : pages.page(page).object_list,
         "num_coupons"           : pages.count,
         "total_coupon_count"    : merchant.coupon_count + len(expired_coupons),
-        "coupon_categories"     : coupon_categories,
+        "coupon_categories"     : all_categories,
         "similar_stores"        : Merchant.objects.all()[:6],
+        "categories"            : Category.objects.filter(parent__isnull=True)[:6],
+        "groceries"             : Category.objects.filter(name='Grocery Coupons')[0],
     }
     set_meta_tags(merchant, context)
     if current_page > 1:
         context['canonical_url'] = "{0}pages/{1}/".format(merchant.og_url(), current_page)
-
-    if len(all_categories) != len(selected_categories):
-        context["comma_categories"] = ShortenedURLComponent.objects.shorten_url_component(comma_categories).shortened_url
 
     return render_response("company.html", request, context)
 

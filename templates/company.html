@@ -15,12 +15,16 @@
 	<body>
 		<div class="header-container  header">
 				<div class="row">
-					<div class="logo"><img src="/static/img/logo.png">
+					<div class="logo"><a href="{% url 'web.views.main.index' %}"><img src="/static/img/logo.png"></a>
 					</div>
 					<div class="search-container">
-						<input type="text" placeholder="Search over 50,000+ coupons from 6,000+ stores" class="search">
-						<a href="#">Sign Up</a> |
-						<a href="#">Login</a>
+						<form action="/search/" id="search_form">
+						<input name="q" type="text" placeholder="Search over 50,000+ coupons from 6,000+ stores" class="search">
+						</form>
+						{% comment %}
+							<a href="#">Sign Up</a> |
+							<a href="#">Login</a>
+						{% endcomment %}
 					</div>
 				</div>
 		</div>
@@ -34,12 +38,12 @@
 									{% if forloop.counter == 1 %}
 										<div class="category-container store-row">
 									{% endif %}
-									{% if forloop.counter|divisibleby:"19" %}
-										</div><div class="category-container store-row">
-									{% endif %}
-									<a href="#">{{ merchant.name }}</a><br>
+									<a href="{% url 'web.views.main.coupons_for_company' company_name=merchant.name_slug company_id=merchant.id %}">{{ merchant.name }}</a><br>
 									{% if forloop.counter|divisibleby:"3" %}
 										<hr>
+									{% endif %}
+									{% if forloop.counter|divisibleby:"18" %}
+										</div><div class="category-container store-row">
 									{% endif %}
 									{% if forloop.last %}
 										</div>
@@ -47,74 +51,24 @@
 								{% endfor %}
 							<hr>
 							<div class="more-categories">
-								See all stores &#187;
+								<a href="{% url 'web.views.main.stores' %}">See all stores</a> &#187;
 							</div>
 						</li></ul>
 					</li>
 					<li class="menu-item category-item">
 						<a href="#">Categories</a>
 						<ul class="row main-row dropdown-row category-row"><li>
-							<div class="category-label">Special Events</div>
-							<div class="category-label">Apparalel</div>
-							<div class="category-label">Home</div>
-							<div class="category-label">Babies/Kids</div>
-							<div class="category-label">Beauty/Health</div>
-							<div class="category-label">Electronics</div>
+							{% for category in categories %}
+								<div class="category-label">{{ category.name }}</div>
+							{% endfor %}
 							<hr>
-							<div class="category-container">
-								Category 1<br>
-								Category 2<br>
-								Category 3<br>
-								Category 4<br>
-								Category 5<br>
-								Category 6<br>
-								Category 7<br>
-							</div>
-							<div class="category-container">
-								Category 1<br>
-								Category 2<br>
-								Category 3<br>
-								Category 4<br>
-								Category 5<br>
-								Category 6<br>
-								Category 7<br>
-							</div>
-							<div class="category-container">
-								Category 1<br>
-								Category 2<br>
-								Category 3<br>
-								Category 4<br>
-								Category 5<br>
-								Category 6<br>
-								Category 7<br>
-							</div>
-							<div class="category-container">
-								Category 1<br>
-								Category 2<br>
-								Category 3<br>
-								Category 4<br>
-								Category 5<br>
-								Category 6<br>
-								Category 7<br>
-							</div>
-							<div class="category-container">
-								Category 1<br>
-								Category 2<br>
-								Category 3<br>
-								Category 4<br>
-								Category 5<br>
-								Category 6<br>
-								Category 7<br>
-							</div>
-							<div class="category-container">
-								Category 1<br>
-								Category 2<br>
-								Category 3<br>
-								Category 4<br>
-								Category 5<br>
-								Category 6<br>
-								Category 7<br>
-							</div>
+							{% for category in categories %}
+								<div class="category-container">
+									{% for subcategory in category.category_set.all %}
+										{{ subcategory.name }}<br>
+									{% endfor %}
+								</div>
+							{% endfor %}
 							<hr>
 							<div class="more-categories">
 								See all categories &#187;
@@ -124,54 +78,18 @@
 					<li class="menu-item">
 						<a href="#">Groceries</a>
 						<ul class="row main-row dropdown-row groceries-row"><li>
-							<div class="category-container">
-								Grocery 1<br>
-								Grocery 2<br>
-								Grocery 3<br>
-								Grocery 4<br>
-								Grocery 5<br>
-								Grocery 6<br>
-							</div>
-							<div class="category-container">
-								Grocery 1<br>
-								Grocery 2<br>
-								Grocery 3<br>
-								Grocery 4<br>
-								Grocery 5<br>
-								Grocery 6<br>
-							</div>
-							<div class="category-container">
-								Grocery 1<br>
-								Grocery 2<br>
-								Grocery 3<br>
-								Grocery 4<br>
-								Grocery 5<br>
-								Grocery 6<br>
-							</div>
-							<div class="category-container">
-								Grocery 1<br>
-								Grocery 2<br>
-								Grocery 3<br>
-								Grocery 4<br>
-								Grocery 5<br>
-								Grocery 6<br>
-							</div>
-							<div class="category-container">
-								Grocery 1<br>
-								Grocery 2<br>
-								Grocery 3<br>
-								Grocery 4<br>
-								Grocery 5<br>
-								Grocery 6<br>
-							</div>
-							<div class="category-container">
-								Grocery 1<br>
-								Grocery 2<br>
-								Grocery 3<br>
-								Grocery 4<br>
-								Grocery 5<br>
-								Grocery 6<br>
-							</div>
+							{% for grocery in groceries.category_set.all %}
+									{% if forloop.counter == 1 %}
+										<div class="category-container store-row">
+									{% endif %}
+									<a href="{% url 'web.views.main.category' category_code=grocery.code %}">{{ grocery.name }}</a><br>
+									{% if forloop.counter|divisibleby:"6" %}
+										</div><div class="category-container store-row">
+									{% endif %}
+									{% if forloop.last %}
+										</div>
+									{% endif %}
+								{% endfor %}
 							<hr>
 							<div class="more-categories">
 								See all groceries &#187;
@@ -186,44 +104,13 @@
 								<input type="button" value="Search" class="btn-search">
 							</div>
 							<hr>
-							<div class="category-container">
-								Atlanta<br>
-								Boston<br>
-								Chicago<br>
-							</div>
-							<div class="category-container">
-								New York<br>
-								Philadelphia<br>
-								Washington, DC<br>
-							</div>
-							<div class="category-container">
-								Miami<br>
-								Atlanta<br>
-								Dallas<br>
-							</div>
-							<div class="category-container">
-								Phenix<br>
-								Los Angeles<br>
-								San Francisco<br>
-							</div>
-							<div class="category-container">
-								Seattle<br>
-								Portland<br>
-								Denver<br>
-							</div>
-							<div class="category-container">
-								Detroit<br>
-								Baltimore<br>
-								Cleveland<br>
-							</div>
-							<hr>
 							<div class="more-categories">
 								See all cities &#187;
 							</div>
 						</li></ul>
 					</li>
 					<li class="menu-item menu-item-latest">
-						<a href="#">Mazagine</a>
+						<a href="/blog">Magazine</a>
 					</li>
 				</ul>
 			</div>
@@ -236,7 +123,9 @@
 						<h4>Coupons</h4>
 						{{ merchant.link }}
 					</div>
-					<button type="button" class="btn-follow"><img src="/static/img/follow_icon.png">Follow</button>
+					{% comment %}
+						<button type="button" class="btn-follow"><img src="/static/img/follow_icon.png">Follow</button>
+					{% endcomment %}
 					<div class="merchant">
 						<div class="merchant-left">
 							<img src="{{ merchant.get_image }}" class="merchant-logo">
@@ -255,29 +144,27 @@
 							Select: <a href="javascript:select_filters('all');">All</a> | <a href="javascript:select_filters('none');">None</a>
 						</div>
 						<div class="filter-icons">
-							<div class="filter-container coupon-code">
+							<div class="filter-container coupon-code" id="coupon_code">
 								<div class="filter-icon coupon-code-icon"></div>
 								Coupon Codes
 							</div>
-							<div class="filter-container shipping">
+							<div class="filter-container shipping" id="free_shipping">
 								<div class="filter-icon shipping-icon"></div>
 								Free Shipping
 							</div>
-							<div class="filter-container on-sale last">
-								<div class="filter-icon on-sale-icon">
-									<!--<a href="javascript:void(null);" class="close-tag"><img src="images/close_tag.png"></a>-->
-								</div>
+							<div class="filter-container on-sale last" id="onsale">
+								<div class="filter-icon on-sale-icon"></div>
 								On Sale
 							</div>
-							<div class="filter-container groceries">
+							<div class="filter-container groceries" id="groceries">
 								<div class="filter-icon groceries-icon"></div>
 								Groceries
 							</div>
-							<div class="filter-container printable">
+							<div class="filter-container printable" id="printable">
 								<div class="filter-icon printable-icon"></div>
 								Printables
 							</div>
-							<div class="filter-container freebies last">
+							<div class="filter-container freebies last" id="freebies">
 								<div class="filter-icon freebies-icon"></div>
 								Freebies
 							</div>
@@ -291,13 +178,13 @@
 						</div>
 						{% for category in coupon_categories %}
 							<div class="category {% if forloop.counter > 9 %}hidden{% endif %}">
-								<a href="javascript:void(null);">{{ category.category.name }}</a>
+								<a href="javascript:void(null);" id="{{ category.id }}">{{ category.name }}</a>
 							</div>
 							{% if forloop.counter == 9 %}
 								<div class="more-categories">
-									<a href="#"><img src="/static/img/category-arrow.png">
-										<span>See more categories</span>
-										<img src="/static/img/category-arrow.png"></a>
+									<img src="/static/img/category-arrow.png">
+									<a href="javascript:void(null);">See more categories</a>
+									<img src="/static/img/category-arrow.png">
 								</div>
 							{% endif %}
 						{% endfor %}
@@ -307,7 +194,9 @@
 						<h4>Similar Stores</h4>
 						{% for store in similar_stores %}
 							<div class="similar-store">
-								<img src="{{store.get_image}}" class="merchant-logo">
+								<a href="{% url 'web.views.main.coupons_for_company' company_name=store.name_slug company_id=store.id %}">
+									<img src="{{store.get_image}}" class="merchant-logo">
+								</a>
 							</div>
 						{% endfor %}
 					</div>
@@ -315,23 +204,23 @@
 				<div class="main-rail">
 					<div class="top-labels-container">
 						<div class="main-labels">
-							<a href="#">Home</a>
+							<a href="{% url 'web.views.main.index' %}">Home</a>
 							>
-							<a href="#">Retailers</a>
+							<a href="{% url 'web.views.main.stores' %}">Retailers</a>
 							>
-							<a href="#">{{ merchant.name }}</a>
+							{{ merchant.name }}
 						</div>
 						<div class="sorting">
 							Sort by
 							<div class="sorting-toggle">
 								<div class="sorting-item">
-									<a href="javascript:void(null);">Expiring soon</a>
+									<a href="javascript:void(null);" class="expiring_soon">Expiring soon</a>
 								</div>
 								<div class="sorting-item selected-sorting">
-									<a href="javascript:void(null);">Popularity</a>
+									<a href="javascript:void(null);" class="popularity">Popularity</a>
 								</div>
 								<div class="sorting-item sorting-item-last">
-									<a href="javascript:void(null);">Newest</a>
+									<a href="javascript:void(null);" class="newest">Newest</a>
 								</div>
 							</div>
 						</div>
@@ -341,12 +230,27 @@
 							<div class="coupon-container {% if forloop.counter|divisibleby:3 %}coupon-last{% endif %}">
 								<div class="coupon-body">
 									<div class="coupon-header">
-										<div class="coupon-left-label on-sale-label">
-											<img src="/static/img/on_sale_coupon.png">On Sale
-										</div>
-										<div class="coupon-right-label">
-											{{ coupon.merchant.name }}
-										</div>
+										{% if coupon.coupon_type == 'free_shipping' %}
+											<div class="coupon-left-label free-shipping-label">
+												<img src="/static/img/free_shipping_icon.png">Free Shipping
+											</div>
+										{% elif coupon.coupon_type == 'on_sale' %}
+											<div class="coupon-left-label on-sale-label">
+												<img src="/static/img/on_sale_icon.png">On Sale
+											</div>
+										{% elif coupon.coupon_type == 'groceries' %}
+											<div class="coupon-left-label groceries-label">
+												<img src="/static/img/groceries_icon.png">Groceries
+											</div>
+										{% elif coupon.coupon_type == 'coupon' %}
+											<div class="coupon-left-label coupon-code-label">
+												<img src="/static/img/coupon_code_icon.png">Coupon
+											</div>
+										{% elif coupon.coupon_type == 'printable' %}
+											<div class="coupon-left-label printable-label">
+												<img src="/static/img/printable_icon.png">Printables
+											</div>
+										{% endif %}
 									</div>
 									<hr>
 									<h1 class="short-description">{{ coupon.short_desc }}</h1>
@@ -356,19 +260,22 @@
 									</div>
 								</div>
 								<div class="use-coupon">
-									<a href="#">Use Coupon</a>
+									<a href="{{ coupon.success_path }}">Use Coupon</a>
 								</div>
 								<div class="coupon-bottom">
-									<div class="coupon-left-bottom">
-										<a href="#">
-											<img src="/static/img/save_coupon.png">
-											Save
-										</a>
-									</div>
+									{% comment %}
+										<div class="coupon-left-bottom">
+											<a href="#">
+												<img src="/static/img/save_coupon.png">
+												Save
+											</a>
+										</div>
+									{% endcomment %}
 									<div class="coupon-right-bottom">
 										Share
-										<a href="#"><img src="/static/img/facebook_share_icon.png"></a>
-										<a href="#"><img src="/static/img/twitter_share_icon.png"></a>
+										<a href="https://www.facebook.com/sharer/sharer.php?u={{ coupon.full_success_path|urlencode }}"><img src="/static/img/facebook_share_icon.png" target="_blank"></a>
+										<a href="https://twitter.com/share?url={{ coupon.full_success_path|urlencode }}" target="_blank"><img src="/static/img/twitter_share_icon.png"></a>
+										<a href="#"><img src="/static/img/email_share_icon.png"></a>
 									</div>
 								</div>
 							</div>
