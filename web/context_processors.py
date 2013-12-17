@@ -20,9 +20,4 @@ def base(request):
     else:
         context["SHOW_NEWSLETTER_SUBSCRIPTION_BAR"] = True
 
-    if 'custom_landing_url' in request.session:
-        context['EXTRA_TAB_URL'] = request.session['custom_landing_url']
-        context['EXTRA_TAB_ACTIVE'] = (
-            request.path.startswith(request.session['custom_landing_url']))
-
     return context
