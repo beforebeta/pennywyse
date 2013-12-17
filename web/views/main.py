@@ -36,9 +36,9 @@ def build_base_context(request, context):
                 break
 
     base_context = {"visitor": getattr(request, 'visitor', None),
-               "merchants": merchants_data,
-                "categories": Category.objects.filter(parent__isnull=True)[:6],
-                "groceries": Category.objects.filter(name='Grocery Coupons')[0],}
+               "top_merchants": merchants_data,
+                "top_categories": Category.objects.filter(parent__isnull=True)[:6],
+                "top_groceries": Category.objects.filter(name='Grocery Coupons')[0],}
     context.update(**base_context)
     return context
 

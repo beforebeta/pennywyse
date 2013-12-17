@@ -94,6 +94,9 @@ h4 {
 	margin: 0px !important;
 	font-weight: 300 !important;
 }
+.search-rail {
+	background-color: #ebebe8 !important;
+}
 hr {
 	border-top: 1px solid #d9d9d7 !important;
 	clear: both;
@@ -343,6 +346,29 @@ hr {
 .coupon-container hr {
 	margin-top: 10px !important;
 }
+.search-merchants-container {
+	height: 650px !important;
+	text-align: center !important;
+	overflow: hidden;
+}
+.search-merchants-container img{
+	max-width: 120px;
+	max-height: 60px;
+}
+.search-merchant-container {
+	width: 165px;
+	height: 95px;
+	line-height: 95px;
+	background-color: #f3f3f3;
+	margin: 0px auto !important;
+	margin-bottom: 10px !important;
+	list-style: none;
+	overflow: hidden;
+}
+.search-merchants-list {
+	height: 560px !important;
+	overflow: hidden;
+}
 .coupon-banner {
 	background-color: #ffffff;
 	padding: 5px;
@@ -412,7 +438,6 @@ hr {
 .description img {
 	max-width: 200px;
 	max-height: 100px;
-	
 }
 .coupon-bottom {
 	height: 30px;
@@ -756,7 +781,7 @@ hr {
 	background-image: url('../img/freebies_white.png');
 	background-color: #5757a2;
 }
-.index-labels a{
+.index-labels a {
 	font-size: 11pt;
 	text-transform: uppercase;
 	color: #ef5b5b !important;

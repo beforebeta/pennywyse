@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Merchant Store Page</title>
+		<link href="/static/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+		<link href="/static/css/grid.css" rel="stylesheet">
+		<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+		<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+		<script src="/static/js/waypoints.min.js"></script>
+		<script src="/static/js/vendor/jcarousellite.min.js"></script>
+		<script type="text/javascript" src="/static/js/store.js"></script>
+		<script type="text/javascript" src="/static/js/mustache.js"></script>
+	</head>
+	<body>
+		<div class="header-container top-header">
+			100% verified coupons guaranteed
+		</div>
+		<div class="header-container  header">
+				<div class="row">
+					<div class="logo"><a href="{% url 'web.views.main.index' %}"><img src="/static/img/logo.png"></a>
+					</div>
+					<div class="search-container">
+						<form action="/search/" id="search_form">
+						<input name="q" type="text" placeholder="Search over 50,000+ coupons from 6,000+ stores" class="search" value={{ query }}>
+						</form>
+						{% comment %}
+							<a href="#">Sign Up</a> |
+							<a href="#">Login</a>
+						{% endcomment %}
+					</div>
+				</div>
+		</div>
+		<div class="header-container menu-row">
+			<div class="row">
+				<ul class="menu">
+					<li class="menu-item category-item">
+						<a href="#">Stores</a>
+						<ul class="row main-row dropdown-row stores-row"><li>
+								{% for merchant in top_merchants %}
+									{% if forloop.counter == 1 %}
+										<div class="category-container store-row">
+									{% endif %}
+									<a href="{% url 'web.views.main.coupons_for_company' company_name=merchant.name_slug company_id=merchant.id %}">{{ merchant.name }}</a><br>
+									{% if forloop.counter|divisibleby:"3" %}
+										<hr>
+									{% endif %}
+									{% if forloop.counter|divisibleby:"18" %}
+										</div><div class="category-container store-row">
+									{% endif %}
+									{% if forloop.last %}
+										</div>
+									{% endif %}
+								{% endfor %}
+							<hr>
+							<div class="more-categories">
+								<a href="{% url 'web.views.main.stores' %}">See all stores</a> &#187;
+							</div>
+						</li></ul>
+					</li>
+					<li class="menu-item category-item">
+						<a href="#">Categories</a>
+						<ul class="row main-row dropdown-row category-row"><li>
+							{% for category in top_categories %}
+								<div class="category-label">{{ category.name }}</div>
+							{% endfor %}
+							<hr>
+							{% for category in categories %}
+								<div class="category-container">
+									{% for subcategory in category.category_set.all %}
+										{{ subcategory.name }}<br>
+									{% endfor %}
+								</div>
+							{% endfor %}
+							<hr>
+							<div class="more-categories">
+								See all categories &#187;
+							</div>
+						</li></ul>
+					</li>
+					<li class="menu-item">
+						<a href="#">Groceries</a>
+						<ul class="row main-row dropdown-row groceries-row"><li>
+							{% for grocery in top_groceries.category_set.all %}
+									{% if forloop.counter == 1 %}
+										<div class="category-container store-row">
+									{% endif %}
+									<a href="{% url 'web.views.main.category' category_code=grocery.code %}">{{ grocery.name }}</a><br>
+									{% if forloop.counter|divisibleby:"6" %}
+										</div><div class="category-container store-row">
+									{% endif %}
+									{% if forloop.last %}
+										</div>
+									{% endif %}
+								{% endfor %}
+							<hr>
+							<div class="more-categories">
+								See all groceries &#187;
+							</div>
+						</li></ul>
+					</li>
+					<li class="menu-item">
+						<a href="#">Local</a>
+						<ul class="row main-row dropdown-row local-row"><li>
+							<div class="local-search-container">
+								<input type="text" placeholder="Search by city, state or zip code" class="local-search">
+								<input type="button" value="Search" class="btn-search">
+							</div>
+							<hr>
+							<div class="more-categories">
+								See all cities &#187;
+							</div>
+						</li></ul>
+					</li>
+					<li class="menu-item menu-item-latest">
+						<a href="/blog">Magazine</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="main-container">
+			<div class="row middle-container">
+				<div class="main-rail index-rail top-labels-container">
+						<div class="main-labels index-labels">
+							<a href="javascript:void(null);" class="active" id="new">New</a>
+							<a href="javascript:void(null);" id="tranding">Tranding</a>
+						</div>
+					</div>
+				<br clear="both">
+				<div class="left-rail search-rail">
+					<div class="coupon-container coupon-body search-merchants-container">
+						<ul class="search-merchants-list">
+							{% for merchant in merchants %}
+								<li class="search-merchant-container">
+									<a href="{{ merchant.local_path }}"><img src="{{ merchant.image }}"></a>
+								</li>
+							{% endfor %}
+						</ul>
+						
+						<a href="javascript:void(null);" class="prev"><img src="/static/img/down-arrow.png" ></a>
+					</div>
+					
+				</div>
+				<div class="main-rail">
+					<div class="coupons more-coupons">
+						{% for coupon in coupons %}
+							<div class="coupon-container {% if forloop.counter|divisibleby:3 %}coupon-last{% endif %}">
+								<div class="coupon-body">
+									<div class="coupon-header">
+										{% if coupon.coupon_type == 'free_shipping' %}
+											<div class="coupon-left-label free-shipping-label">
+												<img src="/static/img/free_shipping_icon.png">Free Shipping
+											</div>
+										{% elif coupon.coupon_type == 'on_sale' %}
+											<div class="coupon-left-label on-sale-label">
+												<img src="/static/img/on_sale_icon.png">On Sale
+											</div>
+										{% elif coupon.coupon_type == 'groceries' %}
+											<div class="coupon-left-label groceries-label">
+												<img src="/static/img/groceries_icon.png">Groceries
+											</div>
+										{% elif coupon.coupon_type == 'coupon' %}
+											<div class="coupon-left-label coupon-code-label">
+												<img src="/static/img/coupon_code_icon.png">Coupon
+											</div>
+										{% elif coupon.coupon_type == 'printable' %}
+											<div class="coupon-left-label printable-label">
+												<img src="/static/img/printable_icon.png">Printables
+											</div>
+										{% endif %}
+									</div>
+									<hr>
+									<h1 class="short-description">{{ coupon.short_desc }}</h1>
+									{{ coupon.text }}<br>
+									<span class="ends">Ends {{ coupon.end|date:"m/d/y" }}</span>
+									<div class="description"><img src="{{ coupon.merchant_image }}"></div>
+								</div>
+								<div class="use-coupon">
+									<a href="{{ coupon.success_path }}">Use Coupon</a>
+								</div>
+								<div class="coupon-bottom">
+									{% comment %}
+										<div class="coupon-left-bottom">
+											<a href="#">
+												<img src="/static/img/save_coupon.png">
+												Save
+											</a>
+										</div>
+									{% endcomment %}
+									<div class="coupon-right-bottom">
+										Share
+										<a href="https://www.facebook.com/sharer/sharer.php?u={{ coupon.full_success_path|urlencode }}"><img src="/static/img/facebook_share_icon.png" target="_blank"></a>
+										<a href="https://twitter.com/share?url={{ coupon.full_success_path|urlencode }}" target="_blank"><img src="/static/img/twitter_share_icon.png"></a>
+										<a href="#"><img src="/static/img/email_share_icon.png"></a>
+									</div>
+								</div>
+							</div>
+						{% endfor %}
+						<!--<div class="coupon-container coupon-banner coupon-last"></div>-->
+						<br clear="both">
+					</div>
+					
+				</div>
+			</div>
+			
+		</div>
+		<!-- /container -->
+	</body>
+</html>

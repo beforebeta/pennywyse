@@ -60,7 +60,8 @@ urlpatterns += patterns('tracking.views',
 )
 
 urlpatterns += patterns('web.views.search',
-    url(r'^search/$', 'search')
+    url(r'^search/$', 'search'),
+    url(r'^search/page/(?P<current_page>[\d]+)/$', 'search')
 )
 
 urlpatterns += patterns('web.views.email',

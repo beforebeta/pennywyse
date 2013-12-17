@@ -81,6 +81,15 @@ $(function() {
 		fetch_items(reset_items=true);
 		init_waypoint();
 	});
+	$('.search-merchants-container').jCarouselLite({
+	    btnNext: '.next',
+  		btnPrev: '.prev',
+       	autoCss: false,
+	  	vertical: true,
+	  	visible: 5,
+	  	start: 0,
+	  	scroll: 1,
+	});
 });
 function select_categories(criteria) {
 	if (criteria == 'all') {
@@ -215,6 +224,7 @@ function fetch_items(reset_items) {
 	var url = window.location.pathname;
 	var parameters = new Array();
 	var i = 0;
+	var q = $('input[name=q]').val();
 	if (reset_items) {
 		page = 1;
 	}
@@ -235,6 +245,9 @@ function fetch_items(reset_items) {
 	}
 	if (is_tranding) {
 		parameters['is_tranding'] = is_tranding;
+	}
+	if (q) {
+		parameters['q'] = q;
 	}
 	for (key in parameters) {
 		var value = parameters[key];
