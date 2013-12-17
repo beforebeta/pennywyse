@@ -162,14 +162,6 @@ class VisitorTrackingMiddleware(object):
         # make the visitor available to others
         request.visitor = visitor
 
-        # redirect to custom landing page
-        if request.session['acquisition_source_name'] == 'denverpost.com':
-            request.session['custom_landing_url'] = redirect_url = reverse(
-                'web.views.main.coupons_for_company',
-                kwargs={'company_name': 'denver'})
-            request.session.save()
-            return HttpResponseRedirect(redirect_url)
-
     def _assign_acquisition_source(self, visitor, request):
         try:
             utm_source      = request.GET.get("utm_source", "unknown")
