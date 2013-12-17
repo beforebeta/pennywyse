@@ -7,7 +7,7 @@
       <div class='catch-phrase'><span>Hand Verified Coupon Codes</span></div>
     </div>
     <form action="/search/" id="search_form">
-      {% if not EXTRA_TAB_ACTIVE and ACQUISITION_SOURCE_LOGO_URL %}
+      {% if ACQUISITION_SOURCE_LOGO_URL %}
       <div class="large-2 columns">
         <img style="padding-top:15px;" src="{{ ACQUISITION_SOURCE_LOGO_URL }}">
       </div>
@@ -30,9 +30,6 @@
       <ul>
         <li><a class='top-tab blue {{coupon_tab_class}}' href="{{ coupons_path }}">Coupon Codes</a></li>
         <li><a class='top-tab blue {{blog_tab_class}}' href="{{ blog_path }}">&nbsp;&nbsp;&nbsp;Blog&nbsp;&nbsp;&nbsp;</a></li>
-        {% if EXTRA_TAB_URL %}
-        <li><a class='top-tab blue {% if EXTRA_TAB_ACTIVE %} active {% endif %}' href="{{ EXTRA_TAB_URL }}">Denver</a></li>
-        {% endif %}
       </ul>
     </div>
     <div class="float-right">
