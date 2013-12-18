@@ -1,187 +1,126 @@
-{% load static %}
-{% load compress %}
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>{{ page_title }}</title>
-    <meta name="description" content="{{ page_description }}">
-    <meta name="viewport" content="width=device-width">
-
-    {# Place favicon.ico and apple-touch-icon.png in the root directory #}
-    <link rel="shortcut icon" type="image/x-icon" href="{% static "img/favicon.ico" %}">
-    <link rel="apple-touch-icon" href="{% static "img/favicon.png" %}" />
-    <link rel="canonical" href="{{ canonical_url }}">
-	{% block pagination_links %}{% endblock %}
-
-    <!--<link href='http://fonts.googleapis.com/css?family=Ubuntu:400,300,700' rel='stylesheet' type='text/css'>-->
-    <link href='https://fonts.googleapis.com/css?family=Lato:400,700,700italic,900,400italic,300' rel='stylesheet' type='text/css'>
-
-    {% compress css %}
-    <link rel="stylesheet" href="{% static "css/normalize.css" %}">
-    <link rel="stylesheet" href="{% static "css/foundation.css" %}">
-    {# <!--<link rel="stylesheet" href="{% static "css/ubuntu.css" %}">--> #}
-    <link rel="stylesheet" href="{% static "css/flexslider.css" %}">
-    <link rel="stylesheet" href="{% static "css/main.css" %}">
-    <link rel="stylesheet" href="{% static "css/mq-0.css" %}" media="screen and (max-width: 32.5em)" />
-    <link rel="stylesheet" href="{% static "css/mq-32.css" %}" media="screen and (min-width: 32.5em)" />
-    <link rel="stylesheet" href="{% static "css/mq-48.css" %}" media="screen and (min-width: 48em)" />
-    <link rel="stylesheet" href="{% static "css/mq-67.css" %}" media="screen and (min-width: 67.5em)" />
-    <link rel="stylesheet" href="{% static "css/carousel.css" %}"/>
-    <link rel="stylesheet" href="{% static "css/header.css" %}">
-
-    <!--[if (lt IE 9)&(!IEMobile)]>
-    <link rel="stylesheet" href="{% static "css/foundation-ie8.css" %}">
-    <link rel="stylesheet" href="{% static "css/mq-32.css" %}"/>
-    <link rel="stylesheet" href="{% static "css/mq-48.css" %}"/>
-    <link rel="stylesheet" href="{% static "css/mq-67.css" %}"/>
-    <![endif]-->
-    {% endcompress %}
-
-	{# <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> --> #}
-    <script>window.jQuery || document.write('<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"><\/script>')</script>
-
-    {% compress js %}
-    <script src="{% static "js/vendor/modernizr-2.6.2.min.js" %}"></script>
-    <script src="{% static "js/plugins.js" %}"></script>
-    {% endcompress %}
-
-    {% block head_tags %}
-    {% endblock %}
-
-    {% block fbtags %}
-        <meta property="og:image" content="{{ og_image }}"/>
-        <meta property="og:title" content="{{ og_title }}"/>
-        <meta property="og:description" content="{{ og_description }}"/>
-        <meta property="og:url" content="{{ og_url }}"/>
-    {% endblock %}
-
-</head>
-<body>
-<!--[if lt IE 7]>
-<p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
-<![endif]-->
-
-<div class="page home">
-    <header role="banner" class="cf">
-      {% include 'layouts/_header.html' %}
-      {% block header_block %}
-      {% endblock %}
-      {% block newsletter_subscription %}
-      		{% include 'layouts/_newsletter_subscription_bar.html' %}
-      {% endblock %}
-    </header>
-
-    {% block main %}
-    {% endblock %}
-
-    {% block content %}
-    {% endblock %}
-
-    <footer role="contentinfo">
-        {% block popular_companies %}
-	        <div class="stripe-regular">
-	            <div class="row">
-	                <div class="column">
-	                    <h2>Popular Companies</h2>
-	                </div>
-	            </div>
-	            <div class="row collapse">
-	                <div class="column">
-	                    <div class="popular-companies flexslider">
-	                        <ul class="rr slides pop-companies">
-	                            {% for pop_company in pop_companies %}
-	                            <li>
-	                                <a href="{% url 'web.views.main.coupons_for_company' company_name=pop_company.name_slug company_id=pop_company.id %}" class="wrapper-5 small">
-	                                  <img src="{{ pop_company.get_image }}" alt="{{ pop_company.name }}">
-	                                </a>
-	                            </li>
-	                            {% endfor %}
-	                        </ul>
-	                    </div>
-	                </div>
-	            </div>
-	        </div>
-        {% endblock %}
-
-        <div class="stripe-dark pre-footer-wrap">
-            <div class="row">
-                <div class="large-5 columns">
-                    <h3 class="alt">About</h3>
-                    <p>
-                        {{ WEBSITE_NAME }} is America's best and largest source for working coupon codes. All codes on PushPenny are hand verified by a team right here in the US. We have all the best coupons and deals from over 6,000 brands and retailers. So if its a great coupon, we will have it and we will give you the simplest way to find it and use it.
-                    </p>
-                </div>
-                <div class="small-6 large-3 large-offset-1 columns">
-
-                </div>
-                <nav class="small-6 large-2 large-offset-1 columns">
-                    <h3 class="alt">Menu</h3>
-                    <ul class="rr footer-menu">
-                        <li><a href="/">Home</a></li>
-                        <li><a href="/privacy-and-terms/" target="_blank">Terms &amp; Conditions</a></li>
-                        <li><a href="/privacy-and-terms/" target="_blank">Privacy Policy</a></li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-
-        <div class="stripe-darker footer-wrap">
-            <div class="row">
-                <div class="large-3 columns">
-                    <div class="logo">
-                        <a href="#">{{ WEBSITE_NAME }}</a><span style="font-style:normal;font-size:30px;">™</span>
-                    </div>
-                </div>
-                <div class="large-6 columns">
-                    <div class="copyright">Copyright &copy; 2013, {{ WEBSITE_NAME }}. All rights reserved.</div>
-                </div>
-                <div class="large-3 columns">
-                    <ul class="rr social">
-                        <li><a href="http://www.twitter.com/pushpennycoupon" target="_blank" class="ir tw">Twitter</a></li>
-                        <li><a href="http://www.facebook.com/pushpennycoupon" target="_blank" class="ir fb">Facebook</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-    </footer>
-
-</div>
-
-    <script src="/static/js/main.js"></script>
-	<script type="text/javascript">
-		var _gaq = _gaq || [];
-		_gaq.push(['_setAccount', ' UA-42711247-1']);
-		_gaq.push(['_trackPageview']);
-		(function() {
-		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true; 
-		
-		ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
-		
-		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-		})();
-	</script>
-    <script type="text/javascript">
-        var clicky_site_ids = clicky_site_ids || [];
-        clicky_site_ids.push(100637453);
-        (function() {
-            var s = document.createElement('script');
-            s.type = 'text/javascript';
-            s.async = true;
-            s.src = '//static.getclicky.com/js';
-            ( document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0] ).appendChild( s );
-        })();
-    </script>
-    <script type="text/javascript">(function(e,b){if(!b.__SV){var a,f,i,g;window.mixpanel=b;a=e.createElement("script");a.type="text/javascript";a.async=!0;a.src=("https:"===e.location.protocol?"https:":"http:")+'//cdn.mxpnl.com/libs/mixpanel-2.2.min.js';f=e.getElementsByTagName("script")[0];f.parentNode.insertBefore(a,f);b._i=[];b.init=function(a,e,d){function f(b,h){var a=h.split(".");2==a.length&&(b=b[a[0]],h=a[1]);b[h]=function(){b.push([h].concat(Array.prototype.slice.call(arguments,0)))}}var c=b;"undefined"!==
-        typeof d?c=b[d]=[]:d="mixpanel";c.people=c.people||[];c.toString=function(b){var a="mixpanel";"mixpanel"!==d&&(a+="."+d);b||(a+=" (stub)");return a};c.people.toString=function(){return c.toString(1)+".people (stub)"};i="disable track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config people.set people.set_once people.increment people.append people.track_charge people.clear_charges people.delete_user".split(" ");for(g=0;g<i.length;g++)f(c,i[g]);
-    b._i.push([a,e,d])};b.__SV=1.2}})(document,window.mixpanel||[]);
-    mixpanel.init("3d3d512c8e3abb7052561dcaa0187132");</script>
-    {% block end_of_body %}
-    {% endblock %}
-</body>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>PushPenny</title>
+		<link href="/static/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+		<link href="/static/css/grid.css" rel="stylesheet">
+		<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+		<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+		<script src="/static/js/waypoints.min.js"></script>
+		<script type="text/javascript" src="/static/js/store.js"></script>
+		<script type="text/javascript" src="/static/js/mustache.js"></script>
+	</head>
+	<body>
+		<div class="header-container top-header">
+			100% verified coupons guaranteed
+		</div>
+		<div class="header-container  header">
+				<div class="row">
+					<div class="logo"><a href="{% url 'web.views.main.index' %}"><img src="/static/img/logo.png"></a>
+					</div>
+					<div class="search-container">
+						<form action="/search/" id="search_form">
+						<input name="q" type="text" placeholder="Search over 50,000+ coupons from 6,000+ stores" class="search">
+						</form>
+						{% comment %}
+							<a href="#">Sign Up</a> |
+							<a href="#">Login</a>
+						{% endcomment %}
+					</div>
+				</div>
+		</div>
+		<div class="header-container menu-row">
+			<div class="row">
+				<ul class="menu">
+					<li class="menu-item category-item">
+						<a href="#">Stores</a>
+						<ul class="row main-row dropdown-row stores-row"><li>
+								{% for merchant in top_merchants %}
+									{% if forloop.counter == 1 %}
+										<div class="category-container store-row">
+									{% endif %}
+									<a href="{% url 'web.views.main.coupons_for_company' company_name=merchant.name_slug company_id=merchant.id %}">{{ merchant.name }}</a><br>
+									{% if forloop.counter|divisibleby:"3" %}
+										<hr>
+									{% endif %}
+									{% if forloop.counter|divisibleby:"18" %}
+										</div><div class="category-container store-row">
+									{% endif %}
+									{% if forloop.last %}
+										</div>
+									{% endif %}
+								{% endfor %}
+							<hr>
+							<div class="more-categories">
+								<a href="{% url 'web.views.main.stores' %}">See all stores</a> &#187;
+							</div>
+						</li></ul>
+					</li>
+					<li class="menu-item category-item">
+						<a href="#">Categories</a>
+						<ul class="row main-row dropdown-row category-row"><li>
+							{% for category in top_categories %}
+								<div class="category-label">{{ category.name }}</div>
+							{% endfor %}
+							<hr>
+							{% for category in top_categories %}
+								<div class="category-container">
+									{% for subcategory in category.category_set.all %}
+										{{ subcategory.name }}<br>
+									{% endfor %}
+								</div>
+							{% endfor %}
+							<hr>
+							<div class="more-categories">
+								See all categories &#187;
+							</div>
+						</li></ul>
+					</li>
+					<li class="menu-item">
+						<a href="#">Groceries</a>
+						<ul class="row main-row dropdown-row groceries-row"><li>
+							{% for grocery in top_groceries.category_set.all %}
+									{% if forloop.counter == 1 %}
+										<div class="category-container store-row">
+									{% endif %}
+									<a href="{% url 'web.views.main.category' category_code=grocery.code %}">{{ grocery.name }}</a><br>
+									{% if forloop.counter|divisibleby:"6" %}
+										</div><div class="category-container store-row">
+									{% endif %}
+									{% if forloop.last %}
+										</div>
+									{% endif %}
+								{% endfor %}
+							<hr>
+							<div class="more-categories">
+								See all groceries &#187;
+							</div>
+						</li></ul>
+					</li>
+					<li class="menu-item">
+						<a href="#">Local</a>
+						<ul class="row main-row dropdown-row local-row"><li>
+							<div class="local-search-container">
+								<input type="text" placeholder="Search by city, state or zip code" class="local-search">
+								<input type="button" value="Search" class="btn-search">
+							</div>
+							<hr>
+							<div class="more-categories">
+								See all cities &#187;
+							</div>
+						</li></ul>
+					</li>
+					<li class="menu-item menu-item-latest">
+						<a href="/blog">Magazine</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="main-container">
+			{% block content %}{% endblock %}
+		</div>
+		<!-- /container -->
+	</body>
 </html>
