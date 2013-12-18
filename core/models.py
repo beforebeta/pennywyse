@@ -169,6 +169,8 @@ class Merchant(models.Model):
     date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
     last_modified   = models.DateTimeField(default=datetime.datetime.now(), auto_now=True, auto_now_add=True)
     use_skimlinks   = models.BooleanField(default=True)
+    is_featured     = models.BooleanField('Featured', blank=True, default=False)
+    popularity      = models.IntegerField(blank=True, null=True, default=0)
 
     all_objects = models.Manager()
     objects = MerchantManager()

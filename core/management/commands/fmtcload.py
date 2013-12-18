@@ -208,21 +208,19 @@ def setup_web_coupons():
         print_stack_trace()
 
     try:
-
-        if Coupon.objects.filter(is_new=True).count() == 0:
-            for coupon in Coupon.active_objects.get_new_coupons(8):
-                coupon.is_new = True
-                coupon.save()
+        Coupon.objects.filter(is_featured=True).update(is_featured=False)
+        for coupon in Coupon.active_objects.get_new_coupons(40):
+            coupon.is_new = True
+            coupon.save()
 
     except:
         print_stack_trace()
 
     try:
-
-        if Coupon.objects.filter(is_popular=True).count() == 0:
-            for coupon in Coupon.active_objects.get_popular_coupons(8):
-                coupon.is_popular = True
-                coupon.save()
+        Coupon.objects.filter(is_featured=True).update(is_featured=False)
+        for coupon in Coupon.active_objects.get_popular_coupons(40):
+            coupon.is_popular = True
+            coupon.save()
 
     except:
         print_stack_trace()
@@ -245,11 +243,20 @@ def refresh_calculated_fields():
             except Coupon.DoesNotExist:
                 ct.coupon = None
             ct.save()
+    for ct in ClickTrack.objects.filter(merchant__isnull=True):
+        if ct.coupon:
+            ct.coupon.merchant = ct.coupon.merchant
+            ct.save()
     tracks = ClickTrack.objects.exclude(coupon__isnull=True).values('coupon_id')\
                                                             .annotate(popularity=Count('coupon__id'))
     for track in tracks:
         Coupon.objects.filter(id=track['coupon_id']).update(popularity=track['popularity'])
-
+    
+    tracks = ClickTrack.objects.exclude(merchant__isnull=True).values('merchant_id')\
+                                                            .annotate(popularity=Count('merchant__id'))
+    for track in tracks:
+        Merchant.objects.filter(id=track['merchant_id']).update(popularity=track['popularity'])
+    
 def refresh_merchant_redirects():
     for coupon in Coupon.objects.all():
         if coupon.link and not coupon.merchant.redirect:
