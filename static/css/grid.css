@@ -806,3 +806,62 @@ hr {
 .on-sale-icon.selected {
 	background-image: url('../img/on_sale_white.png');
 }
+.top-rail {
+	width: 960px !important;
+	background-color: #ebebe8 !important;
+}
+.featured-merchants {
+	width:960px !important;
+	background-color: #fff;
+}
+.featured-merchants-header {
+	height: 35px;
+	line-height: 35px;
+	background-color: #f2f2f0;
+	color: #787b76;
+	text-transform: uppercase;
+	font-size: 11pt;
+	padding-left: 10px;
+}
+.top-pagination a{
+	padding: 5px !important;
+}
+.top-pagination a.active {
+	background-color: #d9d9d7;
+	border-radius: 2px;
+}
+.merchants {
+	clear: both !important;
+	float: none !important;
+	width: 960px !important;
+}
+.merchants a {
+	float: left !important;
+	width: 170px !important;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	color: #423d3e;
+	width: 220px !important;
+	margin-right: 10px;
+}
+.merchants hr {
+	margin-bottom: 10px !important;
+}
+.featured-merchants-list {
+	padding: 20px;
+}
+.featured-merchants-list div{
+	width: 150px;
+	height: 95px;
+	line-height: 95px;
+	margin: 0px auto !important;
+	margin-bottom: 10px !important;
+	list-style: none;
+	overflow: hidden;
+	float: left;
+}
+.featured-merchants-list img {
+	max-width: 150px;
+	max-height: 95px;
+}
