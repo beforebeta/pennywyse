@@ -75,7 +75,6 @@ def set_canonical_url(request, context):
 
 
 @ensure_csrf_cookie
-#@cache_page(60 * 60 * 24)
 def index(request, current_page=1):
     # handling AJAX request 
     if request.is_ajax():
@@ -227,11 +226,12 @@ def redirect_to_open_coupon(request, company_name, coupon_label, coupon_id):
 
 @ensure_csrf_cookie
 def open_coupon(request, company_name, coupon_label, coupon_id):
-    log_click_track(request)
     try:
         coupon = Coupon.objects.get(id=coupon_id)
+        log_click_track(request, coupon)
     except Coupon.DoesNotExist:
         coupon = Coupon.objects.filter(desc_slug=coupon_label).order_by('-id')
+        log_click_track(request)
         if not coupon:
             raise Http404
         original_coupon_url = reverse('web.views.main.open_coupon', kwargs={'company_name': company_name,
@@ -272,18 +272,17 @@ def privacy(request):
     return render_response("privacy.html", request, {})
 
 @ensure_csrf_cookie
-@cache_page(60 * 60 * 24)
 def categories(request):
     description = "Coupon Categories | {0}".format(base_description)
     context={
-        "categories": Category.objects.filter(ref_id_source__isnull=True, parent__isnull=True, is_featured=False).order_by('name'),
-        "featured_categories": Category.objects.filter(ref_id_source__isnull=True, parent__isnull=True, is_featured=True).order_by('name'),
         "page_description": description,
         "page_title": description,
         "og_title": "Coupon Categories",
         "og_description": description,
         "og_image": icon_url,
         "og_url": "{0}/categories/".format(settings.BASE_URL_NO_APPENDED_SLASH),
+        "categories": Category.objects.filter(parent__isnull=True, is_featured=False).order_by('name'),
+        "featured_categories": Category.objects.filter(parent__isnull=True, is_featured=True).order_by('name'),
     }
     set_active_tab('category', context)
     set_canonical_url(request, context)
@@ -291,7 +290,6 @@ def categories(request):
     return render_response("categories.html", request, context)
 
 @ensure_csrf_cookie
-@cache_page(60 * 60 * 24)
 def category(request, category_code, current_page=1, category_ids=-1):
     current_page = int(current_page)
     category = Category.objects.get(code=category_code, ref_id_source__isnull=True)
@@ -353,7 +351,7 @@ def category(request, category_code, current_page=1, category_ids=-1):
         "coupon_categories"     : coupon_categories,
         "form_path"             : "/categories/{0}/".format(category.code),
     }
-    set_meta_tags(category, context)
+
     if current_page > 1:
         context['canonical_url'] = "{0}pages/{1}/".format(category.og_url(), current_page)
     set_active_tab('category', context)
@@ -374,35 +372,32 @@ def sitemap(request):
     return HttpResponseRedirect('http://s3.amazonaws.com/pushpenny/sitemap.xml')
 
 @ensure_csrf_cookie
-@cache_page(60 * 60 * 24)
-def stores(request, page='#'):
+def stores(request, page='popular'):
     """List of stores, ordered by alphabet."""
 
-    description = u"Stores List | {0}".format(base_description)
     category = request.GET.get('category', None)
+    ordering = '-name'
     if page == '#':
         filters = {'name__regex': r'^[0-9]'}
+    elif page == 'popular':
+        filters = {'popularity__gt': 0}
+        ordering = '-popularity'
     else:
         filters = {'name__istartswith': page}
     if category:
         merchant_ids = [c['merchant__id'] for c in Coupon.objects.filter(categories=category).values('merchant__id').annotate()]
         filters['id__in'] = merchant_ids
     filters['total_coupon_count__gt'] = 0
-    stores = Merchant.objects.filter(**filters)
+    stores = Merchant.objects.filter(**filters).order_by(ordering)
     context={
         "stores": stores,
         "categories": Category.objects.filter(parent__isnull=True, ref_id_source__isnull=True).order_by('name'),
         "category": int(category) if category else None,
-        "page_description": description,
-        "page_title": description,
         "pagination": AlphabeticalPagination(page),
-        "og_title": "Stores List",
-        "og_description": description,
-        "og_image": icon_url,
-        "og_url": "{0}/categories/".format(settings.BASE_URL_NO_APPENDED_SLASH),
+        "featured_merchants": Merchant.objects.filter(is_featured=True),
+        "page": page,
     }
-    set_active_tab('stores', context)
-    return render_response("stores.html", request, context)
+    return render_response("companies.html", request, context)
 
 @ensure_csrf_cookie
 def coupon_success_page(request, company_name, coupon_label, coupon_id):
