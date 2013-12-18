@@ -1,93 +1,44 @@
 {% extends "base.html" %}
-{% load humanize %}
 
-{% block fbtags %}
-    <meta property="og:image" content="{{ BASE_URL_NO_APPENDED_SLASH }}{{ merchant.get_image }}"/>
-    <meta property="og:title" content="Hand Verified Coupon Codes for {{ merchant.name }} from PushPenny"/>
-    <meta property="og:url" content="{{ CURRENT_URL }}"/>
-{% endblock %}
-
-{% block header_block %}
-  <h1 class="text-center">Categories</h1>
-{% endblock %} {# header #}
-
-{% block main %}
-<div class="stripe-regular" style="border-bottom: 2px solid #DDDDDD">
-  	{% if CATEGORY_PAGE_TEXT %}
-		<div class="row">
-        	<div class="large-9 columns category-text">
-  				<p>{{ CATEGORY_PAGE_TEXT | safe }}</p>
-            </div>
-	  	</div>
-  	{% endif %}
-  {% if featured_categories %}
-	  <div role="main">
-	    <section class="row category-index">
-	      <ul class='categories-list rr'>
-	        {% for category in featured_categories %}
-	          <li class='category'>
-	            <a class='round3' href='/categories/{{ category.code }}'>
-	              {{ category.name }}
-	            {% if category.category_set.all.exists %}
-	                <span class='arrow-down'/>
-	              </a>
-	              <div class='subcategories'>
-	                {% for subcat in category.category_set.all %}
-	                <div class='subcategory'><div class='centering'>
-	                  <a href='/categories/{{ subcat.code }}'>{{ subcat.name }}</a>
-	                </div></div>
-	                {% endfor %}
-	              </div>
-	            {% else %}
-	              </a>
-	            {% endif %}
-	          </li>
-	        {% endfor %}
-	      </ul>
-	    </section>
-	  </div>
-	  <br><br>
-  {% endif %}
-  <div role="main">
-    <section class="row category-index">
-      <ul class='categories-list rr'>
-        {% for category in categories %}
-          <li class='category'>
-            <a class='round3' href='/categories/{{ category.code }}'>
-              {{ category.name }}
-            {% if category.category_set.all.exists %}
-                <span class='arrow-down'/>
-              </a>
-              <div class='subcategories'>
-                {% for subcat in category.category_set.all %}
-                <div class='subcategory'><div class='centering'>
-                  <a href='/categories/{{ subcat.code }}'>{{ subcat.name }}</a>
-                </div></div>
-                {% endfor %}
-              </div>
-            {% else %}
-              </a>
-            {% endif %}
-          </li>
-        {% endfor %}
-      </ul>
-    </section>
-  </div>
-</div>
-{% endblock %} {# main #}
-
-{% block end_of_body %}
-{% comment %}
-<script type="text/javascript">
-    try{
-        mixpanel.track("Categories Index Page Opened",{
-            "utm_source"    : "{{ visitor.acquisition_source }}",
-            "utm_medium"    : "{{ visitor.acquisition_medium }}",
-            "utm_term"      : "{{ visitor.acquisition_term }}",
-            "utm_content"   : "{{ visitor.acquisition_content }}",
-            "utm_campaign"  : "{{ visitor.acquisition_campaign }}"
-        });
-    }catch(e){}
-</script>
-{% endcomment %}
-{% endblock %}
+			{% block content %}
+			<div class="row middle-container">
+				<div class="main-rail index-rail top-labels-container">
+						<div class="main-labels">
+							<a href="{% url 'web.views.main.index' %}">Home</a>
+							>
+							<a href="{% url 'web.views.main.categories' %}">Categories</a>
+							>
+							All categories
+						</div>
+					</div>
+				<br clear="both">
+				{% if featured_categories %}
+					<div class="left-rail top-rail">
+						<div class="coupon-container  featured-merchants">
+							<div class="featured-merchants-header">Featured Categories</div>
+							<div class="featured-merchants-list featured-categories">
+								{% for category in featured_categories %}
+									<div>
+										<a href="{% url 'web.views.main.category' category_code=category.code %}">{{ category.name }}</a>
+									</div>
+									{% if forloop.counter == 6 %}
+			                       		<hr>
+			                   		{% endif %}
+								{% endfor %}
+								<br clear="both">
+							</div>
+							<br clear="both">
+						</div>
+					</div>
+				{% endif %}
+				<div class="main-rail merchants">
+					{% for category in categories %}
+	               		<a href="{% url 'web.views.main.category' category_code=category.code %}">{{category.name}}</a>
+                       	{% if forloop.counter|divisibleby:"4" %}
+                       		<hr>
+                   		{% endif %}
+    	            {% endfor %}
+					
+				</div>
+			</div>
+			{% endblock %}
