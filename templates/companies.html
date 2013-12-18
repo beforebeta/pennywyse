@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+			{% block content %}
+			<div class="row middle-container">
+				<div class="main-rail index-rail top-labels-container">
+						<div class="main-labels">
+							<a href="{% url 'web.views.main.index' %}">Home</a>
+							>
+							<a href="{% url 'web.views.main.stores' %}">Retailers</a>
+							>
+							All retailers
+						</div>
+					</div>
+				<br clear="both">
+				<div class="left-rail top-rail">
+					<div class="coupon-container  featured-merchants">
+						<div class="featured-merchants-header">Featured Stores</div>
+						<div class="featured-merchants-list">
+							{% for merchant in featured_merchants %}
+								<div>
+									<a href="{{ merchant.local_path }}"><img src="{{ merchant.image }}"></a>
+								</div>
+								{% if forloop.counter == 6 %}
+		                       		<hr>
+		                   		{% endif %}
+							{% endfor %}
+							<br clear="both">
+						</div>
+						<br clear="both">
+					</div>
+					
+				</div>
+				<div class="main-rail index-rail featured-merchants">
+						<div class="main-labels top-pagination">
+							<a href="{% url 'web.views.main.stores' page='popular' %}" {% if page == "popular" %}class="active"{% endif %}>Top Stores</a>
+							{% for page in pagination.all_pages %}
+			          				<a href="{% url 'web.views.main.stores' page %}{% if category %}?category={{category}}{% endif %}" {% if pagination.page == page %}class="active"{% endif %}>{{ page }}</a>
+			          		{% endfor %}
+						</div>
+					</div>
+				<br clear="both">
+				<div class="main-rail merchants">
+					{% for store in stores %}
+	               		<a href="{% url 'web.views.main.coupons_for_company' company_name=store.name_slug company_id=store.id %}">{{store.name}}</a>
+                       	{% if forloop.counter|divisibleby:"4" %}
+                       		<hr>
+                   		{% endif %}
+    	            {% endfor %}
+					
+				</div>
+			</div>
+			{% endblock %}
