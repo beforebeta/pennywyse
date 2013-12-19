@@ -2,6 +2,7 @@
 import datetime
 import math
 import requests
+from optparse import make_option
 
 from django.core.management.base import BaseCommand
 from django.conf import settings
@@ -16,18 +17,35 @@ ITEMS_PER_PAGE = 100
 SAVED_MERCHANT_ID_LIST = [int(m.ref_id) for m in Merchant.all_objects.filter(ref_id_source='sqoot')]
 
 class Command(BaseCommand):
+    option_list = BaseCommand.option_list + (
+        make_option('--directload',
+            action='store_true',
+            dest='directload',
+            default=False,
+            help='directload'),
+        make_option('--savedown',
+            action='store_true',
+            dest='savedown',
+            default=False,
+            help='savedown'),
+        )
 
     def handle(self, *args, **options):
-        try:
-            refresh_sqoot_data()
-        except:
-            print_stack_trace()
-
+        if options['directload']:
+            try:
+                refresh_sqoot_data()
+            except:
+                print_stack_trace()
+        if options['savedown']:
+            try:
+                savedown_sqoot_data()
+            except:
+                print_stack_trace()
 
 def refresh_sqoot_data():
     request_parameters = {
-        # 'api_key': settings.SQOOT_PUBLIC_KEY,
-        'api_key': 'xhtihz',
+        'api_key': settings.SQOOT_PUBLIC_KEY,
+        # 'api_key': 'xhtihz',
     }
     print "\nSQOOT DATA LOAD STARTING..\n"
 
@@ -48,13 +66,13 @@ def refresh_sqoot_data():
     print '%s deals detected, estimating %s pages to iterate\n' % (active_deal_count, page_count)
 
     describe_section("STARTING TO DOWNLOAD SQOOT DEALS..\n")
-    request_parameters['location'] = '10011'
-    request_parameters['order'] = 'distance'
-    # request_parameters['query'] = 'Pace For Success'
+    request_parameters['location'] = '10011' # FOR DEBUGGING
+    request_parameters['order'] = 'distance' # FOR DEBUGGING
+    # request_parameters['provider_slugs'] = 'scorebig' # FOR DEBUGGING
+    # request_parameters['query'] = 'The Theater at Madison Square Garden' # FOR DEBUGGING
 
     country_model = get_or_create_country()     # since there's only one country for all deals - no need to check it for each coupon
-    # for p in range(page_count):
-    for p in range(10):
+    for p in range(page_count):
         request_parameters['page'] = p + 1
         print '## Fetching page %s...\n' % (p + 1)
         response_in_json = requests.get(SQOOT_API_URL + 'deals', params=request_parameters).json()
@@ -84,6 +102,17 @@ def refresh_sqoot_data():
                 print_stack_trace()
 
 
+def savedown_sqoot_data():
+    # print 'Downloading content from %s' % url
+    # r = requests.get(url, stream=True)
+    # with open(filename, 'w') as f:
+    #     for c in r.iter_content(chunk_size=2048):
+    #         if c:
+    #             f.write(c)
+    #             f.flush()
+    # return open(filename, 'r')
+    print 'this option is work-in-progress'
+
 #############################################################################################################
 #
 # Helper Methods - Data
@@ -91,18 +120,26 @@ def refresh_sqoot_data():
 #############################################################################################################
 
 def reorganize_categories_list(categories_array):
+    '''Manual renaming of "Retail & Services" to "Shopping & Services"'''
     categories_list = []
     for category in categories_array:
-        category_dict = {'category_name': category['category']['name'],
-                         'category_slug': category['category']['slug']}
+        category_name = category['category']['name']
+        category_name = 'Shopping & Services' if category_name == 'Retail & Services' else category_name
+        category_slug = category['category']['slug']
+        category_slug = 'shopping-services' if category_slug == 'retail-services' else category_slug
+        category_dict = {'category_name': category_name,
+                         'category_slug': category_slug}
         categories_list.append(category_dict)
     return categories_list
 
 def establish_categories_dict(categories_array):
+    '''Manual renaming of "Retail & Services" to "Shopping & Services"'''
     categories_dict = {}
     for category in categories_array:
         category_slug = category['category']['slug']
         parent_slug = category['category']['parent_slug'] or None
+        category_slug = 'shopping-services' if category_slug == 'retail-services' else category_slug
+        parent_slug = 'shopping-services' if parent_slug == 'retail-services' else parent_slug
         categories_dict[category_slug] = parent_slug
     category_count = len(categories_dict.keys())
     parent_count = len(filter(None, set(categories_dict.values())))
@@ -126,8 +163,11 @@ def get_or_create_merchant(merchant_data_dict):
     return merchant_model
 
 def get_or_create_category(each_deal_data_dict, categories_dict):
+    '''Manual renaming of "Retail & Services" to "Shopping & Services"'''
     category_slug = each_deal_data_dict['category_slug']
+    category_slug = 'shopping-services' if category_slug == 'retail-services' else category_slug
     if not category_slug:
+        # In case where Sqoot doesn't show any category for a given deal
         return None
     parent_slug = categories_dict[category_slug]
     try:
@@ -278,6 +318,7 @@ def check_and_mark_duplicate(coupon_model):
             coupons_folded_under_c = c.coupon_set.all()
             for coupon_obj in coupons_folded_under_c:
                 coupon_obj.related_deal = coupon_model
+                coupon_obj.save()
             c.coupon_set.clear()
             c.related_deal = coupon_model
             c.save()
