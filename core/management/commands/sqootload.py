@@ -77,11 +77,6 @@ def refresh_sqoot_data(indirectload=False):
     print '%s deals detected, estimating %s pages to iterate\n' % (active_deal_count, page_count)
 
     describe_section("STARTING TO DOWNLOAD SQOOT DEALS..\n")
-    request_parameters['location'] = '10011' # FOR DEBUGGING
-    request_parameters['order'] = 'distance' # FOR DEBUGGING
-    request_parameters['provider_slugs'] = 'livingsocial' # FOR DEBUGGING
-    request_parameters['query'] = 'A Christmas Story, The Musical' # FOR DEBUGGING
-
     #request_parameters['location'] = '10011' # FOR DEBUGGING
     #request_parameters['order'] = 'distance' # FOR DEBUGGING
     #request_parameters['provider_slugs'] = 'livingsocial' # FOR DEBUGGING
