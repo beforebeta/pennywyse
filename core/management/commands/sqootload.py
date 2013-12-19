@@ -68,8 +68,8 @@ def refresh_sqoot_data():
     describe_section("STARTING TO DOWNLOAD SQOOT DEALS..\n")
     request_parameters['location'] = '10011' # FOR DEBUGGING
     request_parameters['order'] = 'distance' # FOR DEBUGGING
-    # request_parameters['provider_slugs'] = 'scorebig' # FOR DEBUGGING
-    # request_parameters['query'] = 'The Theater at Madison Square Garden' # FOR DEBUGGING
+    request_parameters['provider_slugs'] = 'livingsocial' # FOR DEBUGGING
+    request_parameters['query'] = 'A Christmas Story, The Musical' # FOR DEBUGGING
 
     country_model = get_or_create_country()     # since there's only one country for all deals - no need to check it for each coupon
     for p in range(page_count):
