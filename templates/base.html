@@ -13,16 +13,27 @@
 		<script type="text/javascript" src="/static/js/mustache.js"></script>
 	</head>
 	<body>
-		<div class="header-container top-header">
-			100% verified coupons guaranteed
+		<div class="header-container top-header sticky">
+			<div class="main-row">
+				100% verified coupons guaranteed
+				<div class="top-links">
+					<div class="header-links">
+						<a href="#">About</a>
+						<a href="#">Help</a>
+					</div>
+					<a href="#"><img src="/static/img/twitter_icon.png"></a>
+					<a href="#"><img src="/static/img/facebook_icon.png"></a>
+					<a href="#"><img src="/static/img/gplus_icon.png"></a>
+				</div>
+			</div>
 		</div>
-		<div class="header-container  header">
+		<div class="header-container header hidden">
 				<div class="row">
 					<div class="logo"><a href="{% url 'web.views.main.index' %}"><img src="/static/img/logo.png"></a>
 					</div>
 					<div class="search-container">
 						<form action="/search/" id="search_form">
-						<input name="q" type="text" placeholder="Search over 50,000+ coupons from 6,000+ stores" class="search">
+						<input name="q" type="text" placeholder="Search over 50,000+ coupons from 6,000+ stores" class="search" value="{{ query }}">
 						</form>
 						{% comment %}
 							<a href="#">Sign Up</a> |
@@ -31,7 +42,7 @@
 					</div>
 				</div>
 		</div>
-		<div class="header-container menu-row">
+		<div class="header-container menu-row sticky">
 			<div class="row">
 				<ul class="menu">
 					<li class="menu-item category-item">
@@ -117,6 +128,16 @@
 					</li>
 				</ul>
 			</div>
+		</div>
+		<div class="header-container header prescroll-header bottom-shadow">
+				<div class="row">
+					<div class="search-container top-container">
+						<a href="{% url 'web.views.main.index' %}"><img src="/static/img/top_logo.png"></a>
+						<form action="/search/" id="search_form">
+						<input name="q" type="text" placeholder="Search over 50,000+ coupons from 6,000+ stores" class="search" value="{{ query }}">
+						</form>
+					</div>
+				</div>
 		</div>
 		<div class="main-container">
 			{% block content %}{% endblock %}

@@ -13,7 +13,7 @@ a:hover {
 	padding-left: 15px;
 	padding-right: 15px;
 	font-family: "Helvetica Neue", Helvetica, Geneva, Open Sans, Arial, sans-serif;
-	margin-top: 3px;
+	margin-top: 55px;
 }
 .header-container {
 	background-color: #fff;
@@ -21,6 +21,7 @@ a:hover {
 	clear: both;
 }
 .top-header {
+	top: 0px;
 	height: 25px !important;
 	line-height: 25px !important;
 	color: #fff;
@@ -351,7 +352,7 @@ hr {
 	text-align: center !important;
 	overflow: hidden;
 }
-.search-merchants-container img{
+.search-merchants-container img {
 	max-width: 120px;
 	max-height: 60px;
 }
@@ -473,7 +474,9 @@ hr {
 	margin-top: -3px !important;
 }
 .menu-row {
-	z-index: 11 !important;
+	top: 25px;
+}
+.bottom-shadow {
 	-webkit-box-shadow: 0px 2px 2px 2px rgba(0,0,0,0.05);
 	-moz-box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.05);
 	box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.05);
@@ -811,7 +814,7 @@ hr {
 	background-color: #ebebe8 !important;
 }
 .featured-merchants {
-	width:960px !important;
+	width: 960px !important;
 	background-color: #fff;
 }
 .featured-merchants-header {
@@ -823,7 +826,7 @@ hr {
 	font-size: 11pt;
 	padding-left: 10px;
 }
-.top-pagination a{
+.top-pagination a {
 	padding: 5px !important;
 }
 .top-pagination a.active {
@@ -851,7 +854,7 @@ hr {
 .featured-merchants-list {
 	padding: 20px;
 }
-.featured-merchants-list div{
+.featured-merchants-list div {
 	width: 150px;
 	line-height: 95px;
 	margin: 0px auto !important;
@@ -867,7 +870,6 @@ hr {
 .featured-categories div {
 	text-align: center;
 	width: 150px !important;
-
 }
 .featured-categories a {
 	background-color: #d9d9d7;
@@ -875,4 +877,42 @@ hr {
 	padding: 5px;
 	width: 150px !important;
 	color: #423d3e;
+}
+.prescroll-header {
+	top: 45px;
+	background-image: url('../img/header.png');
+	background-repeat: no-repeat;
+	background-position: center;
+	height: 264px !important;
+	position: relative;
+}
+.top-container {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	text-align: center;
+	margin-top: -60px;
+	margin-left: -242.5px;
+	height: 120px !important;
+	width: 485px !important;
+}
+.sticky {
+	position: fixed !important;
+	z-index: 1;
+}
+.top-menu {
+	top: 85px !important;
+}
+.top-search {
+	top: 25px !important;
+}
+.top-links {
+	float: right;
+}
+.header-links {
+	float: left;
+}
+.header-links a {
+	margin-right: 15px;
+	color: #fff;
 }
