@@ -11,6 +11,7 @@ from django.utils.html import strip_tags
 from core.models import DealType, Category, Coupon, Merchant, Country, CouponNetwork, MerchantLocation
 
 from core.util import print_stack_trace
+import json
 
 SQOOT_API_URL = "http://api.sqoot.com/v2/"
 ITEMS_PER_PAGE = 100
@@ -23,6 +24,11 @@ class Command(BaseCommand):
             dest='directload',
             default=False,
             help='directload'),
+        make_option('--indirectload',
+            action='store_true',
+            dest='indirectload',
+            default=False,
+            help='indirectload'),
         make_option('--savedown',
             action='store_true',
             dest='savedown',
@@ -36,13 +42,18 @@ class Command(BaseCommand):
                 refresh_sqoot_data()
             except:
                 print_stack_trace()
+        if options['indirectload']:
+            try:
+                refresh_sqoot_data(True)
+            except:
+                print_stack_trace()
         if options['savedown']:
             try:
                 savedown_sqoot_data()
             except:
                 print_stack_trace()
 
-def refresh_sqoot_data():
+def refresh_sqoot_data(indirectload=False):
     request_parameters = {
         'api_key': settings.SQOOT_PUBLIC_KEY,
         # 'api_key': 'xhtihz',
@@ -71,11 +82,22 @@ def refresh_sqoot_data():
     request_parameters['provider_slugs'] = 'livingsocial' # FOR DEBUGGING
     request_parameters['query'] = 'A Christmas Story, The Musical' # FOR DEBUGGING
 
+    #request_parameters['location'] = '10011' # FOR DEBUGGING
+    #request_parameters['order'] = 'distance' # FOR DEBUGGING
+    #request_parameters['provider_slugs'] = 'livingsocial' # FOR DEBUGGING
+    #request_parameters['query'] = 'A Christmas Story, The Musical' # FOR DEBUGGING
+
     country_model = get_or_create_country()     # since there's only one country for all deals - no need to check it for each coupon
+    sqoot_output_deals = None
+    if indirectload:
+        sqoot_output_deals = json.loads(open("sqoot_output.json","r").read())
     for p in range(page_count):
         request_parameters['page'] = p + 1
         print '## Fetching page %s...\n' % (p + 1)
-        response_in_json = requests.get(SQOOT_API_URL + 'deals', params=request_parameters).json()
+        if indirectload:
+            response_in_json = sqoot_output_deals[p]
+        else:
+            response_in_json = requests.get(SQOOT_API_URL + 'deals', params=request_parameters).json()
         deals_data = response_in_json['deals']
 
         for deal_data in deals_data:
@@ -103,15 +125,44 @@ def refresh_sqoot_data():
 
 
 def savedown_sqoot_data():
-    # print 'Downloading content from %s' % url
-    # r = requests.get(url, stream=True)
-    # with open(filename, 'w') as f:
-    #     for c in r.iter_content(chunk_size=2048):
-    #         if c:
-    #             f.write(c)
-    #             f.flush()
-    # return open(filename, 'r')
-    print 'this option is work-in-progress'
+    request_parameters = {
+        'api_key': settings.SQOOT_PUBLIC_KEY,
+        # 'api_key': 'xhtihz',
+    }
+    print "\nSQOOT DATA LOAD STARTING..\n"
+
+    categories_array = requests.get(SQOOT_API_URL + 'categories', params=request_parameters).json()['categories']
+    categories_dict = establish_categories_dict(categories_array)
+    reorganized_categories_array = reorganize_categories_list(categories_array)
+    for category_dict in reorganized_categories_array:
+        get_or_create_category(category_dict, categories_dict)
+
+    # loading coupons and merchants
+    describe_section("CHECKING THE LATEST DEAL DATA FROM SQOOT..\n")
+    request_parameters['per_page'] = ITEMS_PER_PAGE
+    active_deal_count = requests.get(SQOOT_API_URL + 'deals', params=request_parameters).json()['query']['total']
+    page_count = int(math.ceil(active_deal_count / float(request_parameters['per_page'])))
+
+    print '%s deals detected, estimating %s pages to iterate\n' % (active_deal_count, page_count)
+
+    describe_section("STARTING TO DOWNLOAD SQOOT DEALS..\n")
+    request_parameters['location'] = '10011' # FOR DEBUGGING
+    request_parameters['order'] = 'distance' # FOR DEBUGGING
+    # request_parameters['provider_slugs'] = 'scorebig' # FOR DEBUGGING
+    # request_parameters['query'] = 'The Theater at Madison Square Garden' # FOR DEBUGGING
+
+    country_model = get_or_create_country()     # since there's only one country for all deals - no need to check it for each coupon
+    sqoot_file = open("sqoot_output.json", "w")
+    sqoot_file.write("[")
+    for p in range(page_count):
+        request_parameters['page'] = p + 1
+        print '## Fetching page %s...\n' % (p + 1)
+        response_in_json = requests.get(SQOOT_API_URL + 'deals', params=request_parameters).json()
+        sqoot_file.write(json.dumps(response_in_json))
+        sqoot_file.write(",")
+    sqoot_file.write("]")
+    sqoot_file.flush()
+    sqoot_file.close()
 
 #############################################################################################################
 #
@@ -296,7 +347,7 @@ def get_or_create_coupon(each_deal_data_dict, merchant_model, category_model, de
 
 def check_and_mark_duplicate(coupon_model):
     # other_coupons_from_this_merchant = Coupon.all_objects.filter(merchant__ref_id=coupon_model.merchant.ref_id)
-    other_coupons_from_this_merchant = Coupon.objects.filter(merchant__ref_id=coupon_model.merchant.ref_id).exclude(ref_id=coupon_model.ref_id)
+    other_coupons_from_this_merchant = Coupon.objects.filter(merchant=coupon_model.merchant).exclude(ref_id=coupon_model.ref_id)
     for c in other_coupons_from_this_merchant:
         info_match_count = 0
         info_match_count += 1 if coupon_model.description == c.description else 0
@@ -327,6 +378,7 @@ def check_and_mark_duplicate(coupon_model):
             coupon_model.related_deal = c
             coupon_model.save()
 
+    coupon_model.save()
 #############################################################################################################
 #
 # Helper Methods - Formatting
