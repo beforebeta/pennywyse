@@ -91,8 +91,8 @@ class MobileResource(ModelResource):
             coupon_network = coupon.coupon_network
 
             related_coupons = coupon.coupon_set.all()
+            deal_description = coupon.description
             if len(related_coupons) is not 0:
-                deal_description = coupon.description
                 deal_description = deal_description if coupon.description else ""
                 deal_description += "\n\nFind {} more similar deal(s) from this vendor on {}!:".format(len(related_coupons), coupon_network.name)
                 # for c in related_coupons[:5]:
@@ -100,43 +100,43 @@ class MobileResource(ModelResource):
 
             each_deal = {'deal':
                 {
-                    # 'id':                   int(coupon.ref_id),
-                    # 'title':                coupon.embedly_title,
+                    'id':                   int(coupon.ref_id),
+                    'title':                coupon.embedly_title,
                     'short_title':          coupon.embedly_description,
                     'description':          deal_description,
-                    # 'fine_print':           coupon.restrictions,
-                    # 'number_sold':          None,
-                    # 'url':                  coupon.link,
-                    # 'untracked_url':        coupon.directlink,
-                    # 'price':                coupon.price,
-                    # 'value':                coupon.listprice,
-                    # 'discount_amount':      coupon.discount,
-                    # 'discount_percentage':  float(coupon.percent) / 100,
-                    # 'commission':           None,
-                    # 'provider_name':        coupon_network.name,
+                    'fine_print':           coupon.restrictions,
+                    'number_sold':          None,
+                    'url':                  coupon.link,
+                    'untracked_url':        coupon.directlink,
+                    'price':                coupon.price,
+                    'value':                coupon.listprice,
+                    'discount_amount':      coupon.discount,
+                    'discount_percentage':  float(coupon.percent) / 100,
+                    'commission':           None,
+                    'provider_name':        coupon_network.name,
                     'provider_slug':        coupon_network.code,
-                    # 'category_name':        ', '.join([c.name for c in coupon.categories.all()]),
-                    # 'category_slug':        ', '.join([c.code for c in coupon.categories.all()]),
-                    # 'image_url':            coupon.embedly_image_url,
-                    # 'online':               coupon.online,
-                    # 'expires_at':           coupon.end,
-                    # 'created_at':           coupon.start,
-                    # 'updated_at':           coupon.lastupdated,
+                    'category_name':        ', '.join([c.name for c in coupon.categories.all()]),
+                    'category_slug':        ', '.join([c.code for c in coupon.categories.all()]),
+                    'image_url':            coupon.embedly_image_url,
+                    'online':               coupon.online,
+                    'expires_at':           coupon.end,
+                    'created_at':           coupon.start,
+                    'updated_at':           coupon.lastupdated,
                     'is_duplicate':         coupon.is_duplicate,
-                    # 'merchant': {
+                    'merchant': {
                         'id':               int(merchant.ref_id),
-                        # 'name':             merchant.name,
-                    #     'address':          merchant_location.address,
-                    #     'locality':         merchant_location.locality,
-                    #     'region':           merchant_location.region,
-                    #     'postal_code':      merchant_location.postal_code,
-                    #     'country':          "United States",
-                    #     'country_code':     "US",
-                    #     'latitude':         merchant_location.geometry.y,
-                    #     'longitude':        merchant_location.geometry.x,
+                        'name':             merchant.name,
+                        'address':          merchant_location.address,
+                        'locality':         merchant_location.locality,
+                        'region':           merchant_location.region,
+                        'postal_code':      merchant_location.postal_code,
+                        'country':          "United States",
+                        'country_code':     "US",
+                        'latitude':         merchant_location.geometry.y,
+                        'longitude':        merchant_location.geometry.x,
                         'dist_to_user_mi':  dist_to_user,
-                    #     'url':              merchant.link,
-                    # }
+                        'url':              merchant.link,
+                    }
                 }
             }
             deals.append(each_deal)
@@ -167,6 +167,7 @@ class MobileResource(ModelResource):
 
     def localinfo_return_response(self, request, **kwargs):
         self.method_check(request, allowed=['get'])
+        self.create_localinfo_index_if_doesnt_exist()
 
         params_dict = request.GET
         try:
