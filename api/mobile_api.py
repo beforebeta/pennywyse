@@ -47,7 +47,8 @@ class MobileResource(ModelResource):
 
         radius = D(mi=float(params_dict['radius'])) if 'radius' in params_keys else D(mi=10)
         user_pnt = Point(lng, lat)
-        sqs = SearchQuerySet().filter(django_ct='core.coupon', coupon_source='sqoot', online=False, is_duplicate=False).dwithin('merchant_location', user_pnt, radius).distance('merchant_location', user_pnt).order_by('distance')
+        # sqs = SearchQuerySet().filter(django_ct='core.coupon', coupon_source='sqoot', online=False, is_duplicate=False).dwithin('merchant_location', user_pnt, radius).distance('merchant_location', user_pnt).order_by('distance')
+        sqs = SearchQuerySet().filter(django_ct='core.coupon', coupon_source='sqoot', online=False).dwithin('merchant_location', user_pnt, radius).distance('merchant_location', user_pnt).order_by('distance')
 
         if 'query' in params_keys:
             query = params_dict['query']
@@ -90,17 +91,17 @@ class MobileResource(ModelResource):
             dist_to_user = geopy_distance((user_pnt.y, user_pnt.x), (merchant_location.geometry.y, merchant_location.geometry.x)).miles
             coupon_network = coupon.coupon_network
 
+            deal_description = coupon.description
             related_coupons = coupon.coupon_set.all()
             if len(related_coupons) is not 0:
-                deal_description = coupon.description
                 deal_description = deal_description if coupon.description else ""
-                deal_description += "\n\nFind {} more similar deal(s) from this vendor on {}!:".format(len(related_coupons), coupon_network.name)
+                deal_description += "\n\nFind {} more similar deal(s) from this vendor on {}!".format(len(related_coupons), coupon_network.name)
                 # for c in related_coupons[:5]:
                 #     deal_description += c.embedly_title + "\n"
 
             each_deal = {'deal':
                 {
-                    # 'id':                   int(coupon.ref_id),
+                    'id':                   int(coupon.ref_id),
                     # 'title':                coupon.embedly_title,
                     'short_title':          coupon.embedly_description,
                     'description':          deal_description,
@@ -123,7 +124,7 @@ class MobileResource(ModelResource):
                     # 'created_at':           coupon.start,
                     # 'updated_at':           coupon.lastupdated,
                     'is_duplicate':         coupon.is_duplicate,
-                    # 'merchant': {
+                    'merchant': {
                         'id':               int(merchant.ref_id),
                         # 'name':             merchant.name,
                     #     'address':          merchant_location.address,
@@ -136,7 +137,7 @@ class MobileResource(ModelResource):
                     #     'longitude':        merchant_location.geometry.x,
                         'dist_to_user_mi':  dist_to_user,
                     #     'url':              merchant.link,
-                    # }
+                    }
                 }
             }
             deals.append(each_deal)
@@ -208,6 +209,7 @@ class MobileResource(ModelResource):
             }
         }
 
+        self.create_localinfo_index_if_doesnt_exist()
         res = self.es.search(index="localinfo", doc_type='populars', body=filters)
         popular_category_list_raw = res['facets']['search_category']['terms']
         popular_nearby_list_raw = res['facets']['search_keyword']['terms']
