@@ -146,7 +146,6 @@ def savedown_sqoot_data():
     # request_parameters['provider_slugs'] = 'scorebig' # FOR DEBUGGING
     # request_parameters['query'] = 'The Theater at Madison Square Garden' # FOR DEBUGGING
 
-    country_model = get_or_create_country()     # since there's only one country for all deals - no need to check it for each coupon
     sqoot_file = open("sqoot_output.json", "w")
     sqoot_file.write("[")
     for p in range(page_count):
