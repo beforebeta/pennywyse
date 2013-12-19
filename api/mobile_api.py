@@ -1,5 +1,6 @@
 import string
 import random
+from datetime import datetime
 
 from tastypie.resources import ModelResource
 # from geopy import geocoders
@@ -14,7 +15,6 @@ from core.models import Coupon, Category
 class MobileResource(ModelResource):
 
     def __init__(self, *args, **kwargs):
-        # super(MobileResource, self).save(*args, **kwargs) # didn't work
         super(MobileResource, self).__init__()
         self.es = Elasticsearch()
         self.available_categories_list = [c.name for c in Category.objects.all()]
@@ -47,8 +47,7 @@ class MobileResource(ModelResource):
 
         radius = D(mi=float(params_dict['radius'])) if 'radius' in params_keys else D(mi=10)
         user_pnt = Point(lng, lat)
-        # sqs = SearchQuerySet().filter(django_ct='core.coupon', coupon_source='sqoot', online=False, is_duplicate=False).dwithin('merchant_location', user_pnt, radius).distance('merchant_location', user_pnt).order_by('distance')
-        sqs = SearchQuerySet().filter(django_ct='core.coupon', coupon_source='sqoot', online=False).dwithin('merchant_location', user_pnt, radius).distance('merchant_location', user_pnt).order_by('distance')
+        sqs = SearchQuerySet().filter(django_ct='core.coupon', coupon_source='sqoot', online=False, is_duplicate=False, end__gt=datetime.now()).dwithin('merchant_location', user_pnt, radius).distance('merchant_location', user_pnt).order_by('distance')
 
         if 'query' in params_keys:
             query = params_dict['query']
@@ -93,12 +92,9 @@ class MobileResource(ModelResource):
 
             deal_description = coupon.description
             related_coupons = coupon.coupon_set.all()
-            deal_description = coupon.description
             if len(related_coupons) is not 0:
                 deal_description = deal_description if coupon.description else ""
                 deal_description += "\n\nFind {} more similar deal(s) from this vendor on {}!".format(len(related_coupons), coupon_network.name)
-                # for c in related_coupons[:5]:
-                #     deal_description += c.embedly_title + "\n"
 
             each_deal = {'deal':
                 {
@@ -211,7 +207,6 @@ class MobileResource(ModelResource):
             }
         }
 
-        self.create_localinfo_index_if_doesnt_exist()
         res = self.es.search(index="localinfo", doc_type='populars', body=filters)
         popular_category_list_raw = res['facets']['search_category']['terms']
         popular_nearby_list_raw = res['facets']['search_keyword']['terms']
