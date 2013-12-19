@@ -90,53 +90,53 @@ class MobileResource(ModelResource):
             dist_to_user = geopy_distance((user_pnt.y, user_pnt.x), (merchant_location.geometry.y, merchant_location.geometry.x)).miles
             coupon_network = coupon.coupon_network
 
-            deal_description = coupon.description
             related_coupons = coupon.coupon_set.all()
             if len(related_coupons) is not 0:
+                deal_description = coupon.description
                 deal_description = deal_description if coupon.description else ""
-                deal_description += "\nFind More Deals From This Vendor on {}:\n".format(coupon_network.name)
-                for c in related_coupons[:5]:
-                    deal_description += c.embedly_title + "\n"
+                deal_description += "\n\nFind {} more similar deal(s) from this vendor on {}!:".format(len(related_coupons), coupon_network.name)
+                # for c in related_coupons[:5]:
+                #     deal_description += c.embedly_title + "\n"
 
             each_deal = {'deal':
                 {
-                    'id':                   int(coupon.ref_id),
-                    'title':                coupon.embedly_title,
+                    # 'id':                   int(coupon.ref_id),
+                    # 'title':                coupon.embedly_title,
                     'short_title':          coupon.embedly_description,
                     'description':          deal_description,
-                    'fine_print':           coupon.restrictions,
-                    'number_sold':          None,
-                    'url':                  coupon.link,
-                    'untracked_url':        coupon.directlink,
-                    'price':                coupon.price,
-                    'value':                coupon.listprice,
-                    'discount_amount':      coupon.discount,
-                    'discount_percentage':  float(coupon.percent) / 100,
-                    'commission':           None,
-                    'provider_name':        coupon_network.name,
+                    # 'fine_print':           coupon.restrictions,
+                    # 'number_sold':          None,
+                    # 'url':                  coupon.link,
+                    # 'untracked_url':        coupon.directlink,
+                    # 'price':                coupon.price,
+                    # 'value':                coupon.listprice,
+                    # 'discount_amount':      coupon.discount,
+                    # 'discount_percentage':  float(coupon.percent) / 100,
+                    # 'commission':           None,
+                    # 'provider_name':        coupon_network.name,
                     'provider_slug':        coupon_network.code,
-                    'category_name':        ', '.join([c.name for c in coupon.categories.all()]),
-                    'category_slug':        ', '.join([c.code for c in coupon.categories.all()]),
-                    'image_url':            coupon.embedly_image_url,
-                    'online':               coupon.online,
-                    'expires_at':           coupon.end,
-                    'created_at':           coupon.start,
-                    'updated_at':           coupon.lastupdated,
+                    # 'category_name':        ', '.join([c.name for c in coupon.categories.all()]),
+                    # 'category_slug':        ', '.join([c.code for c in coupon.categories.all()]),
+                    # 'image_url':            coupon.embedly_image_url,
+                    # 'online':               coupon.online,
+                    # 'expires_at':           coupon.end,
+                    # 'created_at':           coupon.start,
+                    # 'updated_at':           coupon.lastupdated,
                     'is_duplicate':         coupon.is_duplicate,
-                    'merchant': {
+                    # 'merchant': {
                         'id':               int(merchant.ref_id),
-                        'name':             merchant.name,
-                        'address':          merchant_location.address,
-                        'locality':         merchant_location.locality,
-                        'region':           merchant_location.region,
-                        'postal_code':      merchant_location.postal_code,
-                        'country':          "United States",
-                        'country_code':     "US",
-                        'latitude':         merchant_location.geometry.y,
-                        'longitude':        merchant_location.geometry.x,
+                        # 'name':             merchant.name,
+                    #     'address':          merchant_location.address,
+                    #     'locality':         merchant_location.locality,
+                    #     'region':           merchant_location.region,
+                    #     'postal_code':      merchant_location.postal_code,
+                    #     'country':          "United States",
+                    #     'country_code':     "US",
+                    #     'latitude':         merchant_location.geometry.y,
+                    #     'longitude':        merchant_location.geometry.x,
                         'dist_to_user_mi':  dist_to_user,
-                        'url':              merchant.link,
-                    }
+                    #     'url':              merchant.link,
+                    # }
                 }
             }
             deals.append(each_deal)
@@ -150,7 +150,7 @@ class MobileResource(ModelResource):
                  'latitude':            lat,
                  'longitude':           lng,
             },
-            'radius':                   float(params_dict['radius']),
+            'radius':                   float(params_dict['radius']) if 'radius' in params_keys else 10,
             'online':                   False,
             'category_slugs':           category_slugs_list if 'category_slugs' in params_keys else None,
             'provider_slugs':           provider_slugs_list if 'provider_slugs' in params_keys else None,
@@ -226,9 +226,11 @@ class MobileResource(ModelResource):
         }
 
         # Always show 'popular categories' based on either user search history or random suggestions.
-        max_categories = 6
-        for c in popular_category_list_raw[:max_categories]:
-            if c['count'] < 5:
+        # Always include 2 randomly selected categories to avoid self-enforcing popular categories
+        max_total_categories = 6
+        max_searched_categories = 4
+        for c in popular_category_list_raw[:max_searched_categories]:
+            if c['count'] < 100:
                 break
             else:
                 popular_category = self.return_popular_something_insert(c['term'])
@@ -236,11 +238,10 @@ class MobileResource(ModelResource):
 
         while True:
             popular_categories_so_far = [c['name'] for c in popular_category_sub_structure['list']]
-            if len(popular_categories_so_far) >= max_categories:
+            if len(popular_categories_so_far) >= max_total_categories:
                 break
             random_pick = random.sample(self.sanitized_categories_list, 1)[0]
             if random_pick not in popular_categories_so_far:
-                 # popular_category_sub_structure['list']
                  popular_category = self.return_popular_something_insert(random_pick)
                  popular_category_sub_structure['list'].append(popular_category)
         base_response['search_categories'].append(popular_category_sub_structure)
@@ -249,7 +250,7 @@ class MobileResource(ModelResource):
         # 'nearby' and 'keyword' used interchangeably.
         max_nearbys = 5
         for kw in popular_nearby_list_raw[:max_nearbys]:
-            if kw['count'] < 5:
+            if kw['count'] < 100:
                 break
             else:
                 popular_nearby = self.return_popular_something_insert(kw['term'])
