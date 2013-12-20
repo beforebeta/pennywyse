@@ -234,20 +234,6 @@ hr {
 	margin-right: 10px;
 	color: #fff;
 }
-.more-categories {
-	margin-top: 10px;
-	height: 25px;
-	line-height: 25px;
-	font-size: 10pt;
-	color: #76ba9b !important;
-	text-align: center;
-	width: 100% !important;
-}
-.more-categories a {
-	color: #76ba9b !important;
-	margin-left: 5px;
-	margin-right: 5px;
-}
 .similar-stores h4 {
 	font-weight: 700 !important;
 	font-size: 14pt !important;
@@ -500,11 +486,9 @@ hr {
 	text-decoration: none;
 }
 .menu-item:hover {
-	background-color: #595959;
 	display: block !important;
-}
-.menu-item:hover a {
-	color: #fff;
+	border-bottom: #ef5b5b 4px solid;
+	margin-bottom: -4px;
 }
 .menu-item a {
 	color: #858585;
@@ -608,16 +592,18 @@ hr {
 	color: #fff;
 }
 .dropdown-row {
-	background-color: #595959;
-	color: #fff;
+	background-color: #fff;
 	padding-top: 10px;
-	margin-top: -5px;
+	margin-top: 12px;
 	z-index: 2;
-}
-.dropdown-row hr {
-	border-top: 1px solid #737373 !important;
-	clear: both;
-	margin-bottom: 0px !important;
+	position: absolute;
+	width: 100% !important;
+	margin: 0 auto !important;
+	left: 0px !important;
+	border-top: 1px #858585 !important;
+	-webkit-box-shadow: 0px 3px 3px 3px rgba(0,0,0,0.07);
+	-moz-box-shadow: 0px 3px 3px 0px rgba(0,0,0,0.07);
+	box-shadow: 0px 3px 3px 0px rgba(0,0,0,0.07);
 }
 .category-label {
 	text-transform: uppercase;
@@ -634,11 +620,9 @@ hr {
 	width: 140px;
 }
 .more-categories {
-	color: #fff !important;
 	width: 100%;
 	text-align: right;
 	text-transform: uppercase;
-	font-weight: 700;
 	padding-right: 10px;
 	margin-bottom: 10px;
 }
@@ -650,33 +634,6 @@ hr {
 }
 .local-row {
 	display: none;
-	position: absolute;
-	margin-left: -585px;
-	margin-top: 0px !important;
-}
-.local-search {
-	width: 355px !important;
-	height: 33px !important;
-	line-height: 33px !important;
-	color: #fff !important;
-	font-weight: 400;
-	font-size: 10pt !important;
-	background-color: #787877;
-	padding: 10px;
-	outline: none !important;
-	border: none;
-	margin-right: 10px;
-	border-radius: 2px;
-	float: left;
-}
-.local-search::-webkit-input-placeholder {
-	color: #fff !important;
-}
-.local-search:-moz-placeholder {
-	color: #fff !important;
-}
-.local-search:-ms-input-placeholder {
-	color: #fff !important;
 }
 .local-search-container {
 	margin: 0 auto;
@@ -711,18 +668,13 @@ hr {
 }
 .stores-row {
 	display: none;
-	position: absolute;
-	margin-left: -44px;
-	margin-top: 0px !important;
+	
 }
 .merchant-left {
 	width: 120px;
 }
 .groceries-row {
 	display: none;
-	position: absolute;
-	margin-left: -406px;
-	margin-top: 0px !important;
 }
 .merchant-logo, .coupon-container {
 	-webkit-box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.15);

@@ -214,6 +214,7 @@ function render_coupons(data, reset_items) {
 	}
 }
 function init_waypoint() {
+	$('.more-coupons').waypoint('destroy');
 	$('.more-coupons').waypoint(function(direction) {
 		if (direction === 'down') {
 			fetch_items(reset_items=false);
@@ -283,14 +284,9 @@ function fetch_items(reset_items) {
 }
 function init_sticky_header() {
 	$('.prescroll-header').waypoint({
-		  context: window,
-		  continuous: true,
-		  enabled: true,
-		  horizontal: false,
 		  offset: function() {
 		    return -$(this).height() + 55;
 		  },
-		  triggerOnce: false,
 		  handler: function(direction) {
 				if (direction === 'down') {
 					$('.header').removeClass('hidden');
