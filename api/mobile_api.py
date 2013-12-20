@@ -47,8 +47,8 @@ class MobileResource(ModelResource):
 
         radius = D(mi=float(params_dict['radius'])) if 'radius' in params_keys else D(mi=10)
         user_pnt = Point(lng, lat)
-        sqs = SearchQuerySet().using('mobile_api').filter(django_ct='core.coupon', coupon_source='sqoot', 
-                                                          online=False, is_duplicate=False, end__gt=datetime.now())\
+        sqs = SearchQuerySet().using('mobile_api').filter(django_ct='core.coupon', online=False, 
+                                                          is_duplicate=False, end__gt=datetime.now())\
                                                 .dwithin('merchant_location', user_pnt, radius).distance('merchant_location', user_pnt)\
                                                 .order_by('distance')
 
