@@ -79,8 +79,6 @@ def refresh_sqoot_data(indirectload=False):
     describe_section("STARTING TO DOWNLOAD SQOOT DEALS..\n")
     #request_parameters['location'] = '10011' # FOR DEBUGGING
     #request_parameters['order'] = 'distance' # FOR DEBUGGING
-    #request_parameters['provider_slugs'] = 'livingsocial' # FOR DEBUGGING
-    #request_parameters['query'] = 'A Christmas Story, The Musical' # FOR DEBUGGING
 
     country_model = get_or_create_country()     # since there's only one country for all deals - no need to check it for each coupon
     sqoot_output_deals = None
@@ -122,7 +120,6 @@ def refresh_sqoot_data(indirectload=False):
 def savedown_sqoot_data():
     request_parameters = {
         'api_key': settings.SQOOT_PUBLIC_KEY,
-        # 'api_key': 'xhtihz',
     }
     print "\nSQOOT DATA LOAD STARTING..\n"
 
@@ -141,10 +138,6 @@ def savedown_sqoot_data():
     print '%s deals detected, estimating %s pages to iterate\n' % (active_deal_count, page_count)
 
     describe_section("STARTING TO DOWNLOAD SQOOT DEALS..\n")
-    request_parameters['location'] = '10011' # FOR DEBUGGING
-    request_parameters['order'] = 'distance' # FOR DEBUGGING
-    # request_parameters['provider_slugs'] = 'scorebig' # FOR DEBUGGING
-    # request_parameters['query'] = 'The Theater at Madison Square Garden' # FOR DEBUGGING
 
     sqoot_file = open("sqoot_output.json", "w")
     sqoot_file.write("[")
@@ -372,7 +365,6 @@ def check_and_mark_duplicate(coupon_model):
             coupon_model.related_deal = c
             coupon_model.save()
 
-    coupon_model.save()
 #############################################################################################################
 #
 # Helper Methods - Formatting
