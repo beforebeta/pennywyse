@@ -65,8 +65,8 @@ class Category(models.Model):
     date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
     last_modified   = models.DateTimeField(default=datetime.datetime.now(), auto_now=True, auto_now_add=True)
 
-    # objects = CategoryManager()
-    # all_objects = models.Manager()
+    objects = CategoryManager()
+    all_objects = models.Manager()
 
     def save(self, *args, **kwargs):
         if not self.image:
@@ -499,9 +499,9 @@ class Coupon(models.Model):
     date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
     last_modified   = models.DateTimeField(default=datetime.datetime.now(), auto_now=True, auto_now_add=True)
 
-    # objects = CouponManager()
-    # active_objects = ActiveCouponManager()
-    # all_objects = models.Manager()
+    objects = CouponManager()
+    active_objects = ActiveCouponManager()
+    all_objects = models.Manager()
 
     def get_image(self):
         if self.embedly_image_url:
