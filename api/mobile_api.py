@@ -47,11 +47,14 @@ class MobileResource(ModelResource):
 
         radius = D(mi=float(params_dict['radius'])) if 'radius' in params_keys else D(mi=10)
         user_pnt = Point(lng, lat)
-        sqs = SearchQuerySet().filter(django_ct='core.coupon', coupon_source='sqoot', online=False, is_duplicate=False, end__gt=datetime.now()).dwithin('merchant_location', user_pnt, radius).distance('merchant_location', user_pnt).order_by('distance')
+        sqs = SearchQuerySet().using('mobile_api').filter(django_ct='core.coupon', online=False, 
+                                                          is_duplicate=False, end__gt=datetime.now())\
+                                                .dwithin('merchant_location', user_pnt, radius).distance('merchant_location', user_pnt)\
+                                                .order_by('distance')
 
         if 'query' in params_keys:
             query = params_dict['query']
-            sqs_by_query = SearchQuerySet().filter(mobilequery=query)
+            sqs_by_query = SearchQuerySet().using('mobile_api').filter(mobilequery=query)
             sqs = sqs.__and__(sqs_by_query)
 
             # Prepare for 'localindex' api service
@@ -62,14 +65,14 @@ class MobileResource(ModelResource):
 
         if 'category_slugs' in params_keys:
             category_slugs_list = params_dict['category_slugs'].split(',')
-            sqs_by_category = SearchQuerySet()
+            sqs_by_category = SearchQuerySet().using('mobile_api')
             for c in category_slugs_list:
                 sqs_by_category = sqs_by_category.filter_or(category_slugs=c.strip())
             sqs = sqs.__and__(sqs_by_category)
 
         if 'provider_slugs' in params_keys:
             provider_slugs_list = params_dict['provider_slugs'].split(',')
-            sqs_by_provider = SearchQuerySet()
+            sqs_by_provider = SearchQuerySet().using('mobile_api')
             for p in provider_slugs_list:
                 sqs_by_provider = sqs_by_provider.filter_or(provider_slugs=p.strip())
             sqs = sqs.__and__(sqs_by_provider)
@@ -83,8 +86,7 @@ class MobileResource(ModelResource):
         deals = []
 
         for sqs_coupon_obj in sqs[start_point:end_point]:
-            # coupon = Coupon.all_objects.get(pk=int(sqs_coupon_obj.pk))
-            coupon = Coupon.objects.get(pk=int(sqs_coupon_obj.pk))
+            coupon = Coupon.all_objects.get(pk=int(sqs_coupon_obj.pk))
             merchant = coupon.merchant
             merchant_location = coupon.merchant_location
             dist_to_user = geopy_distance((user_pnt.y, user_pnt.x), (merchant_location.geometry.y, merchant_location.geometry.x)).miles
@@ -241,8 +243,8 @@ class MobileResource(ModelResource):
                 break
             random_pick = random.sample(self.sanitized_categories_list, 1)[0]
             if random_pick not in popular_categories_so_far:
-                 popular_category = self.return_popular_something_insert(random_pick)
-                 popular_category_sub_structure['list'].append(popular_category)
+                popular_category = self.return_popular_something_insert(random_pick)
+                popular_category_sub_structure['list'].append(popular_category)
         base_response['search_categories'].append(popular_category_sub_structure)
 
         # Show 'popular nearby' based on user search history ONLY IF 100 or above history;

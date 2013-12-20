@@ -209,8 +209,7 @@ def get_or_create_category(each_deal_data_dict, categories_dict):
         return None
     parent_slug = categories_dict[category_slug]
     try:
-        # category_model = Category.all_objects.get(code=category_slug, ref_id_source='sqoot')
-        category_model = Category.objects.get(code=category_slug, ref_id_source='sqoot')
+        category_model = Category.all_objects.get(code=category_slug, ref_id_source='sqoot')
     except Category.DoesNotExist:
         category_model                    = Category()
         category_model.ref_id_source      = 'sqoot'
@@ -218,8 +217,7 @@ def get_or_create_category(each_deal_data_dict, categories_dict):
 
     if parent_slug:
         try:
-            # parent_category               = Category.all_objects.get(code=parent_slug, ref_id_source='sqoot')
-            parent_category               = Category.objects.get(code=parent_slug, ref_id_source='sqoot')
+            parent_category               = Category.all_objects.get(code=parent_slug, ref_id_source='sqoot')
             category_model.parent         = parent_category
         except Category.DoesNotExist:
             parent_category = Category(ref_id_source='sqoot', code=parent_slug)
@@ -291,8 +289,7 @@ def get_or_create_merchantlocation(merchant_data_dict, merchant_model, is_online
 def get_or_create_coupon(each_deal_data_dict, merchant_model, category_model, dealtype_model,
                          country_model, couponnetwork_model, merchantlocation_model):
     ref_id = each_deal_data_dict['id']
-    # coupon_model, created = Coupon.all_objects.get_or_create(ref_id=ref_id, ref_id_source='sqoot')
-    coupon_model, created = Coupon.objects.get_or_create(ref_id=ref_id, ref_id_source='sqoot')
+    coupon_model, created = Coupon.all_objects.get_or_create(ref_id=ref_id, ref_id_source='sqoot')
     if created:
         print 'Created coupon %s' % each_deal_data_dict['title']
         coupon_model.online              = each_deal_data_dict['online']
@@ -333,8 +330,7 @@ def get_or_create_coupon(each_deal_data_dict, merchant_model, category_model, de
     return coupon_model
 
 def check_and_mark_duplicate(coupon_model):
-    # other_coupons_from_this_merchant = Coupon.all_objects.filter(merchant__ref_id=coupon_model.merchant.ref_id)
-    other_coupons_from_this_merchant = Coupon.objects.filter(merchant=coupon_model.merchant).exclude(ref_id=coupon_model.ref_id)
+    other_coupons_from_this_merchant = Coupon.all_objects.filter(merchant__ref_id=coupon_model.merchant.ref_id)
     for c in other_coupons_from_this_merchant:
         info_match_count = 0
         info_match_count += 1 if coupon_model.description == c.description else 0
