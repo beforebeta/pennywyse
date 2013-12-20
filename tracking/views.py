@@ -38,7 +38,7 @@ def _remove_skimlinks(skimlinked_url):
         return skimlinked_url
 
 @_ignore_bots
-def log_click_track(request):
+def log_click_track(request, coupon=None):
     try:
         referer = utils.u_clean(request.META.get('HTTP_REFERER', 'unknown')[:255])
         clicked_link = request.path
@@ -55,15 +55,9 @@ def log_click_track(request):
         merchant=None
 
         if "/coupon/" in clicked_link:
-            #skimlinks will assume the source url to be the /coupon/ url
-            if clicked_link.endswith("/"):
-                coupon_id = clicked_link.split("/")[-2] #assumes trailing '/'
-            else:
-                coupon_id = clicked_link.split("/")[-1]
             source_url = clicked_link
-            coupon = Coupon.objects.get(id=int(coupon_id))
             try:
-                merchant = Merchant.objects.get(id=coupon.merchant.id)
+                merchant = Merchant.objects.get(id=coupon.merchant_id)
             except:
                 merchant = None
             target_url = coupon.get_retailer_link()
