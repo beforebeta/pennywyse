@@ -1,4 +1,5 @@
 var page = 2;
+var mpage = 2;
 var sorting = '';
 var category_ids = new Array();
 var coupon_types = new Array();
@@ -94,16 +95,28 @@ $(function() {
 		fetch_items(reset_items=true);
 		init_waypoint();
 	});
-	/*$('.search-merchants-container').jCarouselLite({
-	    btnNext: '.next',
-  		btnPrev: '.prev',
-       	autoCss: false,
-	  	vertical: true,
-	  	visible: 5,
-	  	start: 0,
-	  	scroll: 1,
-	});
-	*/
+	if ($('.search-merchants-container').length > 0) {
+		var citems = $('.search-carousel').find('li').length;
+		var start = citems - 5;
+		var limit = citems - 1;
+		if ($('.search-carousel').find('li').length > 5) {
+			$('.search-carousel').jcarousel({
+			  	vertical: true
+			});
+			$('.prev').click(function() {
+				$('.search-carousel').jcarousel('scroll', '+=1');
+			});
+			$('.next').click(function() {
+				$('.search-carousel').jcarousel('scroll', '-=1');
+			});
+			$('.search-carousel').on('jcarousel:visiblein', 'li:eq('+limit+')', function(event, carousel) {
+			    fetch_merchants();
+			});
+		}
+		else {
+			$('.prev').hide();
+		}
+	}
 });
 function select_categories(criteria) {
 	if (criteria == 'all') {
@@ -225,6 +238,23 @@ function render_coupons(data, reset_items) {
 		$('.coupons').append(html);
 	}
 }
+function render_merchants(data) {
+	template = '{{#items}} \
+						<li class="search-merchant-container newmerchant"> \
+							<a href="{{ local_path }}"><img src="{{ image }}"></a> \
+						</li> \
+				{{/items}}';
+	html = Mustache.to_html(template, data);
+	$('.search-merchant-container').last().after(html);
+	$('.search-carousel').jcarousel('reload', {
+    	vertical: true,
+	});
+	var limit = $('.search-carousel').find('li').length - 1;
+	$('.search-carousel').off('jcarousel:visiblein');
+	$('.search-carousel').on('jcarousel:visiblein', 'li:eq('+limit+')', function(event, carousel) {
+		fetch_merchants();
+	});
+}
 function init_waypoint() {
 	$('.more-coupons').waypoint('destroy');
 	$('.more-coupons').waypoint(function(direction) {
@@ -292,6 +322,34 @@ function fetch_items(reset_items) {
 			page += 1;
 			init_waypoint();
 		}
+	}, 'json');
+}
+function fetch_merchants() {
+	var url = window.location.pathname;
+	var parameters = new Array();
+	var i = 0;
+	var q = $('input[name=q]').val();
+	if (mpage > 1) { 
+		url += 'page/' + mpage + '/';
+	}
+	if (q) {
+		parameters['q'] = q;
+	}
+	parameters['fetch_merchants'] = true;
+	for (key in parameters) {
+		var value = parameters[key];
+		if (i == 0) {
+			url += '?';
+		}
+		else {
+			url += '&';
+		}
+			url += key + '=' + value;
+		i++;
+	}
+	$.get(url, function(data) {
+		render_merchants(data);
+		mpage += 1;
 	}, 'json');
 }
 function init_sticky_header() {

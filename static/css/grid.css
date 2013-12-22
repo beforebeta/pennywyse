@@ -348,13 +348,27 @@ hr {
 	line-height: 95px;
 	background-color: #f3f3f3;
 	margin: 0px auto !important;
-	margin-bottom: 10px !important;
+	margin-bottom: 15px !important;
 	list-style: none;
 	overflow: hidden;
 }
-.search-merchants-list {
-	height: 560px !important;
+.search-carousel{
 	overflow: hidden;
+	margin-top: 10px;
+	margin-bottom: 10px;
+    position: relative;
+	height: 550px;
+
+}
+.search-carousel ul {
+    height: 20000em;
+    position: relative;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.search-carousel li {
+    height: 100px;
 }
 .coupon-banner {
 	background-color: #ffffff;
