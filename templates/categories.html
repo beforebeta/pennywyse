@@ -18,8 +18,10 @@
 							<div class="featured-merchants-header">Featured Categories</div>
 							<div class="featured-merchants-list featured-categories">
 								{% for category in featured_categories %}
-									<div>
-										<a href="{% url 'web.views.main.category' category_code=category.code %}">{{ category.name }}</a>
+									<div class="featured-category">
+										<div class="featured-category-container">
+											<a href="{% url 'web.views.main.category' category_code=category.code %}">{{ category.name }}</a>
+										</div>
 									</div>
 									{% if forloop.counter == 6 %}
 			                       		<hr>

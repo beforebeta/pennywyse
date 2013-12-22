@@ -808,8 +808,9 @@ hr {
 }
 .featured-merchants-list div {
 	width: 150px;
+	height:95px;
 	line-height: 95px;
-	margin: 0px auto !important;
+	margin: 0px auto;
 	margin-bottom: 10px !important;
 	list-style: none;
 	overflow: hidden;
@@ -819,15 +820,24 @@ hr {
 	max-width: 150px;
 	max-height: 95px;
 }
-.featured-categories div {
+.featured-category {
 	text-align: center;
-	width: 150px !important;
+	width: 140px !important;
+	margin-right: 10px !important;
 }
-.featured-categories a {
-	background-color: #d9d9d7;
+.featured-category-container {
+	background-color: #ebebe8;
 	border-radius: 2px;
-	padding: 5px;
-	width: 150px !important;
+	color: #423d3e;
+	margin-top: 30px !important;
+	margin-right: 5px;
+	height: 30px !Important;
+	line-height: 30px !important;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.featured-category-container a{
 	color: #423d3e;
 }
 .prescroll-header {
