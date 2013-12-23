@@ -246,8 +246,8 @@ def privacy(request):
 def categories(request):
     description = "Coupon Categories | {0}".format(base_description)
     context={
-        "categories": Category.objects.filter(parent__isnull=True, is_featured=False).order_by('name'),
-        "featured_categories": Category.objects.filter(parent__isnull=True, is_featured=True).order_by('name'),
+        "categories": Category.objects.filter(ref_id_source__isnull=True, parent__isnull=True, is_featured=False).order_by('name'),
+        "featured_categories": Category.objects.filter(ref_id_source__isnull=True, parent__isnull=True, is_featured=True).order_by('name'),
         "page_description": description,
         "page_title": description,
         "og_title": "Coupon Categories",
@@ -264,7 +264,7 @@ def categories(request):
 @cache_page(60 * 60 * 24)
 def category(request, category_code, current_page=1, category_ids=-1):
     current_page = int(current_page)
-    category = Category.objects.get(code=category_code)
+    category = Category.objects.get(code=category_code, ref_id_source__isnull=True)
 
     if category_ids == -1:
         all_categories = [str(x["categories__id"]) for x in category.get_active_coupons().values("categories__id") if x["categories__id"]]
@@ -361,7 +361,7 @@ def stores(request, page='#'):
     stores = Merchant.objects.filter(**filters)
     context={
         "stores": stores,
-        "categories": Category.objects.filter(parent__isnull=True).order_by('name'),
+        "categories": Category.objects.filter(parent__isnull=True, ref_id_source__isnull=True).order_by('name'),
         "category": int(category) if category else None,
         "page_description": description,
         "page_title": description,
