@@ -3,7 +3,6 @@ import random
 from datetime import datetime
 
 from tastypie.resources import ModelResource
-# from geopy import geocoders
 from geopy.distance import distance as geopy_distance
 from haystack.query import SearchQuerySet
 from haystack.utils.geo import Point, D
@@ -17,33 +16,26 @@ class MobileResource(ModelResource):
     def __init__(self, *args, **kwargs):
         super(MobileResource, self).__init__()
         self.es = Elasticsearch()
-        self.available_categories_list = [c.name for c in Category.objects.all()]
-        self.sanitized_categories_list = [c for c in self.available_categories_list if self.check_if_should_exclude(c)]
+        self.available_categories_list = [c.name for c in Category.objects.filter(ref_id_source='sqoot').only('name').all()]
+        self.sanitized_categories_list = filter(self.check_if_should_exclude, self.available_categories_list)
+
 
     def deals_return_response(self, request, **kwargs):
         self.method_check(request, allowed=['get'])
 
         params_dict = request.GET
         params_keys = params_dict.keys()
-
-        try:
-            location_param = params_dict['location']
-            lat_lng_in_list = location_param.split(',')
-            lat = float(lat_lng_in_list[0])
-            lng = float(lat_lng_in_list[1])
-        except:
+        location_param = params_dict.get('location', None)
+        if not location_param:
             response = {
                 'error': {'message': "You must supply a valid user location information."}
             }
             return self.create_response(request, response)
 
-        try:
-            id_param = params_dict['id']
-        except:
-            response = {
-                'error': {'message': "You must supply a valid user uuid."}
-            }
-            return self.create_response(request, response)
+        lat_lng_in_list = location_param.split(',')
+        lat, lng = map(float, lat_lng_in_list)
+
+        id_param = params_dict.get('id', 'uuid')
 
         radius = D(mi=float(params_dict['radius'])) if 'radius' in params_keys else D(mi=10)
         user_pnt = Point(lng, lat)
@@ -77,26 +69,29 @@ class MobileResource(ModelResource):
                 sqs_by_provider = sqs_by_provider.filter_or(provider_slugs=p.strip())
             sqs = sqs.__and__(sqs_by_provider)
 
-        updated_after = params_dict['updated_after'] if 'updated_after' in params_keys else None
-        per_page = int(params_dict['per_page']) if 'per_page' in params_keys else 20
-        page = int(params_dict['page']) if 'page' in params_keys else 1
+        updated_after = params_dict.get('updated_after', None)
+        per_page = int(params_dict.get('per_page', 20))
+        page = int(params_dict.get('page', 1))
         start_point = (page - 1) * per_page
         end_point = page * per_page
 
         deals = []
 
-        for sqs_coupon_obj in sqs[start_point:end_point]:
-            coupon = Coupon.all_objects.get(pk=int(sqs_coupon_obj.pk))
+        coupon_ids = [int(sqs_coupon_obj.pk) for sqs_coupon_obj in sqs[start_point:end_point]]
+        coupons = Coupon.all_objects.filter(id__in=coupon_ids)
+
+        for coupon in coupons:
             merchant = coupon.merchant
             merchant_location = coupon.merchant_location
             dist_to_user = geopy_distance((user_pnt.y, user_pnt.x), (merchant_location.geometry.y, merchant_location.geometry.x)).miles
             coupon_network = coupon.coupon_network
 
             deal_description = coupon.description
-            related_coupons = coupon.coupon_set.all()
-            if len(related_coupons) is not 0:
+            related_coupons_count = Coupon.all_objects.filter(related_deal=coupon).count()
+            if related_coupons_count != 0:
                 deal_description = deal_description if coupon.description else ""
-                deal_description += "\n\nFind {} more similar deal(s) from this vendor on {}!".format(len(related_coupons), coupon_network.name)
+                deal_description += "\n\nFind {} more similar deal(s) from this vendor on {}!".format(related_coupons_count,
+                                                                                                      coupon_network.name)
 
             each_deal = {'deal':
                 {
@@ -208,7 +203,7 @@ class MobileResource(ModelResource):
                 }
             }
         }
-
+        print filters
         res = self.es.search(index="localinfo", doc_type='populars', body=filters)
         popular_category_list_raw = res['facets']['search_category']['terms']
         popular_nearby_list_raw = res['facets']['search_keyword']['terms']
@@ -301,8 +296,7 @@ class MobileResource(ModelResource):
         categories_to_exclude_list = ['Jewish', 'Gay', 'Special Interest']
         if category in categories_to_exclude_list:
             return False
-        else:
-            return True
+        return True
 
     def return_popular_something_insert(self, category_or_keyword):
         popular_something = {

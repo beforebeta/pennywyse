@@ -46,11 +46,6 @@ icon_url = "http://pushpenny.com/static/img/fbog.png"
 # Category
 #
 #######################################################################################################################
-class CategoryManager(models.Manager):
-    """Custom model manager, which excludes local categories."""
-
-    def get_query_set(self):
-        return super(CategoryManager, self).get_query_set().filter(ref_id_source__isnull=True)
 
 class Category(models.Model):
     ref_id          = models.CharField(max_length=255, db_index=True, blank=True, null=True, default='refid')
@@ -64,9 +59,6 @@ class Category(models.Model):
 
     date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
     last_modified   = models.DateTimeField(default=datetime.datetime.now(), auto_now=True, auto_now_add=True)
-
-    objects = CategoryManager()
-    all_objects = models.Manager()
 
     def save(self, *args, **kwargs):
         if not self.image:
