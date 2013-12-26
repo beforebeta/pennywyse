@@ -34,7 +34,6 @@ urlpatterns += patterns('web.views.main',
     url(r'^coupons/(?P<company_name>[a-zA-Z0-9-_]+)/page/(?P<current_page>[\d]+)/categories/(?P<category_ids>sh_[a-fA-F0-9]+)/$', 'coupons_for_company'),
     url(r'^coupons/(?P<company_name>[a-zA-Z0-9-_]+)/(?P<company_id>[\d]+)/page/(?P<current_page>[\d]+)/categories/(?P<category_ids>sh_[a-fA-F0-9]+)/$', 'coupons_for_company'),
 
-    url(r'^coupons/(?P<company_name>[a-zA-Z0-9-_]+)/(?P<coupon_label>[a-z0-9-_]+)/(?P<coupon_id>[\d]+)/$', 'open_coupon'),
     #do not kill old links:
     url(r'^coupon/(?P<company_name>[a-zA-Z0-9-_]+)/(?P<coupon_label>[a-z0-9-_]+)/(?P<coupon_id>[\d]+)/$', 'redirect_to_open_coupon'),
     url(r'^coupons/(?P<company_name>[a-zA-Z0-9-_]+)/(?P<coupon_label>[a-zA-Z0-9-_]+)/(?P<coupon_id>[\d]+)/ty/$', 'coupon_success_page'),
@@ -44,15 +43,13 @@ urlpatterns += patterns('web.views.main',
     url(r'^categories/$', 'categories'),
     url(r'^stores/(?P<page>[#a-zA-Z]+)/$', 'stores'),
     url(r'^stores/$', 'stores'),
+    url(r'^e/subscribe/$', 'email_subscribe'),
+    url(r'^o/(?P<coupon_id>[\d]+)/$', 'open_coupon'),
 
 # /blog/ is being served by WordPress
 #    url(r'^blog/', include('articles.urls')),
     url(r'^robots\.txt$', 'robots_txt'),
     url(r'^sitemap\.xml$', 'sitemap'),
-)
-
-urlpatterns += patterns('web.views.ajax',
-    url(r'^a/subscribe/$', 'ajax_subscribe'),
 )
 
 urlpatterns += patterns('tracking.views',
@@ -81,11 +78,6 @@ urlpatterns += patterns('websvcs.views.image',
     url(r'^s/image/(?P<image_url>.+)/(?P<height>[\d]+)x(?P<width>[\d]+)/$', 'image_resize'),
     url(r'^s/image/(?P<image_url>http.+)/$', 'image')
 )
-
-urlpatterns += patterns('websvcs.views.subscriptions',
-    url(r'^e/subscribe/$', 'email_subscribe')
-)
-
 ########################################################################################
 # API
 ########################################################################################

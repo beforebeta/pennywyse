@@ -12,6 +12,7 @@
 		<script type="text/javascript" src="/static/js/store.js"></script>
 		<script type="text/javascript" src="/static/js/mustache.js"></script>
 		<script type="text/javascript" src="/static/js/jquery.jcarousel-core.min.js"></script>
+		<script type="text/javascript" src="/static/js/jquery.form.js"></script>
 	</head>
 	<body>
 		<div class="header-container top-header sticky">
@@ -47,31 +48,53 @@
 			<div class="row">
 				<ul class="menu">
 					<li class="menu-item category-item">
-						<a href="#">Stores</a>
+						<a href="#">Top Coupons</a>
 						<ul class="row dropdown-row stores-row solid-bottom-shadow"><li>
-							<div class="main-row">
-								{% for merchant in top_merchants %}
-									{% if forloop.counter == 1 %}
-										<div class="category-container store-row">
-									{% endif %}
-									<a href="{% url 'web.views.main.coupons_for_company' company_name=merchant.name_slug company_id=merchant.id %}">{{ merchant.name }}</a><br>
-									{% if forloop.counter|divisibleby:"3" %}
-										<hr>
-									{% endif %}
-									{% if forloop.counter|divisibleby:"18" %}
-										</div><div class="category-container store-row">
-									{% endif %}
-									{% if forloop.last %}
+							<div class="main-row">	
+								<div class="top-coupon-types top-coupons">
+									<a href="#">Coupon Codes</a><br>
+									<a href="#">Free Shipping</a><br>
+									<a href="#">On Sale</a><br>
+									<a href="#">Groceries</a><br>
+									<a href="#">Printables</a><br>
+									<a href="#">Freebies</a><br>
+								</div>
+								<div class="top-coupons top-coupon">
+									<b>Most popular</b>
+									<div class="coupon-body">
+										<h1 class="short-description">{{ top_popular_coupon.short_desc }}</h1>
+										{{ top_popular_coupon.get_description }}<br>
+										<span class="ends">Ends {{ top_popular_coupon.end|date:"m/d/y" }}</span>
+										<div class="description">
 										</div>
-									{% endif %}
-
-								{% endfor %}
-									<hr>
-								<div class="more-categories">
-									<a href="{% url 'web.views.main.stores' %}">See all stores</a> &#187;
+									</div>
+								</div>
+								<div class="top-coupons featured-coupons">
+									<b>Featured coupons</b>
+									{% for coupon in top_featured_coupons %}
+										<div class="top-featured-coupon {% if foorloop.first %}first-coupon{% elif forloop.last %}last-coupon{% endif %}">
+											<div class="featured-image">
+												<img src="{{ coupon.merchant.get_image }}">
+											</div>
+											<div class="featured-description">
+											{{ coupon.get_description }}
+											</div><br clear="both">
+										</div>
+									{% endfor %}
+								</div>
+								<div class="top-coupons popular-merchants">
+									<b>Stores</b>
+									<ul>
+										{% for merchant in top_merchants %}
+											<li>
+												<a href="{{ merchant.local_path }}"><img src="{{ merchant.image }}"></a>
+											</li>
+										{% endfor %}
+									</ul>
+									<br clear="both">
 								</div>
 							</div>
-						</li></ul>
+						</ul>
 					</li>
 					<li class="menu-item category-item">
 						<a href="#">Categories</a>
@@ -113,7 +136,7 @@
 									{% endfor %}
 								<hr>
 								<div class="more-categories">
-									<a href="#">See all groceries &#187;</a>
+									<a href="{% url 'web.views.main.category' category_code=top_groceries.code %}">See all groceries &#187;</a>
 								</div>
 							</div>
 						</li></ul>
@@ -122,20 +145,23 @@
 						<a href="#">Local</a>
 						<ul class="row main-row dropdown-row local-row"><li>
 							<div class="main-row">
-							<div class="local-search-container">
-								<form>
-								<input type="text" placeholder="Search by city, state or zip code" class="search">
-								</form>
+								<div class="local-search-container">
+									<form>
+									<input type="text" placeholder="Search by city, state or zip code" class="search">
+									</form>
+								</div>
+								<hr>
+								<div class="more-categories">
+									<a href="#">See all cities &#187;</a>
+								</div>
 							</div>
-							<hr>
-							<div class="more-categories">
-								<a href="#">See all cities &#187;</a>
-							</div>
-						</div>
 						</li></ul>
 					</li>
-					<li class="menu-item menu-item-latest">
+					<li class="menu-item">
 						<a href="/blog">Magazine</a>
+					</li>
+					<li class="menu-item menu-item-latest">
+						<a href="javascript:void(null);" id="subscribe-link">Subscribe</a>
 					</li>
 				</ul>
 			</div>
@@ -150,6 +176,30 @@
 					</div>
 				</div>
 		</div>
+		<div class="subscription-popup">
+			<div class="main-row">
+				<div class="subscription-row">
+					<div class="subscription-popup-left">
+					<h2><img src="/static/img/pushpenny_icon.png">Push that Penny.</h2>
+					<h3>Subscribe and save on Everything. Enywhere.</h3>
+					<h4>We'll send you tips to help you learn how to get
+					the most out of your penny.</h4>
+					</div>
+					<div class="subscription-popup-right">
+						<div class="facebook-subscribe">Sign up with Facebook</div>
+						<div class="subscribe-delimiter"><hr><span>or</span><hr></div>
+						<div class="email-subscribe">
+							<form action="/e/subscribe/" method="post" id="subscribe-form">{% csrf_token %}
+							{{ form.email }}
+						</div>
+						<input type="submit" value="start saving">
+						</form>
+					</div>
+				</div>
+				<a href="javascript:void(null);" id="close-subscription-popup"><img src="/static/img/exit_icon.png"></a>
+			</div>
+		</div>
+		<div class="overlay"></div>
 		<div class="main-container">
 			{% block content %}{% endblock %}
 		</div>

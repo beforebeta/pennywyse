@@ -117,6 +117,33 @@ $(function() {
 			$('.prev').hide();
 		}
 	}
+	$('#subscribe-link').click(function(){
+		$('.subscription-popup').show();
+		$('.overlay').show();
+	});
+	$('#close-subscription-popup').click(function() {
+		$('.subscription-popup').hide();
+		$('.overlay').hide();
+	});
+    $(window).keyup(function(e){
+	    if(e.keyCode === 27) {
+    	    $('.subscription-popup').hide();
+			$('.coupon-popup').hide();
+			$('.overlay').hide();
+		}
+	});
+	$('#subscribe-form').submit(function() {
+		$('#subscribe-form').ajaxSubmit({'success': subscribe_form_callback, 'dataType': 'json'});
+		return false;
+	});
+	$('.use-coupon a').click(function() {
+		var coupon_id = $(this).attr('id');
+		$.get('/o/'+coupon_id, function(data) {
+			render_coupon_popup(data);
+			$('.overlay').show();
+		}, 'json');
+		return false;
+	});
 });
 function select_categories(criteria) {
 	if (criteria == 'all') {
@@ -178,7 +205,7 @@ function render_coupons(data, reset_items) {
 										</div> \
 									</div> \
 									<div class="use-coupon"> \
-										<a href="{{ full_success_path}}">Use Coupon</a> \
+										<a href="javascript:void(null);">Use Coupon</a> \
 									</div> \
 									<div class="coupon-bottom"> \
 										<div class="coupon-right-bottom"> \
@@ -374,4 +401,53 @@ function init_sticky_header() {
 				}
 			}, 
 	});
+}
+function subscribe_form_callback(response, statusText, xhr, $form) {
+	$('#subscribe-form').find('span, br').remove();
+	if (!response.success && typeof(response.errors) != 'undefined') {
+		for (key in response.errors) {
+			$('#subscribe-form').find('input[name='+key+']').before('<span>'+response.errors[key]+'</span><br><br>');
+		}
+	}
+	if (response.success) {
+		$('.subscription-popup-right').html('<span>You have been subscribed. <img src="/static/img/check_icon.png"></span>');
+	}
+}
+function render_coupon_popup(data) {
+	data.csrf = $('input[name=csrfmiddlewaretoken]').val();
+	var template = '<div class="coupon-popup"> \
+						<div class="coupon-popup-header">Coupon code \
+							<a href="javascript:close_coupon_popup();"><img src="/static/img/close_coupon.png"></a> \
+						</div> \
+						<div class="coupon-popup-code"> \
+							<input type="text" value="{{ code }}" placeholder="coupon" readonly> \
+							<input type="button" value="Click to copy"> \
+						</div> \
+						<div class="coupon-popup-body"> \
+							<div class="coupon-popup-logo"> \
+								<a href="{{ merchant_link }}" target="_blank"> \
+									<img src="{{ image }}" class="merchant-logo"> \
+								</a> \
+							</div> \
+							<div class="coupon-popup-description"> \
+								<h2 class="short-description">{{ short_desc }}</h2> \
+									{{& description }} \
+							</div> \
+							<br clear="both"><a href="{{ url }}">Go to merchant website</a> \
+						</div> \
+							<div class="coupon-popup-bottom"> \
+								Should we notify you when we add new coupons and deals for Store?<br> \
+								<form action="/e/subscribe/" method="post" id="subscribe-form"> \
+									<input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf }}"> \
+									<input type="text" name="email" placeholder="Email address" value=""> \
+									<input type="submit" value="Let me know"> \
+								</form> \
+							</div> \
+					</div>';
+	html = Mustache.to_html(template, data);
+	$('.subscription-popup').after(html);
+}
+function close_coupon_popup() {
+	$('.coupon-popup').hide();
+	$('.overlay').hide();
 }

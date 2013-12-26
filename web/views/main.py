@@ -1,7 +1,6 @@
 import json
-import random
 import re
-import string
+from uuid import uuid4
 from django.conf import settings
 from django.contrib.sites.models import get_current_site
 from django.core.paginator import Paginator
@@ -19,26 +18,17 @@ from core.util.pagination import AlphabeticalPagination
 from tracking.views import log_click_track
 from tracking.utils import get_visitor_tag
 from web.models import ShortenedURLComponent
-
+from web.forms import EmailSubscriptionForm
+from websvcs.models import EmailSubscription
 
 def build_base_context(request, context):
-    merchants_data = []
-    
-    # aggregating merchants - first three merchants, starting with every alphabet letter
-    merchants = Merchant.objects.values('id', 'name', 'name_slug')
-    for char in list(string.uppercase):
-        i = 0
-        for m in merchants:
-            if i <= 2 and m['name'].startswith(char):
-                merchants_data.append(m)
-                i += 1
-            if i > 2:
-                break
-
     base_context = {"visitor": getattr(request, 'visitor', None),
-               "top_merchants": merchants_data,
+               "top_merchants": Merchant.objects.all().order_by('-popularity', '-name')[0:6],
                 "top_categories": Category.objects.filter(parent__isnull=True)[:6],
-                "top_groceries": Category.objects.filter(name='Grocery Coupons')[0],}
+                "top_groceries": Category.objects.filter(name='Grocery Coupons')[0],
+                "top_popular_coupon": Coupon.objects.all().order_by('-popularity', '-embedly_title')[0],
+                "top_featured_coupons": Coupon.objects.filter(is_featured=True)[0:3],
+                "form": EmailSubscriptionForm()}
     context.update(**base_context)
     return context
 
@@ -89,7 +79,8 @@ def index(request, current_page=1):
         coupons = Coupon.objects.filter(**parameters).order_by("-date_added")
         pages = Paginator(coupons, 12)
         for c in pages.page(current_page).object_list:
-            item = {'merchant_name': c.merchant.name,
+            item = {'id': c.id,
+                    'merchant_name': c.merchant.name,
                     'short_desc': c.short_desc,
                     'description': c.get_description(),
                     'end': c.end.strftime('%m/%d/%y') if c.end else '',
@@ -191,7 +182,8 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
     if request.is_ajax():
         data = []
         for c in pages.page(page).object_list:
-            item = {'merchant_name': c.merchant.name,
+            item = {'id': c.id,
+                    'merchant_name': c.merchant.name,
                     'short_desc': c.short_desc,
                     'description': c.get_description(),
                     'end': c.end.strftime('%m/%d/%y') if c.end else '',
@@ -225,46 +217,20 @@ def redirect_to_open_coupon(request, company_name, coupon_label, coupon_id):
     return HttpResponsePermanentRedirect('{0}/coupons/{1}/{2}/{3}'.format(settings.BASE_URL_NO_APPENDED_SLASH, company_name, coupon_label, coupon_id))
 
 @ensure_csrf_cookie
-def open_coupon(request, company_name, coupon_label, coupon_id):
+def open_coupon(request, coupon_id):
     try:
         coupon = Coupon.objects.get(id=coupon_id)
         log_click_track(request, coupon)
     except Coupon.DoesNotExist:
-        coupon = Coupon.objects.filter(desc_slug=coupon_label).order_by('-id')
-        log_click_track(request)
-        if not coupon:
-            raise Http404
-        original_coupon_url = reverse('web.views.main.open_coupon', kwargs={'company_name': company_name,
-                                                                            'coupon_label': coupon_label,
-                                                                            'coupon_id': coupon[0].id})
-        return HttpResponsePermanentRedirect(original_coupon_url)
+        raise Http404
 
-    if coupon.merchant.redirect:
-        if coupon.merchant.use_skimlinks:
-            coupon_url = get_visitor_tag(coupon.skimlinks, request.visitor.id)
-        else:
-            coupon_url = coupon.link
-        return HttpResponseRedirect(coupon_url)
-
-    logo_url = "/"
-    back_url = "/"
-    try:
-        logo_url = request.META["HTTP_REFERER"]
-        back_url = logo_url
-        if "localhost" not in logo_url and "pushpenny.com" not in logo_url:
-            logo_url="/"
-    except:
-        pass
-
-    context={
-        "coupon"        : coupon,
-        "logo_url"      : logo_url,
-        "back_url"      : back_url,
-        "path"          : encode_uri_component("%s://%s%s" % ("http", "www.pushpenny.com", request.path)),
-    }
-    set_meta_tags(coupon, context)
-
-    return render_response("open_coupon.html",request, context)
+    item = {'merchant_link': coupon.merchant.local_path(),
+            'code': coupon.code,
+            'short_desc': coupon.short_desc,
+            'description': coupon.get_description(),
+            'image': coupon.merchant.get_image(),
+            'url': get_visitor_tag(coupon.skimlinks, request.visitor.id)}
+    return HttpResponse(json.dumps(item), content_type="application/json")
 
 @ensure_csrf_cookie
 @cache_page(60 * 60 * 24)
@@ -399,17 +365,15 @@ def stores(request, page='popular'):
     }
     return render_response("companies.html", request, context)
 
-@ensure_csrf_cookie
-def coupon_success_page(request, company_name, coupon_label, coupon_id):
-    try:
-        coupon = Coupon.objects.get(id=coupon_id)
-    except Coupon.DoesNotExist:
-        coupon = Coupon.objects.filter(desc_slug=coupon_label).order_by('-id')
-        if not coupon:
-            raise Http404
-        original_coupon_url = reverse('web.views.main.coupon_success_page', kwargs={'company_name': company_name,
-                                                                                    'coupon_label': coupon_label,
-                                                                                    'coupon_id': coupon[0].id})
-        return HttpResponsePermanentRedirect(original_coupon_url)
-    context={"coupon": coupon}
-    return render_response("coupon_success_page.html",request, context)
+def email_subscribe(request):
+    data = {'success': False}
+    if request.method == 'POST':
+        instance = EmailSubscription(session_key=request.session.get('key', str(uuid4())), 
+                                     app=settings.APP_NAME)
+        form = EmailSubscriptionForm(data=request.POST, instance=instance)
+        if form.is_valid():
+            data['success'] = True
+            form.save()
+        else:
+            data['errors'] = form.errors
+    return HttpResponse(json.dumps(data), content_type="application/json")
