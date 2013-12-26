@@ -203,7 +203,10 @@ def get_or_create_merchant(merchant_data_dict):
 def get_or_create_category(each_deal_data_dict, categories_dict):
     '''Manual renaming of "Retail & Services" to "Shopping & Services"'''
     category_slug = each_deal_data_dict['category_slug']
-    category_slug = 'shopping-services' if category_slug == 'retail-services' else category_slug
+    category_name = each_deal_data_dict['category_name']
+    if category_slug == 'retail-services':
+        category_slug = 'shopping-services'
+        category_name = 'Shopping & Services'
     if not category_slug:
         # In case where Sqoot doesn't show any category for a given deal
         return None
@@ -227,7 +230,7 @@ def get_or_create_category(each_deal_data_dict, categories_dict):
         category_model.parent             = None
 
     # In case it was already created as another category's parent (hence save outside try-except)
-    category_model.name = each_deal_data_dict['category_name']
+    category_model.name = category_name
     category_model.save()
     return category_model
 
