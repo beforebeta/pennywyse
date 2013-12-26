@@ -209,7 +209,7 @@ def get_or_create_category(each_deal_data_dict, categories_dict):
         return None
     parent_slug = categories_dict[category_slug]
     try:
-        category_model = Category.all_objects.get(code=category_slug, ref_id_source='sqoot')
+        category_model = Category.objects.get(code=category_slug, ref_id_source='sqoot')
     except Category.DoesNotExist:
         category_model                    = Category()
         category_model.ref_id_source      = 'sqoot'
@@ -217,7 +217,7 @@ def get_or_create_category(each_deal_data_dict, categories_dict):
 
     if parent_slug:
         try:
-            parent_category               = Category.all_objects.get(code=parent_slug, ref_id_source='sqoot')
+            parent_category               = Category.objects.get(code=parent_slug, ref_id_source='sqoot')
             category_model.parent         = parent_category
         except Category.DoesNotExist:
             parent_category = Category(ref_id_source='sqoot', code=parent_slug)
@@ -340,7 +340,7 @@ def check_and_mark_duplicate(coupon_model):
         info_match_count += 1 if coupon_model.listprice == c.listprice else 0
         if info_match_count == 5:
             coupon_model.is_duplicate = True
-            coupon_model.coupon_set.clear()
+            Coupon.all_objects.filter(related_deal=coupon_model).update(related_deal=None)
             coupon_model.save()
             break
 
@@ -349,11 +349,11 @@ def check_and_mark_duplicate(coupon_model):
 
         if coupon_model.percent > c.percent:
             c.is_duplicate = True
-            coupons_folded_under_c = c.coupon_set.all()
+            coupons_folded_under_c = Coupon.all_objects.filter(related_deal=c)
             for coupon_obj in coupons_folded_under_c:
                 coupon_obj.related_deal = coupon_model
                 coupon_obj.save()
-            c.coupon_set.clear()
+            Coupon.all_objects.filter(related_deal=c).update(related_deal=None)
             c.related_deal = coupon_model
             c.save()
         else:
