@@ -203,13 +203,16 @@ def get_or_create_merchant(merchant_data_dict):
 def get_or_create_category(each_deal_data_dict, categories_dict):
     '''Manual renaming of "Retail & Services" to "Shopping & Services"'''
     category_slug = each_deal_data_dict['category_slug']
-    category_slug = 'shopping-services' if category_slug == 'retail-services' else category_slug
+    category_name = each_deal_data_dict['category_name']
+    if category_slug == 'retail-services':
+        category_slug = 'shopping-services'
+        category_name = 'Shopping & Services'
     if not category_slug:
         # In case where Sqoot doesn't show any category for a given deal
         return None
     parent_slug = categories_dict[category_slug]
     try:
-        category_model = Category.all_objects.get(code=category_slug, ref_id_source='sqoot')
+        category_model = Category.objects.get(code=category_slug, ref_id_source='sqoot')
     except Category.DoesNotExist:
         category_model                    = Category()
         category_model.ref_id_source      = 'sqoot'
@@ -217,7 +220,7 @@ def get_or_create_category(each_deal_data_dict, categories_dict):
 
     if parent_slug:
         try:
-            parent_category               = Category.all_objects.get(code=parent_slug, ref_id_source='sqoot')
+            parent_category               = Category.objects.get(code=parent_slug, ref_id_source='sqoot')
             category_model.parent         = parent_category
         except Category.DoesNotExist:
             parent_category = Category(ref_id_source='sqoot', code=parent_slug)
@@ -227,7 +230,7 @@ def get_or_create_category(each_deal_data_dict, categories_dict):
         category_model.parent             = None
 
     # In case it was already created as another category's parent (hence save outside try-except)
-    category_model.name = each_deal_data_dict['category_name']
+    category_model.name = category_name
     category_model.save()
     return category_model
 
@@ -340,7 +343,7 @@ def check_and_mark_duplicate(coupon_model):
         info_match_count += 1 if coupon_model.listprice == c.listprice else 0
         if info_match_count == 5:
             coupon_model.is_duplicate = True
-            coupon_model.coupon_set.clear()
+            Coupon.all_objects.filter(related_deal=coupon_model).update(related_deal=None)
             coupon_model.save()
             break
 
@@ -349,11 +352,11 @@ def check_and_mark_duplicate(coupon_model):
 
         if coupon_model.percent > c.percent:
             c.is_duplicate = True
-            coupons_folded_under_c = c.coupon_set.all()
+            coupons_folded_under_c = Coupon.all_objects.filter(related_deal=c)
             for coupon_obj in coupons_folded_under_c:
                 coupon_obj.related_deal = coupon_model
                 coupon_obj.save()
-            c.coupon_set.clear()
+            Coupon.all_objects.filter(related_deal=c).update(related_deal=None)
             c.related_deal = coupon_model
             c.save()
         else:
