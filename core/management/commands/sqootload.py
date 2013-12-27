@@ -36,6 +36,11 @@ class Command(BaseCommand):
             dest='savedown',
             default=False,
             help='savedown'),
+        make_option('--validate',
+            action='store_true',
+            dest='validate',
+            default=False,
+            help='validate'),
         )
 
     def handle(self, *args, **options):
@@ -52,6 +57,11 @@ class Command(BaseCommand):
         if options['savedown']:
             try:
                 savedown_sqoot_data()
+            except:
+                print_stack_trace()
+        if options['validate']:
+            try:
+                validate_sqoot_deals()
             except:
                 print_stack_trace()
 
@@ -81,6 +91,7 @@ def refresh_sqoot_data(indirectload=False):
     describe_section("STARTING TO DOWNLOAD SQOOT DEALS..\n")
     #request_parameters['location'] = '10011' # FOR DEBUGGING
     #request_parameters['order'] = 'distance' # FOR DEBUGGING
+    # request_parameters['provider_slugs'] = 'yelp' # FOR DEBUGGING
 
     country_model = get_or_create_country()     # since there's only one country for all deals - no need to check it for each coupon
     sqoot_output_deals = None
@@ -118,10 +129,6 @@ def refresh_sqoot_data(indirectload=False):
             except:
                 print_stack_trace()
 
-    suspicious_deals = Coupon.all_objects.filter(ref_id_source='sqoot', end__isnull=True, status='unconfirmed')
-    for c in suspicious_deals:
-        check_if_deal_gone(c)
-
 def savedown_sqoot_data():
     request_parameters = {
         'api_key': settings.SQOOT_PUBLIC_KEY,
@@ -155,6 +162,12 @@ def savedown_sqoot_data():
     sqoot_file.write("]")
     sqoot_file.flush()
     sqoot_file.close()
+
+def validate_sqoot_deals():
+    suspicious_deals = Coupon.all_objects.filter(ref_id_source='sqoot', end__isnull=True, status='unconfirmed')
+    for c in suspicious_deals:
+        check_if_deal_gone(c)
+
 
 #############################################################################################################
 #
