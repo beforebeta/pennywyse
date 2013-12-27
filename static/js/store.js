@@ -8,9 +8,23 @@ var is_tranding = false;
 var is_sticky = false;
 $(function() {
 	is_sticky = $('.prescroll-header').hasClass('hidden');
-	init_sticky_header();
+	if ($('.index-container').length > 0) {
+		init_sticky_header();
+	}
+	else {
+		$('.header').removeClass('hidden');
+		$('.header').addClass('top-search');
+		$('.header').addClass('fixed-container');
+		$('.menu-row').addClass('top-menu');
+		$('.menu-row').addClass('bottom-shadow');
+		$('.menu-row').addClass('fixed-container');
+		$('.menu-row').removeClass('sticky');
+		$('.prescroll-header').addClass('hidden');
+		$('.top-header').removeClass('sticky');
+		$('.top-header').addClass('fixed-container');
+	}
 	init_waypoint();
-	
+
 	if ($('.more-coupons').length > 0) {
 		$(window).scroll(function() {
 			if ($('.prescroll-header').hasClass('hidden') != is_sticky) {
@@ -19,6 +33,15 @@ $(function() {
 			is_sticky = $('.prescroll-header').hasClass('hidden');
 		});
 	}
+
+	$(window).bind('hashchange', function(e) { 
+		var coupon_id = window.location.hash.substr(2, window.location.hash.length);
+		if (coupon_id) {
+			load_coupon(coupon_id);
+		}
+	});
+
+	$(window).trigger('hashchange');
 
 	$('.sorting-item a').click(function(){
 		$('.sorting-item').removeClass('selected-sorting');
@@ -127,21 +150,20 @@ $(function() {
 	});
     $(window).keyup(function(e){
 	    if(e.keyCode === 27) {
-    	    $('.subscription-popup').hide();
-			$('.coupon-popup').hide();
-			$('.overlay').hide();
+    	    close_popups();
 		}
+	});
+	$('.overlay').click(function() {
+		close_popups();
 	});
 	$('#subscribe-form').submit(function() {
 		$('#subscribe-form').ajaxSubmit({'success': subscribe_form_callback, 'dataType': 'json'});
 		return false;
 	});
-	$('.use-coupon a').click(function() {
+	$('.use-coupon').live('click', function(e) {
 		var coupon_id = $(this).attr('id');
-		$.get('/o/'+coupon_id, function(data) {
-			render_coupon_popup(data);
-			$('.overlay').show();
-		}, 'json');
+		load_coupon(coupon_id);
+		window.location.hash = 'c'+coupon_id;
 		return false;
 	});
 });
@@ -201,11 +223,12 @@ function render_coupons(data, reset_items) {
 							<h1 class="short-description">{{ short_desc }}</h1> \
 							{{ description }}<br> \
 										<span class="ends">Ends {{ end }}</span> \
-										<div class="description">{{#image}}<img src="{{ image }}">{{/image}} \
-										</div> \
+										<a href="{{ merchant_link }}" target="_blank" class="merchant-link"> \
+											<img src="{{ image }}"> \
+										</a> \
 									</div> \
-									<div class="use-coupon"> \
-										<a href="javascript:void(null);">Use Coupon</a> \
+									<div class="use-coupon" id="{{ id }}"> \
+										Use Coupon \
 									</div> \
 									<div class="coupon-bottom"> \
 										<div class="coupon-right-bottom"> \
@@ -413,16 +436,31 @@ function subscribe_form_callback(response, statusText, xhr, $form) {
 		$('.subscription-popup-right').html('<span>You have been subscribed. <img src="/static/img/check_icon.png"></span>');
 	}
 }
-function render_coupon_popup(data) {
+function load_coupon(coupon_id) {
+	$.get('/o/'+coupon_id, function(data) {
+			render_coupon_popup(data, coupon_id);
+			$('.overlay').show();
+	}, 'json');
+}
+function render_coupon_popup(data, coupon_id) {
 	data.csrf = $('input[name=csrfmiddlewaretoken]').val();
+	data.id = coupon_id;
 	var template = '<div class="coupon-popup"> \
 						<div class="coupon-popup-header">Coupon code \
 							<a href="javascript:close_coupon_popup();"><img src="/static/img/close_coupon.png"></a> \
 						</div> \
+						{{# code }} \
 						<div class="coupon-popup-code"> \
 							<input type="text" value="{{ code }}" placeholder="coupon" readonly> \
-							<input type="button" value="Click to copy"> \
+							<input type="button" id="coupon-code-{{ id }}" value="Click to copy"> \
 						</div> \
+						{{/ code }} \
+						{{^ code }} \
+							<div class="coupon-popup-code"> \
+								No coupon code required.<br> \
+								<input type="button" value="Shop at {{ merchant_name }}"> \
+							</div> \
+						{{/ code}} \
 						<div class="coupon-popup-body"> \
 							<div class="coupon-popup-logo"> \
 								<a href="{{ merchant_link }}" target="_blank"> \
@@ -433,7 +471,10 @@ function render_coupon_popup(data) {
 								<h2 class="short-description">{{ short_desc }}</h2> \
 									{{& description }} \
 							</div> \
-							<br clear="both"><a href="{{ url }}">Go to merchant website</a> \
+							<br clear="both"> \
+							{{# code }} \
+								<span><a href="{{ url }}" target="_blank">Shop at {{ merchant_name }} &raquo;</a></span> \
+							{{/ code }} \
 						</div> \
 							<div class="coupon-popup-bottom"> \
 								Should we notify you when we add new coupons and deals for Store?<br> \
@@ -446,8 +487,23 @@ function render_coupon_popup(data) {
 					</div>';
 	html = Mustache.to_html(template, data);
 	$('.subscription-popup').after(html);
+	init_clipboard($('#coupon-code-' + coupon_id));
 }
 function close_coupon_popup() {
 	$('.coupon-popup').hide();
 	$('.overlay').hide();
+}
+function close_popups() {
+	$('.subscription-popup').hide();
+	$('.coupon-popup').hide();
+	$('.overlay').hide();
+	window.location.hash = '';
+}
+function init_clipboard(element) {
+    element.clipboard({
+        path: '/static/js/jquery.clipboard.swf',
+        copy: function() {
+            return element.parent().find('input[type=text]').val();
+        }
+    });
 }

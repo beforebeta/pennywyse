@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
-			{% block content %}
-			<div class="row middle-container">
+	{% block content %}
+			<div class="row middle-container index-container">
 				<div class="main-rail index-rail">
 					<div class="top-labels-container">
 						<div class="main-labels index-labels">
@@ -40,10 +40,12 @@
 									<h1 class="short-description">{{ coupon.short_desc }}</h1>
 									{{ coupon.get_description }}<br>
 									<span class="ends">Ends {{ coupon.end|date:"m/d/y" }}</span>
-									<div class="description"><img src="{{ coupon.merchant.get_image }}"></div>
+										<a href="{% url 'web.views.main.coupons_for_company' company_name=coupon.merchant.name_slug company_id=coupon.merchant.id %}" target="_blank" class="merchant-link">
+											<img src="{{ coupon.merchant.get_image }}">
+										</a>
 								</div>
-								<div class="use-coupon">
-									<a href="javascript:void(null);" id="{{ coupon.id }}">Use Coupon</a>
+								<div class="use-coupon" id="{{ coupon.id }}">
+									Use Coupon
 								</div>
 								<div class="coupon-bottom">
 									{% comment %}

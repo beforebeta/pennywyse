@@ -85,7 +85,6 @@ def index(request, current_page=1):
                     'description': c.get_description(),
                     'end': c.end.strftime('%m/%d/%y') if c.end else '',
                     'coupon_type': c.coupon_type,
-                    'full_success_path': c.full_success_path(),
                     'image': c.merchant.get_image()}
             data.append(item)
         return HttpResponse(json.dumps({'items': data,
@@ -187,8 +186,7 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
                     'short_desc': c.short_desc,
                     'description': c.get_description(),
                     'end': c.end.strftime('%m/%d/%y') if c.end else '',
-                    'coupon_type': c.coupon_type,
-                    'full_success_path': c.full_success_path()}
+                    'coupon_type': c.coupon_type}
             data.append(item)
         return HttpResponse(json.dumps({'items': data,
                                         'total_pages': pages.num_pages}), content_type="application/json")
@@ -224,7 +222,8 @@ def open_coupon(request, coupon_id):
     except Coupon.DoesNotExist:
         raise Http404
 
-    item = {'merchant_link': coupon.merchant.local_path(),
+    item = {'merchant_name': coupon.merchant.name,
+            'merchant_link': coupon.merchant.local_path(),
             'code': coupon.code,
             'short_desc': coupon.short_desc,
             'description': coupon.get_description(),

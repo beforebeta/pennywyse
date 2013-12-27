@@ -318,6 +318,7 @@ hr {
 	background-color: #ffffff;
 	padding: 10px;
 	height: 290px;
+	position: relative;
 }
 .coupon-container {
 	width: 220px;
@@ -435,8 +436,17 @@ hr {
 	font-size: 13px;
 	margin-top: 10px;
 	text-align: center;
+	bottom: 0px;
+	border: 1px solid;
 }
-.description img {
+.merchant-link {
+	position: absolute;
+	bottom: 5px;
+	left: 0;
+	width: 100%;
+	text-align: center;
+}
+.merchant-link img {
 	max-width: 200px;
 	max-height: 100px;
 }
@@ -600,6 +610,7 @@ hr {
 	z-index: 1;
 	margin-top: -50px;
 	display: none;
+	cursor: pointer;
 }
 .use-coupon a {
 	text-decoration: none;
@@ -1106,9 +1117,9 @@ hr {
 	position: fixed;
 	top: 125px;
 	left: 50%;
-	margin-left: -230px; 
+	margin-left: -250px; 
 	z-index: 5;
-	width: 460px;
+	width: 500px;
 	height: 375px;
 }
 .coupon-popup-header {
@@ -1144,6 +1155,8 @@ hr {
 .coupon-popup-code input[type=button] {
 	color: #fff;
 	background-color: #3cb5b5;
+	width: auto;
+	min-width: 300px;
 }
 .coupon-popup-code input::-webkit-input-placeholder {
     color: #000;
@@ -1160,7 +1173,7 @@ hr {
 .coupon-popup-body {
 	margin-left: 30px;
 	height: 130px;
-	width: 410px;
+	width: 450px;
 	padding: 10px;
 }
 .coupon-popup-body div {
@@ -1169,13 +1182,18 @@ hr {
 .coupon-popup-body h2 {
 	margin-top: 0px !important;
 }
+.coupon-popup-body span {
+	text-align: center;
+	width: 100%;
+	display: block;
+}
 .coupon-popup-logo {
 	width: 100px;
 	text-align: center;
 }
 .coupon-popup-description {
-	width: 280px;
-	margin-left: 10px;
+	width: 300px;
+	margin-left: 15px;
 }
 .coupon-popup-description h2 {
 	text-align: left;
@@ -1214,7 +1232,11 @@ hr {
 }
 .coupon-popup-bottom  input::-moz-placeholder {
     text-transform: uppercase;
-}    
+}
 .coupon-popup-bottom  input:-ms-input-placeholder {
     text-transform: uppercase;
+}
+.fixed-container {
+	position: relative !important;
+	top: auto !important;
 }
