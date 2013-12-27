@@ -8,6 +8,8 @@ from django.core.management.base import BaseCommand
 from django.conf import settings
 from django.utils.html import strip_tags
 
+from BeautifulSoup import BeautifulSoup
+
 from core.models import DealType, Category, Coupon, Merchant, Country, CouponNetwork, MerchantLocation
 
 from core.util import print_stack_trace
@@ -116,6 +118,9 @@ def refresh_sqoot_data(indirectload=False):
             except:
                 print_stack_trace()
 
+    suspicious_deals = Coupon.all_objects.filter(ref_id_source='sqoot', end__isnull=True, status='unconfirmed')
+    for c in suspicious_deals:
+        check_if_deal_gone(c)
 
 def savedown_sqoot_data():
     request_parameters = {
@@ -305,7 +310,7 @@ def get_or_create_coupon(each_deal_data_dict, merchant_model, category_model, de
         coupon_model.link                = each_deal_data_dict['url']
         coupon_model.directlink          = each_deal_data_dict['untracked_url']
         coupon_model.skimlinks           = each_deal_data_dict['url']
-        coupon_model.status              = 'active'
+        coupon_model.status              = 'unconfirmed'
         coupon_model.lastupdated         = get_date(each_deal_data_dict['updated_at'])
         coupon_model.created             = get_date(each_deal_data_dict['created_at'])
         coupon_model.coupon_network      = couponnetwork_model
@@ -363,6 +368,48 @@ def check_and_mark_duplicate(coupon_model):
             coupon_model.is_duplicate = True
             coupon_model.related_deal = c
             coupon_model.save()
+
+def check_if_deal_gone(coupon_obj):
+    '''
+    Note on coupon status:
+    'unconfirmed' (default)
+    'confirmed-inactive'
+    'considered-active'
+    '''
+    url = coupon_obj.directlink
+    provider_slug = coupon_obj.coupon_network.code
+
+    if url:
+        page = requests.get(url)
+        soup = BeautifulSoup(page.content)
+    else:
+        mark_deal_inactive(coupon_obj)
+        return
+
+    if page.status_code != 200:
+        mark_deal_inactive(coupon_obj)
+        return
+
+    if provider_slug == 'yelp':
+        done_deal = soup.find("a", { "class" : "done-deal" })
+        sold_out = soup.find("a", { "class" : "sold-out" })
+        if done_deal or sold_out:
+            mark_deal_inactive(coupon_obj)
+            return
+
+    if provider_slug == 'restaurant-com':
+        if "ErrPgNotAvail" in page.url:
+            mark_deal_inactive(coupon_obj)
+            return
+
+    coupon_obj.status = 'considered-active'
+    coupon_obj.save()
+    # print "yay!" # FOR DEBUGGING
+
+def mark_deal_inactive(coupon_obj):
+    coupon_obj.status = 'confirmed-inactive'
+    coupon_obj.save()
+    # print "boo :( inactive deal" # FOR DEBUGGING
 
 #############################################################################################################
 #

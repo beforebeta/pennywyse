@@ -37,6 +37,7 @@ class LocalCouponIndex(CouponIndex):
     category_slugs = indexes.MultiValueField(null=True)
     categories = indexes.MultiValueField(null=True)
     is_duplicate = indexes.BooleanField(model_attr='is_duplicate', null=True)
+    status = indexes.CharField(model_attr='status', null=True)
 
     def get_model(self):
         return Coupon
