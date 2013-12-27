@@ -4,7 +4,7 @@ from datetime import datetime
 
 from tastypie.resources import ModelResource
 from geopy.distance import distance as geopy_distance
-from haystack.query import SearchQuerySet
+from haystack.query import SearchQuerySet, SQ
 from haystack.utils.geo import Point, D
 from elasticsearch import Elasticsearch
 
@@ -39,8 +39,8 @@ class MobileResource(ModelResource):
 
         radius = D(mi=float(params_dict['radius'])) if 'radius' in params_keys else D(mi=10)
         user_pnt = Point(lng, lat)
-        sqs = SearchQuerySet().using('mobile_api').filter(django_ct='core.coupon', online=False, 
-                                                          is_duplicate=False, end__gt=datetime.now())\
+        sqs = SearchQuerySet().using('mobile_api').filter(django_ct='core.coupon', online=False, is_duplicate=False)\
+                                                .filter(SQ(end__gt=datetime.now()) | SQ(status='considered-active'))\
                                                 .dwithin('merchant_location', user_pnt, radius).distance('merchant_location', user_pnt)\
                                                 .order_by('distance')
 
