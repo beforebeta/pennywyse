@@ -7,6 +7,7 @@ from optparse import make_option
 from django.core.management.base import BaseCommand
 from django.conf import settings
 from django.utils.html import strip_tags
+from django.db.models import Q
 
 from BeautifulSoup import BeautifulSoup
 
@@ -164,7 +165,8 @@ def savedown_sqoot_data():
     sqoot_file.close()
 
 def validate_sqoot_deals():
-    suspicious_deals = Coupon.all_objects.filter(ref_id_source='sqoot', end__isnull=True, status='unconfirmed')
+    suspicious_deals = Coupon.all_objects.filter(ref_id_source='sqoot', end__isnull=True)\
+                                         .filter(Q(status='considered-active')| Q(status='unconfirmed'))
     for c in suspicious_deals:
         check_if_deal_gone(c)
 
