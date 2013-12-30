@@ -25,15 +25,6 @@ class CouponIndex(indexes.SearchIndex, indexes.Indexable):
     def index_queryset(self, using=None):
         return self.get_model().active_objects
 
-    def prepare_success_path(self, obj):
-        if obj.merchant:
-            return obj.success_path()
-        return
-    
-    def prepare_full_success_path(self, obj):
-        if obj.merchant:
-            return obj.full_success_path()
-        return
 
 
 class LocalCouponIndex(CouponIndex):
