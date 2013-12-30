@@ -45,7 +45,7 @@
 									{{ coupon.get_description }}<br>
 									<span class="ends">Ends {{ coupon.end|date:"m/d/y" }}</span>
 										<a href="{% url 'web.views.main.coupons_for_company' company_name=coupon.merchant.name_slug company_id=coupon.merchant.id %}" target="_blank" class="merchant-link">
-											<img src="{{ coupon.merchant.get_image }}">
+											<img src="{{ coupon.merchant.image }}">
 										</a>
 								</div>
 								<div class="use-coupon" id="{{ coupon.id }}">
