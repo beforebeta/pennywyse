@@ -34,6 +34,10 @@
 											<div class="coupon-left-label printable-label">
 												<img src="/static/img/printable_icon.png">Printables
 											</div>
+										{% elif coupon.coupon_type == 'gift' %}
+											<div class="coupon-left-label freebies-label">
+												<img src="/static/img/freebies_icon.png">Freebies
+											</div>
 										{% endif %}
 									</div>
 									<hr>
@@ -60,7 +64,7 @@
 										Share
 										<a href="https://www.facebook.com/sharer/sharer.php?u={{ coupon.full_success_path|urlencode }}"><img src="/static/img/facebook_share_icon.png" target="_blank"></a>
 										<a href="https://twitter.com/share?url={{ coupon.full_success_path|urlencode }}" target="_blank"><img src="/static/img/twitter_share_icon.png"></a>
-										<a href="#"><img src="/static/img/email_share_icon.png"></a>
+										<a href="mailto:?body={{ coupon.full_success_path|urlencode }}"><img src="/static/img/email_share_icon.png"></a>
 									</div>
 								</div>
 							</div>

@@ -30,27 +30,27 @@
 						</div>
 						<div class="filter-icons">
 							<div class="filter-container coupon-code" id="coupon_code">
-								<div class="filter-icon coupon-code-icon"></div>
+								<div class="filter-icon coupon-code-icon selected"></div>
 								Coupon Codes
 							</div>
 							<div class="filter-container shipping" id="free_shipping">
-								<div class="filter-icon shipping-icon"></div>
+								<div class="filter-icon shipping-icon selected"></div>
 								Free Shipping
 							</div>
 							<div class="filter-container on-sale last" id="onsale">
-								<div class="filter-icon on-sale-icon"></div>
+								<div class="filter-icon on-sale-icon selected"></div>
 								On Sale
 							</div>
 							<div class="filter-container groceries" id="groceries">
-								<div class="filter-icon groceries-icon"></div>
+								<div class="filter-icon groceries-icon selected"></div>
 								Groceries
 							</div>
 							<div class="filter-container printable" id="printable">
-								<div class="filter-icon printable-icon"></div>
+								<div class="filter-icon printable-icon selected"></div>
 								Printables
 							</div>
 							<div class="filter-container freebies last" id="freebies">
-								<div class="filter-icon freebies-icon"></div>
+								<div class="filter-icon freebies-icon selected"></div>
 								Freebies
 							</div>
 						</div>
@@ -141,8 +141,9 @@
 									<h1 class="short-description">{{ coupon.short_desc }}</h1>
 									{{ coupon.get_description }}<br>
 									<span class="ends">Ends {{ coupon.end|date:"m/d/y" }}</span>
-									<div class="description">
-									</div>
+										<a href="{% url 'web.views.main.coupons_for_company' company_name=coupon.merchant.name_slug company_id=coupon.merchant.id %}" target="_blank" class="merchant-link">
+											<img src="{{ coupon.merchant.get_image }}">
+										</a>
 								</div>
 								<div class="use-coupon">
 									<a href="javascript:void(null);" id="{{ coupon.id }}">Use Coupon</a>

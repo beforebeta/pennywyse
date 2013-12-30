@@ -5,15 +5,17 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>PushPenny</title>
 		<link href="/static/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+		<link href="/static/css/tipsy.css" rel="stylesheet">
 		<link href="/static/css/grid.css" rel="stylesheet">
-		<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-		<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-		<script src="/static/js/waypoints.min.js"></script>
+		<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+		<script type="text/javascript" src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+		<script type="text/javascript" src="/static/js/waypoints.min.js"></script>
 		<script type="text/javascript" src="/static/js/store.js"></script>
 		<script type="text/javascript" src="/static/js/mustache.js"></script>
 		<script type="text/javascript" src="/static/js/jquery.jcarousel-core.min.js"></script>
 		<script type="text/javascript" src="/static/js/jquery.form.js"></script>
 		<script type="text/javascript" src="/static/js/jquery.clipboard.js"></script>
+		<script type="text/javascript" src="/static/js/jquery.tipsy.js"></script>
 	</head>
 	<body>
 		<div class="header-container top-header sticky">
@@ -49,16 +51,18 @@
 			<div class="row">
 				<ul class="menu">
 					<li class="menu-item category-item">
-						<a href="#">Top Coupons</a>
+						<a href="#" class="menu-link">Top Coupons</a>
 						<ul class="row dropdown-row stores-row solid-bottom-shadow"><li>
 							<div class="main-row">	
 								<div class="top-coupon-types top-coupons">
-									<a href="#">Coupon Codes</a><br>
-									<a href="#">Free Shipping</a><br>
-									<a href="#">On Sale</a><br>
-									<a href="#">Groceries</a><br>
-									<a href="#">Printables</a><br>
-									<a href="#">Freebies</a><br>
+									<div>
+										<a href="#">Coupon Codes</a><br>
+										<a href="#">Free Shipping</a><br>
+										<a href="#">On Sale</a><br>
+										<a href="#">Groceries</a><br>
+										<a href="#">Printables</a><br>
+										<a href="#">Freebies</a><br>
+									</div>
 								</div>
 								<div class="top-coupons top-coupon">
 									<b>Most popular</b>
@@ -98,7 +102,7 @@
 						</ul>
 					</li>
 					<li class="menu-item category-item">
-						<a href="{% url 'web.views.main.categories' %}">Categories</a>
+						<a href="{% url 'web.views.main.categories' %}" class="menu-link">Categories</a>
 						<ul class="row main-row dropdown-row category-row"><li>
 							<div class="main-row">
 								{% for category in top_categories %}
@@ -120,7 +124,7 @@
 						</li></ul>
 					</li>
 					<li class="menu-item">
-						<a href="#">Groceries</a>
+						<a href="#" class="menu-link">Groceries</a>
 						<ul class="row main-row dropdown-row groceries-row"><li>
 							<div class="main-row">
 								{% for grocery in top_groceries.category_set.all %}
@@ -161,10 +165,10 @@
 					</li>
 					{% endcomment %}
 					<li class="menu-item">
-						<a href="/blog">Magazine</a>
+						<a href="/blog" class="menu-link">Magazine</a>
 					</li>
 					<li class="menu-item menu-item-latest">
-						<a href="javascript:void(null);" id="subscribe-link">Subscribe</a>
+						<a href="javascript:void(null);" id="subscribe-link" class="menu-link">Subscribe</a>
 					</li>
 				</ul>
 			</div>

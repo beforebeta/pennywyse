@@ -6,6 +6,25 @@
 						<div class="main-labels index-labels">
 							<a href="javascript:void(null);" class="active" id="new">New</a>
 							<a href="javascript:void(null);" id="tranding">Tranding</a>
+							<a href="javascript:void(null);" id="tranding">Expiring Soon</a>
+							<ul class="index-labels-dropdown">
+								<li>
+									<a href="javascript:void(null);" id="tranding">
+										Coupon Type 
+									</a>
+									<span class="shape"></span>
+								</li>
+								<li>
+									<ul>
+										<li id="free_shipping">Free Shipping</li>
+										<li id="on_sale">On Sale</li>
+										<li id="groceries">Groceries</li>
+										<li id="coupon">Coupon</li>
+										<li id="printabl">Printables</li>
+										<li id="gift">Freebies</li>
+									</ul>
+								</li>
+							</ul>
 						</div>
 					</div>
 				<br clear="both">
@@ -25,7 +44,7 @@
 					</div>
 					
 				</div>
-				<div class="main-rail">
+				<div class="main-rail search-main-rail">
 					<div class="coupons more-coupons">
 						{% for coupon in coupons %}
 							<div class="coupon-container {% if forloop.counter|divisibleby:3 %}coupon-last{% endif %}">
@@ -51,16 +70,22 @@
 											<div class="coupon-left-label printable-label">
 												<img src="/static/img/printable_icon.png">Printables
 											</div>
+										{% elif coupon.coupon_type == 'gift' %}
+											<div class="coupon-left-label freebies-label">
+												<img src="/static/img/freebies_icon.png">Freebies
+											</div>
 										{% endif %}
 									</div>
 									<hr>
 									<h1 class="short-description">{{ coupon.short_desc }}</h1>
 									{{ coupon.text }}<br>
 									<span class="ends">Ends {{ coupon.end|date:"m/d/y" }}</span>
-									<div class="description"><img src="{{ coupon.merchant_image }}"></div>
+										<a href="{{ merchant_local_path }}" target="_blank" class="merchant-link">
+											<img src="{{ coupon.merchant_image }}">
+										</a>
 								</div>
-								<div class="use-coupon">
-									<a href="javascript:void(null);" id="{{ coupon.id }}">Use Coupon</a>
+								<div class="use-coupon" id="{{ coupon.pk }}">
+									<a href="javascript:void(null);" >Use Coupon</a>
 								</div>
 								<div class="coupon-bottom">
 									{% comment %}
@@ -75,7 +100,7 @@
 										Share
 										<a href="https://www.facebook.com/sharer/sharer.php?u={{ coupon.full_success_path|urlencode }}"><img src="/static/img/facebook_share_icon.png" target="_blank"></a>
 										<a href="https://twitter.com/share?url={{ coupon.full_success_path|urlencode }}" target="_blank"><img src="/static/img/twitter_share_icon.png"></a>
-										<a href="#"><img src="/static/img/email_share_icon.png"></a>
+										<a href="mailto:?body={{ coupon.full_success_path|urlencode }}"><img src="/static/img/email_share_icon.png"></a>
 									</div>
 								</div>
 							</div>

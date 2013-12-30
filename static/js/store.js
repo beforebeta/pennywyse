@@ -6,6 +6,7 @@ var coupon_types = new Array();
 var is_new = false;
 var is_tranding = false;
 var is_sticky = false;
+var deal_type_filters_active = false;
 $(function() {
 	is_sticky = $('.prescroll-header').hasClass('hidden');
 	if ($('.index-container').length > 0) {
@@ -25,14 +26,14 @@ $(function() {
 	}
 	init_waypoint();
 
-	if ($('.more-coupons').length > 0) {
+	/*if ($('.more-coupons').length > 0) {
 		$(window).scroll(function() {
 			if ($('.prescroll-header').hasClass('hidden') != is_sticky) {
 				init_waypoint();	
 			}
 			is_sticky = $('.prescroll-header').hasClass('hidden');
 		});
-	}
+	}*/
 
 	$(window).bind('hashchange', function(e) { 
 		var coupon_id = window.location.hash.substr(2, window.location.hash.length);
@@ -62,9 +63,24 @@ $(function() {
 		var coupon_type = $(this).attr('id');
 		if (!$(this).hasClass('selected')) {
 			coupon_types.push(coupon_type);
-			$(this).addClass('selected');
-			$(this).find('.filter-icon').addClass('selected');
-			$(this).find('.filter-icon').append('<a href="javascript:void(null);" class="close-tag"><img src="/static/img/close_tag.png"></a>');
+			if (deal_type_filters_active) {
+				$(this).addClass('selected');
+				$(this).find('.filter-icon').addClass('selected');
+				$(this).find('.filter-icon').append('<a href="javascript:void(null);" class="close-tag"><img src="/static/img/close_tag.png"></a>');
+			}
+			else {
+				$(this).addClass('selected');
+				$(this).find('.filter-icon').addClass('selected');
+				$(this).find('.filter-icon').append('<a href="javascript:void(null);" class="close-tag"><img src="/static/img/close_tag.png"></a>');
+				$('.filter-container').each(function() {
+					if ($(this).attr('id') != coupon_type) {
+						$(this).removeClass('selected');
+						$(this).children().removeClass('selected');
+						$(this).find('a').remove();
+					}
+				});
+				deal_type_filters_active = true;
+			}
 		}
 		else {
 			coupon_types.splice(coupon_types.indexOf(coupon_type),1);
@@ -106,6 +122,8 @@ $(function() {
 		}
 	});
 	$('.index-labels a').click(function() {
+		$('.index-labels a').removeClass('active');
+		$(this).addClass('active');
 		var filter_type = $(this).attr('id');
 		if (filter_type == 'new') {
 			is_new = true;
@@ -138,6 +156,7 @@ $(function() {
 		}
 		else {
 			$('.prev').hide();
+			$('.next').hide();
 		}
 	}
 	$('#subscribe-link').click(function(){
@@ -158,6 +177,10 @@ $(function() {
 	});
 	$('#subscribe-form').submit(function() {
 		$('#subscribe-form').ajaxSubmit({'success': subscribe_form_callback, 'dataType': 'json'});
+		return false;
+	});
+	$('.coupon-subscribe-form').live('submit', function() {
+		$(this).ajaxSubmit({'success': coupon_subscribe_form_callback, 'dataType': 'json'});
 		return false;
 	});
 	$('.use-coupon').live('click', function(e) {
@@ -209,9 +232,9 @@ function select_filters(criteria) {
 }
 function render_coupons(data, reset_items) {
 	var count = 0;
-	var coupons_limit = 3;
-	if ($('.main-rail').hasClass('index-rail')) {
-		coupons_limit = 4;
+	var coupons_limit = 4;
+	if ($('.main-rail').hasClass('search-main-rail')) {
+		coupons_limit = 3;
 	}
 	template = '{{#items}} \
 						<div class="coupon-container {{#count}}coupon-last{{/count}}"> \
@@ -235,7 +258,7 @@ function render_coupons(data, reset_items) {
 											Share \
 											<a href="{{ facebook_share_url }}"><img src="/static/img/facebook_share_icon.png"></a> \
 											<a href="{{ twitter_share_url }}""><img src="/static/img/twitter_share_icon.png"></a> \
-											<a href="#"><img src="/static/img/email_share_icon.png"></a> \
+											<a href="mailto:?body={{ email_share_url }}"><img src="/static/img/email_share_icon.png"></a> \
 										</div> \
 									</div> \
 								</div> \
@@ -252,6 +275,9 @@ function render_coupons(data, reset_items) {
    	};
    	data.twitter_share_url = function() {
    		return 'https://twitter.com/share?url=' + encodeURIComponent(this.full_success_path);
+	};
+	data.email_share_url = function() {
+		return encodeURIComponent(this.full_success_path);
 	};
 	data.coupon_type_container = function() {
 		if (this.coupon_type == 'free_shipping') {
@@ -277,6 +303,11 @@ function render_coupons(data, reset_items) {
 		else if (this.coupon_type == 'printable') {
 			return '<div class="coupon-left-label printable-label"> \
 						<img src="/static/img/printable_icon.png">Printables \
+					</div>';
+		}
+		else if (this.coupon_type == 'gift') {
+			return '<div class="coupon-left-label freebies-label"> \
+						<img src="/static/img/freebies_icon.png">Freebies \
 					</div>';
 		}
 	};
@@ -436,6 +467,19 @@ function subscribe_form_callback(response, statusText, xhr, $form) {
 		$('.subscription-popup-right').html('<span>You have been subscribed. <img src="/static/img/check_icon.png"></span>');
 	}
 }
+function coupon_subscribe_form_callback(response, statusText, xhr, $form) {
+	if (!response.success && typeof(response.errors) != 'undefined') {
+		for (key in response.errors) {
+			var field = $form.find('input[name='+key+']');
+			field.attr('title', response.errors[key]);
+			field.tipsy({trigger: 'manual', gravity: 'sw', opacity: 1});
+			field.tipsy('show');
+		}
+	}
+	if (response.success) {
+		$('.subscription-popup-right').html('<span>You have been subscribed. <img src="/static/img/check_icon.png"></span>');
+	}
+}
 function load_coupon(coupon_id) {
 	$.get('/o/'+coupon_id, function(data) {
 			render_coupon_popup(data, coupon_id);
@@ -478,7 +522,7 @@ function render_coupon_popup(data, coupon_id) {
 						</div> \
 							<div class="coupon-popup-bottom"> \
 								Should we notify you when we add new coupons and deals for Store?<br> \
-								<form action="/e/subscribe/" method="post" id="subscribe-form"> \
+								<form action="/e/subscribe/" method="post" class="coupon-subscribe-form"> \
 									<input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf }}"> \
 									<input type="text" name="email" placeholder="Email address" value=""> \
 									<input type="submit" value="Let me know"> \

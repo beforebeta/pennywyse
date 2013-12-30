@@ -33,7 +33,9 @@ def search(request, current_page=1):
                                 'end': c.end.strftime('%m/%d/%y') if c.end else '',
                                 'coupon_type': c.coupon_type,
                                 'full_success_path': c.full_success_path,
-                                'image': c.merchant_image}
+                                'image': c.merchant_image,
+                                'id': c.pk,
+                                'code': c.code}
                         data.append(item)
                 except:
                     pass
