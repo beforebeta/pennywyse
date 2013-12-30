@@ -2,6 +2,8 @@ import string
 import random
 from datetime import datetime
 
+from django.core.cache import cache
+
 from tastypie.resources import ModelResource
 from geopy.distance import distance as geopy_distance
 from haystack.query import SearchQuerySet, SQ
@@ -216,23 +218,35 @@ class MobileResource(ModelResource):
 
         # Always show 'popular categories' based on either user search history or random suggestions.
         # Always include 2 randomly selected categories to avoid self-enforcing popular categories
-        max_total_categories = 6
-        max_searched_categories = 4
-        for c in popular_category_list_raw[:max_searched_categories]:
-            if c['count'] < 100:
-                break
-            else:
-                popular_category = self.return_popular_something_insert(c['term'])
-                popular_category_sub_structure['list'].append(popular_category)
+        id_param = params_dict.get('id', 'uuid')
+        cached_dict = cache.get(id_param) if id_param != 'uuid' else None
 
-        while True:
-            popular_categories_so_far = [c['name'] for c in popular_category_sub_structure['list']]
-            if len(popular_categories_so_far) >= max_total_categories:
-                break
-            random_pick = random.sample(self.sanitized_categories_list, 1)[0]
-            if random_pick not in popular_categories_so_far:
-                popular_category = self.return_popular_something_insert(random_pick)
+        if cached_dict:
+            cached_pop_categories_list = cached_dict['pop_categories']
+            for c in cached_pop_categories_list:
+                popular_category = self.return_popular_something_insert(c)
                 popular_category_sub_structure['list'].append(popular_category)
+        else:
+            max_total_categories = 6
+            max_searched_categories = 4
+            for c in popular_category_list_raw[:max_searched_categories]:
+                if c['count'] < 100:
+                    break
+                else:
+                    popular_category = self.return_popular_something_insert(c['term'])
+                    popular_category_sub_structure['list'].append(popular_category)
+
+            while True:
+                popular_categories_so_far = [c['name'] for c in popular_category_sub_structure['list']]
+                if len(popular_categories_so_far) >= max_total_categories:
+                    break
+                random_pick = random.sample(self.sanitized_categories_list, 1)[0]
+                if random_pick not in popular_categories_so_far:
+                    popular_category = self.return_popular_something_insert(random_pick)
+                    popular_category_sub_structure['list'].append(popular_category)
+            if id_param != 'uuid':
+                pop_categories_for_cache = [c['name'] for c in popular_category_sub_structure['list']]
+                cache.set(id_param, {'pop_categories': pop_categories_for_cache}, 60 * 60 * 24) # Expires after 24 hours
         base_response['search_categories'].append(popular_category_sub_structure)
 
         # Show 'popular nearby' based on user search history ONLY IF 100 or above history;
@@ -248,7 +262,7 @@ class MobileResource(ModelResource):
             base_response['search_categories'].append(popular_nearby_sub_structure)
 
         # only for debugging purposes below
-        base_response['elasticsearch_res'] = res
+        # base_response['elasticsearch_res'] = res
 
         response = base_response
         return self.create_response(request, response)
