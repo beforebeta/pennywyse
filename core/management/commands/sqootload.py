@@ -89,7 +89,7 @@ def refresh_sqoot_data(indirectload=False):
     print '%s deals detected, estimating %s pages to iterate\n' % (active_deal_count, page_count)
 
     describe_section("STARTING TO DOWNLOAD SQOOT DEALS..\n")
-    #request_parameters['location'] = '10011' # FOR DEBUGGING
+    request_parameters['location'] = '10011' # FOR DEBUGGING
     #request_parameters['order'] = 'distance' # FOR DEBUGGING
     # request_parameters['provider_slugs'] = 'yelp' # FOR DEBUGGING
 

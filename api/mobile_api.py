@@ -9,7 +9,7 @@ from haystack.utils.geo import Point, D
 from elasticsearch import Elasticsearch
 
 from core.util import print_stack_trace
-from core.models import Coupon, Category
+from core.models import Category
 
 class MobileResource(ModelResource):
 
@@ -76,61 +76,54 @@ class MobileResource(ModelResource):
         end_point = page * per_page
 
         deals = []
+        # import ipdb; ipdb.set_trace()
+        for sqs_obj in sqs[start_point:end_point]:
+            merchant_pnt = sqs_obj.merchant_location
+            dist_to_user = geopy_distance((user_pnt.y, user_pnt.x), (merchant_pnt.y, merchant_pnt.x)).miles
 
-        coupon_ids = [int(sqs_coupon_obj.pk) for sqs_coupon_obj in sqs[start_point:end_point]]
-        coupons = Coupon.all_objects.filter(id__in=coupon_ids)
-
-        for coupon in coupons:
-            merchant = coupon.merchant
-            merchant_location = coupon.merchant_location
-            dist_to_user = geopy_distance((user_pnt.y, user_pnt.x), (merchant_location.geometry.y, merchant_location.geometry.x)).miles
-            coupon_network = coupon.coupon_network
-
-            deal_description = coupon.description
-            related_coupons_count = Coupon.all_objects.filter(related_deal=coupon).count()
-            if related_coupons_count != 0:
-                deal_description = deal_description if coupon.description else ""
-                deal_description += "\n\nFind {} more similar deal(s) from this vendor on {}!".format(related_coupons_count,
-                                                                                                      coupon_network.name)
-
+            deal_description = sqs_obj.text
+            if sqs_obj.related_deals_count != 0:
+                deal_description = deal_description if deal_description else ""
+                deal_description += "\n\nFind {} more similar deal(s) from this vendor on {}!".format(sqs_obj.related_deals_count,
+                                                                                                      sqs_obj.provider)
             each_deal = {'deal':
                 {
-                    'id':                   int(coupon.ref_id),
-                    'title':                coupon.embedly_title,
-                    'short_title':          coupon.embedly_description,
+                    'id':                   sqs_obj.coupon_ref_id,
+                    'title':                sqs_obj.embedly_title,
+                    'short_title':          sqs_obj.embedly_description,
                     'description':          deal_description,
-                    'fine_print':           coupon.restrictions,
+                    'fine_print':           sqs_obj.restrictions,
                     'number_sold':          None,
-                    'url':                  coupon.link,
-                    'untracked_url':        coupon.directlink,
-                    'price':                coupon.price,
-                    'value':                coupon.listprice,
-                    'discount_amount':      coupon.discount,
-                    'discount_percentage':  float(coupon.percent) / 100,
+                    'url':                  sqs_obj.link,
+                    'untracked_url':        sqs_obj.directlink,
+                    'price':                sqs_obj.price,
+                    'value':                sqs_obj.listprice,
+                    'discount_amount':      sqs_obj.discount,
+                    'discount_percentage':  float(sqs_obj.percent) / 100,
                     'commission':           None,
-                    'provider_name':        coupon_network.name,
-                    'provider_slug':        coupon_network.code,
-                    'category_name':        ', '.join([c.name for c in coupon.categories.all()]),
-                    'category_slug':        ', '.join([c.code for c in coupon.categories.all()]),
-                    'image_url':            coupon.embedly_image_url,
-                    'online':               coupon.online,
-                    'expires_at':           coupon.end,
-                    'created_at':           coupon.start,
-                    'updated_at':           coupon.lastupdated,
-                    'is_duplicate':         coupon.is_duplicate,
+                    'provider_name':        sqs_obj.provider,
+                    'provider_slug':        sqs_obj.provider_slug,
+                    'category_name':        ', '.join(sqs_obj.categories) if sqs_obj.categories else None,
+                    'category_slug':        ', '.join(sqs_obj.category_slugs) if sqs_obj.category_slugs else None,
+                    'image_url':            sqs_obj.image,
+                    'online':               sqs_obj.online,
+                    'expires_at':           sqs_obj.end,
+                    'created_at':           sqs_obj.start,
+                    'updated_at':           sqs_obj.lastupdated,
+                    'is_duplicate':         sqs_obj.is_duplicate,
                     'merchant': {
-                        'id':               int(merchant.ref_id),
-                        'name':             merchant.name,
-                        'address':          merchant_location.address,
-                        'locality':         merchant_location.locality,
-                        'region':           merchant_location.region,
-                        'postal_code':      merchant_location.postal_code,
+                        'id':               sqs_obj.merchant_ref_id,
+                        'name':             sqs_obj.merchant_name,
+                        'address':          sqs_obj.merchant_address,
+                        'locality':         sqs_obj.merchant_locality,
+                        'region':           sqs_obj.merchant_region,
+                        'postal_code':      sqs_obj.merchant_postal_code,
                         'country':          "United States",
                         'country_code':     "US",
-                        'latitude':         merchant_location.geometry.y,
-                        'longitude':        merchant_location.geometry.x,
+                        'latitude':         merchant_pnt.y,
+                        'longitude':        merchant_pnt.x,
                         'dist_to_user_mi':  dist_to_user,
-                        'url':              merchant.link,
+                        'url':              sqs_obj.merchant_link,
                     }
                 }
             }
