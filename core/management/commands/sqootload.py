@@ -392,18 +392,13 @@ def check_if_deal_gone(coupon_obj):
     url = coupon_obj.directlink
     provider_slug = coupon_obj.coupon_network.code
 
-    if url:
-        page = requests.get(url)
-        soup = BeautifulSoup(page.content)
-    else:
-        mark_deal_inactive(coupon_obj)
-        return
-
-    if page.status_code != 200:
-        mark_deal_inactive(coupon_obj)
-        return
-
     if provider_slug == 'yelp':
+        is_bad_link, page = check_if_bad_link(url)
+        if is_bad_link:
+            mark_deal_inactive(coupon_obj)
+            return
+
+        soup = BeautifulSoup(page.content)
         done_deal = soup.find("a", { "class" : "done-deal" })
         sold_out = soup.find("a", { "class" : "sold-out" })
         if done_deal or sold_out:
@@ -411,6 +406,11 @@ def check_if_deal_gone(coupon_obj):
             return
 
     if provider_slug == 'restaurant-com':
+        is_bad_link, page = check_if_bad_link(url)
+        if is_bad_link:
+            mark_deal_inactive(coupon_obj)
+            return
+
         if "ErrPgNotAvail" in page.url:
             mark_deal_inactive(coupon_obj)
             return
@@ -423,6 +423,15 @@ def mark_deal_inactive(coupon_obj):
     coupon_obj.status = 'confirmed-inactive'
     coupon_obj.save()
     # print "boo :( inactive deal" # FOR DEBUGGING
+
+def check_if_bad_link(url):
+    if not url:
+        return True, None
+    page = requests.get(url)
+    if page.status_code != 200:
+        return True, None
+    return False, page
+
 
 #############################################################################################################
 #
