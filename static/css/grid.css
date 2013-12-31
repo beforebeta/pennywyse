@@ -1210,8 +1210,11 @@ hr {
 	display: block;
 }
 .coupon-popup-logo {
-	width: 100px;
+	max-width: 120px;
 	text-align: center;
+}
+.coupon-popup-logo img{
+	max-width: 110px;
 }
 .coupon-popup-description {
 	width: 300px;
@@ -1316,4 +1319,7 @@ hr {
 }
 .index-labels-dropdown:hover li > ul {
 	display: block;
+}
+.coupon-type .active{
+	color: #ef5b5b !important;
 }

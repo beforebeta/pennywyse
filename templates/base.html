@@ -71,6 +71,7 @@
 										{{ top_popular_coupon.get_description }}<br>
 										<span class="ends">Ends {{ top_popular_coupon.end|date:"m/d/y" }}</span>
 										<div class="description">
+											<img src="{{ top_popular_coupon.merchant.image }}">
 										</div>
 									</div>
 								</div>
@@ -79,7 +80,7 @@
 									{% for coupon in top_featured_coupons %}
 										<div class="top-featured-coupon {% if foorloop.first %}first-coupon{% elif forloop.last %}last-coupon{% endif %}">
 											<div class="featured-image">
-												<img src="{{ coupon.merchant.get_image }}">
+												<img src="{{ coupon.merchant.image }}">
 											</div>
 											<div class="featured-description">
 											{{ coupon.get_description }}

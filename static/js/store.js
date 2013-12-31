@@ -102,7 +102,6 @@ $(function() {
 		$(this).after('<a href="javascript:void(null)" class="close-category"><img src="/static/img/close_category.png"></a>');
 		sorting = $(this).attr('class');
 		fetch_items(reset_items=true);
-		init_waypoint();
 	});
 	
 	$('.close-category').live('click', function() {
@@ -130,18 +129,25 @@ $(function() {
 	
 	$('.index-labels a').click(function() {
 		$('.index-labels a').removeClass('active');
-		$(this).addClass('active');
 		var filter_type = $(this).attr('id');
-		if (filter_type == 'new') {
-			is_new = true;
-			is_tranding = false;
+		if (filter_type != 'coupon_type') {
+			$(this).addClass('active');
+			if (filter_type == 'new') {
+				is_new = true;
+				is_tranding = false;
+			}
+			else {
+				is_tranding = true;
+				is_new = false;
+			}
+			fetch_items(reset_items=true);
+			/*init_waypoint();*/
 		}
-		else {
-			is_tranding = true;
-			is_new = false;
-		}
-		fetch_items(reset_items=true);
-		/*init_waypoint();*/
+	});
+	$('.coupon-type li').click(function() {
+		var coupon_type = $(this).attr('id');
+		$('.coupon-type li').removeClass('active');
+		$(this).addClass('active');
 	});
 	
 	if ($('.search-merchants-container').length > 0) {
@@ -335,6 +341,7 @@ function render_coupons(data, reset_items) {
 	}
 	init_waypoint();
 }
+
 function render_merchants(data) {
 	template = '{{#items}} \
 						<li class="search-merchant-container newmerchant"> \
@@ -352,6 +359,7 @@ function render_merchants(data) {
 		fetch_merchants();
 	});
 }
+
 function init_waypoint() {
 	$('.more-coupons').waypoint('destroy');
 	$('.more-coupons').waypoint(function(direction) {
@@ -360,9 +368,12 @@ function init_waypoint() {
 			fetch_items(reset_items=false);
 		}
 	}, {
-		offset: 'bottom-in-view',
+		offset: function() {
+			return $(window).height() * 1.5 - $(this).outerHeight();
+		},
 	});
 }
+
 function fetch_items(reset_items) {
 	var url = window.location.pathname;
 	var parameters = new Array();
@@ -421,6 +432,7 @@ function fetch_items(reset_items) {
 		}
 	}, 'json');
 }
+
 function fetch_merchants() {
 	var url = window.location.pathname;
 	var parameters = new Array();
@@ -449,6 +461,7 @@ function fetch_merchants() {
 		mpage += 1;
 	}, 'json');
 }
+
 function init_sticky_header() {
 	$('.prescroll-header').waypoint({
 		  offset: function() {
@@ -476,6 +489,7 @@ function init_sticky_header() {
 			}, 
 	});
 }
+
 function subscribe_form_callback(response, statusText, xhr, $form) {
 	$('#subscribe-form').find('span, br').remove();
 	if (!response.success && typeof(response.errors) != 'undefined') {
@@ -487,6 +501,7 @@ function subscribe_form_callback(response, statusText, xhr, $form) {
 		$('.subscription-popup-right').html('<span>You have been subscribed. <img src="/static/img/check_icon.png"></span>');
 	}
 }
+
 function coupon_subscribe_form_callback(response, statusText, xhr, $form) {
 	if (!response.success && typeof(response.errors) != 'undefined') {
 		for (key in response.errors) {
@@ -500,12 +515,14 @@ function coupon_subscribe_form_callback(response, statusText, xhr, $form) {
 		$('.subscription-popup-right').html('<span>You have been subscribed. <img src="/static/img/check_icon.png"></span>');
 	}
 }
+
 function load_coupon(coupon_id) {
 	$.get('/o/'+coupon_id, function(data) {
 			render_coupon_popup(data, coupon_id);
 			$('.overlay').show();
 	}, 'json');
 }
+
 function render_coupon_popup(data, coupon_id) {
 	data.csrf = $('input[name=csrfmiddlewaretoken]').val();
 	data.id = coupon_id;
@@ -553,16 +570,20 @@ function render_coupon_popup(data, coupon_id) {
 	$('.subscription-popup').after(html);
 	init_clipboard($('#coupon-code-' + coupon_id));
 }
+
 function close_coupon_popup() {
 	$('.coupon-popup').hide();
 	$('.overlay').hide();
 }
+
 function close_popups() {
 	$('.subscription-popup').hide();
 	$('.coupon-popup').hide();
 	$('.overlay').hide();
+	$('.tipsy').remove();
 	window.location.hash = '';
 }
+
 function init_clipboard(element) {
     element.clipboard({
         path: '/static/js/jquery.clipboard.swf',

@@ -85,8 +85,7 @@ def index(request, current_page=1):
                     'description': c.get_description(),
                     'end': c.end.strftime('%m/%d/%y') if c.end else '',
                     'coupon_type': c.coupon_type,
-                    'image': c.merchant.get_image(),
-                    'full_success_path': c.full_success_path()}
+                    'image': c.merchant.image}
             data.append(item)
         return HttpResponse(json.dumps({'items': data,
                                         'total_pages': pages.num_pages}), content_type="application/json")
@@ -228,7 +227,7 @@ def open_coupon(request, coupon_id):
             'code': coupon.code,
             'short_desc': coupon.short_desc,
             'description': coupon.get_description(),
-            'image': coupon.merchant.get_image(),
+            'image': coupon.merchant.image,
             'url': get_visitor_tag(coupon.skimlinks, request.visitor.id)}
     return HttpResponse(json.dumps(item), content_type="application/json")
 
