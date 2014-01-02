@@ -100,9 +100,6 @@ def refresh_sqoot_data(indirectload=False):
     print '%s deals detected, estimating %s pages to iterate\n' % (active_deal_count, page_count)
 
     describe_section("STARTING TO DOWNLOAD SQOOT DEALS..\n")
-    # request_parameters['location'] = '10011' # FOR DEBUGGING
-    #request_parameters['order'] = 'distance' # FOR DEBUGGING
-    request_parameters['provider_slugs'] = 'livingsocial' # FOR DEBUGGING
 
     country_model = get_or_create_country()     # since there's only one country for all deals - no need to check it for each coupon
     sqoot_output_deals = None
@@ -480,12 +477,10 @@ def check_if_deal_gone(coupon_obj):
 
     coupon_obj.status = 'considered-active'
     coupon_obj.save()
-    # print "yay!" # FOR DEBUGGING
 
 def mark_deal_inactive(coupon_obj):
     coupon_obj.status = 'confirmed-inactive'
     coupon_obj.save()
-    # print "boo :( inactive deal" # FOR DEBUGGING
 
 def check_if_bad_link(url):
     if not url:
