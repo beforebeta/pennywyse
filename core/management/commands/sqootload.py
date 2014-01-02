@@ -12,7 +12,7 @@ from django.db.models import Q
 from BeautifulSoup import BeautifulSoup
 
 from core.models import DealType, Category, Coupon, Merchant, Country, CouponNetwork, MerchantLocation
-
+from tests.for_api.sample_data_feed import top_50_us_cities_dict
 from core.util import print_stack_trace
 import json
 
@@ -42,6 +42,11 @@ class Command(BaseCommand):
             dest='validate',
             default=False,
             help='validate'),
+        make_option('--analyze',
+            action='store_true',
+            dest='analyze',
+            default=False,
+            help='analyze'),
         )
 
     def handle(self, *args, **options):
@@ -63,6 +68,11 @@ class Command(BaseCommand):
         if options['validate']:
             try:
                 validate_sqoot_deals()
+            except:
+                print_stack_trace()
+        if options['analyze']:
+            try:
+                analyze_sqoot_deals()
             except:
                 print_stack_trace()
 
@@ -92,7 +102,7 @@ def refresh_sqoot_data(indirectload=False):
     describe_section("STARTING TO DOWNLOAD SQOOT DEALS..\n")
     # request_parameters['location'] = '10011' # FOR DEBUGGING
     #request_parameters['order'] = 'distance' # FOR DEBUGGING
-    # request_parameters['provider_slugs'] = 'yelp' # FOR DEBUGGING
+    request_parameters['provider_slugs'] = 'livingsocial' # FOR DEBUGGING
 
     country_model = get_or_create_country()     # since there's only one country for all deals - no need to check it for each coupon
     sqoot_output_deals = None
@@ -169,6 +179,57 @@ def validate_sqoot_deals():
                                          .filter(Q(status='considered-active')| Q(status='unconfirmed'))
     for c in suspicious_deals:
         check_if_deal_gone(c)
+
+def analyze_sqoot_deals():
+    request_parameters = {
+        'api_key': settings.SQOOT_PUBLIC_KEY,
+    }
+
+    # describe_section("Retrieving the latest categories..\n")
+    # categories_array = requests.get(SQOOT_API_URL + 'categories', params=request_parameters).json()['categories']
+    # category_slugs = [c['category']['slug'] for c in categories_array]
+
+    describe_section("Retrieving the latest providers..\n")
+    providers_array = requests.get(SQOOT_API_URL + 'providers', params=request_parameters).json()['providers']
+    provider_slugs = [c['provider']['slug'] for c in providers_array]
+
+    describe_section("Importing the latest 50 US cities..\n")
+    target_cities = top_50_us_cities_dict
+
+    describe_section("Checking total sqoot deals available..\n")
+    total_deals_count = requests.get(SQOOT_API_URL + 'deals', params=request_parameters).json()['query']['total']
+
+    TARGET_RADIUS = 50 # miles
+    request_parameters['radius'] = TARGET_RADIUS
+    describe_section("Checking sqoot deals currently available in {} mi radius of the following cities..\n".format(TARGET_RADIUS))
+    for city in target_cities:
+        request_parameters['location'] = target_cities[city]
+        per_city_deal_count = requests.get(SQOOT_API_URL + 'deals', params=request_parameters).json()['query']['total']
+        print city, ': ', per_city_deal_count
+    print 'total sqoot deal count: ', total_deals_count
+
+    del request_parameters['location']
+
+    describe_section("Preparing to check deal availablity from the following providers..\n")
+    for p in provider_slugs:
+        print p
+
+    for p in provider_slugs:
+        request_parameters['provider_slugs'] = p
+        per_p_deal_count = requests.get(SQOOT_API_URL + 'deals', params=request_parameters).json()['query']['total']
+        if per_p_deal_count < 100:
+            print "total deals available from {} too small: {}".format(p, per_p_deal_count)
+            print "Skipping.."
+            continue
+        else:
+            describe_section("Checking deals from {} for each city..\n".format(p))
+
+        for city in target_cities:
+            request_parameters['location'] = target_cities[city]
+            per_city_and_p_deal_count = requests.get(SQOOT_API_URL + 'deals', params=request_parameters).json()['query']['total']
+            print city, ': ', per_city_and_p_deal_count
+        print 'total {} deal count:  {}'.format(p, per_p_deal_count)
+        del request_parameters['location']
 
 
 #############################################################################################################
