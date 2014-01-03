@@ -18,7 +18,7 @@ import json
 
 SQOOT_API_URL = "http://api.sqoot.com/v2/"
 ITEMS_PER_PAGE = 100
-SAVED_MERCHANT_ID_LIST = [int(m.ref_id) for m in Merchant.all_objects.filter(ref_id_source='sqoot')]
+SAVED_MERCHANT_ID_LIST = [int(m.ref_id) for m in Merchant.all_objects.filter(ref_id_source='sqoot').only('ref_id')]
 
 class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
