@@ -413,6 +413,7 @@ def get_or_create_coupon(each_deal_data_dict, merchant_model, category_model, de
 def check_and_mark_duplicate(coupon_model):
     other_coupons_from_this_merchant = Coupon.all_objects.filter(merchant__ref_id=coupon_model.merchant.ref_id).exclude(ref_id=coupon_model.ref_id)
     if other_coupons_from_this_merchant.filter(is_duplicate=False).count() == 0:
+        # This is the case where coupon_model already exists in db as a 'representative' i.e. is_duplicate=False
         return
 
     for c in other_coupons_from_this_merchant:
