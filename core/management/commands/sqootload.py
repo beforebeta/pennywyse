@@ -411,7 +411,10 @@ def get_or_create_coupon(each_deal_data_dict, merchant_model, category_model, de
     return coupon_model
 
 def check_and_mark_duplicate(coupon_model):
-    other_coupons_from_this_merchant = Coupon.all_objects.filter(merchant__ref_id=coupon_model.merchant.ref_id)
+    other_coupons_from_this_merchant = Coupon.all_objects.filter(merchant__ref_id=coupon_model.merchant.ref_id).exclude(ref_id=coupon_model.ref_id)
+    if other_coupons_from_this_merchant.filter(is_duplicate=False).count() == 0:
+        return
+
     for c in other_coupons_from_this_merchant:
         info_match_count = 0
         info_match_count += 1 if coupon_model.description == c.description else 0
