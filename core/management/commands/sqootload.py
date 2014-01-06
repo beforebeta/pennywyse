@@ -18,7 +18,7 @@ import json
 
 SQOOT_API_URL = "http://api.sqoot.com/v2/"
 ITEMS_PER_PAGE = 100
-SAVED_MERCHANT_ID_LIST = [int(m.ref_id) for m in Merchant.all_objects.filter(ref_id_source='sqoot')]
+SAVED_MERCHANT_ID_LIST = [int(m.ref_id) for m in Merchant.all_objects.filter(ref_id_source='sqoot').only('ref_id')]
 
 class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
@@ -411,7 +411,11 @@ def get_or_create_coupon(each_deal_data_dict, merchant_model, category_model, de
     return coupon_model
 
 def check_and_mark_duplicate(coupon_model):
-    other_coupons_from_this_merchant = Coupon.all_objects.filter(merchant__ref_id=coupon_model.merchant.ref_id)
+    other_coupons_from_this_merchant = Coupon.all_objects.filter(merchant__ref_id=coupon_model.merchant.ref_id).exclude(ref_id=coupon_model.ref_id)
+    if other_coupons_from_this_merchant.filter(is_duplicate=False).count() == 0:
+        # This is the case where coupon_model already exists in db as a 'representative' i.e. is_duplicate=False
+        return
+
     for c in other_coupons_from_this_merchant:
         info_match_count = 0
         info_match_count += 1 if coupon_model.description == c.description else 0
