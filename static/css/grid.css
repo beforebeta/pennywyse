@@ -896,6 +896,10 @@ hr {
 	height: 120px !important;
 	width: 485px !important;
 }
+.top-container h1 {
+	margin-top: 0 !important;
+	padding-top: 0 !important;
+}
 .sticky {
 	position: fixed !important;
 	z-index: 1;

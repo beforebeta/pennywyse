@@ -30,7 +30,7 @@ class Command(BaseCommand):
 
             page_count = int((category.get_active_coupons().count() / 10.0) + 0.5)
             for i in range(1, page_count):
-              file.write('http://pushpenny.com/categories/{0}/page/{1}/ changefreq=weekly priority=0.3\n'.format(category.code, i))
+                file.write('http://pushpenny.com/categories/{0}/page/{1}/ changefreq=weekly priority=0.3\n'.format(category.code, i))
         file.close()
 
     def generate_merchant_urls(self):
@@ -42,31 +42,12 @@ class Command(BaseCommand):
 
             page_count = int((merchant.get_active_coupons().count() / 10.0) + 0.5)
             for i in range(1, page_count):
-              file.write('http://pushpenny.com/coupons/{0}/page/{1}/ changefreq=weekly priority=0.3\n'.format(merchant.name_slug, i))
-              file.write('http://pushpenny.com/coupons/{0}/{1}/page/{2}/ changefreq=weekly priority=0.3\n'.format(merchant.name_slug, merchant.id, i))
+                file.write('http://pushpenny.com/coupons/{0}/page/{1}/ changefreq=weekly priority=0.3\n'.format(merchant.name_slug, i))
+                file.write('http://pushpenny.com/coupons/{0}/{1}/page/{2}/ changefreq=weekly priority=0.3\n'.format(merchant.name_slug, merchant.id, i))
         file.close()
 
     def chunks(self, l, n):
         return [l[i:i+n] for i in range(0, len(l), n)]
-
-    def generate_coupon_urls(self):
-        self.stdout.write('Generating Coupon URLs...')
-        file_num = 0
-        for c_ids in self.chunks([c.id for c in Coupon.objects.all()], 50000):
-          file_num += 1
-          f = open('/tmp/pushpenny_sitemap_coupon_urls.txt'.format(file_num), 'w')
-          for c_id in c_ids:
-              coupon = Coupon.objects.get(id=c_id)
-              if coupon.merchant:
-                  f.write('http://pushpenny.com{0} changefreq=weekly priority=0.7\n'.format(coupon.local_path()))
-          f.close()
-
-      #build coupon in one place and move them to their own unique location
-          self.stdout.write('Building coupon sitemap {0}...\n\n'.format(file_num))
-          call(['./vendor/sitemap_gen/sitemap_gen.py', '--config=sitemap/configs/coupon.xml'])
-          call(['mv', "./sitemap/coupon_sitemap.xml", "./sitemap/coupon_sitemap_{0}.xml".format(file_num)])
-
-        return file_num
 
     def build_sitemaps(self):
         self.stdout.write('Building base sitemap...\n\n')

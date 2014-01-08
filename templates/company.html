@@ -1,4 +1,11 @@
 {% extends "base.html" %}
+			
+			{% block head %}
+			    {{ block.super }}
+				{% if coupon_id %}
+				 	<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+				{% endif %}
+			{% endblock %}
 
 			{% block content %}
 			<div class="row middle-container">
