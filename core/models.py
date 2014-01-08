@@ -281,7 +281,7 @@ class Merchant(models.Model):
         return self.name
 
     def local_path(self):
-        return "/coupons/{0}/{1}/".format(self.name_slug, self.id)
+        return "/coupons/{0}/".format(self.name_slug)
 
     def page_description(self):
         return "Coupons for {0} | {1} | {2}".format(self.name, self.description, base_description)
