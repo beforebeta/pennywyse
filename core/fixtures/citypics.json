@@ -1,0 +1,22 @@
+[
+    {
+        "pk": 1,
+        "model": "core.citypicture",
+        "fields": {
+            "name": "New York, NY",
+            "code": "new-york-ny",
+            "geometry": "POINT(-73.966332 40.784076)",
+            "picture_url": "http://image.shutterstock.com/display_pic_with_logo/1125836/145539733/stock-photo-new-york-city-manhattan-skyline-panorama-with-empire-state-building-145539733.jpg"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "core.citypicture",
+        "fields": {
+            "name": "San Francisco, CA",
+            "code": "san-francisco-ca",
+            "geometry": "POINT(-122.4167 37.7833)",
+            "picture_url": "http://image.shutterstock.com/display_pic_with_logo/253576/110669864/stock-photo-golden-gate-bridge-san-francisco-110669864.jpg"
+        }
+    }
+]
