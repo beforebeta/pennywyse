@@ -86,7 +86,7 @@ h4 {
 	margin: 0px !important;
 	font-weight: 700 !important;
 }
-.left-rail h4 {
+.left-rail h4, .left-rail h1 {
 	font-family: "Helvetica Neue", Helvetica, Geneva, Open Sans, Arial, sans-serif;
 	text-transform: uppercase;
 	color: #423d3e;
