@@ -8,13 +8,15 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 )
 
-########################################################################################
+# flatpages
+urlpatterns = patterns('',
+    (r'^p/', include('django.contrib.flatpages.urls')),
+)
+
 # Web
-########################################################################################
 urlpatterns += patterns('web.views.main',
     url(r'^$', 'index'),
     url(r'^page/(?P<current_page>[\d]+)/$', 'index'),
-    url(r'^privacy-and-terms/$', 'privacy'),
     url(r'^coupons/(?P<company_name>[a-zA-Z0-9-_]+)/$', 'coupons_for_company'),
     url(r'^coupons/(?P<company_name>[a-zA-Z0-9-_]+)/(?P<company_id>[\d]+)/$', 'coupons_for_company'),
     url(r'^coupons/(?P<company_name>[a-zA-Z0-9-_]+)/(?P<coupon_label>[a-z0-9-_]+)/$', 'coupons_for_company'),
@@ -35,6 +37,7 @@ urlpatterns += patterns('web.views.main',
     url(r'^stores/$', 'stores'),
     url(r'^e/subscribe/$', 'email_subscribe'),
     url(r'^o/(?P<coupon_id>[\d]+)/$', 'open_coupon'),
+    url(r'^p/(?P<url>[a-zA-Z0-9-_]+)/', 'flatpage'),
 
 # /blog/ is being served by WordPress
 #    url(r'^blog/', include('articles.urls')),
@@ -51,27 +54,15 @@ urlpatterns += patterns('web.views.search',
     url(r'^search/page/(?P<current_page>[\d]+)/$', 'search')
 )
 
-urlpatterns += patterns('web.views.email',
-    url(r'^emailA$', 'email_a'),
-    url(r'^emailB$', 'email_b'),
-    url(r'^emailC$', 'email_c'),
-    url(r'^emailD$', 'email_d'),
-)
-
 handler404 = 'web.views.main.index'
 
-########################################################################################
 # WebSvcs
-########################################################################################
-
 urlpatterns += patterns('websvcs.views.image',
     url(r'^s/image/(?P<image_url>.+)/(?P<height>[\d]+)x(?P<width>[\d]+)/$', 'image_resize'),
     url(r'^s/image/(?P<image_url>http.+)/$', 'image')
 )
-########################################################################################
-# API
-########################################################################################
 
+# API
 urlpatterns += patterns('api.views',
     url(r'^v2/deals', 'deals'),
     url(r'^v2/localinfo', 'localinfo'),

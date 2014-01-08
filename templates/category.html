@@ -1,5 +1,10 @@
 {% extends "base.html" %}
-
+			
+			{% block head %}
+			    {{ block.super }}
+				<meta name="title" content="{{ category.name }} Coupons | Hand Verified Discounts @ PushPenny">
+			{% endblock %}
+			
 			{% block content %}
 			<div class="row middle-container">
 				<div class="left-rail">

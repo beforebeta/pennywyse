@@ -1,7 +1,7 @@
 import json
-import re
 from uuid import uuid4
 from django.conf import settings
+from django.contrib.flatpages.views import flatpage
 from django.contrib.sites.models import get_current_site
 from django.core.paginator import Paginator
 from django.core.urlresolvers import reverse
@@ -21,17 +21,7 @@ from web.models import ShortenedURLComponent, CategorySection, TopCouponSection
 from web.forms import EmailSubscriptionForm
 from websvcs.models import EmailSubscription
 
-def build_base_context(request, context):
-    base_context = {"visitor": getattr(request, 'visitor', None),
-                "top_categories": CategorySection.objects.all(),
-                "top_coupons": TopCouponSection.objects.all(),
-                "top_groceries": Category.objects.filter(name='Grocery Coupons')[0],
-                "form": EmailSubscriptionForm()}
-    context.update(**base_context)
-    return context
-
 def render_response(template_file, request, context={}):
-    build_base_context(request, context)
     return render_to_response(template_file, context, context_instance=RequestContext(request))
 
 def set_meta_tags(subject, context):
@@ -42,13 +32,6 @@ def set_meta_tags(subject, context):
     context["og_image"] = subject.og_image()
     context["og_url"] = subject.og_url()
     context["canonical_url"] = subject.og_url()
-
-def set_canonical_url(request, context):
-    full_path = request.get_full_path()
-    canonical_path = re.search('[A-z0-9\/\-]+', full_path).group(0)
-
-    context["canonical_url"] = (settings.BASE_URL_NO_APPENDED_SLASH + canonical_path)
-
 
 @ensure_csrf_cookie
 def index(request, current_page=1):
@@ -87,7 +70,6 @@ def index(request, current_page=1):
       "pop_coupons": Coupon.objects.filter(is_popular=True).order_by("-date_added")[:8],
     }
 
-    set_canonical_url(request, context)
     return render_response("index.html", request, context)
 
 def _search(itm,lst,f):
@@ -197,11 +179,6 @@ def open_coupon(request, coupon_id):
     return HttpResponse(json.dumps(item), content_type="application/json")
 
 @ensure_csrf_cookie
-@cache_page(60 * 60 * 24)
-def privacy(request):
-    return render_response("privacy.html", request, {})
-
-@ensure_csrf_cookie
 def categories(request):
     context={
         "page_description": description,
@@ -213,7 +190,6 @@ def categories(request):
         "categories": Category.objects.filter(parent__isnull=True, is_featured=False).order_by('name'),
         "featured_categories": Category.objects.filter(is_featured=True).order_by('name'),
     }
-    set_canonical_url(request, context)
     return render_response("categories.html", request, context)
 
 @ensure_csrf_cookie

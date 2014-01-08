@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+			{% block content %}
+			<div class="row middle-container">
+				<div class="main-rail index-rail top-labels-container">
+						<div class="main-labels">
+							<a href="{% url 'web.views.main.index' %}">Home</a>
+							>
+							{{ flatpage.title }}
+						</div>
+					</div>
+				<br clear="both">
+				<div class="main-rail merchants">
+					<h3>{{ flatpage.title }}</h3>
+					{{ flatpage.content }}
+				</div>
+			</div>
+			{% endblock %}

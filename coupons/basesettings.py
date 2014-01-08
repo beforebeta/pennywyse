@@ -31,9 +31,7 @@ BASE_URL_NO_APPENDED_SLASH = "http://localhost:8002"
 try: os.makedirs(IMAGE_LOCAL_COPY_DIR)
 except: pass
 
-ADMINS = (
-# ('Your Name', 'your_email@example.com'),
-)
+ADMINS = ()
 
 WEBSITE_NAME = 'PushPenny'
 
@@ -167,6 +165,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.humanize',
     'django.contrib.gis', # GeoDjango
+    'django.contrib.flatpages',
     'compressor',
     'constance',
     'djcelery',
