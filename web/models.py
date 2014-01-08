@@ -1,34 +1,6 @@
-import datetime
 import uuid
 from django.db import models
-from core.models import Merchant, Coupon
 
-class FeaturedCoupon(models.Model):
-    coupon = models.ForeignKey(Coupon)
-
-    date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
-    last_modified   = models.DateTimeField(auto_now=True, auto_now_add=True)
-
-    def __unicode__(self):  # Python 3: def __str__(self):
-        return str(self.coupon)
-
-class NewCoupon(models.Model):
-    coupon = models.ForeignKey(Coupon)
-
-    date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
-    last_modified   = models.DateTimeField(auto_now=True, auto_now_add=True)
-
-    def __unicode__(self):  # Python 3: def __str__(self):
-        return str(self.coupon)
-
-class PopularCoupon(models.Model):
-    coupon = models.ForeignKey(Coupon)
-
-    date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
-    last_modified   = models.DateTimeField(auto_now=True, auto_now_add=True)
-
-    def __unicode__(self):  # Python 3: def __str__(self):
-        return str(self.coupon)
 
 class ShortenedURLComponentManager(models.Manager):
     def shorten_url_component(self, original_url):
@@ -50,12 +22,6 @@ class ShortenedURLComponentManager(models.Manager):
         if url[:3] == ShortenedURLComponent_IDENTIFIER:
             return True
 
-#    def should_shorten_url(self, url):
-#        if len(url) > 255:
-#            return True
-#        else:
-#            return False
-
     def get_original_url(self, shortened_url):
         objects = super(ShortenedURLComponentManager, self)
         return objects.get(shortened_url=shortened_url).original_url
@@ -66,3 +32,22 @@ class ShortenedURLComponent(models.Model):
     objects = ShortenedURLComponentManager()
 
 ShortenedURLComponent_IDENTIFIER = 'sh_'
+
+
+class NavigationSection(models.Model):
+    
+    name = models.CharField(blank=False, max_length=255)
+    order = models.IntegerField(blank=False)
+    
+    class Meta:
+        ordering = ['order']
+        abstract = True
+    
+    def __unicode__(self):
+        return self.name
+
+class CategorySection(NavigationSection):
+    pass
+
+class TopCouponSection(NavigationSection):
+    pass

@@ -26,9 +26,9 @@
 						<a href="#">About</a>
 						<a href="#">Help</a>
 					</div>
-					<a href="#"><img src="/static/img/twitter_icon.png"></a>
-					<a href="#"><img src="/static/img/facebook_icon.png"></a>
-					<a href="#"><img src="/static/img/gplus_icon.png"></a>
+					<a href="http://twitter.com/pushpennycoupon" target="_blank"><img src="/static/img/twitter_icon.png"></a>
+					<a href="https://www.facebook.com/pushpennycoupon" target="_blank"><img src="/static/img/facebook_icon.png"></a>
+					<a href="https://plus.google.com/105363253284126279882/posts" target="_blank"><img src="/static/img/gplus_icon.png"></a>
 				</div>
 			</div>
 		</div>
@@ -53,50 +53,60 @@
 					<li class="menu-item category-item">
 						<a href="#" class="menu-link">Top Coupons</a>
 						<ul class="row dropdown-row stores-row solid-bottom-shadow"><li>
-							<div class="main-row">	
-								<div class="top-coupon-types top-coupons">
-									<div>
-										<a href="#">Coupon Codes</a><br>
-										<a href="#">Free Shipping</a><br>
-										<a href="#">On Sale</a><br>
-										<a href="#">Groceries</a><br>
-										<a href="#">Printables</a><br>
-										<a href="#">Freebies</a><br>
-									</div>
-								</div>
-								<div class="top-coupons top-coupon">
-									<b>Most popular</b>
-									<div class="coupon-body">
-										<h1 class="short-description">{{ top_popular_coupon.short_desc }}</h1>
-										{{ top_popular_coupon.get_description }}<br>
-										<span class="ends">Ends {{ top_popular_coupon.end|date:"m/d/y" }}</span>
-										<div class="description">
-											<img src="{{ top_popular_coupon.merchant.image }}">
+							<div class="main-row">
+								<div class="top-coupons-row">	
+									<div class="top-coupon-types top-coupons">
+										<div>
+											{% for top_coupon in top_coupons %}
+												<a href="javascript:void(null);" id="tc-{{ top_coupon.id }}">{{ top_coupon.name }}</a><br>
+											{% endfor %}
 										</div>
 									</div>
-								</div>
-								<div class="top-coupons featured-coupons">
-									<b>Featured coupons</b>
-									{% for coupon in top_featured_coupons %}
-										<div class="top-featured-coupon {% if foorloop.first %}first-coupon{% elif forloop.last %}last-coupon{% endif %}">
-											<div class="featured-image">
-												<img src="{{ coupon.merchant.image }}">
-											</div>
-											<div class="featured-description">
-											{{ coupon.get_description }}
-											</div><br clear="both">
-										</div>
-									{% endfor %}
-								</div>
-								<div class="top-coupons popular-merchants">
-									<b>Stores</b>
-									<ul>
-										{% for merchant in top_merchants %}
-											<li>
-												<a href="{{ merchant.local_path }}"><img src="{{ merchant.image }}"></a>
-											</li>
+									<div class="top-coupons top-coupon">
+										<b>Most popular</b>
+										{% for top_coupon in top_coupons %}
+											{% if top_coupon.popular.all.0 %}
+												<div class="coupon-body top-popular-coupon {% if not forloop.first %}hidden{% endif %}" id="pc-{{ top_coupon.id }}">
+													<h1 class="short-description">{{ top_coupon.popular.all.0.short_desc }}</h1>
+													{{ top_coupon.popular.all.0.get_description }}<br>
+													<span class="ends">Ends {{ top_coupon.popular.all.0.end|date:"m/d/y" }}</span>
+													<div class="description">
+														<img src="{{ top_coupon.popular.all.0.merchant.image }}">
+													</div>
+												</div>
+											{% endif %}
 										{% endfor %}
-									</ul>
+									</div>
+									<div class="top-coupons featured-coupons">
+										<b>Featured coupons</b>
+										{% for top_coupon in top_coupons %}
+											<div class="top-featured-section {% if not forloop.first %}hidden{% endif %}" id="fc-{{ top_coupon.id }}">
+											{% for featured_coupon in top_coupon.featured.all %}
+												<div class="top-featured-coupon {% if foorloop.first %}first-coupon{% elif forloop.last %}last-coupon{% endif %}">
+													<div class="featured-image">
+														<img src="{{ featured_coupon.merchant.image }}">
+													</div>
+													<div class="featured-description">
+													{{ featured_coupon.get_description }}
+													</div><br clear="both">
+												</div>
+											{% endfor %}
+											</div>
+										{% endfor %}
+									</div>
+									<div class="top-coupons popular-merchants">
+										<b>Stores</b>
+										{% for top_coupon in top_coupons %}
+										<ul class="top-store{% if not forloop.first %} hidden{% endif %}" id="st-{{ top_coupon.id }}">
+											{% for merchant in top_coupon.stores.all %}
+												<li>
+													<a href="{{ merchant.local_path }}"><img src="{{ merchant.image }}"></a>
+												</li>
+											{% endfor %}
+										</ul>
+										{% endfor %}
+										<br clear="both">
+									</div>
 									<br clear="both">
 								</div>
 							</div>
@@ -109,15 +119,15 @@
 								{% for category in top_categories %}
 									<div class="category-label">{{ category.name }}</div>
 								{% endfor %}
-								<hr>
+								<br clear="both">
 								{% for category in top_categories %}
 									<div class="category-container">
 										{% for subcategory in category.category_set.all %}
-											{{ subcategory.name }}<br>
+											<a href="{%url 'web.views.main.category' category_code=subcategory.code %}">{{ subcategory.name }}</a><br>
 										{% endfor %}
 									</div>
 								{% endfor %}
-								<hr>
+								<br clear="both">
 								<div class="more-categories">
 									<a href="{% url 'web.views.main.categories' %}">See all categories &#187;</a>
 								</div>
@@ -125,10 +135,10 @@
 						</li></ul>
 					</li>
 					<li class="menu-item">
-						<a href="#" class="menu-link">Groceries</a>
+						<a href="{% url 'web.views.main.category' category_code=top_groceries.code %}" class="menu-link">Groceries</a>
 						<ul class="row main-row dropdown-row groceries-row"><li>
 							<div class="main-row">
-								{% for grocery in top_groceries.category_set.all %}
+									{% for grocery in top_groceries.category_set.all %}
 										{% if forloop.counter == 1 %}
 											<div class="category-container store-row">
 										{% endif %}
@@ -140,7 +150,7 @@
 											</div>
 										{% endif %}
 									{% endfor %}
-								<hr>
+								<br clear="both">
 								<div class="more-categories">
 									<a href="{% url 'web.views.main.category' category_code=top_groceries.code %}">See all groceries &#187;</a>
 								</div>
@@ -157,7 +167,7 @@
 									<input type="text" placeholder="Search by city, state or zip code" class="search">
 									</form>
 								</div>
-								<hr>
+								<br clear="both">
 								<div class="more-categories">
 									<a href="#">See all cities &#187;</a>
 								</div>
@@ -194,8 +204,11 @@
 					the most out of your penny.</h4>
 					</div>
 					<div class="subscription-popup-right">
-						<div class="facebook-subscribe">Sign up with Facebook</div>
-						<div class="subscribe-delimiter"><hr><span>or</span><hr></div>
+						Sign up with your email to get latest coupons.<br><br>
+						{% comment %}
+							<div class="facebook-subscribe">Sign up with Facebook</div>
+							<div class="subscribe-delimiter"><hr><span>or</span><hr></div>
+						{% endcomment %}
 						<div class="email-subscribe">
 							<form action="/e/subscribe/" method="post" id="subscribe-form">{% csrf_token %}
 							{{ form.email }}

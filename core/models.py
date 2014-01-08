@@ -20,7 +20,7 @@ from django.contrib.gis.geos import Point
 
 from core.util import print_stack_trace, get_first_google_image_result, get_description_tag_from_url
 from tracking.commission.skimlinks import get_merchant_description
-
+from web.models import CategorySection, TopCouponSection
 
 def get_descriptive_image(name):
     return get_first_google_image_result(name)
@@ -54,8 +54,9 @@ class Category(models.Model):
     name            = models.CharField(max_length=255, blank=True, null=True, db_index=True)
     description     = models.CharField(max_length=255, blank=True, null=True)
     parent          = models.ForeignKey("Category", blank=True, null=True)
-    image           = models.TextField(blank=True, null=True)
+    image           = models.TextField(blank=True, null=True, default='/static/img/favicon.png')
     is_featured     = models.BooleanField('Featured', blank=True, default=False)
+    navigation_section = models.ForeignKey(CategorySection, blank=True, null=True)
 
     date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
     last_modified   = models.DateTimeField(default=datetime.datetime.now(), auto_now=True, auto_now_add=True)
@@ -171,6 +172,8 @@ class Merchant(models.Model):
     use_skimlinks   = models.BooleanField(default=True)
     is_featured     = models.BooleanField('Featured', blank=True, default=False)
     popularity      = models.IntegerField(blank=True, null=True, default=0)
+    similar         = models.ManyToManyField('Merchant', blank=True, null=True)
+    navigation_section = models.ForeignKey(TopCouponSection, blank=True, null=True, related_name='stores')
 
     all_objects = models.Manager()
     objects = MerchantManager()
@@ -493,6 +496,8 @@ class Coupon(models.Model):
 
     date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
     last_modified   = models.DateTimeField(default=datetime.datetime.now(), auto_now=True, auto_now_add=True)
+    featured_in = models.ForeignKey(TopCouponSection, blank=True, null=True, related_name='featured')
+    popular_in = models.ForeignKey(TopCouponSection, blank=True, null=True, related_name='popular')
 
     objects = CouponManager()
     active_objects = ActiveCouponManager()
@@ -592,18 +597,13 @@ class Coupon(models.Model):
     def create_image(self):
         if self.merchant:
             return self.merchant.image
-#            if self.categories.count()>0:
-#                if self.categories.exclude(name="apparel").count()>0:
-#                    return self.categories.exclude(name="apparel")[0].image
-#                else:
-#                    return self.categories.all()[0].image
         return settings.DEFAULT_IMAGE
 
     def save(self, *args, **kwargs):
         if self.description:
             if self.description.endswith("."):
                 self.description = self.description[:-1]
-            #Hierarchy for setting short desc
+            # Hierarchy for setting short desc
             self.short_desc = self.create_short_desc()
             self.desc_slug = slugify(self.description)[:175]
         super(Coupon, self).save(*args, **kwargs)
@@ -624,7 +624,7 @@ class Coupon(models.Model):
         return category in [c.code for c in self.categories.all()]
 
     def local_path(self):
-        return "/coupons/{0}/{1}/{2}/".format(self.merchant.name_slug, self.desc_slug, self.id)
+        return "/coupons/{0}/{1}/".format(self.merchant.name_slug, self.desc_slug)
 
     def success_path(self):
         return reverse('web.views.main.coupon_success_page', kwargs={'company_name': self.merchant.name_slug,
@@ -658,7 +658,7 @@ class Coupon(models.Model):
         return False
     
     def full_success_path(self):
-        return 'http://%s%s' % (Site.objects.get_current().domain, self.success_path())
+        return 'http://%s/%s' % (Site.objects.get_current().domain, self.local_path())
     
 @receiver(post_save, sender=Category)
 @receiver(post_save, sender=Coupon)

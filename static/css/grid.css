@@ -698,7 +698,7 @@ hr {
 	
 }
 .merchant-left {
-	width: 120px;
+	width: 100px;
 }
 .groceries-row {
 	display: none;
@@ -709,7 +709,7 @@ hr {
 	box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.15);
 }
 .merchant-logo {
-	max-width: 120px;
+	max-width: 100px;
 	max-height: 60px;
 }
 .close-category {
@@ -923,8 +923,10 @@ hr {
 	margin-top: 5px;
 	margin-bottom: 10px;
 	line-height: 20px;
-	float: left;
-	height: 400px;
+	height: auto;
+	overflow: hidden;
+	display: table-cell;
+	vertical-align: top;
 }
 .top-coupons b{
 	text-transform: uppercase;
@@ -932,7 +934,7 @@ hr {
 	color: #423d3e;
 }
 .top-coupon-types div{
-	margin-top: 25px;
+	padding-top: 15px;
 }
 .top-coupon-types a{
 	display: block;
@@ -1322,4 +1324,8 @@ hr {
 }
 .coupon-type .active{
 	color: #ef5b5b !important;
+}
+.top-coupons-row {
+	display: table;
+	padding: 5px;
 }

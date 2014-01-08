@@ -4,17 +4,7 @@ from api.mobile_api import MobileResource
 admin.autodiscover()
 mobile_resource = MobileResource()
 
-# Uncomment the next two lines to enable the admin:
-
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'coupons.views.home', name='home'),
-    # url(r'^coupons/', include('coupons.foo.urls')),
-
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
 )
 
@@ -27,14 +17,14 @@ urlpatterns += patterns('web.views.main',
     url(r'^privacy-and-terms/$', 'privacy'),
     url(r'^coupons/(?P<company_name>[a-zA-Z0-9-_]+)/$', 'coupons_for_company'),
     url(r'^coupons/(?P<company_name>[a-zA-Z0-9-_]+)/(?P<company_id>[\d]+)/$', 'coupons_for_company'),
-
+    url(r'^coupons/(?P<company_name>[a-zA-Z0-9-_]+)/(?P<coupon_label>[a-z0-9-_]+)/$', 'coupons_for_company'),
     url(r'^coupons/(?P<company_name>[a-zA-Z0-9-_]+)/page/(?P<current_page>[\d]+)/$', 'coupons_for_company'),
     url(r'^coupons/(?P<company_name>[a-zA-Z0-9-_]+)/(?P<company_id>[\d]+)/page/(?P<current_page>[\d]+)/$', 'coupons_for_company'),
 
     url(r'^coupons/(?P<company_name>[a-zA-Z0-9-_]+)/page/(?P<current_page>[\d]+)/categories/(?P<category_ids>sh_[a-fA-F0-9]+)/$', 'coupons_for_company'),
     url(r'^coupons/(?P<company_name>[a-zA-Z0-9-_]+)/(?P<company_id>[\d]+)/page/(?P<current_page>[\d]+)/categories/(?P<category_ids>sh_[a-fA-F0-9]+)/$', 'coupons_for_company'),
 
-    #do not kill old links:
+    # do not kill old links:
     url(r'^coupon/(?P<company_name>[a-zA-Z0-9-_]+)/(?P<coupon_label>[a-z0-9-_]+)/(?P<coupon_id>[\d]+)/$', 'redirect_to_open_coupon'),
     url(r'^coupons/(?P<company_name>[a-zA-Z0-9-_]+)/(?P<coupon_label>[a-zA-Z0-9-_]+)/(?P<coupon_id>[\d]+)/ty/$', 'coupon_success_page'),
 

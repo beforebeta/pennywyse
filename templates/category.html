@@ -3,13 +3,17 @@
 			{% block content %}
 			<div class="row middle-container">
 				<div class="left-rail">
+					<div class="top-labels">
+						<h4>{{ category.name }}</h4>
+						<h4>Coupons</h4>
+						{{ category.link }}
+					</div>
 					{% comment %}
 						<button type="button" class="btn-follow"><img src="/static/img/follow_icon.png">Follow</button>
 					{% endcomment %}
 					<div class="merchant">
 						<div class="merchant-left">
-							<h4>{{ category.name }}</h4>
-							<h4>Coupons</h4>
+							<img src="{{ category.image }}" class="merchant-logo">
 						</div>
 						<div class="merchant-right">
 							<span>{{ num_coupons }}</span>
@@ -26,27 +30,27 @@
 						</div>
 						<div class="filter-icons">
 							<div class="filter-container coupon-code" id="coupon_code">
-								<div class="filter-icon coupon-code-icon"></div>
+								<div class="filter-icon coupon-code-icon selected"></div>
 								Coupon Codes
 							</div>
 							<div class="filter-container shipping" id="free_shipping">
-								<div class="filter-icon shipping-icon"></div>
+								<div class="filter-icon shipping-icon selected"></div>
 								Free Shipping
 							</div>
 							<div class="filter-container on-sale last" id="onsale">
-								<div class="filter-icon on-sale-icon"></div>
+								<div class="filter-icon on-sale-icon selected"></div>
 								On Sale
 							</div>
 							<div class="filter-container groceries" id="groceries">
-								<div class="filter-icon groceries-icon"></div>
+								<div class="filter-icon groceries-icon selected"></div>
 								Groceries
 							</div>
 							<div class="filter-container printable" id="printable">
-								<div class="filter-icon printable-icon"></div>
+								<div class="filter-icon printable-icon selected"></div>
 								Printables
 							</div>
 							<div class="filter-container freebies last" id="freebies">
-								<div class="filter-icon freebies-icon"></div>
+								<div class="filter-icon freebies-icon selected"></div>
 								Freebies
 							</div>
 						</div>
@@ -58,9 +62,9 @@
 						<div class="main-labels">
 							<a href="{% url 'web.views.main.index' %}">Home</a>
 							>
-							<a href="{% url 'web.views.main.stores' %}">Retailers</a>
+							<a href="{% url 'web.views.main.categories' %}">Categories</a>
 							>
-							{{ merchant.name }}
+							{{ category.name }}
 						</div>
 						<div class="sorting">
 							Sort by

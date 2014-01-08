@@ -15,6 +15,3 @@ class EmailSubscriptionForm(ModelForm):
     class Meta:
         model = EmailSubscription
         fields = ['email']
-
-
-    

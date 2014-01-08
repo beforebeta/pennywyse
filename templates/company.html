@@ -13,7 +13,7 @@
 					{% endcomment %}
 					<div class="merchant">
 						<div class="merchant-left">
-							<img src="{{ merchant.get_image }}" class="merchant-logo">
+							<img src="{{ merchant.image }}" class="merchant-logo">
 						</div>
 						<div class="merchant-right">
 							<span>{{ num_coupons }}</span>
@@ -77,10 +77,10 @@
 					<hr>
 					<div class="similar-stores">
 						<h4>Similar Stores</h4>
-						{% for store in similar_stores %}
+						{% for store in merchant.similar.all %}
 							<div class="similar-store">
 								<a href="{% url 'web.views.main.coupons_for_company' company_name=store.name_slug company_id=store.id %}">
-									<img src="{{store.get_image}}" class="merchant-logo">
+									<img src="{{ store.image }}" class="merchant-logo">
 								</a>
 							</div>
 						{% endfor %}
@@ -110,7 +110,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="coupons {% if num_pages > 1 %}more-coupons{% endif %}">
+					<div class="coupons {% if num_pages > 1 %}more-coupons{% endif %}" {% if coupon_id %}id="{{ coupon_id }}"{% endif %}>
 						{% for coupon in coupons %}
 							<div class="coupon-container {% if forloop.counter|divisibleby:3 %}coupon-last{% endif %}">
 								<div class="coupon-body">

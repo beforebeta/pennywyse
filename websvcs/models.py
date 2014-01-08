@@ -84,6 +84,7 @@ class EmailSubscription(models.Model):
     last_name   = models.CharField(max_length=255, null=True, blank=True)
     full_name   = models.CharField(max_length=255, null=True, blank=True)
     context     = PickledObjectField(default={})
+    source_url  = models.CharField(max_length=255, null=True, blank=True)
 
     date_added = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True, auto_now_add=True)
