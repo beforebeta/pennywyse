@@ -11,6 +11,7 @@ var current_url = window.location.href;
 $(function() {
 	// enabling sticky header only on landing page
 	if ($('.index-container').length > 0) {
+		is_sticky = true;
 		init_sticky_header();
 	}
 	else {
@@ -468,28 +469,30 @@ function fetch_merchants() {
 }
 
 function init_sticky_header() {
-	$('.prescroll-header').waypoint('destroy');
-	$('.prescroll-header').waypoint({
-		  offset: function() {
-		    return $(this).offset().top - 230;
-		  },
-		  handler: function(direction) {
-				if (direction === 'down') {
-					$('.header').removeClass('hidden');
-					$('.header').addClass('sticky top-search');
-					$('.menu-row').addClass('top-menu');
-					$('.menu-row').addClass('bottom-shadow');
-					$('.prescroll-header').addClass('hidden');
-				}
-				else if (direction == 'up') {
-					$('.header').addClass('hidden');
-					$('.header').removeClass('sticky top-search');
-					$('.menu-row').removeClass('top-menu');
-					$('.menu-row').removeClass('bottom-shadow');
-					$('.prescroll-header').removeClass('hidden');
-				}
-			}, 
-	});
+	if (is_sticky) {
+		$('.prescroll-header').waypoint('destroy');
+		$('.prescroll-header').waypoint({
+			  offset: function() {
+			    return $(this).offset().top - 230;
+			  },
+			  handler: function(direction) {
+					if (direction === 'down') {
+						$('.header').removeClass('hidden');
+						$('.header').addClass('sticky top-search');
+						$('.menu-row').addClass('top-menu');
+						$('.menu-row').addClass('bottom-shadow');
+						$('.prescroll-header').addClass('hidden');
+					}
+					else if (direction == 'up') {
+						$('.header').addClass('hidden');
+						$('.header').removeClass('sticky top-search');
+						$('.menu-row').removeClass('top-menu');
+						$('.menu-row').removeClass('bottom-shadow');
+						$('.prescroll-header').removeClass('hidden');
+					}
+				}, 
+		});
+	}
 }
 
 function subscribe_form_callback(response, statusText, xhr, $form) {
