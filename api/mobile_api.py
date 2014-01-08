@@ -1,5 +1,6 @@
 import string
 import random
+import copy
 from datetime import datetime
 
 from django.core.cache import cache
@@ -19,8 +20,15 @@ class MobileResource(ModelResource):
         super(MobileResource, self).__init__()
         self.es = Elasticsearch()
         self.available_categories_list = [c.name for c in Category.objects.filter(ref_id_source='sqoot').only('name').all()]
+        self.parent_categories_list    = ['Dining & Nightlife',
+                                          'Activities & Events',
+                                          'Shopping & Services',
+                                          'Health & Beauty',
+                                          'Fitness',
+                                          # 'Special Interest', # Excluded
+                                          # 'Product', # Excluded
+                                         ]
         self.sanitized_categories_list = filter(self.check_if_should_exclude, self.available_categories_list)
-
 
     def deals_return_response(self, request, **kwargs):
         self.method_check(request, allowed=['get'])
@@ -160,6 +168,7 @@ class MobileResource(ModelResource):
         self.create_localinfo_index_if_doesnt_exist()
 
         params_dict = request.GET
+        params_keys = params_dict.keys()
         try:
             location_param = params_dict['location']
         except:
@@ -167,6 +176,10 @@ class MobileResource(ModelResource):
                 'error': {'message': "You must supply a valid user location information."}
             }
             return self.create_response(request, response)
+        lat_lng_in_list = location_param.split(',')
+        lat, lng = map(float, lat_lng_in_list)
+        user_pnt = Point(lng, lat)
+        radius = D(mi=float(params_dict['radius'])) if 'radius' in params_keys else D(mi=100)
 
         default_radius_filter = '5mi'
         filters = {
@@ -198,10 +211,10 @@ class MobileResource(ModelResource):
                 }
             }
         }
-        print filters
+
         res = self.es.search(index="localinfo", doc_type='populars', body=filters)
-        popular_category_list_raw = res['facets']['search_category']['terms']
         popular_nearby_list_raw = res['facets']['search_keyword']['terms']
+        # popular_category_list_raw = res['facets']['search_category']['terms'] # Not used for now; instead of parent categories.
 
         base_response = {
             "default_image": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
@@ -216,50 +229,81 @@ class MobileResource(ModelResource):
             "list": []
         }
 
-        # Always show 'popular categories' based on either user search history or random suggestions.
-        # Always include 2 randomly selected categories to avoid self-enforcing popular categories
-        id_param = params_dict.get('id', 'uuid')
-        cached_dict = cache.get(id_param) if id_param != 'uuid' else None
-
-        if cached_dict:
-            cached_pop_categories_list = cached_dict['pop_categories']
-            for c in cached_pop_categories_list:
-                popular_category = self.return_popular_something_insert(c)
-                popular_category_sub_structure['list'].append(popular_category)
-        else:
-            max_total_categories = 6
-            max_searched_categories = 4
-            for c in popular_category_list_raw[:max_searched_categories]:
-                if c['count'] < 100:
-                    break
-                else:
-                    popular_category = self.return_popular_something_insert(c['term'])
-                    popular_category_sub_structure['list'].append(popular_category)
-
-            while True:
-                popular_categories_so_far = [c['name'] for c in popular_category_sub_structure['list']]
-                if len(popular_categories_so_far) >= max_total_categories:
-                    break
-                random_pick = random.sample(self.sanitized_categories_list, 1)[0]
-                if random_pick not in popular_categories_so_far:
-                    popular_category = self.return_popular_something_insert(random_pick)
-                    popular_category_sub_structure['list'].append(popular_category)
-            if id_param != 'uuid':
-                pop_categories_for_cache = [c['name'] for c in popular_category_sub_structure['list']]
-                cache.set(id_param, {'pop_categories': pop_categories_for_cache}, 60 * 60 * 24) # Expires after 24 hours
+        # Always show parent categories as 'popular categories' (minus Special Interest and Product )
+        for c in self.parent_categories_list:
+            popular_category = self.return_popular_something_insert(c)
+            popular_category_sub_structure['list'].append(popular_category)
         base_response['search_categories'].append(popular_category_sub_structure)
 
-        # Show 'popular nearby' based on user search history ONLY IF 100 or above history;
-        # 'nearby' and 'keyword' used interchangeably.
-        max_nearbys = 5
-        for kw in popular_nearby_list_raw[:max_nearbys]:
-            if kw['count'] < 100:
-                break
-            else:
-                popular_nearby = self.return_popular_something_insert(kw['term'])
+        # Always try to show 5 'popular nearby's based on historical searches (min occurance threshold at 100);
+        # To the extent there aren't enough historical popular nearbys, then fill the rest with
+        # randomly selected categories, provided that there are at least 10 deals available under each category.
+        # The user's location & poular_nearbys pair is cached and used for 12hrs; If the user's location changes
+        # more than 50 miles away from any cached locations, then generate a new list of popular nearbys.
+        id_param = params_dict.get('id', 'uuid')
+        cached_data = cache.get(id_param) if id_param != 'uuid' else None
+
+        if cached_data:
+            cached_locations = cached_data['pop_nearbys'].keys()
+            closest_pnt_to_user = {}
+            for location in cached_locations:
+                lat, lng = map(float, location.split(','))
+                dist_to_user = geopy_distance((user_pnt.y, user_pnt.x), (lat, lng)).miles
+                if len(closest_pnt_to_user) == 0:
+                    closest_pnt_to_user = {location: dist_to_user}
+                    continue
+
+                closest_dist_so_far = closest_pnt_to_user.values()[0]
+                if dist_to_user < closest_dist_so_far:
+                    closest_pnt_to_user = {location: dist_to_user}
+                else:
+                    continue
+
+        max_dist_for_caching = 50 # miles
+        if cached_data and (closest_pnt_to_user.values()[0] <= max_dist_for_caching):
+            closest_lat_lng = closest_pnt_to_user.keys()[0]
+            cached_popular_nearbys = cached_data['pop_nearbys'][closest_lat_lng]
+            for n in cached_popular_nearbys:
+                popular_nearby = self.return_popular_something_insert(n)
                 popular_nearby_sub_structure['list'].append(popular_nearby)
-        if popular_nearby_sub_structure['list']:
             base_response['search_categories'].append(popular_nearby_sub_structure)
+        else:
+            max_nearbys = 5
+            for kw in popular_nearby_list_raw[:max_nearbys]:
+                if kw['count'] < 100:
+                    break
+                else:
+                    popular_nearby = self.return_popular_something_insert(kw['term'])
+                    popular_nearby_sub_structure['list'].append(popular_nearby)
+
+            categories_to_sample_from = copy.copy(self.sanitized_categories_list)
+            while True:
+                popular_nearbys_so_far = [n['name'] for n in popular_nearby_sub_structure['list']]
+                if len(popular_nearbys_so_far) >= max_nearbys:
+                    break
+
+                try:
+                    random_pick = random.sample(categories_to_sample_from, 1)[0]
+                except ValueError: # When ran out of categories to choose from.
+                    break
+
+                sqs = SearchQuerySet().using('mobile_api')\
+                                      .filter(django_ct='core.coupon', online=False, is_duplicate=False, mobilequery=random_pick)\
+                                      .filter(SQ(end__gt=datetime.now()) | SQ(status='considered-active'))\
+                                      .dwithin('merchant_location', user_pnt, radius)\
+                                      .distance('merchant_location', user_pnt).order_by('distance')
+                if (random_pick in popular_nearbys_so_far) or (len(sqs) < 10):
+                    categories_to_sample_from.remove(random_pick)
+                    continue
+                else:
+                    popular_nearby = self.return_popular_something_insert(random_pick)
+                    popular_nearby_sub_structure['list'].append(popular_nearby)
+                    categories_to_sample_from.remove(random_pick)
+            popular_nearbys_so_far = [n['name'] for n in popular_nearby_sub_structure['list']]
+            if popular_nearbys_so_far:
+                base_response['search_categories'].append(popular_nearby_sub_structure)
+                if id_param != 'uuid':
+                    self.cache_it_with_location(id_param, popular_nearbys_so_far, location_param)
 
         # only for debugging purposes below
         # base_response['elasticsearch_res'] = res
@@ -301,6 +345,10 @@ class MobileResource(ModelResource):
 
     def check_if_should_exclude(self, category):
         categories_to_exclude_list = ['Jewish', 'Gay', 'Special Interest']
+
+        # Exclude parent categories that are already being presented as 'popular categories'
+        categories_to_exclude_list += self.parent_categories_list
+
         if category in categories_to_exclude_list:
             return False
         return True
@@ -311,5 +359,15 @@ class MobileResource(ModelResource):
             "name": category_or_keyword
         }
         return popular_something
+
+    def cache_it_with_location(self, uuid, popular_nearbys_list, lat_lng_str):
+        cached_data = cache.get(uuid)
+
+        if cached_data:
+            location_popular_pairs = cached_data['pop_nearbys']
+            location_popular_pairs[lat_lng_str] = popular_nearbys_list
+        else:
+            location_popular_pairs = {lat_lng_str: popular_nearbys_list}
+        cache.set(uuid, {'pop_nearbys': location_popular_pairs}, 60 * 60 * 12) # Cache it for 12 hours
 
 
