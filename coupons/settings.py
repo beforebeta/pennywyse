@@ -11,7 +11,7 @@ HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'web.utils.CustomSolrEngine',
         'URL': 'http://127.0.0.1:8080/solr',
-        'EXCLUDED_INDEXES': ['web.search_indexes.LocalCouponIndex']
+        'EXCLUDED_INDEXES': ['web.search_indexes.LocalCouponIndex', 'web.search_indexes.CityPictureIndex']
     },
     'mobile_api': {
         'ENGINE': 'web.utils.CustomSolrEngine',

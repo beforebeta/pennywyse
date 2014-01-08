@@ -216,9 +216,9 @@ class MobileResource(ModelResource):
         popular_nearby_list_raw = res['facets']['search_keyword']['terms']
         # popular_category_list_raw = res['facets']['search_category']['terms'] # Not used for now; instead of parent categories.
 
-        default_image = find_default_image()
+        default_image = self.find_default_image(user_pnt)
         base_response = {
-            "default_image": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "default_image": default_image,
             "search_categories": []
         }
         popular_category_sub_structure = {
@@ -372,4 +372,11 @@ class MobileResource(ModelResource):
         cache.set(uuid, {'pop_nearbys': location_popular_pairs}, 60 * 60 * 12) # Cache it for 12 hours
 
     def find_default_image(self, user_pnt):
-        pass
+        closest_city = SearchQuerySet().using('mobile_api').filter(django_ct='core.citypicture')\
+                                       .distance('geometry', user_pnt).order_by('distance')[0]
+        dist_btwn_city_user = geopy_distance((user_pnt.y, user_pnt.x), (closest_city.geometry.y, closest_city.geometry.x)).miles
+        if dist_btwn_city_user <= closest_city.radius:
+            default_image = closest_city.picture_url
+        else:
+            default_image = "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg"
+        return default_image
