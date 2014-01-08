@@ -372,11 +372,16 @@ class MobileResource(ModelResource):
         cache.set(uuid, {'pop_nearbys': location_popular_pairs}, 60 * 60 * 12) # Cache it for 12 hours
 
     def find_default_image(self, user_pnt):
-        closest_city = SearchQuerySet().using('mobile_api').filter(django_ct='core.citypicture')\
-                                       .distance('geometry', user_pnt).order_by('distance')[0]
+        cities = SearchQuerySet().using('mobile_api').filter(django_ct='core.citypicture')\
+                                 .distance('geometry', user_pnt).order_by('distance')
+        closest_city = cities[0]
         dist_btwn_city_user = geopy_distance((user_pnt.y, user_pnt.x), (closest_city.geometry.y, closest_city.geometry.x)).miles
         if dist_btwn_city_user <= closest_city.radius:
             default_image = closest_city.picture_url
         else:
-            default_image = "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg"
+            try:
+                default = cities.filter(text='Default')[0]
+                default_image = default.picture_url
+            except:
+                default_image = 'http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg'
         return default_image

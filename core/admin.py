@@ -1,6 +1,6 @@
 # from django.contrib import admin
 from django.contrib.gis import admin
-from core.models import Coupon, Category, Merchant, MerchantLocation,CouponNetwork
+from core.models import Coupon, Category, Merchant, MerchantLocation, CouponNetwork, CityPicture
 
 class CouponAdmin(admin.ModelAdmin):
     search_fields = ['description',"short_desc", "merchant__name"]
@@ -16,8 +16,12 @@ class CouponNetworkAdmin(admin.ModelAdmin):
 class CategoryAdmin(admin.ModelAdmin):
     readonly_fields = ['ref_id', 'ref_id_source']
 
+class CityPictureAdmin(admin.ModelAdmin):
+    pass
+
 admin.site.register(Coupon, CouponAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Merchant, MerchantAdmin)
 admin.site.register(MerchantLocation, admin.GeoModelAdmin)
 admin.site.register(CouponNetwork, CouponNetworkAdmin)
+admin.site.register(CityPicture, CityPictureAdmin)

@@ -3,6 +3,17 @@
         "pk": 1,
         "model": "core.citypicture",
         "fields": {
+            "name": "Default",
+            "code": "default",
+            "geometry": "POINT(0.0000 0.0000)",
+            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "radius": 10
+        }
+    },
+    {
+        "pk": 2,
+        "model": "core.citypicture",
+        "fields": {
             "name": "New York, NY",
             "code": "new-york-ny",
             "geometry": "POINT(-73.966332 40.784076)",
@@ -11,7 +22,7 @@
         }
     },
     {
-        "pk": 2,
+        "pk": 3,
         "model": "core.citypicture",
         "fields": {
             "name": "San Francisco, CA",
