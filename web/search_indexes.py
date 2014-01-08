@@ -15,7 +15,7 @@ class CouponIndex(indexes.SearchIndex, indexes.Indexable):
     date_added = indexes.DateTimeField(model_attr='date_added', null=True)
     merchant_local_path = indexes.CharField(model_attr='merchant__local_path', null=True)
     success_path = indexes.CharField(null=True)
-    full_success_path = indexes.CharField(null=True)
+    full_success_path = indexes.CharField(null=True, model_attr='full_success_path')
     merchant_id = indexes.IntegerField(model_attr='merchant__id', null=True)
     coupon_type = indexes.CharField(model_attr='coupon_type', null=True)
 
