@@ -8,11 +8,6 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 )
 
-# flatpages
-urlpatterns += patterns('',
-    (r'^p/', include('django.contrib.flatpages.urls')),
-)
-
 # Web
 urlpatterns += patterns('web.views.main',
     url(r'^$', 'index'),
@@ -71,4 +66,9 @@ urlpatterns += patterns('api.views',
 urlpatterns += patterns('',
     url(r'^v3/deals', mobile_resource.deals_return_response),
     url(r'^v3/localinfo', mobile_resource.localinfo_return_response),
+)
+
+# flatpages
+urlpatterns += patterns('django.contrib.flatpages.views',
+    (r'^(?P<url>.*/)$', 'flatpage'),
 )
