@@ -87,7 +87,7 @@ class Category(models.Model):
         coupons = list(coupons.filter(Q(categories__id__in=selected_categories) |\
                                       Q(categories__id__isnull=True)))
         coupons = coupons + list(self.get_expired_coupons())
-        return Paginator(coupons, 10)
+        return Paginator(coupons, 12)
 
     def display_name(self):
         return self.name
