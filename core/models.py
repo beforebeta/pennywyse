@@ -663,6 +663,7 @@ class CityPicture(models.Model):
     code            = models.CharField(max_length=255, blank=True, null=True)
     geometry        = models.PointField(srid=4326)
     picture_url     = models.TextField(blank=True, null=True)
+    radius          = models.IntegerField(default=10)
 
     date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
     last_modified   = models.DateTimeField(default=datetime.datetime.now(), auto_now=True, auto_now_add=True)

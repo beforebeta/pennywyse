@@ -1,5 +1,5 @@
 from haystack import indexes
-from core.models import Coupon, Merchant
+from core.models import Coupon, Merchant, CityPicture
 
 class CouponIndex(indexes.SearchIndex, indexes.Indexable):
     text                    = indexes.CharField(document=True, model_attr='description', null=True)
@@ -72,6 +72,14 @@ class LocalCouponIndex(CouponIndex):
     def prepare_related_deals_count(self, obj):
         return Coupon.all_objects.filter(related_deal=obj).count()
 
+class CityPictureIndex(indexes.SearchIndex, indexes.Indexable):
+    text            = indexes.CharField(document=True, model_attr='name', null=True)
+    geometry        = indexes.LocationField(model_attr='geometry', null=True)
+    picture_url     = indexes.CharField(model_attr='picture_url', null=True)
+    radius          = indexes.IntegerField(model_attr='radius', null=True)
+
+    def get_model(self):
+        return CityPicture
 
 class MerchantIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, model_attr='name')

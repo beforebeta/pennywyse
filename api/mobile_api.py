@@ -216,6 +216,7 @@ class MobileResource(ModelResource):
         popular_nearby_list_raw = res['facets']['search_keyword']['terms']
         # popular_category_list_raw = res['facets']['search_category']['terms'] # Not used for now; instead of parent categories.
 
+        default_image = find_default_image()
         base_response = {
             "default_image": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
             "search_categories": []
@@ -370,4 +371,5 @@ class MobileResource(ModelResource):
             location_popular_pairs = {lat_lng_str: popular_nearbys_list}
         cache.set(uuid, {'pop_nearbys': location_popular_pairs}, 60 * 60 * 12) # Cache it for 12 hours
 
-
+    def find_default_image(self, user_pnt):
+        pass

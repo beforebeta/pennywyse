@@ -15,6 +15,7 @@ class Migration(SchemaMigration):
             ('code', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
             ('geometry', self.gf('django.contrib.gis.db.models.fields.PointField')()),
             ('picture_url', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
+            ('radius', self.gf('django.db.models.fields.IntegerField')(default=10)),
             ('date_added', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2014, 1, 8, 0, 0), auto_now_add=True, blank=True)),
             ('last_modified', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2014, 1, 8, 0, 0), auto_now=True, auto_now_add=True, blank=True)),
         ))
@@ -49,7 +50,8 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'last_modified': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 1, 8, 0, 0)', 'auto_now': 'True', 'auto_now_add': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
-            'picture_url': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'})
+            'picture_url': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'radius': ('django.db.models.fields.IntegerField', [], {'default': '10'})
         },
         u'core.country': {
             'Meta': {'object_name': 'Country'},
