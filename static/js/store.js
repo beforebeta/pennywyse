@@ -9,6 +9,7 @@ var is_sticky = false;
 var deal_type_filters_active = false;
 var current_url = window.location.href;
 $(function() {
+	// enabling sticky header only on landing page
 	if ($('.index-container').length > 0) {
 		init_sticky_header();
 	}
@@ -26,13 +27,6 @@ $(function() {
 	}
 	fetch_items(reset_items=true);
 
-	$(window).bind('hashchange', function(e) { 
-		var coupon_id = window.location.hash.substr(2, window.location.hash.length);
-		if (coupon_id) {
-			load_coupon(coupon_id);
-		}
-	});
-	
 	var coupon_id = $('.coupons').attr('id');
 	if (coupon_id) {
 		load_coupon(coupon_id);
@@ -214,6 +208,7 @@ $(function() {
 	});
 
 });
+
 function select_categories(criteria) {
 	if (criteria == 'all') {
 		$('.category').each(function() {
@@ -232,6 +227,7 @@ function select_categories(criteria) {
 	}
 	fetch_items(reset_items=true);
 }
+
 function select_filters(criteria) {
 	if (criteria == 'all') {
 		$('.filter-container').each(function() {
@@ -252,6 +248,7 @@ function select_filters(criteria) {
 	}
 	fetch_items(reset_items=true);
 }
+
 function render_coupons(data, reset_items) {
 	var count = 0;
 	var coupons_limit = 3;
@@ -341,8 +338,6 @@ function render_coupons(data, reset_items) {
 	else {
 		$('.coupons').append(html);
 	}
-	$('.prescroll-header').waypoint('enable');
-	init_waypoint();
 }
 
 function render_merchants(data) {
@@ -429,9 +424,12 @@ function fetch_items(reset_items) {
 	}
 	$.get(url, function(data) {
 		render_coupons(data, reset_items);
-		if (page <= data.total_pages) {
+		if (page < data.total_pages) {
 			page += 1;
 			init_waypoint();
+		}
+		else {
+			$('.more-coupons').waypoint('disable');
 		}
 	}, 'json');
 }

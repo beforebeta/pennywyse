@@ -43,11 +43,8 @@ def search(request, current_page=1):
             return HttpResponse(json.dumps({'items': data,
                                         'total_pages': pages.num_pages}), content_type="application/json")
         merchants = merchant_pages.page(current_page).object_list
-        coupons = pages.page(current_page).object_list
     else:
-        merchants = coupons = None
+        merchants = None
     context = {'query': query,
-               'merchants': merchants,
-               'coupons': coupons,
-               'query': query}
+               'merchants': merchants}
     return render_response(template_file="search.html", request=request, context=context)
