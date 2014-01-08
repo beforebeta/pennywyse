@@ -74,7 +74,8 @@ def index(request, current_page=1):
                     'full_success_path': c.full_success_path(),
                     'image': c.merchant.image}
             data.append(item)
-        return HttpResponse(json.dumps({'items': data}), content_type="application/json")
+        return HttpResponse(json.dumps({'items': data,
+                                        'total_pages': pages.num_pages}), content_type="application/json")
     
     context = {
       "page_title": base_description,
@@ -205,7 +206,7 @@ def categories(request):
         "og_image": icon_url,
         "og_url": "{0}/categories/".format(settings.BASE_URL_NO_APPENDED_SLASH),
         "categories": Category.objects.filter(parent__isnull=True, is_featured=False).order_by('name'),
-        "featured_categories": Category.objects.filter(parent__isnull=True, is_featured=True).order_by('name'),
+        "featured_categories": Category.objects.filter(is_featured=True).order_by('name'),
     }
     set_canonical_url(request, context)
     return render_response("categories.html", request, context)

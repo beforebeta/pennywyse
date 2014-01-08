@@ -25,8 +25,11 @@ $(function() {
 		$('.top-header').removeClass('sticky');
 		$('.top-header').addClass('fixed-container');
 	}
+	
+	// fetching initial bunch of coupons
 	fetch_items(reset_items=true);
 
+	// displaying coupon popup automatically, if coupon ID provided
 	var coupon_id = $('.coupons').attr('id');
 	if (coupon_id) {
 		load_coupon(coupon_id);
@@ -338,6 +341,7 @@ function render_coupons(data, reset_items) {
 	else {
 		$('.coupons').append(html);
 	}
+	init_sticky_header();
 }
 
 function render_merchants(data) {
@@ -464,9 +468,10 @@ function fetch_merchants() {
 }
 
 function init_sticky_header() {
+	$('.prescroll-header').waypoint('destroy');
 	$('.prescroll-header').waypoint({
 		  offset: function() {
-		    return -$(this).height() + 55;
+		    return $(this).offset().top - 230;
 		  },
 		  handler: function(direction) {
 				if (direction === 'down') {
@@ -475,10 +480,6 @@ function init_sticky_header() {
 					$('.menu-row').addClass('top-menu');
 					$('.menu-row').addClass('bottom-shadow');
 					$('.prescroll-header').addClass('hidden');
-					/*if (!is_sticky) {
-						init_waypoint();
-						is_sticky = true;
-					}*/
 				}
 				else if (direction == 'up') {
 					$('.header').addClass('hidden');
