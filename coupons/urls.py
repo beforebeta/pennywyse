@@ -9,7 +9,7 @@ urlpatterns = patterns('',
 )
 
 # flatpages
-urlpatterns = patterns('',
+urlpatterns += patterns('',
     (r'^p/', include('django.contrib.flatpages.urls')),
 )
 
