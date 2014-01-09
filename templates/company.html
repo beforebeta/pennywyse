@@ -118,7 +118,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="coupons {% if num_pages > 1 %}more-coupons{% endif %}" {% if coupon_id %}id="{{ coupon_id }}"{% endif %}>
+					<div class="coupons {% if num_pages > 1 %}more-coupons{% endif %}">
 						{% for coupon in coupons %}
 							<div class="coupon-container {% if forloop.counter|divisibleby:3 %}coupon-last{% endif %}">
 								<div class="coupon-body">

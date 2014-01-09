@@ -79,7 +79,7 @@ def _search(itm,lst,f):
     return False
 
 @ensure_csrf_cookie
-def coupons_for_company(request, company_name, company_id=None, current_page=None, category_ids=None, coupon_label=None):
+def coupons_for_company(request, company_name, company_id=None, current_page=None, category_ids=None):
     """List of coupons for given merchant."""
     
     category_ids = request.GET.getlist('category_id', [])
@@ -92,13 +92,6 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
         merchant_url = reverse('web.views.main.coupons_for_company', kwargs=kwargs)
         return HttpResponsePermanentRedirect(merchant_url)
     
-    coupon_id = None
-    if coupon_label:
-        try:
-            coupon_id = Coupon.objects.only('id').get(desc_slug=coupon_label).id
-        except:
-            pass
-
     all_categories = merchant.get_coupon_categories()
     coupons_list = merchant.get_active_coupons()
     if category_ids:
@@ -140,7 +133,6 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
                                         'total_pages': pages.num_pages}), content_type="application/json")
     
     context = {
-        "coupon_id"             : coupon_id,
         "merchant"              : merchant,
         "num_pages"             : pages.num_pages,
         "current_page"          : pages.page(page),

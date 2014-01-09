@@ -14,7 +14,6 @@ urlpatterns += patterns('web.views.main',
     url(r'^page/(?P<current_page>[\d]+)/$', 'index'),
     url(r'^coupons/(?P<company_name>[a-zA-Z0-9-_]+)/$', 'coupons_for_company'),
     url(r'^coupons/(?P<company_name>[a-zA-Z0-9-_]+)/(?P<company_id>[\d]+)/$', 'coupons_for_company'),
-    url(r'^coupons/(?P<company_name>[a-zA-Z0-9-_]+)/(?P<coupon_label>[a-z0-9-_]+)/$', 'coupons_for_company'),
     url(r'^coupons/(?P<company_name>[a-zA-Z0-9-_]+)/page/(?P<current_page>[\d]+)/$', 'coupons_for_company'),
     url(r'^coupons/(?P<company_name>[a-zA-Z0-9-_]+)/(?P<company_id>[\d]+)/page/(?P<current_page>[\d]+)/$', 'coupons_for_company'),
 

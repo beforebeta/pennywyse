@@ -31,7 +31,7 @@ $(function() {
 	fetch_items(reset_items=true);
 
 	// displaying coupon popup automatically, if coupon ID provided
-	var coupon_id = $('.coupons').attr('id');
+	var coupon_id = $.url().param('c');
 	if (coupon_id) {
 		load_coupon(coupon_id);
 	}

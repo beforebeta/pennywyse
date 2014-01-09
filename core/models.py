@@ -624,7 +624,7 @@ class Coupon(models.Model):
         return category in [c.code for c in self.categories.all()]
 
     def local_path(self):
-        return "/coupons/{0}/{1}/".format(self.merchant.name_slug, self.desc_slug)
+        return "/coupons/%s/?c=%s" % (self.merchant.name_slug, self.id)
 
     def success_path(self):
         return reverse('web.views.main.coupon_success_page', kwargs={'company_name': self.merchant.name_slug,
