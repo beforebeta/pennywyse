@@ -8,6 +8,9 @@ from core.models import Coupon
 from subprocess import call
 import datetime
 import os
+import requests
+from lxml import etree
+from core.management.commands.fmtcload import _download_content
 
 class Command(BaseCommand):
 
@@ -17,8 +20,9 @@ class Command(BaseCommand):
 
         self.generate_category_urls()
         self.generate_merchant_urls()
+        self.generate_blog_urls()
         self.build_sitemaps()
-        # self.gzip_sitemaps() # commented out because of trouble getting S3 tp serve gziped files
+        # self.gzip_sitemaps() # commented out because of trouble getting S3 to serve gziped files
         self.build_sitemap_index()
         self.cleanup()
 
@@ -46,19 +50,26 @@ class Command(BaseCommand):
                 file.write('http://pushpenny.com/coupons/{0}/{1}/page/{2}/ changefreq=weekly priority=0.3\n'.format(merchant.name_slug, merchant.id, i))
         file.close()
 
+    def generate_blog_urls(self):
+        self.stdout.write('Generating Blog URLs...')
+        f = open('/tmp/pushpenny_sitemap_blog_urls.txt', 'w')
+        fh = _download_content('http://pushpenny.com/blog/feed/', '/tmp/blog_feed.txt')
+        data = etree.iterparse(fh, tag='item')
+        for event, item in data:
+            link = item.find('link').text
+            f.write('%s changefreq=weekly priority=0.7\n' % link)
+        f.close()
+
     def chunks(self, l, n):
         return [l[i:i+n] for i in range(0, len(l), n)]
 
     def build_sitemaps(self):
-        self.stdout.write('Building base sitemap...\n\n')
-        call(['./vendor/sitemap_gen/sitemap_gen.py', '--config=sitemap/configs/base.xml'])
-        self.stdout.write('Building category sitemap...\n\n')
-        call(['./vendor/sitemap_gen/sitemap_gen.py', '--config=sitemap/configs/category.xml'])
-        self.stdout.write('Building merchant sitemap...\n\n')
-        call(['./vendor/sitemap_gen/sitemap_gen.py', '--config=sitemap/configs/merchant.xml'])
+        for sitemap in ['base', 'category', 'merchant', 'blog']:
+            self.stdout.write('Building %s sitemap...\n\n' % sitemap)
+            call(['./vendor/sitemap_gen/sitemap_gen.py', '--config=sitemap/configs/%s.xml' % sitemap])
 
     def gzip_sitemaps(self):
-        self.stdout.write('gzipping...\n\n')
+        self.stdout.write('Archiving sitemaps...\n\n')
 
         call(['gzip', '-f', 'sitemap/base_sitemap.xml'])
         call(['gzip', '-f', 'sitemap/category_sitemap.xml'])
@@ -70,9 +81,10 @@ class Command(BaseCommand):
         base_url = default_storage.save('base_sitemap.xml', ContentFile(open('sitemap/base_sitemap.xml').read()))
         category_url = default_storage.save('category_sitemap.xml', ContentFile(open('sitemap/category_sitemap.xml').read()))
         merchant_url = default_storage.save('merchant_sitemap.xml', ContentFile(open('sitemap/merchant_sitemap.xml').read()))
+        blog_url = default_storage.save('blog_sitemap.xml', ContentFile(open('sitemap/blog_sitemap.xml').read()))
+
         last_updated = datetime.datetime.now().strftime('%Y-%m-%d')
         root = 'http://s3.amazonaws.com/pushpenny/'
-
 
         self.stdout.write('Updating the sitemap index...\n\n')
         file = open('sitemap/sitemap.xml', 'w')
@@ -90,7 +102,12 @@ class Command(BaseCommand):
   <sitemap>\n\
     <loc>{1}{4}</loc>\n\
     <lastmod>{0}</lastmod>\n\
-  </sitemap>\n'.format(last_updated, root, base_url, category_url, merchant_url))
+  </sitemap>\n\
+  <sitemap>\n\
+    <loc>{1}{5}</loc>\n\
+    <lastmod>{0}</lastmod>\n\
+  </sitemap>\n'.format(last_updated, root, base_url, 
+                       category_url, merchant_url, blog_url))
 
         file.write('</sitemapindex>')
         file.close()
