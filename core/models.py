@@ -73,7 +73,8 @@ class Category(models.Model):
         return self.coupon_set.all().filter(end__lt=datetime.datetime.now()).order_by("-created")[:100]
 
     def get_active_coupons(self):
-        return self.coupon_set.all().exclude(merchant_id__isnull=True).filter(Q(end__gt=datetime.datetime.now()) | Q(end__isnull=True)).order_by("-created")
+        return self.coupon_set.all().exclude(merchant_id__isnull=True)\
+                                    .filter(Q(end__gt=datetime.datetime.now()) | Q(end__isnull=True)).order_by("-created")
 
     def get_coupon_count(self):
         return self.get_active_coupons().count()

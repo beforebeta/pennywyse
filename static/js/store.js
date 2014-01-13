@@ -84,13 +84,12 @@ $(function() {
 		fetch_items(reset_items=true);
 	});
 	
-	$('.category a').live('click', function() {
-		var category_id = $(this).attr('id');
+	$('.category').live('click', function() {
+		var category_id = $(this).find('a').attr('id');
 		category_ids.push(category_id);
-		$(this).parent().removeClass('category');
-		$(this).parent().addClass('current-category');
-		$(this).after('<a href="javascript:void(null)" class="close-category"><img src="/static/img/close_category.png"></a>');
-		sorting = $(this).attr('class');
+		$(this).removeClass('category');
+		$(this).addClass('current-category');
+		$(this).find('a').after('<a href="javascript:void(null)" class="close-category"><img src="/static/img/close_category.png"></a>');
 		fetch_items(reset_items=true);
 	});
 	
@@ -100,7 +99,6 @@ $(function() {
 		$(this).parent().removeClass('current-category');
 		$(this).parent().addClass('category');
 		$(this).remove();
-		sorting = $(this).attr('class');
 		fetch_items(reset_items=true);
 	});
 	
@@ -304,32 +302,32 @@ function render_coupons(data, reset_items) {
 	};
 	data.coupon_type_container = function() {
 		if (this.coupon_type == 'free_shipping') {
-			return 	'<div class="coupon-left-label free-shipping-label"> \
+			return 	'<div class="coupon-left-label"> \
 						<img src="/static/img/free_shipping_icon.png">Free Shipping \
 					</div>';
 		}
 		else if (this.coupon_type == 'on_sale') {
-			return '<div class="coupon-left-label on-sale-label"> \
+			return '<div class="coupon-left-label"> \
 						<img src="/static/img/on_sale_icon.png">On Sale \
 					</div>';
 		}
 		else if (this.coupon_type == 'groceries') {
-			return '<div class="coupon-left-label groceries-label"> \
+			return '<div class="coupon-left-label"> \
 						<img src="/static/img/groceries_icon.png">Groceries \
 					</div>';
 		}
 		else if (this.coupon_type == 'coupon') {
-			return '<div class="coupon-left-label coupon-code-label"> \
+			return '<div class="coupon-left-label"> \
 						<img src="/static/img/coupon_code_icon.png">Coupon \
 					</div>';
 		}
 		else if (this.coupon_type == 'printable') {
-			return '<div class="coupon-left-label printable-label"> \
+			return '<div class="coupon-left-label"> \
 						<img src="/static/img/printable_icon.png">Printables \
 					</div>';
 		}
 		else if (this.coupon_type == 'gift') {
-			return '<div class="coupon-left-label freebies-label"> \
+			return '<div class="coupon-left-label"> \
 						<img src="/static/img/freebies_icon.png">Freebies \
 					</div>';
 		}
@@ -558,19 +556,21 @@ function render_coupon_popup(data, coupon_id) {
 							<div class="coupon-popup-description"> \
 								<h2 class="short-description">{{ short_desc }}</h2> \
 									{{& description }} \
+									{{# code }} \
+										<br><a href="{{ url }}" target="_blank">Shop at {{ merchant_name }} &raquo;</a> \
+									{{/ code }} \
 							</div> \
 							<br clear="both"> \
-							{{# code }} \
-								<span><a href="{{ url }}" target="_blank">Shop at {{ merchant_name }} &raquo;</a></span> \
-							{{/ code }} \
 						</div> \
 							<div class="coupon-popup-bottom"> \
-								Should we notify you when we add new coupons and deals for Store?<br> \
-								<form action="/e/subscribe/" method="post" class="coupon-subscribe-form"> \
-									<input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf }}"> \
-									<input type="text" name="email" placeholder="Email address" value=""> \
-									<input type="submit" value="Let me know"> \
-								</form> \
+								<div class="coupon-popup-subscribe"> \
+									Should we notify you when we add new coupons and deals for Store?<br> \
+									<form action="/e/subscribe/" method="post" class="coupon-subscribe-form"> \
+										<input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf }}"> \
+										<input type="text" name="email" placeholder="Email address" value=""> \
+										<input type="submit" value="Let me know"> \
+									</form> \
+								</div> \
 							</div> \
 					</div>';
 	html = Mustache.to_html(template, data);

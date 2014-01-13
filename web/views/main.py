@@ -186,6 +186,7 @@ def categories(request):
 
 @ensure_csrf_cookie
 def category(request, category_code, current_page=1, category_ids=-1):
+    sorting = request.GET.get('sorting', None)
     current_page = int(current_page)
     category = Category.objects.get(code=category_code, ref_id_source__isnull=True)
 
@@ -196,16 +197,11 @@ def category(request, category_code, current_page=1, category_ids=-1):
         selected_categories = category_ids
     comma_categories = selected_categories
 
-    if request.POST:
-        category_ids = []
-        for param in request.POST:
-            try:
-                category_ids.append(str(int(param)))
-            except:
-                pass
-        category_ids = ",".join(category_ids)
-    else:
-        category_ids = str(category.id)
+    ordering = 'popularity'
+    if sorting == 'newest':
+        ordering = '-date_added'
+    elif sorting == 'expiring_soon':
+        ordering = 'end'
 
     try:
         selected_categories=[int(s) for s in category_ids.split(",") if s]
@@ -219,7 +215,18 @@ def category(request, category_code, current_page=1, category_ids=-1):
             "active"    : _search(coup_cat.id, selected_categories, lambda a,b:a==b)
         })
 
-    pages = category.coupons_in_categories(selected_categories)
+    ordering = 'popularity'
+    if sorting == 'newest':
+        ordering = '-date_added'
+    elif sorting == 'expiring_soon':
+        ordering = 'end'
+
+    coupons = category.get_active_coupons().filter(categories__id=category.id).order_by(ordering)
+    
+    # preparing pagination
+    page = current_page or 1
+    pages = Paginator(coupons, 12)
+    
     # handling AJAX request 
     if request.is_ajax():
         data = []
