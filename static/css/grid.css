@@ -519,7 +519,7 @@ hr {
 }
 .menu-item {
 	font-size: 13px;
-	font-weight: lighter;
+	font-weight: 300;
 	width: 130px;
 	float: left;
 	text-align: center;
@@ -679,7 +679,7 @@ hr {
 	width: 140px;
 }
 .category-container a{
-	font-weight: lighter;
+	font-weight: 300;
 }
 .category-container a:hover {
 	color: #e74c3c;
@@ -806,7 +806,7 @@ hr {
 }
 .index-labels a {
 	font-size: 11pt;
-	font-weight: lighter;
+	font-weight: 300;
 	text-transform: uppercase;
 	color: #ef5b5b !important;
 	margin-right: 40px;
