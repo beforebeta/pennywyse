@@ -22,7 +22,7 @@
 		{% endblock %}
 	</head>
 	<body>
-		<div class="header-container top-header sticky">
+		<div class="header-container top-header sticky visible-md visible-lg">
 			<div class="main-row">
 				<span>100% verified coupons guaranteed</span>
 				<div class="top-links">
@@ -36,7 +36,67 @@
 				</div>
 			</div>
 		</div>
-		<div class="header-container header hidden">
+		<div class="header-container header hidden-md hidden-lg">
+				<div class="mobile-row">
+					    <button type="button" class="navbar-toggle" id="mobile-menu">
+					      <span class="icon-bar"></span>
+					      <span class="icon-bar"></span>
+					      <span class="icon-bar"></span>
+					    </button>
+						<ul class="mobile-menu">
+							<li>
+								<span class="search-label">Search</span>
+								<form action="/search/" id="search_form">
+								<input name="q" type="text" placeholder="Search over 50,000+ coupons" class="search" value="{{ query }}">
+								</form>
+							</li>
+							<li>
+								<a href="#" class="menu-link">Top Coupons</a>
+								<div class="mobile-expand">
+									<span class="glyphicon glyphicon-chevron-down"></span>
+								</div>
+							</li>
+							<li id="mobile-categories">
+								<a href="javascript:void(null);" class="menu-link">Categories</a>
+								<div class="mobile-expand">
+									<span class="glyphicon glyphicon-chevron-down"></span>
+								</div>
+							</li>
+								{% for category in top_categories %}
+										{% for subcategory in category.category_set.all %}
+											<li class="expanded-menu-item mobile-category"><a href="{%url 'web.views.main.category' category_code=subcategory.code %}">{{ subcategory.name }}</a></li>
+										{% endfor %}
+								{% endfor %}
+							<li id="mobile-groceries">
+								<a href="javascript:void(null);" class="menu-link">Groceries</a>
+								<div class="mobile-expand">
+									<span class="glyphicon glyphicon-chevron-down"></span>
+								</div>
+							</li>
+							{% for grocery in top_groceries.category_set.all %}
+								<li class="expanded-menu-item mobile-grocery"><a href="{% url 'web.views.main.category' category_code=grocery.code %}">{{ grocery.name }}</a></li>
+							{% endfor %}
+							<li>
+								<a href="/blog" class="menu-link">Magazine</a>
+							</li>
+							<li>
+								<a href="javascript:void(null);" id="subscribe-link" class="menu-link">Subscribe</a>
+							</li>
+							<li class="mobile-subscription">
+								<div>
+									<div class="email-subscribe">
+										<form action="/e/subscribe/" method="post" id="subscribe-form">{% csrf_token %}
+										{{ form.email }}
+									</div>
+									<button>let me<br>know</button>
+									</form>
+								</div>
+							</li>
+						</ul>
+					<div class="mobile-logo"><a href="{% url 'web.views.main.index' %}"><img src="/static/img/logo.png"></a></div>
+				</div>
+		</div>
+		<div class="header-container header hidden visible-md visible-lg">
 				<div class="row">
 					<div class="logo"><a href="{% url 'web.views.main.index' %}"><img src="/static/img/logo.png"></a>
 					</div>
@@ -51,7 +111,7 @@
 					</div>
 				</div>
 		</div>
-		<div class="header-container menu-row sticky">
+		<div class="header-container menu-row sticky visible-md visible-lg">
 			<div class="row">
 				<ul class="menu">
 					<li class="menu-item category-item">
@@ -192,7 +252,7 @@
 				</ul>
 			</div>
 		</div>
-		<div class="header-container header prescroll-header bottom-shadow">
+		<div class="header-container header prescroll-header bottom-shadow visible-md visible-lg">
 				<div class="row">
 					<div class="search-container top-container">
 						<h1><a href="{% url 'web.views.main.index' %}"><img src="/static/img/top_logo.png"></a></h1>

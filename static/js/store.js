@@ -9,8 +9,8 @@ var is_sticky = false;
 var deal_type_filters_active = false;
 var current_url = window.location.href;
 $(function() {
-	// enabling sticky header only on landing page
-	if ($('.index-container').length > 0) {
+	// enabling sticky header only on landing page and only for desktop pages
+	if ($('.index-container').length > 0 && $(window).width() > 768) {
 		is_sticky = true;
 		init_sticky_header();
 	}
@@ -26,6 +26,21 @@ $(function() {
 		$('.top-header').removeClass('sticky');
 		$('.top-header').addClass('fixed-container');
 	}
+	
+	if ($(window).width() < 768) {
+		$('.main-container').addClass('mobile-container');
+		$('.middle-container').addClass('mobile-middle-container');
+		$('.index-rail').addClass('mobile-index-rail');
+	}
+	
+	$('#mobile-menu').click(function() {
+		if ($('.mobile-menu').is(':visible')) {
+			$('.mobile-menu').hide();
+		}
+		else {
+			$('.mobile-menu').show();
+		}
+	});
 	
 	// fetching initial bunch of coupons
 	fetch_items(reset_items=true);
@@ -111,6 +126,32 @@ $(function() {
 	$('.coupon-container').live('mouseout', function() {
 		if (!$(this).hasClass('coupon-banner')) {
 			$(this).find('.use-coupon').hide();
+		}
+	});
+	
+	$('#mobile-categories').click(function() {
+		if ($('.mobile-category :visible').length > 0) {
+			$('.mobile-category').hide();
+			$(this).find('.glyphicon').removeClass('glyphicon-chevron-up');
+			$(this).find('.glyphicon').addClass('glyphicon-chevron-down');
+		}
+		else {
+			$(this).find('.glyphicon').removeClass('glyphicon-chevron-down');
+			$(this).find('.glyphicon').addClass('glyphicon-chevron-up');
+			$('.mobile-category').show();
+		}
+	});
+	
+	$('#mobile-groceries').click(function() {
+		if ($('.mobile-grocery :visible').length > 0) {
+			$('.mobile-grocery').hide();
+			$(this).find('.glyphicon').removeClass('glyphicon-chevron-up');
+			$(this).find('.glyphicon').addClass('glyphicon-chevron-down');
+		}
+		else {
+			$(this).find('.glyphicon').removeClass('glyphicon-chevron-down');
+			$(this).find('.glyphicon').addClass('glyphicon-chevron-up');
+			$('.mobile-grocery').show();
 		}
 	});
 	
@@ -286,7 +327,7 @@ function render_coupons(data, reset_items) {
 				{{/items}}<br clear="both">';
 	data.count = function () {
     	count++;
-    	if (count % coupons_limit == 0) {
+    	if ($(window).width() > 768 && count % coupons_limit == 0) {
     		return true;
     	}
     	return false;
