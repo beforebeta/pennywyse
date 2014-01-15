@@ -108,7 +108,7 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
     filter_types = Q()
     if coupon_types:
         if 'coupon_code' in coupon_types:
-            filters['short_desc']='COUPON'
+            filter_types |= Q(short_desc='COUPON')
 
         if 'gift' in coupon_types:
             filter_types |= Q(dealtypes__code='gift')
@@ -228,7 +228,7 @@ def category(request, category_code, current_page=1, category_ids=-1):
     filter_types = Q()
     if coupon_types:
         if 'coupon_code' in coupon_types:
-            filters['short_desc']='COUPON'
+            filter_types |= Q(short_desc='COUPON')
 
         if 'gift' in coupon_types:
             filter_types |= Q(dealtypes__code='gift')
