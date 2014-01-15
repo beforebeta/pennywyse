@@ -32,11 +32,6 @@ urlpatterns += patterns('web.views.main',
     url(r'^e/subscribe/$', 'email_subscribe'),
     url(r'^o/(?P<coupon_id>[\d]+)/$', 'open_coupon'),
     url(r'^p/(?P<url>[a-zA-Z0-9-_]+)/', 'flatpage'),
-
-# /blog/ is being served by WordPress
-#    url(r'^blog/', include('articles.urls')),
-    url(r'^robots\.txt$', 'robots_txt'),
-    url(r'^sitemap\.xml$', 'sitemap'),
 )
 
 urlpatterns += patterns('tracking.views',

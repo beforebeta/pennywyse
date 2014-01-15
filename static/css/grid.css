@@ -1417,6 +1417,7 @@ hr {
 	position: absolute;
 	z-index: 4;
 	padding-left: 0px !important;
+	display: none;
 }
 .mobile-menu .search {
 	width: 100% !important;
@@ -1435,7 +1436,7 @@ hr {
 	color: #858585;
 	text-decoration: none;
 }
-#subscribe-link, .search-label {
+#mobile-subscribe-link, .search-label {
 	color: #e74c3c !important;
 	font-weight: 500;
 }

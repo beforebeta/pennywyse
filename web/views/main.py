@@ -1,4 +1,5 @@
 import json
+import datetime
 from uuid import uuid4
 from django.conf import settings
 from django.contrib.flatpages.views import flatpage
@@ -12,7 +13,7 @@ from django.template.context import RequestContext
 from django.template.defaultfilters import slugify
 from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import ensure_csrf_cookie
-from core.models import Category, Coupon, Merchant, base_description
+from core.models import Category, Coupon, DealType, Merchant, base_description
 from core.util import encode_uri_component, print_stack_trace
 from core.util.pagination import AlphabeticalPagination
 from tracking.views import log_click_track
@@ -22,16 +23,20 @@ from web.forms import EmailSubscriptionForm
 from websvcs.models import EmailSubscription
 
 def render_response(template_file, request, context={}):
+    """Shortcut to render function with constant list of parameters"""
     return render_to_response(template_file, context, context_instance=RequestContext(request))
 
+
 def set_meta_tags(subject, context):
-    context["page_title"] = subject.page_title()
-    context["page_description"] = subject.page_description()
-    context["og_title"] = subject.og_title()
-    context["og_description"] = subject.og_description()
-    context["og_image"] = subject.og_image()
-    context["og_url"] = subject.og_url()
-    context["canonical_url"] = subject.og_url()
+    """Updating context with SEO-related data"""
+    context.update(page_title=subject.page_title(),
+                   page_description=subject.page_description(),
+                   og_title=subject.og_title(),
+                   og_description=subject.og_description(),
+                   og_image=subject.og_image(),
+                   og_url=subject.og_url(),
+                   canonical_url=subject.og_url())
+
 
 @ensure_csrf_cookie
 def index(request, current_page=1):
@@ -72,11 +77,13 @@ def index(request, current_page=1):
 
     return render_response("index.html", request, context)
 
+
 def _search(itm,lst,f):
     for l in lst:
         if f(itm,l):
             return True
     return False
+
 
 @ensure_csrf_cookie
 def coupons_for_company(request, company_name, company_id=None, current_page=None, category_ids=None):
@@ -93,14 +100,28 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
         return HttpResponsePermanentRedirect(merchant_url)
     
     all_categories = merchant.get_coupon_categories()
-    coupons_list = merchant.get_active_coupons()
-    if category_ids:
-        coupons_list.filter(Q(categories__id__in=category_ids) |\
-                            Q(categories__id__isnull=True))
+    filters = {'merchant_id': merchant.id}
     
+    if category_ids:
+        filters['categories__id__in'] = category_ids
+    
+    filter_types = Q()
     if coupon_types:
-        coupons_list.filter(dealtypes__code__in=coupon_types)
- 
+        if 'coupon_code' in coupon_types:
+            filters['short_desc']='COUPON'
+
+        if 'gift' in coupon_types:
+            filter_types |= Q(dealtypes__code='gift')
+        if 'on_sale' in coupon_types:
+            filter_types |= Q(dealtypes__code='sale')
+        if 'free_shipping' in coupon_types:
+            filter_types |= Q(dealtypes__code='freeshipping')
+            filter_types |= Q(dealtypes__code='totallyfreeshipping')
+        if 'printable' in coupon_types:
+            filter_types |= Q(dealtypes__code='printable')
+
+    coupons_list = Coupon.objects.filter(filter_types, **filters)
+
     ordering = 'popularity'
     if sorting == 'newest':
         ordering = '-date_added'
@@ -108,6 +129,7 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
         ordering = 'end'
     if sorting:
         coupons_list = coupons_list.order_by(ordering)
+    
     coupons = list(coupons_list)
     expired_coupons = list(merchant.get_expired_coupons())
     coupons += expired_coupons
@@ -130,7 +152,8 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
                     'image': c.merchant.image}
             data.append(item)
         return HttpResponse(json.dumps({'items': data,
-                                        'total_pages': pages.num_pages}), content_type="application/json")
+                                        'total_pages': pages.num_pages,
+                                        'total_items': pages.count}), content_type="application/json")
     
     context = {
         "merchant"              : merchant,
@@ -148,9 +171,12 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
 
     return render_response("company.html", request, context)
 
+
 @ensure_csrf_cookie
 def redirect_to_open_coupon(request, company_name, coupon_label, coupon_id):
-    return HttpResponsePermanentRedirect('{0}/coupons/{1}/{2}/{3}'.format(settings.BASE_URL_NO_APPENDED_SLASH, company_name, coupon_label, coupon_id))
+    return HttpResponsePermanentRedirect('{0}/coupons/{1}/{2}/{3}'.format(settings.BASE_URL_NO_APPENDED_SLASH, 
+                                                                          company_name, coupon_label, coupon_id))
+
 
 @ensure_csrf_cookie
 def open_coupon(request, coupon_id):
@@ -170,6 +196,7 @@ def open_coupon(request, coupon_id):
             'url': get_visitor_tag(coupon.skimlinks, request.visitor.id)}
     return HttpResponse(json.dumps(item), content_type="application/json")
 
+
 @ensure_csrf_cookie
 def categories(request):
     context={
@@ -184,45 +211,43 @@ def categories(request):
     }
     return render_response("categories.html", request, context)
 
+
 @ensure_csrf_cookie
 def category(request, category_code, current_page=1, category_ids=-1):
     sorting = request.GET.get('sorting', None)
+    coupon_types = request.GET.getlist('coupon_type', [])
     current_page = int(current_page)
     category = Category.objects.get(code=category_code, ref_id_source__isnull=True)
 
-    if category_ids == -1:
-        all_categories = [str(x["categories__id"]) for x in category.get_active_coupons().values("categories__id") if x["categories__id"]]
-        selected_categories = ",".join(set(all_categories))
-    else:
-        selected_categories = category_ids
-    comma_categories = selected_categories
+    coupon_category_ids = Coupon.objects.filter(categories=category.id).values('categories').annotate()
+    category_ids = [c['categories'] for c in coupon_category_ids]
+    coupon_categories = Category.objects.filter(id__in=category_ids)
 
-    ordering = 'popularity'
-    if sorting == 'newest':
-        ordering = '-date_added'
-    elif sorting == 'expiring_soon':
-        ordering = 'end'
-
-    try:
-        selected_categories=[int(s) for s in category_ids.split(",") if s]
-    except:
-        selected_categories=[]
-    all_categories = category.get_coupon_categories()
-    coupon_categories = []
-    for coup_cat in all_categories:
-        coupon_categories.append({
-            "category"  : coup_cat,
-            "active"    : _search(coup_cat.id, selected_categories, lambda a,b:a==b)
-        })
-
-    ordering = 'popularity'
-    if sorting == 'newest':
-        ordering = '-date_added'
-    elif sorting == 'expiring_soon':
-        ordering = 'end'
-
-    coupons = category.get_active_coupons().filter(categories__id=category.id).order_by(ordering)
+    filters = {'categories__in': category_ids}
     
+    filter_types = Q()
+    if coupon_types:
+        if 'coupon_code' in coupon_types:
+            filters['short_desc']='COUPON'
+
+        if 'gift' in coupon_types:
+            filter_types |= Q(dealtypes__code='gift')
+        if 'on_sale' in coupon_types:
+            filter_types |= Q(dealtypes__code='sale')
+        if 'free_shipping' in coupon_types:
+            filter_types |= Q(dealtypes__code='freeshipping')
+            filter_types |= Q(dealtypes__code='totallyfreeshipping')
+        if 'printable' in coupon_types:
+            filter_types |= Q(dealtypes__code='printable')
+
+    ordering = 'popularity'
+    if sorting == 'newest':
+        ordering = '-date_added'
+    elif sorting == 'expiring_soon':
+        ordering = 'end'
+
+    coupons = Coupon.objects.filter(filter_types, **filters).order_by(ordering)
+
     # preparing pagination
     page = current_page or 1
     pages = Paginator(coupons, 12)
@@ -241,7 +266,8 @@ def category(request, category_code, current_page=1, category_ids=-1):
                     'image': c.merchant.image}
             data.append(item)
         return HttpResponse(json.dumps({'items': data,
-                                        'total_pages': pages.num_pages}), content_type="application/json")
+                                        'total_pages': pages.num_pages,
+                                        'total_items': pages.count}), content_type="application/json")
     
 
     if int(current_page) > pages.num_pages:
@@ -258,20 +284,8 @@ def category(request, category_code, current_page=1, category_ids=-1):
     if current_page > 1:
         context['canonical_url'] = "{0}pages/{1}/".format(category.og_url(), current_page)
 
-    if len(all_categories) != len(selected_categories):
-        context["comma_categories"] = ShortenedURLComponent.objects.shorten_url_component(comma_categories).shortened_url
-
     return render_response("category.html", request, context)
 
-def robots_txt(request):
-    robots = """User-agent: *
-Allow: /
-Sitemap: http://s3.amazonaws.com/pushpenny/sitemap.xml
-"""
-    return HttpResponse(robots, content_type="text/plain")
-
-def sitemap(request):
-    return HttpResponseRedirect('http://s3.amazonaws.com/pushpenny/sitemap.xml')
 
 @ensure_csrf_cookie
 def stores(request, page='popular'):
@@ -299,6 +313,7 @@ def stores(request, page='popular'):
         "page": page,
     }
     return render_response("companies.html", request, context)
+
 
 def email_subscribe(request):
     data = {'success': False}

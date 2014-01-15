@@ -155,6 +155,15 @@ $(function() {
 		}
 	});
 	
+	$('#mobile-subscribe-link').click(function() {
+		if ($('.mobile-subscription').is(':visible')) {
+			$('.mobile-subscription').hide();
+		}
+		else {
+			$('.mobile-subscription').show();
+		}
+	});
+	
 	$('.index-labels a').click(function() {
 		$('.index-labels a').removeClass('active');
 		var filter_type = $(this).attr('id');
@@ -226,7 +235,7 @@ $(function() {
 	});
 	
 	$('#subscribe-form').submit(function() {
-		$('#subscribe-form').ajaxSubmit({'success': subscribe_form_callback, 'dataType': 'json'});
+		$(this).ajaxSubmit({'success': subscribe_form_callback, 'dataType': 'json'});
 		return false;
 	});
 	
@@ -375,6 +384,7 @@ function render_coupons(data, reset_items) {
 	};
 	html = Mustache.to_html(template, data);
 	$('.prescroll-header').waypoint('disable');
+	$('.merchant-right span').html(data.total_items);
 	if (reset_items) {
 		$('.coupons').html(html);
 	}
@@ -556,7 +566,10 @@ function coupon_subscribe_form_callback(response, statusText, xhr, $form) {
 		}
 	}
 	if (response.success) {
-		$('.subscription-popup-right').html('<span>You have been subscribed. <img src="/static/img/check_icon.png"></span>');
+		var field = $form.find('input[name=email]');
+		field.attr('title', 'You have been subscribed.');
+		field.tipsy({trigger: 'manual', gravity: 'sw', opacity: 1});
+		field.tipsy('show');
 	}
 }
 
@@ -623,6 +636,9 @@ function close_coupon_popup() {
 	$('.coupon-popup').hide();
 	$('.overlay').hide();
 	$('.prescroll-header').waypoint('enable');
+	$('.tipsy').remove();
+	var state_obj = {'coupon_id': null};
+	history.pushState(state_obj, "Coupon Page", current_url);
 }
 
 function close_popups() {
