@@ -19,6 +19,7 @@ import requests
 
 IFRAME_DISALLOWED = ['eBay', 'eBay Canada']
 DATETIME_FORMAT = '%b-%d-%I%M%p-%G'
+SIMILAR_MERCHANTS_LIMIT = 10
 
 class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
@@ -209,7 +210,7 @@ def setup_web_coupons():
 
     try:
         Coupon.objects.filter(is_featured=True).update(is_featured=False)
-        for coupon in Coupon.active_objects.get_new_coupons(40):
+        for coupon in Coupon.active_objects.get_new_coupons(200):
             coupon.is_new = True
             coupon.save()
 
@@ -218,12 +219,21 @@ def setup_web_coupons():
 
     try:
         Coupon.objects.filter(is_featured=True).update(is_featured=False)
-        for coupon in Coupon.active_objects.get_popular_coupons(40):
+        for coupon in Coupon.active_objects.get_popular_coupons(200):
             coupon.is_popular = True
             coupon.save()
 
     except:
         print_stack_trace()
+        
+    for m in Merchant.objects.all():
+        cat_ids = [c['categories'] for c in Coupon.objects.filter(merchant_id=m.id).values('categories').annotate()]
+        merchant_ids = [c['merchant_id'] for c in Coupon.objects.filter(categories__in=cat_ids).values('merchant_id').annotate()][:10]
+        m.similar.clear()
+        for sm in Merchant.objects.filter(id__in=merchant_ids).order_by('-name'):
+            m.similar.add(sm)
+        m.save()
+        print 'Calculated similar merchants for %s' % m.name
 
 def refresh_calculated_fields():
     section("Refresh Calculated Fields")
