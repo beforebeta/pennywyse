@@ -326,6 +326,7 @@ hr {
 }
 .coupons {
 	margin-top: 10px;
+	margin-right: -14px;
 	clear: both;
 	position: relative;
 }
@@ -690,6 +691,7 @@ hr {
 	text-transform: uppercase;
 	padding-right: 10px;
 	margin-bottom: 10px;
+	margin-top: 10px;
 }
 .more-categories a{
 	color: #3cb5b5;
@@ -1504,4 +1506,45 @@ hr {
 }
 .expanded-menu-item a{
 	color: #fff;
+}
+.coupon-types {
+	text-transform: uppercase;
+	width: 100% !important;
+	height: 45px !important;
+}
+.coupon-types .index-labels{
+	background-color: #fff !important;
+	border-radius: 3px;
+	width: 100% !important;
+	padding: 5px;
+	font-size: 11pt !important;
+	font-weight: 500 !important;
+	color: #000 !important;
+	cursor: pointer;
+	overflow: hidden;
+}
+.mobile-coupon-type {
+	list-style-type: none;
+	margin-left: 75px;
+}
+.coupons-types-expand {
+	float: right;
+	text-align: center;
+	color: #46a8a7 !important;
+	font-size: 14pt;
+	height: 45px !important;
+	width: 45px !important;
+}
+.expanded {
+	height: auto !important;
+}
+.expandable span{
+	color: #46a8a7 !important;
+}
+.pagination li {
+	list-style: none;
+	float: left;
+	height: 40px;
+	width: 40px;
+	margin-right: 10px;
 }

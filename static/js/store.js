@@ -1,14 +1,18 @@
-var page = 1;
+var page = 2;
 var mpage = 2;
 var sorting = '';
 var category_ids = new Array();
 var coupon_types = new Array();
+var coupon_type = '';
 var is_new = false;
-var is_tranding = false;
+var is_trending = false;
 var is_sticky = false;
 var deal_type_filters_active = false;
 var current_url = window.location.href;
 $(function() {
+	// removing pagination block, to be displayed with disabled JS only 
+	$('.pagination').remove();
+	
 	// enabling sticky header only on landing page and only for desktop pages
 	if ($('.index-container').length > 0 && $(window).width() > 768) {
 		is_sticky = true;
@@ -31,7 +35,17 @@ $(function() {
 		$('.main-container').addClass('mobile-container');
 		$('.middle-container').addClass('mobile-middle-container');
 		$('.index-rail').addClass('mobile-index-rail');
+		$('.search-main-rail').addClass('mobile-index-rail');
 	}
+	
+	$('.expandable').click(function() {
+		$(this).parent().parent().addClass('expanded');
+	});
+	$('.expanded-choices li').click(function() {
+		var label = $(this).text();
+		$(this).parent().parent().find('span:first').html(label);
+		$(this).parent().parent().parent().removeClass('expanded');
+	});
 	
 	$('#mobile-menu').click(function() {
 		if ($('.mobile-menu').is(':visible')) {
@@ -42,8 +56,8 @@ $(function() {
 		}
 	});
 	
-	// fetching initial bunch of coupons
-	fetch_items(reset_items=true);
+	// initializing infinite scroll
+	init_waypoint();
 
 	// displaying coupon popup automatically, if coupon ID provided
 	var coupon_id = $.url().param('c');
@@ -171,10 +185,10 @@ $(function() {
 			$(this).addClass('active');
 			if (filter_type == 'new') {
 				is_new = true;
-				is_tranding = false;
+				is_trending = false;
 			}
 			else {
-				is_tranding = true;
+				is_trending = true;
 				is_new = false;
 			}
 			fetch_items(reset_items=true);
@@ -184,6 +198,7 @@ $(function() {
 		var coupon_type = $(this).attr('id');
 		$('.coupon-type li').removeClass('active');
 		$(this).addClass('active');
+		fetch_items(reset_items=true);
 	});
 	
 	if ($('.search-merchants-container').length > 0) {
@@ -286,8 +301,8 @@ function select_filters(criteria) {
 			$(this).addClass('selected');
 			$(this).find('.filter-icon').addClass('selected');
 			$(this).find('.filter-icon').append('<a href="javascript:void(null);" class="close-tag"><img src="/static/img/close_tag.png"></a>');
-			var coupon_type = $(this).attr('id');
-			coupon_types.push(coupon_type);
+			var current_coupon_type = $(this).attr('id');
+			coupon_types.push(current_coupon_type);
 		});
 	}
 	else {
@@ -302,16 +317,13 @@ function select_filters(criteria) {
 }
 
 function render_coupons(data, reset_items) {
-	var count = 0;
-	var coupons_limit = 3;
-	if ($('.main-rail').hasClass('landing-rail')) {
-		coupons_limit = 4;
-	}
 	template = '{{#items}} \
-						<div class="coupon-container {{#count}}coupon-last{{/count}}"> \
+					<div class="coupon-container"> \
 						<div class="coupon-body"> \
 							<div class="coupon-header"> \
-								{{& coupon_type_container }} \
+								<div class="coupon-left-label"> \
+									{{& coupon_type_container }} \
+								</div> \
 							</div> \
 							<hr> \
 							<h1 class="short-description">{{ short_desc }}</h1> \
@@ -334,13 +346,6 @@ function render_coupons(data, reset_items) {
 									</div> \
 								</div> \
 				{{/items}}<br clear="both">';
-	data.count = function () {
-    	count++;
-    	if ($(window).width() > 768 && count % coupons_limit == 0) {
-    		return true;
-    	}
-    	return false;
-   	};
    	data.facebook_share_url = function() {
    		return 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(this.full_success_path);
    	};
@@ -352,34 +357,22 @@ function render_coupons(data, reset_items) {
 	};
 	data.coupon_type_container = function() {
 		if (this.coupon_type == 'free_shipping') {
-			return 	'<div class="coupon-left-label"> \
-						<img src="/static/img/free_shipping_icon.png">Free Shipping \
-					</div>';
+			return 	'<img src="/static/img/free_shipping_icon.png">Free Shipping';
 		}
 		else if (this.coupon_type == 'on_sale') {
-			return '<div class="coupon-left-label"> \
-						<img src="/static/img/on_sale_icon.png">On Sale \
-					</div>';
+			return '<img src="/static/img/on_sale_icon.png">On Sale';
 		}
 		else if (this.coupon_type == 'groceries') {
-			return '<div class="coupon-left-label"> \
-						<img src="/static/img/groceries_icon.png">Groceries \
-					</div>';
+			return '<img src="/static/img/groceries_icon.png">Groceries';
 		}
 		else if (this.coupon_type == 'coupon') {
-			return '<div class="coupon-left-label"> \
-						<img src="/static/img/coupon_code_icon.png">Coupon \
-					</div>';
+			return '<img src="/static/img/coupon_code_icon.png">Coupon';
 		}
 		else if (this.coupon_type == 'printable') {
-			return '<div class="coupon-left-label"> \
-						<img src="/static/img/printable_icon.png">Printables \
-					</div>';
+			return '<img src="/static/img/printable_icon.png">Printables';
 		}
 		else if (this.coupon_type == 'gift') {
-			return '<div class="coupon-left-label"> \
-						<img src="/static/img/freebies_icon.png">Freebies \
-					</div>';
+			return '<img src="/static/img/freebies_icon.png">Freebies';
 		}
 	};
 	html = Mustache.to_html(template, data);
@@ -449,8 +442,12 @@ function fetch_items(reset_items) {
 	if (is_new) {
 		parameters['is_new'] = is_new;
 	}
-	if (is_tranding) {
-		parameters['is_tranding'] = is_tranding;
+	if (is_trending) {
+		parameters['is_trending'] = is_trending;
+	}
+
+	if (coupon_type) {
+		parameters['coupon_type'] = coupon_type;
 	}
 	if (q) {
 		parameters['q'] = q;

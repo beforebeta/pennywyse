@@ -1,6 +1,16 @@
 {% extends "base.html" %}
 
-	{% block content %}
+		{% block head %}
+			{{ block.super }}
+			{% if current_page.has_previous %}
+            	<link rel="prev" href="http://{{ request.get_host }}{% url 'web.views.main.index' current_page=current_page.previous_page_number %}" />
+        	{% endif %}
+        	{% if current_page.has_next %}
+            	<link rel="next" href="http://{{ request.get_host }}{% url 'web.views.main.index' current_page=current_page.next_page_number %}" />
+        	{% endif %}
+		{% endblock %}
+		
+		{% block content %}
 			<div class="row middle-container index-container">
 				<div class="main-rail index-rail landing-rail">
 					<div class="top-labels-container">
@@ -10,69 +20,20 @@
 						</div>
 					</div>
 					<div class="coupons more-coupons">
-						{% for coupon in new_coupons %}
-							<div class="coupon-container {% if forloop.counter|divisibleby:4 %}coupon-last{% endif %}">
-								<div class="coupon-body">
-									<div class="coupon-header">
-										{% if coupon.coupon_type == 'free_shipping' %}
-											<div class="coupon-left-label free-shipping-label">
-												<img src="/static/img/free_shipping_icon.png">Free Shipping
-											</div>
-										{% elif coupon.coupon_type == 'on_sale' %}
-											<div class="coupon-left-label on-sale-label">
-												<img src="/static/img/on_sale_icon.png">On Sale
-											</div>
-										{% elif coupon.coupon_type == 'groceries' %}
-											<div class="coupon-left-label groceries-label">
-												<img src="/static/img/groceries_icon.png">Groceries
-											</div>
-										{% elif coupon.coupon_type == 'coupon' %}
-											<div class="coupon-left-label coupon-code-label">
-												<img src="/static/img/coupon_code_icon.png">Coupon
-											</div>
-										{% elif coupon.coupon_type == 'printable' %}
-											<div class="coupon-left-label printable-label">
-												<img src="/static/img/printable_icon.png">Printables
-											</div>
-										{% elif coupon.coupon_type == 'gift' %}
-											<div class="coupon-left-label freebies-label">
-												<img src="/static/img/freebies_icon.png">Freebies
-											</div>
-										{% endif %}
-									</div>
-									<hr>
-									<h1 class="short-description">{{ coupon.short_desc }}</h1>
-									{{ coupon.get_description }}<br>
-									<span class="ends">Ends {{ coupon.end|date:"m/d/y" }}</span>
-										<a href="{% url 'web.views.main.coupons_for_company' company_name=coupon.merchant.name_slug company_id=coupon.merchant.id %}" target="_blank" class="merchant-link">
-											<img src="{{ coupon.merchant.image }}">
-										</a>
-								</div>
-								<div class="use-coupon" id="{{ coupon.id }}">
-									Use Coupon
-								</div>
-								<div class="coupon-bottom">
-									{% comment %}
-										<div class="coupon-left-bottom">
-											<a href="#">
-												<img src="/static/img/save_coupon.png">
-												Save
-											</a>
-										</div>
-									{% endcomment %}
-									<div class="coupon-right-bottom">
-										Share
-										<a href="https://www.facebook.com/sharer/sharer.php?u={{ coupon.full_success_path|urlencode }}"><img src="/static/img/facebook_share_icon.png" target="_blank"></a>
-										<a href="https://twitter.com/share?url={{ coupon.full_success_path|urlencode }}" target="_blank"><img src="/static/img/twitter_share_icon.png"></a>
-										<a href="mailto:?body={{ coupon.full_success_path|urlencode }}"><img src="/static/img/email_share_icon.png"></a>
-									</div>
-								</div>
-							</div>
-						{% endfor %}
-						<!--<div class="coupon-container coupon-banner coupon-last"></div>-->
-						<br clear="both">
+						{% include 'coupons_list.html' %}
 					</div>
-					
+					<ul class="pagination">
+		          		{% for page in pages %}
+		                	<li>
+		                  		<a href="{% url 'web.views.main.index' current_page=page %}">{{ page }}</a>
+		                  	</li>
+		                  	{% if num_pages > 12 %}
+		                  		{% if separators == 2 and forloop.counter == 3 or separators == 2 and forloop.counter == 7 or separators == 1 and forloop.counter == 8 %}
+		                    		<li>...</li>
+		                    	{% endif %}
+		                  	{% endif %}
+		          		{% endfor %}
+	        		</ul>					
 				</div>
 			</div>
 			{% endblock %}

@@ -1,0 +1,50 @@
+{% for coupon in coupons %}
+	<div class="coupon-container">
+		<div class="coupon-body">
+			<div class="coupon-header">
+				<div class="coupon-left-label">
+					{% if coupon.coupon_type == 'free_shipping' %}
+						<img src="/static/img/free_shipping_icon.png">Free Shipping
+					{% elif coupon.coupon_type == 'on_sale' %}
+						<img src="/static/img/on_sale_icon.png">On Sale
+					{% elif coupon.coupon_type == 'groceries' %}
+						<img src="/static/img/groceries_icon.png">Groceries
+					{% elif coupon.coupon_type == 'coupon' %}
+						<img src="/static/img/coupon_code_icon.png">Coupon
+					{% elif coupon.coupon_type == 'printable' %}
+						<img src="/static/img/printable_icon.png">Printables
+					{% elif coupon.coupon_type == 'gift' %}
+						<img src="/static/img/freebies_icon.png">Freebies
+					{% endif %}
+				</div>
+			</div>
+			<hr>
+			<h1 class="short-description">{{ coupon.short_desc }}</h1>
+			{{ coupon.get_description }}<br>
+			<span class="ends">Ends {{ coupon.end|date:"m/d/y" }}</span>
+				<a href="{% url 'web.views.main.coupons_for_company' company_name=coupon.merchant.name_slug company_id=coupon.merchant.id %}" target="_blank" class="merchant-link">
+					<img src="{{ coupon.merchant.image }}">
+				</a>
+		</div>
+		<div class="use-coupon" id="{{ coupon.id }}">
+			Use Coupon
+		</div>
+		<div class="coupon-bottom">
+			{% comment %}
+				<div class="coupon-left-bottom">
+					<a href="#">
+						<img src="/static/img/save_coupon.png">
+						Save
+					</a>
+				</div>
+			{% endcomment %}
+			<div class="coupon-right-bottom">
+				Share
+				<a href="https://www.facebook.com/sharer/sharer.php?u={{ coupon.full_success_path|urlencode }}"><img src="/static/img/facebook_share_icon.png" target="_blank"></a>
+				<a href="https://twitter.com/share?url={{ coupon.full_success_path|urlencode }}" target="_blank"><img src="/static/img/twitter_share_icon.png"></a>
+				<a href="mailto:?body={{ coupon.full_success_path|urlencode }}"><img src="/static/img/email_share_icon.png"></a>
+			</div>
+		</div>
+	</div>
+{% endfor %}
+<br clear="both">

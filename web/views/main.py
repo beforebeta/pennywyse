@@ -40,16 +40,19 @@ def set_meta_tags(subject, context):
 
 @ensure_csrf_cookie
 def index(request, current_page=1):
+    parameters = {}
+
+
     # handling AJAX request 
     if request.is_ajax():
         data = []
-        parameters = {}
         is_new = request.GET.get('is_new', None)
-        is_tranding = request.GET.get('is_tranding', None)
+        is_trending = request.GET.get('is_trending', None)
         if is_new:
             parameters['is_new'] = True
-        if is_tranding:
+        if is_trending:
             parameters['is_popular'] = True
+        
         coupons = Coupon.objects.filter(**parameters).order_by("-date_added")
         pages = Paginator(coupons, 12)
         for c in pages.page(current_page).object_list:
@@ -65,24 +68,32 @@ def index(request, current_page=1):
         return HttpResponse(json.dumps({'items': data,
                                         'total_pages': pages.num_pages}), content_type="application/json")
     
-    context = {
-      "page_title": base_description,
-      "page_description": base_description,
-      "og_title": "PushPenny",
-      "og_description": "Hand Verified Coupon Codes",
-      "og_url": settings.BASE_URL_NO_APPENDED_SLASH,
-      "new_coupons": Coupon.objects.filter(is_new=True).order_by("-date_added")[:8],
-      "pop_coupons": Coupon.objects.filter(is_popular=True).order_by("-date_added")[:8],
-    }
+    parameters['is_new'] = True
+    coupons = Coupon.objects.filter(**parameters).order_by("-date_added")
+    pages = Paginator(coupons, 12)
+    
+    page = current_page or 1
+    if int(page) > pages.num_pages:
+        page = pages.num_pages
+    ppages = range(1, pages.num_pages+1)
+    separators = 0
+    if pages.num_pages > 12:
+        if page <= 5 or page >= pages.num_pages - 3:
+            ppages = ppages[:8] + ppages[-3:]
+            separators = 1
+        else:
+            page_next = current_page + 2
+            page_prev = current_page - 2
+            ppages = ppages[:3] + ppages[page_prev:page_next] + ppages[-3:]
+            separators = 2
+
+    context = {"pages": ppages,
+               "num_pages": pages.num_pages,
+               "current_page": pages.page(page),
+               "separators": separators,
+               "coupons": pages.page(page).object_list}
 
     return render_response("index.html", request, context)
-
-
-def _search(itm,lst,f):
-    for l in lst:
-        if f(itm,l):
-            return True
-    return False
 
 
 @ensure_csrf_cookie
@@ -137,6 +148,19 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
     # preparing pagination
     page = current_page or 1
     pages = Paginator(coupons, 12)
+    if int(page) > pages.num_pages:
+        page = pages.num_pages
+    ppages = range(1, pages.num_pages+1)
+    separators = 0
+    if pages.num_pages > 12:
+        if page <= 5 or page >= pages.num_pages - 3:
+            ppages = ppages[:8] + ppages[-3:]
+            separators = 1
+        else:
+            page_next = current_page + 2
+            page_prev = current_page - 2
+            ppages = ppages[:3] + ppages[page_prev:page_next] + ppages[-3:]
+            separators = 2
     
     # handling AJAX request 
     if request.is_ajax():
@@ -155,16 +179,16 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
                                         'total_pages': pages.num_pages,
                                         'total_items': pages.count}), content_type="application/json")
     
-    context = {
-        "merchant"              : merchant,
-        "num_pages"             : pages.num_pages,
-        "current_page"          : pages.page(page),
-        "current_page_idx"      : int(page),
-        "num_coupons"           : pages.count,
-        "total_coupon_count"    : merchant.coupon_count + len(expired_coupons),
-        "coupon_categories"     : all_categories,
-        "similar_stores"        : Merchant.objects.all()[:6],
-    }
+    context = {"coupons": pages.page(page).object_list,
+               "merchant": merchant,
+               "num_pages": pages.num_pages,
+               "pages": ppages,
+               "current_page": pages.page(page),
+               "num_coupons": pages.count,
+               "separators": separators,
+               "coupon_categories": all_categories,
+               "similar_stores": Merchant.objects.all()[:6]}
+    
     set_meta_tags(merchant, context)
     if current_page > 1:
         context['canonical_url'] = "{0}pages/{1}/".format(merchant.og_url(), current_page)
@@ -251,6 +275,19 @@ def category(request, category_code, current_page=1, category_ids=-1):
     # preparing pagination
     page = current_page or 1
     pages = Paginator(coupons, 12)
+    if int(page) > pages.num_pages:
+        page = pages.num_pages
+    ppages = range(1, pages.num_pages+1)
+    separators = 0
+    if pages.num_pages > 12:
+        if page <= 5 or page >= pages.num_pages - 3:
+            ppages = ppages[:8] + ppages[-3:]
+            separators = 1
+        else:
+            page_next = current_page + 2
+            page_prev = current_page - 2
+            ppages = ppages[:3] + ppages[page_prev:page_next] + ppages[-3:]
+            separators = 2
     
     # handling AJAX request 
     if request.is_ajax():
@@ -272,14 +309,16 @@ def category(request, category_code, current_page=1, category_ids=-1):
 
     if int(current_page) > pages.num_pages:
         current_page=pages.num_pages
-    context={
-        "num_pages"             : pages.num_pages,
-        "category"              : category,
-        "num_coupons"           : pages.count,
-        "total_coupon_count"    : category.get_coupon_count(),
-        "coupon_categories"     : coupon_categories,
-        "form_path"             : "/categories/{0}/".format(category.code),
-    }
+
+    context = {"num_pages": pages.num_pages,
+               "category": category,
+               "num_coupons": pages.count,
+               "coupon_categories": coupon_categories,
+               "coupons": pages.page(page).object_list,
+               "pages": ppages,
+               "current_page": pages.page(page),
+               "num_coupons": pages.count,
+               "separators": separators}
 
     if current_page > 1:
         context['canonical_url'] = "{0}pages/{1}/".format(category.og_url(), current_page)
