@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
+import os
 import datetime
 import math
+import time
 import requests
 from optparse import make_option
 
@@ -10,9 +12,12 @@ from django.utils.html import strip_tags
 from django.db.models import Q
 
 from BeautifulSoup import BeautifulSoup
+from fuzzywuzzy import fuzz
+from geopy import geocoders
 
 from core.models import DealType, Category, Coupon, Merchant, Country, CouponNetwork, MerchantLocation
 from tests.for_api.sample_data_feed import top_50_us_cities_dict
+from readonly.scrub_list import SCRUB_LIST
 from core.util import print_stack_trace
 import json
 
@@ -47,9 +52,28 @@ class Command(BaseCommand):
             dest='analyze',
             default=False,
             help='analyze'),
+        make_option('--scrubprepare',
+            action='store_true',
+            dest='scrubprepare',
+            default=False,
+            help='scrubprepare'),
+        make_option('--scrubexecute',
+            action='store_true',
+            dest='scrubexecute',
+            default=False,
+            help='scrubexecute'),
         )
 
     def handle(self, *args, **options):
+        '''
+        Arg used for --scrubexecute option; should be a file name of tab delimited txt for parsing thru,
+        and make coupon data corrections
+        '''
+        try:
+            first_arg = args[0]
+        except:
+            pass
+
         if options['directload']:
             try:
                 refresh_sqoot_data()
@@ -73,6 +97,16 @@ class Command(BaseCommand):
         if options['analyze']:
             try:
                 analyze_sqoot_deals()
+            except:
+                print_stack_trace()
+        if options['scrubprepare']:
+            try:
+                prepare_list_of_deals_to_scrub()
+            except:
+                print_stack_trace()
+        if options['scrubexecute']:
+            try:
+                read_scrub_list_and_update(first_arg)
             except:
                 print_stack_trace()
 
@@ -227,6 +261,140 @@ def analyze_sqoot_deals():
             print city, ': ', per_city_and_p_deal_count
         print 'total {} deal count:  {}'.format(p, per_p_deal_count)
         del request_parameters['location']
+
+def prepare_list_of_deals_to_scrub():
+    start_time = time.time()
+    deals_to_scrub = Coupon.all_objects.filter(pk__in=SCRUB_LIST).order_by('merchant__name')
+
+    probably_dup_deals_list = [] # List of coupon pks that look like a duplicate.
+    probably_dup_deals_list = check_duplicate_by_field(deals_to_scrub, probably_dup_deals_list, 'coupon_directlink')
+    probably_dup_deals_list = check_duplicate_by_field(deals_to_scrub, probably_dup_deals_list, 'merchant_name')
+    probably_dup_deals_list = list(set(probably_dup_deals_list))
+
+    print "merchant_pk^merchant_ref_id^merchant_name^address^locality^region^postal_code^coupon_pk^coupon_ref_id^coupon_title^coupon_short_title^parent_category^child_category^deal_price^deal_value^provider^link^is_duplicate?"
+
+    for d in deals_to_scrub:
+        categories      = d.categories.all()
+        parent_category = [cat for cat in categories if cat.parent == None]
+        parent_category = parent_category[0].name if parent_category else None
+        child_category  = [cat for cat in categories if cat.parent != None]
+        child_category  = child_category[0].name if child_category else None
+
+        address         = d.merchant_location.address if d.merchant_location.address else ""
+        locality        = d.merchant_location.locality if d.merchant_location.locality else ""
+        region          = d.merchant_location.region if d.merchant_location.region else ""
+        postal_code     = d.merchant_location.postal_code if d.merchant_location.postal_code else ""
+
+        if d.pk in probably_dup_deals_list:
+            is_duplicate = 1
+        else:
+            is_duplicate = 0
+
+        try:
+            print "%s^%s^%s^%s^%s^%s^%s^%s^%s^%s^%s^%s^%s^%s^%s^%s^%s^%s" %\
+                  (d.merchant.pk, d.merchant.ref_id, d.merchant.name.lower(), address, locality, region, postal_code, d.pk, d.ref_id, d.embedly_title,\
+                   d.embedly_description, parent_category, child_category, d.price, d.listprice, d.coupon_network.name, d.directlink, is_duplicate)
+        except:
+            print "!!!ERROR: merchant_pk == {}".format(d.merchant.pk)
+            print_stack_trace()
+            continue
+
+    end_time = time.time()
+    time_elapsed = end_time - start_time
+    print time_elapsed
+
+def read_scrub_list_and_update(filename):
+    # Thomas' Bing Geocoder api key (free basic access)
+    # dotus_geocoder  = geocoders.GeocoderDotUS() for consideration as a fallback
+    bing_geocoder   = geocoders.Bing('AvxLEwiPhVJzf0S3Pozgg01NnUQQX0RR6g9K46VPLlZ8OfZkKS-76gaPyzoV6IHI')
+
+    path = os.path.join(settings.BASE_DIR, 'readonly', filename)
+    try:
+        f = open(path)
+    except IOError:
+        print_stack_trace()
+
+    rows = []
+    for row in f:
+        rows.append(row.replace("\r\n", "").split("\t"))
+
+    for row in rows[1:]: # Skip the header
+        try:
+            coupon_pk           = int(row[1])
+            is_duplicate        = True if row[3] == '1' else False
+            is_inactive         = True if row[4] == '1' else False
+            is_category_wrong   = True if row[5] == '1' else False
+            is_location_wrong   = True if row[8] == '1' else False
+            correction_needed   = is_duplicate or is_inactive or is_category_wrong or is_location_wrong
+
+            if correction_needed:
+                coupon_obj = Coupon.all_objects.get(pk=coupon_pk)
+                if is_duplicate:
+                    coupon_obj.is_duplicate = True
+                    # print "Correction: ", coupon_pk, " is_duplicate=True" #DEBUG
+                if is_inactive:
+                    coupon_obj.status = 'confirmed-inactive'
+                    # print "Correction: ", coupon_pk, " status=confirmed-inactive" #DEBUG
+                if is_category_wrong:
+                    coupon_obj.categories.clear()
+                    try:
+                        parent_category = Category.objects.get(ref_id_source='sqoot', name=row[6])
+                        coupon_obj.categories.add(parent_category)
+                        # print "Correction: ", coupon_pk, " Parent category -> ", parent_category.name #DEBUG
+                    except:
+                        pass
+
+                    try:
+                        child_category  = Category.objects.get(ref_id_source='sqoot', name=row[7])
+                        coupon_obj.categories.add(child_category)
+                        # print "Correction: ", coupon_pk, " Child category -> ", child_category.name #DEBUG
+                    except:
+                        pass
+                if is_location_wrong:
+                    location_obj = coupon_obj.merchant_location
+                    address      = row[9] if row[9] != '' else ''
+                    locality     = row[10] if row[10] != '' else ''
+                    region       = row[11] if row[11] != '' else ''
+                    postal_code  = row[12] if row[12] != '' else ''
+                    spacer1      = ', ' if address != '' else ''
+                    spacer2      = ' ' if locality != '' else ''
+                    lookup_text  = address + spacer1 + locality + spacer2 + region
+
+                    try:
+                        place, (lat, lng) = bing_geocoder.geocode(lookup_text)
+                        pnt = 'POINT({} {})'.format(lng, lat)
+                        location_obj.geometry = pnt
+                    except:
+                        pass
+
+                    location_obj.address     = address if address != '' else location_obj.address
+                    location_obj.locality    = locality if locality != '' else location_obj.locality
+                    location_obj.region      = region if region != '' else location_obj.region
+                    location_obj.postal_code = postal_code if postal_code != '' else location_obj.postal_code
+                    location_obj.save()
+                    # print "Correction: ", coupon_pk, " Location fixed" #DEBUG
+                coupon_obj.save()
+        except:
+            print_stack_trace()
+
+    scrub_list_retrieved = [row[1] for row in rows] # list of original coupon pks imported from 'scrub_list.py'
+    deals_to_scrub = Coupon.all_objects.filter(pk__in=scrub_list_retrieved)\
+                                       .exclude(Q(status='confirmed-inactive') | Q(is_duplicate=True))\
+                                       .order_by('merchant__name')
+
+    probably_dup_deals_list = [] # List of coupon pks that look like a duplicate.
+    probably_dup_deals_list = check_duplicate_by_field(deals_to_scrub, probably_dup_deals_list, 'coupon_directlink')
+    probably_dup_deals_list = check_duplicate_by_field(deals_to_scrub, probably_dup_deals_list, 'merchant_name')
+    probably_dup_deals_list = list(set(probably_dup_deals_list))
+
+    for pk in probably_dup_deals_list:
+        try:
+            coupon = Coupon.all_objects.get(pk=pk)
+            coupon.is_duplicate = True
+            coupon.save()
+            # print "Correction: ", coupon_pk, " is_duplicate=True" #DEBUG
+        except:
+            print_stack_trace()
 
 
 #############################################################################################################
@@ -494,6 +662,86 @@ def check_if_bad_link(url):
         return True, None
     return False, page
 
+def compare_location_between(deal_obj_one, deal_obj_two):
+    location_one = deal_obj_one.merchant_location
+    location_two = deal_obj_two.merchant_location
+
+    if not location_one.address:
+        return True, deal_obj_one # is_duplicate?, which_deal
+    if not location_two.address:
+        return True, deal_obj_two # is_duplicate?, which_deal
+
+    if location_one.postal_code == location_two.postal_code:
+        address_one = cleanse_address_text(location_one.address)
+        address_two = cleanse_address_text(location_two.address)
+        match_ratio = fuzz.ratio(address_one, address_two)
+
+        if match_ratio > 95:
+            if not location_one.locality:
+                return True, deal_obj_one # is_duplicate?, which_deal
+            if not location_two.locality:
+                return True, deal_obj_two # is_duplicate?, which_deal
+
+            if deal_obj_one.percent > deal_obj_two.percent:
+                return True, deal_obj_two # is_duplicate?, which_deal
+            elif deal_obj_one.percent < deal_obj_two.percent:
+                return True, deal_obj_one # is_duplicate?, which_deal
+            else:
+                if deal_obj_one.discount > deal_obj_two.discount:
+                    return True, deal_obj_two # is_duplicate?, which_deal
+                elif deal_obj_one.discount < deal_obj_two.discount:
+                    return True, deal_obj_one # is_duplicate?, which_deal
+                else:
+                    return True, deal_obj_two # When everyting is the same, mark the second one as shady
+        else:
+            return False, None
+    else:
+        return False, None
+
+def check_duplicate_by_field(deals_to_scrub, suspected_dup_deals_list, field_name):
+
+    if field_name == 'coupon_directlink':
+        field_list = list(set([d.directlink for d in deals_to_scrub]))
+    elif field_name == 'merchant_name':
+        field_list = list(set([d.merchant.name for d in deals_to_scrub]))
+    else:
+        return suspected_dup_deals_list
+
+    for x in field_list:
+        try:
+            if field_name == 'coupon_directlink':
+                same_deals = Coupon.all_objects.filter(ref_id_source='sqoot', is_duplicate=False, online=False, directlink=x)\
+                                               .filter(Q(end__gt=datetime.datetime.now()) | Q(status='considered-active'))
+            elif field_name == 'merchant_name':
+                same_deals = Coupon.all_objects.filter(ref_id_source='sqoot', is_duplicate=False, online=False, merchant__name__contains=x)\
+                                               .filter(Q(end__gt=datetime.datetime.now()) | Q(status='considered-active'))
+
+            if same_deals.count() <= 1:
+                continue
+
+            while True:
+                current_count = same_deals.count()
+                if current_count == 1:
+                    break
+                else:
+                    for c in same_deals[1:current_count]:
+                        if c.pk in suspected_dup_deals_list:
+                            continue
+
+                        does_it_look_duplicate, suspected_deal = compare_location_between(same_deals[0], c)
+                        if not does_it_look_duplicate:
+                            continue
+
+                        if suspected_deal == same_deals[0]:
+                            suspected_dup_deals_list.append(suspected_deal.pk)
+                            break
+                        else:
+                            suspected_dup_deals_list.append(suspected_deal.pk)
+                    same_deals = same_deals.exclude(pk=same_deals[0].pk)
+        except:
+            print "!!!ERROR: field: {}".format(x)
+            print_stack_trace()
+    return suspected_dup_deals_list
 
 #############################################################################################################
 #
@@ -511,3 +759,14 @@ def get_date(raw_date_string):
         clean_date_string = raw_date_string[:-4].replace('T', ' ')
         return datetime.datetime.strptime(clean_date_string, "%Y-%m-%d %H:%M")
     return None
+
+def cleanse_address_text(address_string):
+    address_crufts = ['Rd', 'Hwy', 'Dr', 'St', 'Ave', 'Blvd', 'Expy', 'Ln', 'E', 'S', 'W', 'N', 'Pkwy',\
+                     'Road', 'Highway', 'Drive', 'Street', 'Avenue', 'Boulevard', 'Expressway', 'Lane', 'East', 'South', 'West', 'North', 'Parkway']
+    address_broken_down = address_string.split(' ')
+    caught_crufts = [val for val in address_broken_down if val in address_crufts]
+    for c in caught_crufts:
+        address_broken_down.remove(c)
+    clean_address = (' ').join(address_broken_down)
+    return clean_address
+

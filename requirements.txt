@@ -41,3 +41,4 @@ selenium
 redis==2.8.0
 geopy==0.96.2
 elasticsearch==0.4.3
+-e git+git://github.com/seatgeek/fuzzywuzzy.git#egg=fuzzywuzzy
