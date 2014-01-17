@@ -18,6 +18,8 @@ class CouponIndex(indexes.SearchIndex, indexes.Indexable):
     full_success_path = indexes.CharField(null=True, model_attr='full_success_path')
     merchant_id = indexes.IntegerField(model_attr='merchant__id', null=True)
     coupon_type = indexes.CharField(model_attr='coupon_type', null=True)
+    is_new = indexes.BooleanField(model_attr='is_new', null=True)
+    is_popular = indexes.BooleanField(model_attr='is_popular', null=True)
 
     def get_model(self):
         return Coupon

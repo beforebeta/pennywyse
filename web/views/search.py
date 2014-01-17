@@ -7,10 +7,22 @@ from web.utils import FuzzySearchQuerySet
 
 def search(request, current_page=1):
     query = request.GET.get("q","").strip()
+    coupon_type = request.GET.get('coupon_type', None)
+    is_new = request.GET.get('is_new', None)
+    is_trending = request.GET.get('is_trending', None)
+    
     if query:
+        parameters = {'django_ct':'core.coupon', 'content':query}
+        if is_new:
+            parameters['is_new'] = True
+        if is_trending:
+            parameters['is_popular'] = True
+        if coupon_type:
+            parameters['coupon_type'] = coupon_type
         merchants_list = FuzzySearchQuerySet().combined_filter(django_ct='core.merchant',
                                             total_coupon_count__gt=0, content=query)
-        coupons_list = SearchQuerySet().filter(django_ct='core.coupon', content=query)
+        print parameters
+        coupons_list = SearchQuerySet().filter(**parameters)
         pages = Paginator(coupons_list, 12)
         merchant_pages = Paginator(merchants_list, 10)
         if request.is_ajax():
