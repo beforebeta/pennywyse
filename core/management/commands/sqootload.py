@@ -14,8 +14,10 @@ from django.db.models import Q
 from BeautifulSoup import BeautifulSoup
 from fuzzywuzzy import fuzz
 from geopy import geocoders
+from haystack.utils.geo import D
+from haystack.query import SearchQuerySet, SQ
 
-from core.models import DealType, Category, Coupon, Merchant, Country, CouponNetwork, MerchantLocation
+from core.models import DealType, Category, Coupon, Merchant, Country, CouponNetwork, MerchantLocation, CityPicture
 from tests.for_api.sample_data_feed import top_50_us_cities_dict
 from readonly.scrub_list import SCRUB_LIST
 from core.util import print_stack_trace
@@ -66,13 +68,17 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         '''
-        Arg used for --scrubexecute option; should be a file name of tab delimited txt for parsing thru,
-        and make coupon data corrections
+        --direcload:    For downloading and loading coupons into db directly from sqoot
+        --indirecload:  For loading coupons from a file saved via --savedown option
+        --savedown:     For downloading coupons from sqoot and saving them into a file
+        --validate:     For validating deal;
+                        * If no args are given, it will validate all local deals that have no expiry date
+                        * If multiple args are given (as CityPicture.code), then it will only validate deals within 100mi
+                          of the target city by comaring against sqoot
+        --scrubprepare: For preparing to do a semi-manual check process by outputting into '^' seperatated file
+        --scrubexecute: For reading a tab seperatated file after checking semi-manually for data corrections;
+                        * Takes one argument that is a file name under 'readonly' folder
         '''
-        try:
-            first_arg = args[0]
-        except:
-            pass
 
         if options['directload']:
             try:
@@ -91,7 +97,7 @@ class Command(BaseCommand):
                 print_stack_trace()
         if options['validate']:
             try:
-                validate_sqoot_deals()
+                validate_sqoot_deals(args)
             except:
                 print_stack_trace()
         if options['analyze']:
@@ -106,7 +112,7 @@ class Command(BaseCommand):
                 print_stack_trace()
         if options['scrubexecute']:
             try:
-                read_scrub_list_and_update(first_arg)
+                read_scrub_list_and_update(args)
             except:
                 print_stack_trace()
 
@@ -205,11 +211,59 @@ def savedown_sqoot_data():
     sqoot_file.flush()
     sqoot_file.close()
 
-def validate_sqoot_deals():
-    suspicious_deals = Coupon.all_objects.filter(ref_id_source='sqoot', end__isnull=True)\
-                                         .filter(Q(status='considered-active')| Q(status='unconfirmed'))
-    for c in suspicious_deals:
-        check_if_deal_gone(c)
+def validate_sqoot_deals(args):
+    num_of_targets = len(args)
+    if num_of_targets == 0:
+        suspicious_deals = Coupon.all_objects.filter(ref_id_source='sqoot', online=False, end__isnull=True)\
+                                             .filter(Q(status='considered-active')| Q(status='unconfirmed'))
+        for c in suspicious_deals:
+            check_if_deal_gone(c)
+    else:
+        for i in range(num_of_targets):
+            target_city_code = args[i]
+            try:
+                target_pnt = CityPicture.objects.get(code=target_city_code).geometry
+            except:
+                print target_city_code, "is not a valid identified city code. Refer to CityPicture objects for available codes."
+                continue
+
+            radius = D(mi=100)
+            sqs = SearchQuerySet().using('mobile_api').filter(django_ct='core.coupon', online=False, is_duplicate=False)\
+                                                      .filter(SQ(end__gt=datetime.datetime.now()) | SQ(status='considered-active'))\
+                                                      .dwithin('merchant_location', target_pnt, radius).distance('merchant_location', target_pnt)\
+                                                      .order_by('distance')
+            if sqs.count() == 0:
+                # print "No deals found in", target_city_code
+                continue
+
+            coupon_ids_from_db = []
+            coupon_ids_from_db = [s.coupon_ref_id for s in sqs]
+
+            request_parameters = {
+                'api_key': settings.SQOOT_PUBLIC_KEY,
+                'per_page': ITEMS_PER_PAGE,
+                'radius': 100,
+                'location': "{},{}".format(target_pnt.y,target_pnt.x)
+            }
+            active_deal_count = requests.get(SQOOT_API_URL + 'deals', params=request_parameters).json()['query']['total']
+            page_count = int(math.ceil(active_deal_count / float(request_parameters['per_page'])))
+
+            coupon_ids_from_sqoot = []
+            for p in range(page_count):
+                request_parameters['page'] = p + 1
+                # print request_parameters['page']
+                deals_data = requests.get(SQOOT_API_URL + 'deals', params=request_parameters).json()['deals']
+                coupon_ids_from_sqoot += [deal['deal']['id'] for deal in deals_data]
+
+            ids_in_db_but_not_in_sqoot = [] # These deals are deemed 'inactive'
+            for x in coupon_ids_from_db:
+                if x in coupon_ids_from_sqoot:
+                    continue
+                else:
+                    ids_in_db_but_not_in_sqoot.append(x)
+
+            if ids_in_db_but_not_in_sqoot:
+                Coupon.all_objects.filter(ref_id__in=ids_in_db_but_not_in_sqoot).update(status='implied-inactive')
 
 def analyze_sqoot_deals():
     request_parameters = {
@@ -303,7 +357,12 @@ def prepare_list_of_deals_to_scrub():
     time_elapsed = end_time - start_time
     print time_elapsed
 
-def read_scrub_list_and_update(filename):
+def read_scrub_list_and_update(args):
+    try:
+        filename = args[0]
+    except:
+        pass
+
     # Thomas' Bing Geocoder api key (free basic access)
     # dotus_geocoder  = geocoders.GeocoderDotUS() for consideration as a fallback
     bing_geocoder   = geocoders.Bing('AvxLEwiPhVJzf0S3Pozgg01NnUQQX0RR6g9K46VPLlZ8OfZkKS-76gaPyzoV6IHI')
@@ -379,7 +438,7 @@ def read_scrub_list_and_update(filename):
 
     scrub_list_retrieved = [row[1] for row in rows] # list of original coupon pks imported from 'scrub_list.py'
     deals_to_scrub = Coupon.all_objects.filter(pk__in=scrub_list_retrieved)\
-                                       .exclude(Q(status='confirmed-inactive') | Q(is_duplicate=True))\
+                                       .exclude(Q(status='confirmed-inactive') | Q(status='implied-inactive') | Q(is_duplicate=True))\
                                        .order_by('merchant__name')
 
     probably_dup_deals_list = [] # List of coupon pks that look like a duplicate.
@@ -619,6 +678,7 @@ def check_if_deal_gone(coupon_obj):
     Note on coupon status:
     'unconfirmed' (default)
     'confirmed-inactive'
+    'implied-inactive' (Not used in this function; Refer to validate_sqoot_deals() for this status)
     'considered-active'
     '''
     url = coupon_obj.directlink
