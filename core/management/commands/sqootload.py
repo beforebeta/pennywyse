@@ -436,7 +436,7 @@ def read_scrub_list_and_update(args):
         except:
             print_stack_trace()
 
-    scrub_list_retrieved = [row[1] for row in rows] # list of original coupon pks imported from 'scrub_list.py'
+    scrub_list_retrieved = [row[1] for row in rows[1:]] # list of original coupon pks imported from 'scrub_list.py'
     deals_to_scrub = Coupon.all_objects.filter(pk__in=scrub_list_retrieved)\
                                        .exclude(Q(status='confirmed-inactive') | Q(status='implied-inactive') | Q(is_duplicate=True))\
                                        .order_by('merchant__name')
