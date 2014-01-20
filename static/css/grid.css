@@ -29,6 +29,9 @@ a:hover {
 	text-transform: uppercase;
 	font-size: 10pt;
 }
+.top-header span {
+	margin-left: 165px;
+}
 h4 {
 	margin-top: 25px;
 }
@@ -298,6 +301,7 @@ hr {
 .top-labels-container {
 	height: 25px !important;
 	line-height: 25px !important;
+	overflow:hidden;
 }
 .sorting-item {
 	padding-left: 5px !important;
@@ -444,6 +448,12 @@ hr {
 	font-size: 20px;
 	font-weight: 300 !important;
 }
+.short-description a{
+	text-align: center;
+	color: #e74c3c !important;
+	font-size: 20px;
+	font-weight: 300 !important;
+}
 .ends {
 	color: #807a7b;
 	font-size: 9pt;
@@ -503,9 +513,9 @@ hr {
 	top: 25px;
 }
 .bottom-shadow {
-	-webkit-box-shadow: 0px 2px 2px 2px rgba(0,0,0,0.05);
-	-moz-box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.05);
-	box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.05);
+	-webkit-box-shadow: 0px 2px 2px 2px rgba(97,94,94,0.15);
+	-moz-box-shadow: 0px 2px 2px 0px rgba(97,94,94,0.15);
+	box-shadow: 0px 2px 2px 0px rgba(97, 94, 94, 0.15);
 }
 .middle-container {
 	z-index: 10 !important;
@@ -660,9 +670,9 @@ hr {
 	margin: 0 auto !important;
 	left: 0px !important;
 	border-top: 1px solid #d9d9d7 !important;
-	-webkit-box-shadow: 0px 3px 3px 3px rgba(0,0,0,0.07);
-	-moz-box-shadow: 0px 3px 3px 0px rgba(0,0,0,0.07);
-	box-shadow: 0px 3px 3px 0px rgba(0,0,0,0.07);
+	-webkit-box-shadow: 0px 3px 3px 3px rgba(97,94,94,0.15);
+	-moz-box-shadow: 0px 3px 3px 0px rgba(97,94,94,0.15);
+	box-shadow: 0px 3px 3px 0px rgba(97, 94, 94, 0.15)
 }
 .category-label {
 	text-transform: uppercase;
@@ -806,7 +816,7 @@ hr {
 	background-image: url('../img/freebies_white.png');
 	background-color: #5757a2;
 }
-.index-labels a {
+.index-labels a, .mobile-index-labels a {
 	font-size: 11pt;
 	font-weight: 300;
 	text-transform: uppercase;
@@ -816,10 +826,13 @@ hr {
 	display: block;
 	float: left;
 }
-.index-labels a:hover {
+.mobile-index-labels a {
+	margin-right: 10px !important;
+}
+.index-labels a:hover, .mobile-index-labels a:hover  {
 	text-decoration: none;
 }
-.index-labels a.active {
+.index-labels a.active, .mobile-index-labels a.active {
 	color: #ef5b5b !important;
 	font-weight: 500 !important;
 }
@@ -890,39 +903,59 @@ hr {
 .featured-merchants-list {
 	padding: 20px;
 }
-.featured-merchants-list div {
-	width: 150px;
-	height:95px;
-	line-height: 95px;
-	margin: 0px auto;
-	margin-bottom: 10px !important;
-	list-style: none;
-	overflow: hidden;
-	float: left;
-}
 .featured-merchants-list img {
 	max-width: 150px;
 	max-height: 95px;
 }
 .featured-category {
 	text-align: center;
-	width: 140px !important;
 	margin-right: 10px !important;
+	width: 145px;
+	height: 95px;
+	line-height: 95px;
+	margin: 0px auto;
+	margin-bottom: 10px !important;
+	list-style: none;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	float: left;
+}
+.featured-category:nth-child(6) {
+	margin-right: 0px !important;
 }
 .featured-category-container {
 	background-color: #ebebe8;
 	border-radius: 2px;
 	color: #423d3e;
 	margin-top: 30px !important;
-	margin-right: 5px;
 	height: 30px !Important;
 	line-height: 30px !important;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	padding-left: 5px;
+	padding-right: 5px;
 }
 .featured-category-container a{
 	color: #423d3e;
+}
+.featured-merchant {
+	text-align: center;
+	margin-right: 10px !important;
+	width: 145px;
+	height: 95px;
+	line-height: 95px;
+	margin: 0px auto;
+	margin-bottom: 10px !important;
+	list-style: none;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	float: left;
+}
+.featured-merchant:nth-child(6) {
+	margin-right: 0px !important;
 }
 .prescroll-header {
 	background-image: url('../img/header.png');
@@ -995,6 +1028,10 @@ hr {
 	background-repeat: no-repeat;
 	color: #423d3e;
 }
+.top-coupon-types a:hover {
+	color: #e74c3c;
+	background-image: url('../img/arrow_hover.png');
+}
 .top-coupon {
 	width: 250px !important;
 	padding-left: 22px;
@@ -1002,6 +1039,9 @@ hr {
 }
 .top-coupon .coupon-body {
 	padding: 0 !important;
+}
+.top-coupon-link, .featured-description a{
+	color: #000 !important;
 }
 .featured-coupons {
 	width: 255px !important;
@@ -1252,6 +1292,9 @@ hr {
 }    
 .coupon-popup-code input:-ms-input-placeholder {
     color: #000;
+}
+.coupon-popup-code input[type=button]:hover {
+    box-shadow: 0px 3px 3px 0px rgba(97, 94, 94, 0.30);
 }
 .coupon-popup-body {
 	margin-left: 30px;
@@ -1510,7 +1553,7 @@ hr {
 .coupon-types {
 	text-transform: uppercase;
 	width: 100% !important;
-	height: 45px !important;
+	height: 35px !important;
 }
 .coupon-types .index-labels{
 	background-color: #fff !important;
@@ -1547,4 +1590,24 @@ hr {
 	height: 40px;
 	width: 40px;
 	margin-right: 10px;
+}
+.top-menu-store {
+	padding: 0px !important;
+	margin-top: 10px;
+}
+.top-menu-store li{
+	width: 180px;
+	height: 85px;
+	line-height: 85px;
+	background-color: #f3f3f3;
+	margin-bottom: 15px !important;
+	list-style: none;
+	overflow: hidden;
+	float: left;
+	margin-right: 5px;
+	text-align: center;
+}
+.top-menu-store img{
+	max-width: 160px;
+	max-height: 80px;
 }

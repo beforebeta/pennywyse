@@ -51,10 +51,7 @@
 								</form>
 							</li>
 							<li>
-								<a href="#" class="menu-link">Top Coupons</a>
-								<div class="mobile-expand">
-									<span class="glyphicon glyphicon-chevron-down"></span>
-								</div>
+								<a href="{% url 'web.views.main.top_coupons' %}" class="menu-link">Top Coupons</a>
 							</li>
 							<li id="mobile-categories">
 								<a href="javascript:void(null);" class="menu-link">Categories</a>
@@ -116,7 +113,7 @@
 				<ul class="menu">
 					<li class="menu-item category-item">
 						<a href="#" class="menu-link">Top Coupons</a>
-						<ul class="row dropdown-row stores-row solid-bottom-shadow"><li>
+						<ul class="row dropdown-row stores-row"><li>
 							<div class="main-row">
 								<div class="top-coupons-row">	
 									<div class="top-coupon-types top-coupons">
@@ -131,11 +128,19 @@
 										{% for top_coupon in top_coupons %}
 											{% if top_coupon.popular.all.0 %}
 												<div class="coupon-body top-popular-coupon {% if not forloop.first %}hidden{% endif %}" id="pc-{{ top_coupon.id }}">
-													<h1 class="short-description">{{ top_coupon.popular.all.0.short_desc }}</h1>
-													{{ top_coupon.popular.all.0.get_description }}<br>
+													<h2 class="short-description">
+														<a href="{{ top_coupon.popular.all.0.full_success_path }}">
+															{{ top_coupon.popular.all.0.short_desc }}
+														</a>
+													</h2>
+													<a href="{{ top_coupon.popular.all.0.full_success_path }}" class="top-coupon-link">
+														{{ top_coupon.popular.all.0.get_description }}<br>
+													</a>
 													<span class="ends">Ends {{ top_coupon.popular.all.0.end|date:"m/d/y" }}</span>
 													<div class="description">
-														<img src="{{ top_coupon.popular.all.0.merchant.image }}">
+														<a href="{{ top_coupon.popular.all.0.merchant.local_path }}">
+															<img src="{{ top_coupon.popular.all.0.merchant.image }}">
+														</a>
 													</div>
 												</div>
 											{% endif %}
@@ -148,10 +153,14 @@
 											{% for featured_coupon in top_coupon.featured.all %}
 												<div class="top-featured-coupon {% if foorloop.first %}first-coupon{% elif forloop.last %}last-coupon{% endif %}">
 													<div class="featured-image">
-														<img src="{{ featured_coupon.merchant.image }}">
+														<a href="{{ featured_coupon.merchant.local_path }}">
+															<img src="{{ featured_coupon.merchant.image }}">
+														</a>
 													</div>
 													<div class="featured-description">
-													{{ featured_coupon.get_description }}
+														<a href="{{ featured_coupon.full_success_path }}">
+															{{ featured_coupon.get_description }}
+														</a>
 													</div><br clear="both">
 												</div>
 											{% endfor %}

@@ -18,7 +18,6 @@ from core.util import encode_uri_component, print_stack_trace
 from core.util.pagination import AlphabeticalPagination
 from tracking.views import log_click_track
 from tracking.utils import get_visitor_tag
-from web.models import ShortenedURLComponent, CategorySection, TopCouponSection
 from web.forms import EmailSubscriptionForm
 from websvcs.models import EmailSubscription
 
@@ -41,7 +40,6 @@ def set_meta_tags(subject, context):
 @ensure_csrf_cookie
 def index(request, current_page=1):
     parameters = {}
-
 
     # handling AJAX request 
     if request.is_ajax():
@@ -94,6 +92,11 @@ def index(request, current_page=1):
                "coupons": pages.page(page).object_list}
 
     return render_response("index.html", request, context)
+
+
+@ensure_csrf_cookie
+def top_coupons(request, current_page=1):
+    return render_response("top_coupons.html", request, {})
 
 
 @ensure_csrf_cookie

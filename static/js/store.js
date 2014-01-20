@@ -45,6 +45,26 @@ $(function() {
 		var label = $(this).text();
 		$(this).parent().parent().find('span:first').html(label);
 		$(this).parent().parent().parent().removeClass('expanded');
+		if ($(this).parent().hasClass('mobile-coupon-type')) {
+			var top_coupon_type = $(this).attr('id');
+			var coupon_type = $('.mobile-index-labels').find('.active').attr('id');
+			if (coupon_type == 'most-popular') {
+				$('.menu-popular-coupon').hide();
+				$('#mpc-'+top_coupon_type).show();
+				$('#mpc-'+top_coupon_type).removeClass('hidden');
+			}
+			else if (coupon_type == 'featured-coupons') {
+				$('.menu-featured-coupon').hide();
+				$('#mfc-'+top_coupon_type).show();
+				$('#mfc-'+top_coupon_type).removeClass('hidden');
+				$('#mfc-'+top_coupon_type).find('.coupon-container').show();
+			}
+			else if (coupon_type == 'stores') {
+				$('.top-menu-store').hide();
+				$('#mst-'+top_coupon_type).show();
+				$('#mst-'+top_coupon_type).removeClass('hidden');
+			}
+		}
 	});
 	
 	$('#mobile-menu').click(function() {
@@ -194,6 +214,32 @@ $(function() {
 			fetch_items(reset_items=true);
 		}
 	});
+	
+	// switching between "most popular", "featured" and "stores" sections on "top coupons" mobile page
+	$('.mobile-index-labels a').click(function() {
+		$('.mobile-index-labels a').removeClass('active');
+		var filter_type = $(this).attr('id');
+		if (filter_type != 'coupon_type') {
+			$(this).addClass('active');
+		}
+		var expand_label = $('.mobile-coupon-type li:first').text();
+		$('.mobile-coupon-type').parent().find('span:first').html(expand_label);
+		$('.coupon-container').hide();
+		$('.top-menu-store').hide();
+		if (filter_type == 'most-popular') {
+			$('.menu-popular-coupon:first').show();
+		}
+		else if (filter_type == 'featured-coupons') {
+			$('.menu-featured-coupon:first').removeClass('hidden');
+			$('.menu-featured-coupon:first').show();
+			$('.menu-featured-coupon:first').find('.coupon-container').show();
+		}
+		else if (filter_type == 'stores') {
+			$('.top-menu-store:first').removeClass('hidden');
+			$('.top-menu-store:first').show();
+		}
+	});
+	
 	$('.coupon-type li').click(function() {
 		var coupon_type = $(this).attr('id');
 		$('.coupon-type li').removeClass('active');
@@ -264,6 +310,7 @@ $(function() {
 		load_coupon(coupon_id);
 		return false;
 	});
+	
 	$('.top-coupon-types a').mouseover(function() {
 		var coupon_type_id = $(this).attr('id').substr(3, $(this).attr('id').length);
 		$('.top-popular-coupon').addClass('hidden');
