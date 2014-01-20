@@ -117,7 +117,7 @@
 116	1695699	1959309										
 117	1639956	1057543			1	Shopping & Services	Home Services					
 118	1637640	1447693			1	Fitness	Gym					
-119	1732719	1798929						1	1615 L Street 	Sacramento	CA	95814
+119	1732719	1798929						1	1615 L StreetÂ 	Sacramento	CA	95814
 120	1730394	1798932										
 121	1732714	1798931										
 122	1742418	1798930										
@@ -495,7 +495,7 @@
 494	1713947	2019933			1	Health & Beauty	None					
 495	1715058	2019932										
 496	1719702	1931419			1	Health & Beauty	None					
-497	1751035	2007414			1	Activities & Events	City Tours	1	Union Square 	San Francisco	CA	94108
+497	1751035	2007414			1	Activities & Events	City Tours	1	Union SquareÂ 	San Francisco	CA	94108
 498	1690579	1997908			1	Activities & Events	City Tours					
 499	1696012	1998316										
 500	1697192	1998314	1									
@@ -517,7 +517,7 @@
 516	1663566	672802										
 517	1673022	1215849	1									
 518	1638213	1085181			1	Shopping & Services	None					
-519	1697444	1949332						1	553 Sycamore Valley Rd 	Danville	CA	94526
+519	1697444	1949332						1	553 Sycamore Valley RdÂ 	Danville	CA	94526
 520	1675350	702740		1								
 521	1662034	715651										
 522	1671519	882622	1									
@@ -1265,7 +1265,7 @@
 1264	1674116	1091002						1	1190 Macdonald Avenue	Richmond	CA	94801
 1265	1669372	1090527	1									
 1266	1725742	1852839										
-1267	1747243	2020358			1	Activities & Events	Wine Tasting	1	 Pier 39	San Francisco	CA	94133
+1267	1747243	2020358			1	Activities & Events	Wine Tasting	1	Â Pier 39	San Francisco	CA	94133
 1268	1663557	681135										
 1269	1693291	1960912	1									
 1270	1704368	2015581										
