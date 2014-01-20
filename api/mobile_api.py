@@ -383,5 +383,5 @@ class MobileResource(ModelResource):
                 default = cities.filter(text='Default')[0]
                 default_image = default.picture_url
             except:
-                default_image = 'http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg'
+                default_image = 'https://s3.amazonaws.com/pushpennyapp/pushpenny-default.jpg'
         return default_image

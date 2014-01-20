@@ -6,7 +6,7 @@
             "name": "Default",
             "code": "default",
             "geometry": "POINT(0.0000 0.0000)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/pushpenny-default.jpg",
             "radius": 10
         }
     },
@@ -28,7 +28,7 @@
             "name": "Los Angeles, CA",
             "code": "los-angeles-ca",
             "geometry": "POINT(-118.15300 34.02000)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/pushpenny-default.jpg",
             "radius": 10
         }
     },
@@ -39,7 +39,7 @@
             "name": "Chicago, IL",
             "code": "chicago-il",
             "geometry": "POINT(-87.63940 41.87440)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/chicago-il.jpg",
             "radius": 10
         }
     },
@@ -50,7 +50,7 @@
             "name": "Houston, TX",
             "code": "houston-tx",
             "geometry": "POINT(-95.36030 29.75720)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/houston-tx.jpg",
             "radius": 10
         }
     },
@@ -61,7 +61,7 @@
             "name": "Philadelphia, PA",
             "code": "philadelphia-pa",
             "geometry": "POINT(-75.15580 39.94940)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/pushpenny-default.jpg",
             "radius": 10
         }
     },
@@ -72,7 +72,7 @@
             "name": "Phoenix, AZ",
             "code": "phoenix-az",
             "geometry": "POINT(-112.07400 33.45330)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/pushpenny-default.jpg",
             "radius": 10
         }
     },
@@ -83,7 +83,7 @@
             "name": "San Antonio, TX",
             "code": "san-antonio-tx",
             "geometry": "POINT(-98.48500 29.42690)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/pushpenny-default.jpg",
             "radius": 10
         }
     },
@@ -94,7 +94,7 @@
             "name": "San Diego, CA",
             "code": "san-diego-ca",
             "geometry": "POINT(-117.15600 32.71470)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/san-diego-ca.jpg",
             "radius": 10
         }
     },
@@ -105,7 +105,7 @@
             "name": "Dallas, TX",
             "code": "dallas-tx",
             "geometry": "POINT(-96.79360 32.78580)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/dallas-tx.jpg",
             "radius": 10
         }
     },
@@ -127,7 +127,7 @@
             "name": "Austin, TX",
             "code": "austin-tx",
             "geometry": "POINT(-97.74360 30.26920)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/austin-tx.jpg",
             "radius": 10
         }
     },
@@ -138,7 +138,7 @@
             "name": "Jacksonville, FL",
             "code": "jacksonville-fl",
             "geometry": "POINT(-81.66170 30.32890)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/pushpenny-default.jpg",
             "radius": 10
         }
     },
@@ -149,7 +149,7 @@
             "name": "Indianapolis, IN",
             "code": "indianapolis-in",
             "geometry": "POINT(-86.16280 39.76860)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/pushpenny-default.jpg",
             "radius": 10
         }
     },
@@ -171,7 +171,7 @@
             "name": "Columbus, OH",
             "code": "columbus-oh",
             "geometry": "POINT(-83.00470 39.96300)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/pushpenny-default.jpg",
             "radius": 10
         }
     },
@@ -182,7 +182,7 @@
             "name": "Fort Worth, TX",
             "code": "fort-worth-tx",
             "geometry": "POINT(-97.32890 32.74860)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/pushpenny-default.jpg",
             "radius": 10
         }
     },
@@ -193,7 +193,7 @@
             "name": "Charlotte, NC",
             "code": "charlotte-nc",
             "geometry": "POINT(-80.84580 35.22890)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/charlotte-nc.jpg",
             "radius": 10
         }
     },
@@ -204,7 +204,7 @@
             "name": "Detroit, MI",
             "code": "detroit-mi",
             "geometry": "POINT(-83.04920 42.33000)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/detroit-mi.jpg",
             "radius": 10
         }
     },
@@ -215,7 +215,7 @@
             "name": "El Paso, TX",
             "code": "el-paso-tx",
             "geometry": "POINT(-106.48600 31.76000)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/pushpenny-default.jpg",
             "radius": 10
         }
     },
@@ -226,7 +226,7 @@
             "name": "Memphis, TN",
             "code": "memphis-tn",
             "geometry": "POINT(-90.05360 35.14610)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/memphis-tn.jpg",
             "radius": 10
         }
     },
@@ -237,7 +237,7 @@
             "name": "Boston, MA",
             "code": "boston-ma",
             "geometry": "POINT(-71.05690 42.35670)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/boston-ma.jpg",
             "radius": 10
         }
     },
@@ -248,7 +248,7 @@
             "name": "Seattle, WA",
             "code": "seattle-wa",
             "geometry": "POINT(-122.33700 47.60890)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/seattle-wa.jpg",
             "radius": 10
         }
     },
@@ -259,7 +259,7 @@
             "name": "Denver, CO",
             "code": "denver-co",
             "geometry": "POINT(-104.98900 39.74940)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/denver-co.jpg",
             "radius": 10
         }
     },
@@ -270,7 +270,7 @@
             "name": "Washington, DC",
             "code": "washington-dc",
             "geometry": "POINT(-77.00920 38.89750)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/washington-dc.jpg",
             "radius": 10
         }
     },
@@ -281,7 +281,7 @@
             "name": "Nashville, TN",
             "code": "nashville-tn",
             "geometry": "POINT(-86.78190 36.15920)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/nashville-tn.jpg",
             "radius": 10
         }
     },
@@ -292,7 +292,7 @@
             "name": "Baltimore, MD",
             "code": "baltimore-md",
             "geometry": "POINT(-76.61250 39.29050)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/baltimore-md.jpg",
             "radius": 10
         }
     },
@@ -303,7 +303,7 @@
             "name": "Louisville, KY",
             "code": "louisville-ky",
             "geometry": "POINT(-85.76360 38.24640)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/pushpenny-default.jpg",
             "radius": 10
         }
     },
@@ -314,7 +314,7 @@
             "name": "Portland, OR",
             "code": "portland-or",
             "geometry": "POINT(-122.67600 45.51830)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/portland-or.jpg",
             "radius": 10
         }
     },
@@ -325,7 +325,7 @@
             "name": "Oklahoma City, OK",
             "code": "oklahoma-city-ok",
             "geometry": "POINT(-97.51780 35.47390)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/pushpenny-default.jpg",
             "radius": 10
         }
     },
@@ -336,7 +336,7 @@
             "name": "Milwaukee, WI",
             "code": "milwaukee-wi",
             "geometry": "POINT(-87.90420 43.03860)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/pushpenny-default.jpg",
             "radius": 10
         }
     },
@@ -347,7 +347,7 @@
             "name": "Las Vegas, NV",
             "code": "las-vegas-nv",
             "geometry": "POINT(-115.14400 36.17220)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/las-vegas-nv.jpg",
             "radius": 10
         }
     },
@@ -358,7 +358,7 @@
             "name": "Albuquerque, NM",
             "code": "albuquerque-nm",
             "geometry": "POINT(-106.65100 35.08360)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/albuquerque-nm.jpg",
             "radius": 10
         }
     },
@@ -369,7 +369,7 @@
             "name": "Tucson, AZ",
             "code": "tucson-az",
             "geometry": "POINT(-110.96900 32.22080)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/pushpenny-default.jpg",
             "radius": 10
         }
     },
@@ -380,7 +380,7 @@
             "name": "Fresno, CA",
             "code": "fresno-ca",
             "geometry": "POINT(-119.77000 36.73670)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/pushpenny-default.jpg",
             "radius": 10
         }
     },
@@ -391,7 +391,7 @@
             "name": "Sacramento, CA",
             "code": "sacramento-ca",
             "geometry": "POINT(-121.4689 38.5556)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/pushpenny-default.jpg",
             "radius": 10
         }
     },
@@ -402,7 +402,7 @@
             "name": "Long Beach, CA",
             "code": "long-beach-ca",
             "geometry": "POINT(-118.18800 33.77060)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/pushpenny-default.jpg",
             "radius": 10
         }
     },
@@ -413,7 +413,7 @@
             "name": "Kansas City, MO",
             "code": "kansas-city-mo",
             "geometry": "POINT(-94.58890 39.08220)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/pushpenny-default.jpg",
             "radius": 10
         }
     },
@@ -424,7 +424,7 @@
             "name": "Mesa, AZ",
             "code": "mesa-az",
             "geometry": "POINT(-111.82800 33.41500)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/pushpenny-default.jpg",
             "radius": 10
         }
     },
@@ -435,7 +435,7 @@
             "name": "Virginia Beach, VA",
             "code": "virginia-beach-va",
             "geometry": "POINT(-75.97500 36.84670)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/pushpenny-default.jpg",
             "radius": 10
         }
     },
@@ -446,7 +446,7 @@
             "name": "Atlanta, GA",
             "code": "atlanta-ga",
             "geometry": "POINT(-84.39360 33.75280)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/pushpenny-default.jpg",
             "radius": 10
         }
     },
@@ -457,7 +457,7 @@
             "name": "Colorado Springs, CO",
             "code": "colorado-springs-co",
             "geometry": "POINT(-104.82100 38.83530)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/pushpenny-default.jpg",
             "radius": 10
         }
     },
@@ -468,7 +468,7 @@
             "name": "Raleigh, NC",
             "code": "raleigh-nc",
             "geometry": "POINT(-78.63920 35.77720)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/pushpenny-default.jpg",
             "radius": 10
         }
     },
@@ -479,7 +479,7 @@
             "name": "Omaha, NE",
             "code": "omaha-ne",
             "geometry": "POINT(-95.93720 41.26170)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/pushpenny-default.jpg",
             "radius": 10
         }
     },
@@ -490,7 +490,7 @@
             "name": "Miami, FL",
             "code": "miami-fl",
             "geometry": "POINT(-80.19220 25.77690)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/miami-fl.jpg",
             "radius": 10
         }
     },
@@ -501,7 +501,7 @@
             "name": "Oakland, CA",
             "code": "oakland-ca",
             "geometry": "POINT(-122.26500 37.80080)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/pushpenny-default.jpg",
             "radius": 10
         }
     },
@@ -512,7 +512,7 @@
             "name": "Tulsa, OK",
             "code": "tulsa-ok",
             "geometry": "POINT(-95.99280 36.15330)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/pushpenny-default.jpg",
             "radius": 10
         }
     },
@@ -523,7 +523,7 @@
             "name": "Minneapolis, MN",
             "code": "minneapolis-mn",
             "geometry": "POINT(-93.26190 44.98250)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/minneapolis-mn.jpg",
             "radius": 10
         }
     },
@@ -534,7 +534,7 @@
             "name": "Cleveland, OH",
             "code": "cleveland-oh",
             "geometry": "POINT(-81.69720 41.49750)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/pushpenny-default.jpg",
             "radius": 10
         }
     },
@@ -545,7 +545,7 @@
             "name": "Wichita, KS",
             "code": "wichita-ks",
             "geometry": "POINT(-97.33780 37.69170)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/pushpenny-default.jpg",
             "radius": 10
         }
     },
@@ -556,7 +556,7 @@
             "name": "Arlington, TX",
             "code": "arlington-tx",
             "geometry": "POINT(-97.11330 32.73670)",
-            "picture_url": "http://s3.amazonaws.com/pushpennyapp/default-placeholder.jpg",
+            "picture_url": "https://s3.amazonaws.com/pushpennyapp/pushpenny-default.jpg",
             "radius": 10
         }
     }
