@@ -674,7 +674,7 @@ def compare_location_between(deal_obj_one, deal_obj_two):
     if location_one.postal_code == location_two.postal_code:
         address_one = cleanse_address_text(location_one.address)
         address_two = cleanse_address_text(location_two.address)
-        match_ratio = fuzz.ratio(address_one, address_two)
+        match_ratio = fuzz.ratio(address_one.lower(), address_two.lower())
 
         if match_ratio > 95:
             if not location_one.locality:
@@ -761,9 +761,9 @@ def get_date(raw_date_string):
     return None
 
 def cleanse_address_text(address_string):
-    address_crufts = ['Rd', 'Hwy', 'Dr', 'St', 'Ave', 'Blvd', 'Expy', 'Ln', 'E', 'S', 'W', 'N', 'Pkwy',\
-                     'Road', 'Highway', 'Drive', 'Street', 'Avenue', 'Boulevard', 'Expressway', 'Lane', 'East', 'South', 'West', 'North', 'Parkway']
-    address_broken_down = address_string.split(' ')
+    address_crufts = ['Rd', 'Hwy', 'Dr', 'St', 'Ave', 'Blvd', 'Expy', 'Ln', 'E', 'S', 'W', 'N', 'Pkwy', 'Cir',\
+                      'Road', 'Highway', 'Drive', 'Street', 'Avenue', 'Boulevard', 'Expressway', 'Lane', 'East', 'South', 'West', 'North', 'Parkway', 'Circle']
+    address_broken_down = address_string.replace('.', '').split(' ')
     caught_crufts = [val for val in address_broken_down if val in address_crufts]
     for c in caught_crufts:
         address_broken_down.remove(c)
