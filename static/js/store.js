@@ -321,6 +321,10 @@ $(function() {
 		$('#st-' + coupon_type_id).removeClass('hidden');
 	});
 
+	$('.top-coupons-link').click(function() {
+		window.location = '/top-coupons/';
+	});
+
 });
 
 function select_categories(criteria) {
