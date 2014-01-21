@@ -1579,7 +1579,7 @@ hr {
 	color: #46a8a7 !important;
 	font-size: 14pt;
 	height: 45px !important;
-	width: 45px !important;
+	width: 25px !important;
 }
 .expanded {
 	height: auto !important;
@@ -1625,18 +1625,22 @@ hr {
 	position: relative;
 }
 .left-mobile-rail {
-	width: 210px;
-	height: 110px;
+	width: 190px;
+	height: 95px;
 	float:left;
 	text-transform: uppercase;
+	font-size: 10pt !important;
 }
 .left-mobile-rail .merchant {
 	margin-top: 0px !important;
 }
+.left-mobile-rail .merchant-right span {
+	font-size: 18pt !important;
+}
 .right-mobile-rail {
-	width: 120px;
+	width: 100px;
 	float: left;
-	height: 110px;
+	height: 95px;
 }
 .right-mobile-rail .filter{
 	margin-top: 50px;
@@ -1648,6 +1652,8 @@ hr {
 	text-align:center;
 	height: 40px;
 	line-height: 40px;
-	width: 120px;
+	width: 100px;
 }
-.
+.filter .mobile-expand {
+	width: 30px !important;
+}
