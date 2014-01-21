@@ -9,6 +9,7 @@ var is_trending = false;
 var is_sticky = false;
 var deal_type_filters_active = false;
 var current_url = window.location.href;
+var is_mobile = false;
 $(function() {
 	// removing pagination block, to be displayed with disabled JS only 
 	$('.pagination').remove();
@@ -38,35 +39,52 @@ $(function() {
 		$('.index-rail').addClass('mobile-index-rail');
 		$('.search-main-rail').addClass('mobile-index-rail');
 		$('.main-rail').addClass('mobile-index-rail');
+		is_mobile = true;
+		fetch_items(reset_items=true);
 	}
 	
 	// bindings for sliding controls in mobile layout
 	$('.expandable').click(function() {
 		$(this).parent().parent().addClass('expanded');
+		// $(this).find('li:not(.selected)').show();
 	});
 	$('.expanded-choices li').click(function() {
-		var label = $(this).text();
-		$(this).parent().parent().find('span:first').html(label);
-		$(this).parent().parent().parent().removeClass('expanded');
-		if ($(this).parent().hasClass('mobile-coupon-type')) {
-			var top_coupon_type = $(this).attr('id');
-			var coupon_type = $('.mobile-index-labels').find('.active').attr('id');
-			if (coupon_type == 'most-popular') {
-				$('.menu-popular-coupon').hide();
-				$('#mpc-'+top_coupon_type).show();
-				$('#mpc-'+top_coupon_type).removeClass('hidden');
+		if ($(this).parent().parent().parent().parent().parent().hasClass('expanded')) {
+			$(this).parent().find('li').removeClass('selected');
+			$(this).addClass('selected');
+			$(this).closest('.coupon-types').removeClass('expanded');
+			if ($(this).parent().hasClass('coupon-type-select')) {
+				coupon_type = $(this).attr('id');
 			}
-			else if (coupon_type == 'featured-coupons') {
-				$('.menu-featured-coupon').hide();
-				$('#mfc-'+top_coupon_type).show();
-				$('#mfc-'+top_coupon_type).removeClass('hidden');
-				$('#mfc-'+top_coupon_type).find('.coupon-container').show();
+			if ($(this).parent().hasClass('ordering-select')) {
+				sorting = $(this).attr('id');
 			}
-			else if (coupon_type == 'stores') {
-				$('.top-menu-store').hide();
-				$('#mst-'+top_coupon_type).show();
-				$('#mst-'+top_coupon_type).removeClass('hidden');
+			if ($(this).parent().hasClass('coupon-type-select') || $(this).parent().hasClass('ordering-select')) {
+				fetch_items(reset_items=true);
 			}
+			
+			if ($('.mobile-index-labels').length > 0) {
+				var top_coupon_type = $(this).attr('id');
+				var coupon_type = $('.mobile-index-labels').find('.active').attr('id');
+				if (coupon_type == 'most-popular') {
+					$('.menu-popular-coupon').hide();
+					$('#mpc-'+top_coupon_type).show();
+					$('#mpc-'+top_coupon_type).removeClass('hidden');
+				}
+				else if (coupon_type == 'featured-coupons') {
+					$('.menu-featured-coupon').hide();
+					$('#mfc-'+top_coupon_type).show();
+					$('#mfc-'+top_coupon_type).removeClass('hidden');
+					$('#mfc-'+top_coupon_type).find('.coupon-container').show();
+				}
+				else if (coupon_type == 'stores') {
+					$('.top-menu-store').hide();
+					$('#mst-'+top_coupon_type).show();
+					$('#mst-'+top_coupon_type).removeClass('hidden');
+				}
+			}
+			$(this).parent().find('li:not(.selected)').hide();
+			
 		}
 	});
 	
@@ -381,7 +399,7 @@ function select_filters(criteria) {
 
 function render_coupons(data, reset_items) {
 	template = '{{#items}} \
-					<div class="coupon-container"> \
+					<div class="coupon-container {{# is_mobile}}mobile-coupon-container{{/is_mobile}}"> \
 						<div class="coupon-body"> \
 							<div class="coupon-header"> \
 								<div class="coupon-left-label"> \
@@ -390,7 +408,7 @@ function render_coupons(data, reset_items) {
 							</div> \
 							<hr> \
 							<h1 class="short-description">{{ short_desc }}</h1> \
-							{{ description }}<br> \
+									{{ description }}<br> \
 										<span class="ends">Ends {{ end }}</span> \
 										<a href="{{ merchant_link }}" target="_blank" class="merchant-link"> \
 											<img src="{{ image }}"> \
@@ -399,16 +417,19 @@ function render_coupons(data, reset_items) {
 									<div class="use-coupon" id="{{ id }}"> \
 										Use Coupon \
 									</div> \
-									<div class="coupon-bottom"> \
-										<div class="coupon-right-bottom"> \
-											Share \
-											<a href="{{ facebook_share_url }}"><img src="/static/img/facebook_share_icon.png"></a> \
-											<a href="{{ twitter_share_url }}""><img src="/static/img/twitter_share_icon.png"></a> \
-											<a href="mailto:?body={{ email_share_url }}"><img src="/static/img/email_share_icon.png"></a> \
+									{{^ is_mobile }} \
+										<div class="coupon-bottom"> \
+											<div class="coupon-right-bottom"> \
+												Share \
+												<a href="{{ facebook_share_url }}"><img src="/static/img/facebook_share_icon.png"></a> \
+												<a href="{{ twitter_share_url }}""><img src="/static/img/twitter_share_icon.png"></a> \
+												<a href="mailto:?body={{ email_share_url }}"><img src="/static/img/email_share_icon.png"></a> \
+											</div> \
 										</div> \
-									</div> \
+									{{/is_mobile}} \
 								</div> \
 				{{/items}}<br clear="both">';
+   	data.is_mobile = is_mobile;
    	data.facebook_share_url = function() {
    		return 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(this.full_success_path);
    	};

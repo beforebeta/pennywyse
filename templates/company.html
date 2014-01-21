@@ -100,7 +100,7 @@
 						{% endfor %}
 					</div>
 				</div>
-				<div class="center-mobile-rail bottom-shadow">
+				<div class="center-mobile-rail bottom-shadow hidden-md hidden-lg">
 					<div class="left-mobile-rail">
 						{{ merchant.name }} coupons
 						<div class="merchant">
@@ -117,7 +117,7 @@
 					<div class="right-mobile-rail">
 						<div class="filter">Filter
 							<div class="mobile-expand">
-									<span class="glyphicon glyphicon-chevron-down"></span>
+								<span class="glyphicon glyphicon-chevron-down"></span>
 							</div>
 						</div>
 					</div>
@@ -126,32 +126,44 @@
 						<div class="top-labels-container coupon-types ">
 							<div class="main-labels index-labels">
 								<div class="expandable">
-									Coupon type: <span>{{ top_coupons.0.name }}</span>
+									<div class="expandable-label">
+										Coupon type:
+									</div>
+									<div class="expandable-selected">
+										<ul class="mobile-coupon-type expanded-choices coupon-type-select">
+											<li class="selected" id="coupon_code">Coupon Codes</li>
+											<li id="free_shipping">Free Shipping</li>
+											<li id="onsale">On Sale</li>
+											<li id="groceries">Groceries</li>
+											<li id="printable">Printables</li>
+											<li id="freebies">Freebies</li>
+										</ul>
+									</div>
 									<div class="coupons-types-expand">
 										<span class="glyphicon glyphicon-chevron-down"></span>
 									</div>
 								</div>
-								<ul class="mobile-coupon-type expanded-choices">
-									{% for top_coupon in top_coupons %}
-										<li id="{{ top_coupon.id }}">{{ top_coupon.name }}</li>
-									{% endfor %}
-								</ul>
+								
 							</div>
 						</div>
 						<br clear="both">
 						<div class="top-labels-container coupon-types ">
 							<div class="main-labels index-labels">
 								<div class="expandable">
-									Sort by: <span>Expiring Soon</span>
+									<div class="expandable-label">
+										Sort by:
+									</div>
+									<div class="expandable-selected">
+										<ul class="mobile-coupon-type expanded-choices ordering-select">
+											<li class="selected" id="expiring_soon">Expiring Soon</li>
+											<li id="popularity">Popularity</li>
+											<li id="newest">Newest</li>
+										</ul>
+									</div>
 									<div class="coupons-types-expand">
 										<span class="glyphicon glyphicon-chevron-down"></span>
 									</div>
 								</div>
-								<ul class="mobile-coupon-type expanded-choices">
-									<li>Expiring Soon</li>
-									<li>Popularity</li>
-									<li>Newest</li>
-								</ul>
 							</div>
 						</div>
 					</div>

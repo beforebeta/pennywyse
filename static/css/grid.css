@@ -1571,7 +1571,7 @@ hr {
 }
 .mobile-coupon-type {
 	list-style-type: none;
-	margin-left: 75px;
+	padding: 0 !important;
 }
 .coupons-types-expand {
 	float: right;
@@ -1584,7 +1584,7 @@ hr {
 .expanded {
 	height: auto !important;
 }
-.expandable span{
+.expandable span, .expandable .selected{
 	color: #46a8a7 !important;
 }
 .pagination li {
@@ -1638,7 +1638,7 @@ hr {
 	font-size: 18pt !important;
 }
 .right-mobile-rail {
-	width: 100px;
+	width: 120px;
 	float: left;
 	height: 95px;
 }
@@ -1656,4 +1656,19 @@ hr {
 }
 .filter .mobile-expand {
 	width: 30px !important;
+}
+.expandable-label {
+	width: 120px;
+	float: left;
+}
+.expandable-selected {
+	float: left;
+}
+.mobile-coupon-container {
+	height: 300px !important;
+	margin: 0 auto;
+	width: 260px;
+}
+.mobile-coupon-container .use-coupon {
+	display: block !important;
 }
