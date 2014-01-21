@@ -16,7 +16,7 @@
 
 			{% block content %}
 			<div class="row middle-container">
-				<div class="left-rail">
+				<div class="left-rail visible-md visible-lg">
 					<div class="top-labels">
 						<h1>{{ merchant.name }}</h1>
 						<h4>Coupons</h4>
@@ -100,8 +100,64 @@
 						{% endfor %}
 					</div>
 				</div>
+				<div class="center-mobile-rail bottom-shadow">
+					<div class="left-mobile-rail">
+						{{ merchant.name }} coupons
+						<div class="merchant">
+							<div class="merchant-left">
+								<img src="{{ merchant.image }}" class="merchant-logo">
+							</div>
+							<div class="merchant-right">
+								<span>{{ num_coupons }}</span>
+								<br>
+								coupons
+							</div>
+						</div>
+					</div>
+					<div class="right-mobile-rail">
+						<div class="filter">Filter
+							<div class="mobile-expand">
+									<span class="glyphicon glyphicon-chevron-down"></span>
+							</div>
+						</div>
+					</div>
+					<br clear="both">
+					<div class="mobile-filters hidden">
+						<div class="top-labels-container coupon-types ">
+							<div class="main-labels index-labels">
+								<div class="expandable">
+									Coupon type: <span>{{ top_coupons.0.name }}</span>
+									<div class="coupons-types-expand">
+										<span class="glyphicon glyphicon-chevron-down"></span>
+									</div>
+								</div>
+								<ul class="mobile-coupon-type expanded-choices">
+									{% for top_coupon in top_coupons %}
+										<li id="{{ top_coupon.id }}">{{ top_coupon.name }}</li>
+									{% endfor %}
+								</ul>
+							</div>
+						</div>
+						<br clear="both">
+						<div class="top-labels-container coupon-types ">
+							<div class="main-labels index-labels">
+								<div class="expandable">
+									Sort by: <span>Expiring Soon</span>
+									<div class="coupons-types-expand">
+										<span class="glyphicon glyphicon-chevron-down"></span>
+									</div>
+								</div>
+								<ul class="mobile-coupon-type expanded-choices">
+									<li>Expiring Soon</li>
+									<li>Popularity</li>
+									<li>Newest</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
 				<div class="main-rail">
-					<div class="top-labels-container">
+					<div class="top-labels-container visible-md visible-lg">
 						<div class="main-labels">
 							<a href="{% url 'web.views.main.index' %}">Home</a>
 							>

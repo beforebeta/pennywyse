@@ -31,13 +31,16 @@ $(function() {
 		$('.top-header').addClass('fixed-container');
 	}
 	
+	// applying styles for mobile layout, if necessary width has been detected
 	if ($(window).width() < 768) {
 		$('.main-container').addClass('mobile-container');
 		$('.middle-container').addClass('mobile-middle-container');
 		$('.index-rail').addClass('mobile-index-rail');
 		$('.search-main-rail').addClass('mobile-index-rail');
+		$('.main-rail').addClass('mobile-index-rail');
 	}
 	
+	// bindings for sliding controls in mobile layout
 	$('.expandable').click(function() {
 		$(this).parent().parent().addClass('expanded');
 	});
@@ -69,10 +72,10 @@ $(function() {
 	
 	$('#mobile-menu').click(function() {
 		if ($('.mobile-menu').is(':visible')) {
-			$('.mobile-menu').hide();
+			$('.mobile-menu').hide('slide', { direction: 'left' }, 500);
 		}
 		else {
-			$('.mobile-menu').show();
+			$('.mobile-menu').show('slide', { direction: 'left' }, 500);
 		}
 	});
 	
@@ -285,7 +288,7 @@ $(function() {
 		$('.more-coupons').waypoint('enable');
 	});
 	
-    $(window).keyup(function(e){
+	$(window).keyup(function(e){
 	    if(e.keyCode === 27) {
     	    close_popups();
 		}
@@ -323,6 +326,15 @@ $(function() {
 
 	$('.top-coupons-link').click(function() {
 		window.location = '/top-coupons/';
+	});
+
+	$('.right-mobile-rail .filter').click(function() {
+		if (!$('.mobile-filters').is(':visible')) {
+			$('.mobile-filters').removeClass('hidden');
+		}
+		else {
+			$('.mobile-filters').addClass('hidden');
+		}
 	});
 
 });

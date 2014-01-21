@@ -26,27 +26,25 @@
 								</li>
 							</ul>
 						</div>
-					</div>
-				<br clear="both">
-				<div class="main-rail index-rail top-labels-container coupon-types hidden-lg hidden-md">
-						<div class="main-labels index-labels">
-							<div class="expandable">
-								Coupon type: <span></span>
-								<div class="coupons-types-expand">
-									<span class="glyphicon glyphicon-chevron-down"></span>
+						<div class="top-labels-container coupon-types ">
+							<div class="main-labels index-labels">
+								<div class="expandable">
+									Coupon type: <span>{{ top_coupons.0.name }}</span>
+									<div class="coupons-types-expand">
+										<span class="glyphicon glyphicon-chevron-down"></span>
+									</div>
 								</div>
+								<ul class="mobile-coupon-type expanded-choices">
+									{% for top_coupon in top_coupons %}
+										<li id="{{ top_coupon.id }}">{{ top_coupon.name }}</li>
+									{% endfor %}
+								</ul>
 							</div>
-							<ul class="mobile-coupon-type expanded-choices">
-								<li id="free_shipping">Free Shipping</li>
-								<li id="on_sale">On Sale</li>
-								<li id="groceries">Groceries</li>
-								<li id="coupon">Coupon</li>
-								<li id="printabl">Printables</li>
-								<li id="gift">Freebies</li>
-							</ul>
 						</div>
 					</div>
 				<br clear="both">
+
+
 				
 				<div class="left-rail search-rail  visible-lg visible-md">
 					<div class="coupon-container coupon-body search-merchants-container">

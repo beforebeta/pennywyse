@@ -1446,10 +1446,12 @@ hr {
 }
 .navbar-toggle {
 	float: left !important;
+	margin-top: 5px !important;
 }
 .icon-bar {
 	width: 25px !important;
-	height: 5px !important;
+	height: 4px !important;
+	border-radius: 4px !important;
 	background: #ef5b5b !important;
 }
 .mobile-menu {
@@ -1463,6 +1465,7 @@ hr {
 	z-index: 4;
 	padding-left: 0px !important;
 	display: none;
+	box-shadow: 0px 3px 3px 0px rgba(97, 94, 94, 0.15)
 }
 .mobile-menu .search {
 	width: 100% !important;
@@ -1611,3 +1614,40 @@ hr {
 	max-width: 160px;
 	max-height: 80px;
 }
+.center-mobile-rail {
+	width: auto;
+	color: #423d3e;
+	background-color: #f5f5f4 !important;
+	padding: 10px;
+	margin-left: -5px;
+	margin-right: -5px;
+	z-index: 1;
+	position: relative;
+}
+.left-mobile-rail {
+	width: 210px;
+	height: 110px;
+	float:left;
+	text-transform: uppercase;
+}
+.left-mobile-rail .merchant {
+	margin-top: 0px !important;
+}
+.right-mobile-rail {
+	width: 130px;
+	float: left;
+	height: 110px;
+}
+.right-mobile-rail .filter{
+	margin-top: 50px;
+	vertical-align: bottom;
+	border-radius: 0px;
+	background-color: #46a8a7;
+	color: #fff;
+	text-transform: uppercase;
+	text-align:center;
+	height: 40px;
+	line-height: 40px;
+	width: 120px;
+}
+.
