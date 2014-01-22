@@ -10,21 +10,28 @@
 							<a href="javascript:void(null);" id="stores">Stores</a>
 						</div>
 					</div>
-					<div class="top-labels-container coupon-types ">
-						<div class="main-labels index-labels">
-							<div class="expandable">
-								Coupon type: <span>{{ top_coupons.0.name }}</span>
-								<div class="coupons-types-expand">
-									<span class="glyphicon glyphicon-chevron-down"></span>
+					
+					<div class="top-labels-container coupon-types">
+							<div class="main-labels index-labels">
+								<div class="expandable">
+									<div class="expandable-label">
+										Coupon type:
+									</div>
+									<div class="expandable-selected">
+										<ul class="mobile-coupon-type expanded-choices coupon-type-select">
+											{% for top_coupon in top_coupons %}
+												<li id="{{ top_coupon.id }}">{{ top_coupon.name }}</li>
+											{% endfor %}
+										</ul>
+									</div>
+									<div class="coupons-types-expand">
+										<span class="glyphicon glyphicon-chevron-down"></span>
+									</div>
 								</div>
+								
 							</div>
-							<ul class="mobile-coupon-type expanded-choices">
-								{% for top_coupon in top_coupons %}
-									<li id="{{ top_coupon.id }}">{{ top_coupon.name }}</li>
-								{% endfor %}
-							</ul>
 						</div>
-					</div>
+					
 				<br clear="both">
 					<div class="coupons more-coupons">
 						{% for top_coupon in top_coupons %}
