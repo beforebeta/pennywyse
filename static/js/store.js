@@ -613,9 +613,10 @@ function coupon_subscribe_form_callback(response, statusText, xhr, $form) {
 function load_coupon(coupon_id) {
 	$.get('/o/'+coupon_id, function(data) {
 			render_coupon_popup(data, coupon_id);
-			if (!is_mobile) {
-				$('.overlay').show();
+			if (is_mobile) {
+				$('.overlay').addClass('mobile-overlay');
 			}
+			$('.overlay').show();
 			var state_obj = {'coupon_id': coupon_id};
 			history.pushState(state_obj, "Coupon Page", data.local_path);
 	}, 'json');
@@ -685,14 +686,7 @@ function render_coupon_popup(data, coupon_id) {
 							</div> \
 					</div>';
 	html = Mustache.to_html(template, data);
-	if (!is_mobile) {
-		$('.subscription-popup').after(html);
-	}
-	else {
-		$('.more-coupons').waypoint('destroy');
-		$('.coupons').find('.coupon-container').hide();
-		$('.coupons').find('.coupon-container:first').before(html);
-	}
+	$('.subscription-popup').after(html);
 	init_clipboard($('#coupon-code-' + coupon_id));
 }
 

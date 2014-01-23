@@ -1702,6 +1702,8 @@ hr {
 	text-align: center;
 	margin-top: 5px;
 	text-decoration: none;	
+	margin-left: -55px !important;
+	margin-right: 15px;
 }
 .mobile-coupon-popup .coupon-popup-code input[type=button]{
 	width: 280px !important;
@@ -1734,4 +1736,14 @@ hr {
 }
 .mobile-coupon-popup .coupon-popup-subscribe {
 	width: auto !important;
+}
+.mobile-overlay {
+	position: fixed;
+	background-color: #ebebe8;
+	top: 60px;
+	left: 0px;
+	bottom: 0;
+	right: 0;
+	z-index: 2;
+	display: none;
 }
