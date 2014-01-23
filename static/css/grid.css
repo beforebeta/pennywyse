@@ -1672,3 +1672,66 @@ hr {
 .mobile-coupon-container .use-coupon {
 	display: block !important;
 }
+.mobile-coupon-popup {
+	margin-left: 0px !important;
+	top: 0px !important;
+	position: relative !important;
+	left: 0px !important;
+	width: 310px !important;
+}
+.mobile-coupon-popup .coupon-popup-body {
+	margin-left: 0px !important;
+	width: 290px !important;
+	height: auto !important;
+}
+.mobile-coupon-popup .coupon-popup-code {
+	padding: 0px !important;
+}
+.mobile-coupon-popup .coupon-popup-header {
+	line-height: 50px !important;
+	height: 50px !important;
+}
+.mobile-coupon-popup .coupon-popup-header a {
+	float: left;
+	background: url('/static/img/back_button.png');
+	color: #fff;
+	text-transform: uppercase;
+	width: 87px;
+	height: 40px;
+	line-height: 40px !important;
+	text-align: center;
+	margin-top: 5px;
+	text-decoration: none;	
+}
+.mobile-coupon-popup .coupon-popup-code input[type=button]{
+	width: 280px !important;
+	min-width: 280px !important;
+	white-space: normal !important;
+	height: auto !important;
+}
+.mobile-coupon-popup .coupon-popup-description {
+	width: 140px !important;
+}
+.mobile-coupon-popup input[type=text] {
+	width: 180px !important;
+	line-height: 16px !important;
+	height: 50px !important;
+	float: left;
+}
+.mobile-coupon-popup  button {
+	background-color: #46a8a7;
+	color: #fff;
+	width: 80px;
+	font-size: 12px;
+	text-transform: uppercase;
+	line-height: 16px !important;
+	margin-left: 10px;
+	float: left;
+	margin-top: 5px;
+}
+.mobile-coupon-popup .coupon-popup-bottom {
+	height: auto !important;
+}
+.mobile-coupon-popup .coupon-popup-subscribe {
+	width: auto !important;
+}

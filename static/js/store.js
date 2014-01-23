@@ -40,7 +40,7 @@ $(function() {
 		$('.search-main-rail').addClass('mobile-index-rail');
 		$('.main-rail').addClass('mobile-index-rail');
 		is_mobile = true;
-		fetch_items(reset_items=true);
+		//fetch_items(reset_items=true);
 	}
 	
 	$('.expandable').on('click', expandable_select_callback);
@@ -613,7 +613,9 @@ function coupon_subscribe_form_callback(response, statusText, xhr, $form) {
 function load_coupon(coupon_id) {
 	$.get('/o/'+coupon_id, function(data) {
 			render_coupon_popup(data, coupon_id);
-			$('.overlay').show();
+			if (!is_mobile) {
+				$('.overlay').show();
+			}
 			var state_obj = {'coupon_id': coupon_id};
 			history.pushState(state_obj, "Coupon Page", data.local_path);
 	}, 'json');
@@ -622,9 +624,16 @@ function load_coupon(coupon_id) {
 function render_coupon_popup(data, coupon_id) {
 	data.csrf = $('input[name=csrfmiddlewaretoken]').val();
 	data.id = coupon_id;
-	var template = '<div class="coupon-popup"> \
-						<div class="coupon-popup-header">Coupon code \
-							<a href="javascript:close_coupon_popup();"><img src="/static/img/close_coupon.png"></a> \
+	data.is_mobile = is_mobile;
+	var template = '<div class="coupon-popup {{# is_mobile }}mobile-coupon-popup{{/is_mobile}}"> \
+						<div class="coupon-popup-header"> \
+							{{# is_mobile }} \
+								<a href="javascript:close_coupon_popup();">back</a> \
+							{{ /is_mobile }} \
+							Coupon code \
+							{{^ is_mobile}} \
+								<a href="javascript:close_coupon_popup();"><img src="/static/img/close_coupon.png"></a> \
+							{{/is_mobile}} \
 						</div> \
 						{{# code }} \
 						<div class="coupon-popup-code"> \
@@ -655,17 +664,35 @@ function render_coupon_popup(data, coupon_id) {
 						</div> \
 							<div class="coupon-popup-bottom"> \
 								<div class="coupon-popup-subscribe"> \
-									Should we notify you when we add new coupons and deals for Store?<br> \
+									{{# is_mobile }} \
+									 	Notify me when {{ merchant_name }} has new coupons \
+									{{/is_mobile}} \
+									{{^ is_mobile }} \
+										Should we notify you when we add new coupons and deals for Store?<br> \
+									{{/is_mobile}} \
 									<form action="/e/subscribe/" method="post" class="coupon-subscribe-form"> \
 										<input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf }}"> \
 										<input type="text" name="email" placeholder="Email address" value=""> \
-										<input type="submit" value="Let me know"> \
+										{{^ is_mobile }} \
+											<input type="submit" value="Let me know"> \
+										{{/is_mobile}} \
+										{{#is_mobile}} \
+										  <button>let me<br>know</button> \
+										<br clear="both"> \
+										{{/is_mobile}} \
 									</form> \
 								</div> \
 							</div> \
 					</div>';
 	html = Mustache.to_html(template, data);
-	$('.subscription-popup').after(html);
+	if (!is_mobile) {
+		$('.subscription-popup').after(html);
+	}
+	else {
+		$('.more-coupons').waypoint('destroy');
+		$('.coupons').find('.coupon-container').hide();
+		$('.coupons').find('.coupon-container:first').before(html);
+	}
 	init_clipboard($('#coupon-code-' + coupon_id));
 }
 
@@ -674,6 +701,9 @@ function close_coupon_popup() {
 	$('.overlay').hide();
 	$('.prescroll-header').waypoint('enable');
 	$('.tipsy').remove();
+	if (is_mobile) {
+		$('.coupons').find('.coupon-container').show();
+	}
 	var state_obj = {'coupon_id': null};
 	history.pushState(state_obj, "Coupon Page", current_url);
 }
