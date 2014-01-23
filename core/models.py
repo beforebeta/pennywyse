@@ -55,6 +55,7 @@ class Category(models.Model):
     description     = models.CharField(max_length=255, blank=True, null=True)
     parent          = models.ForeignKey("Category", blank=True, null=True)
     image           = models.TextField(blank=True, null=True, default='/static/img/favicon.png')
+    icon            = models.TextField(blank=True, null=True, default='/static/img/category_icons/placeholder.jpg')
     is_featured     = models.BooleanField('Featured', blank=True, default=False)
     navigation_section = models.ForeignKey(CategorySection, blank=True, null=True)
 

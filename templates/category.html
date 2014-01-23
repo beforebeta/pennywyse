@@ -13,7 +13,7 @@
 			
 			{% block content %}
 			<div class="row middle-container">
-				<div class="left-rail">
+				<div class="left-rail visible-md visible-lg">
 					<div class="top-labels">
 						<h1>{{ category.name }}</h1>
 						<h4>Coupons</h4>
@@ -68,8 +68,76 @@
 
 					</div>
 				</div>
+								<div class="center-mobile-rail bottom-shadow hidden-md hidden-lg">
+					<div class="left-mobile-rail">
+						{{ category.name }} coupons
+						<div class="merchant">
+							<div class="merchant-left">
+								<img src="{{ category.icon }}" class="merchant-logo">
+							</div>
+							<div class="merchant-right">
+								<span>{{ num_coupons }}</span>
+								<br>
+								coupons
+							</div>
+						</div>
+					</div>
+					<div class="right-mobile-rail">
+						<div class="filter">Filter
+							<div class="mobile-expand">
+								<span class="glyphicon glyphicon-chevron-down"></span>
+							</div>
+						</div>
+					</div>
+					<br clear="both">
+					<div class="mobile-filters hidden">
+						<div class="top-labels-container coupon-types">
+							<div class="main-labels index-labels">
+								<div class="expandable">
+									<div class="expandable-label">
+										Coupon type:
+									</div>
+									<div class="expandable-selected">
+										<ul class="mobile-coupon-type expanded-choices coupon-type-select">
+											<li class="selected" id="coupon_code">Coupon Codes</li>
+											<li id="free_shipping">Free Shipping</li>
+											<li id="onsale">On Sale</li>
+											<li id="groceries">Groceries</li>
+											<li id="printable">Printables</li>
+											<li id="freebies">Freebies</li>
+										</ul>
+									</div>
+									<div class="coupons-types-expand">
+										<span class="glyphicon glyphicon-chevron-down"></span>
+									</div>
+								</div>
+								
+							</div>
+						</div>
+						<br clear="both">
+						<div class="top-labels-container coupon-types ">
+							<div class="main-labels index-labels">
+								<div class="expandable">
+									<div class="expandable-label">
+										Sort by:
+									</div>
+									<div class="expandable-selected">
+										<ul class="mobile-coupon-type expanded-choices ordering-select">
+											<li class="selected" id="expiring_soon">Expiring Soon</li>
+											<li id="popularity">Popularity</li>
+											<li id="newest">Newest</li>
+										</ul>
+									</div>
+									<div class="coupons-types-expand">
+										<span class="glyphicon glyphicon-chevron-down"></span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 				<div class="main-rail">
-					<div class="top-labels-container">
+					<div class="top-labels-container visible-md visible-lg">
 						<div class="main-labels">
 							<a href="{% url 'web.views.main.index' %}">Home</a>
 							>
