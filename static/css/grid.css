@@ -1701,7 +1701,6 @@ hr {
 	text-align: center;
 	margin-top: 5px;
 	text-decoration: none;	
-	margin-left: -55px !important;
 	margin-right: 15px;
 }
 .mobile-coupon-popup .coupon-popup-code input[type=button]{
@@ -1745,4 +1744,7 @@ hr {
 	right: 0;
 	z-index: 2;
 	display: none;
+}
+.fixed {
+	position: fixed !important;
 }
