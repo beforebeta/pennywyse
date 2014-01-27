@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
-import datetime
+from datetime import datetime
+from datetime import timedelta
 import math
 import time
 import requests
@@ -16,6 +17,7 @@ from fuzzywuzzy import fuzz
 from geopy import geocoders
 from haystack.utils.geo import D
 from haystack.query import SearchQuerySet, SQ
+import pytz
 
 from core.models import DealType, Category, Coupon, Merchant, Country, CouponNetwork, MerchantLocation, CityPicture
 from tests.for_api.sample_data_feed import top_50_us_cities_dict
@@ -116,18 +118,18 @@ class Command(BaseCommand):
             except:
                 print_stack_trace()
 
-def refresh_sqoot_data(indirectload=False):
+def refresh_sqoot_data(indirectload=False, firsttime=False):
+    refresh_start_time = datetime.now(pytz.utc) # Use UTC time to compare & update coupon's 'last_modified' field
     request_parameters = {
         'api_key': settings.SQOOT_PUBLIC_KEY,
-        # 'api_key': 'xhtihz',
     }
     print "\nSQOOT DATA LOAD STARTING..\n"
 
     # loading categories
     describe_section("ESTABLISHING CATEGORY DICTIONARY..\n")
     categories_array = requests.get(SQOOT_API_URL + 'categories', params=request_parameters).json()['categories']
-    categories_dict = establish_categories_dict(categories_array)
-    reorganized_categories_array = reorganize_categories_list(categories_array)
+    categories_dict = establish_categories_dict(categories_array) # Returns a dict with child: parent categories
+    reorganized_categories_array = reorganize_categories_list(categories_array) # list of dict with 'category_name', and 'category_slug'
     for category_dict in reorganized_categories_array:
         get_or_create_category(category_dict, categories_dict)
 
@@ -136,35 +138,49 @@ def refresh_sqoot_data(indirectload=False):
     request_parameters['per_page'] = ITEMS_PER_PAGE
     active_deal_count = requests.get(SQOOT_API_URL + 'deals', params=request_parameters).json()['query']['total']
     page_count = int(math.ceil(active_deal_count / float(request_parameters['per_page'])))
-
     print '%s deals detected, estimating %s pages to iterate\n' % (active_deal_count, page_count)
 
     describe_section("STARTING TO DOWNLOAD SQOOT DEALS..\n")
+    # Since there's only one country & dealtype for all sqoot deals - no need to check it for each coupon
+    country_model       = get_or_create_country()
+    dealtype_model      = get_or_create_dealtype()
 
-    country_model = get_or_create_country()     # since there's only one country for all deals - no need to check it for each coupon
+    two_days_ago_datetime = datetime.now() - timedelta(days=2) # 1 day buffer based on daily run assumption, hence 2 days
     sqoot_output_deals = None
     if indirectload:
         sqoot_output_deals = json.loads(open("sqoot_output.json","r").read())
+
     for p in range(page_count):
         request_parameters['page'] = p + 1
         print '## Fetching page %s...\n' % (p + 1)
+
         if indirectload:
             response_in_json = sqoot_output_deals[p]
         else:
             response_in_json = requests.get(SQOOT_API_URL + 'deals', params=request_parameters).json()
-        deals_data = response_in_json['deals']
 
+        active_coupon_ids = [] # List of sqoot coupon ids to hold all active deal ids per page, as set 'page' request_parameters.
+        deals_data = response_in_json['deals']
         for deal_data in deals_data:
+            sqoot_coupon_id = int(deal_data['deal']['id'])
+            active_coupon_ids.append(sqoot_coupon_id)
+
+            deal_last_updated = datetime.strptime(deal_data['deal']['updated_at'],\
+                                         "%Y-%m-%dT%H:%M:%SZ")
+            if (not firsttime) and (deal_last_updated < two_days_ago_datetime):
+                continue
+
             try:
                 is_online_bool = deal_data['deal']['online']
                 merchant_data_dict = deal_data['deal']['merchant']
 
-                merchant_model          = get_or_create_merchant(merchant_data_dict)
-                category_model          = get_or_create_category(deal_data['deal'], categories_dict)
-                dealtype_model          = get_or_create_dealtype()
-                couponnetwork_model     = get_or_create_couponnetwork(deal_data['deal'])
-                merchantlocation_model  = get_or_create_merchantlocation(merchant_data_dict, merchant_model, is_online_bool)
-                coupon_model            = get_or_create_coupon(deal_data['deal'], merchant_model, category_model, dealtype_model,
+                # Update all objects below with the latest data from sqoot (b/c 'deal_last_updated' is recent);
+                # 'shortcut=True' is given for get_or_create_category() since all categories were 'get_or_create'd above.
+                merchant_model           = get_or_create_merchant(merchant_data_dict)
+                category_model           = get_or_create_category(deal_data['deal'], categories_dict, shortcut=True)
+                couponnetwork_model      = get_or_create_couponnetwork(deal_data['deal'])
+                merchantlocation_model   = get_or_create_merchantlocation(merchant_data_dict, merchant_model, is_online_bool)
+                coupon_model             = get_or_create_coupon(deal_data['deal'], merchant_model, category_model, dealtype_model,
                                                                 country_model, couponnetwork_model, merchantlocation_model)
 
                 coupon_ref_id = int(coupon_model.merchant.ref_id)
@@ -176,6 +192,9 @@ def refresh_sqoot_data(indirectload=False):
                 print '-' * 60
             except:
                 print_stack_trace()
+        Coupon.all_objects.filter(ref_id_source='sqoot', ref_id__in=active_coupon_ids).update(last_modified=datetime.now(pytz.utc))
+    # mass update the sqoot deals that
+    return refresh_start_time
 
 def savedown_sqoot_data():
     request_parameters = {
@@ -229,7 +248,7 @@ def validate_sqoot_deals(args):
 
             radius = D(mi=100)
             sqs = SearchQuerySet().using('mobile_api').filter(django_ct='core.coupon', online=False, is_duplicate=False)\
-                                                      .filter(SQ(end__gt=datetime.datetime.now()) | SQ(status='considered-active'))\
+                                                      .filter(SQ(end__gt=datetime.now()) | SQ(status='considered-active'))\
                                                       .dwithin('merchant_location', target_pnt, radius).distance('merchant_location', target_pnt)\
                                                       .order_by('distance')
             if sqs.count() == 0:
@@ -458,7 +477,7 @@ def read_scrub_list_and_update(args):
 
 #############################################################################################################
 #
-# Helper Methods - Data
+# Helper Methods - Data Gathering
 #
 #############################################################################################################
 
@@ -496,17 +515,20 @@ def get_or_create_merchant(merchant_data_dict):
     ref_id = merchant_data_dict['id']
     merchant_model, created = Merchant.all_objects.get_or_create(ref_id=ref_id, ref_id_source='sqoot',
                                                              name=merchant_data_dict['name'])
-
     if created:
         print "Created merchant %s" % merchant_data_dict['name']
-
+    else:
+        print "UPDATING merchant %s" % merchant_data_dict['name']
     merchant_model.link                 = merchant_data_dict['url']
     merchant_model.directlink           = merchant_data_dict['url']
     merchant_model.save()
     return merchant_model
 
-def get_or_create_category(each_deal_data_dict, categories_dict):
-    '''Manual renaming of "Retail & Services" to "Shopping & Services"'''
+def get_or_create_category(each_deal_data_dict, categories_dict, shortcut=False):
+    '''
+    * Manual renaming of "Retail & Services" to "Shopping & Services"
+    * 'shortcut' option is for simply retreiving the category object.
+    '''
     category_slug = each_deal_data_dict['category_slug']
     category_name = each_deal_data_dict['category_name']
     if category_slug == 'retail-services':
@@ -515,14 +537,17 @@ def get_or_create_category(each_deal_data_dict, categories_dict):
     if not category_slug:
         # In case where Sqoot doesn't show any category for a given deal
         return None
-    parent_slug = categories_dict[category_slug]
+
     try:
         category_model = Category.objects.get(code=category_slug, ref_id_source='sqoot')
     except Category.DoesNotExist:
-        category_model                    = Category()
-        category_model.ref_id_source      = 'sqoot'
-        category_model.code               = category_slug
+        category_model = Category(ref_id_source='sqoot', code=category_slug, name=category_name)
+        category_model.save()
 
+    if shortcut:
+        return category_model
+
+    parent_slug = categories_dict[category_slug]
     if parent_slug:
         try:
             parent_category               = Category.objects.get(code=parent_slug, ref_id_source='sqoot')
@@ -566,8 +591,10 @@ def get_or_create_couponnetwork(each_deal_data_dict):
     couponnetwork_model, created = CouponNetwork.objects.get_or_create(code=provider_slug)
     if created:
         print 'Created coupon network %s' % each_deal_data_dict['provider_name']
-        couponnetwork_model.name = each_deal_data_dict['provider_name']
-        couponnetwork_model.save()
+    else:
+        print 'UPDATING coupon network %s' % each_deal_data_dict['provider_name']
+    couponnetwork_model.name = each_deal_data_dict['provider_name']
+    couponnetwork_model.save()
     return couponnetwork_model
 
 def get_or_create_merchantlocation(merchant_data_dict, merchant_model, is_online_bool):
@@ -580,18 +607,21 @@ def get_or_create_merchantlocation(merchant_data_dict, merchant_model, is_online
     point_wkt = 'POINT({} {})'.format(longitude, latitude)
 
     if is_online_bool == True or longitude == None or latitude == None:
-        return
+        return None
+
+    merchantlocation_model, created = MerchantLocation.objects.get_or_create(geometry=point_wkt, merchant=merchant_model)
+    if created:
+        print 'Created location %s, %s for merchant %s' % (merchant_data_dict['locality'], merchant_data_dict['address'],
+                                                           merchant_model.name)
     else:
-        merchantlocation_model, created = MerchantLocation.objects.get_or_create(geometry=point_wkt, merchant=merchant_model)
-        if created:
-            print 'Created location %s, %s for merchant %s' % (merchant_data_dict['locality'], merchant_data_dict['address'],
-                                                               merchant_model.name)
-            merchantlocation_model.address      = merchant_data_dict['address']
-            merchantlocation_model.locality     = merchant_data_dict['locality']
-            merchantlocation_model.region       = merchant_data_dict['region']
-            merchantlocation_model.postal_code  = merchant_data_dict['postal_code']
-            merchantlocation_model.country      = merchant_data_dict['country']
-            merchantlocation_model.save()
+        print 'UPDATING location %s, %s for merchant %s' % (merchant_data_dict['locality'], merchant_data_dict['address'],
+                                                           merchant_model.name)
+    merchantlocation_model.address      = merchant_data_dict['address']
+    merchantlocation_model.locality     = merchant_data_dict['locality']
+    merchantlocation_model.region       = merchant_data_dict['region']
+    merchantlocation_model.postal_code  = merchant_data_dict['postal_code']
+    merchantlocation_model.country      = merchant_data_dict['country']
+    merchantlocation_model.save()
     return merchantlocation_model
 
 def get_or_create_coupon(each_deal_data_dict, merchant_model, category_model, dealtype_model,
@@ -600,44 +630,55 @@ def get_or_create_coupon(each_deal_data_dict, merchant_model, category_model, de
     coupon_model, created = Coupon.all_objects.get_or_create(ref_id=ref_id, ref_id_source='sqoot')
     if created:
         print 'Created coupon %s' % each_deal_data_dict['title']
-        coupon_model.online              = each_deal_data_dict['online']
-        coupon_model.merchant            = merchant_model
-        coupon_model.merchant_location   = merchantlocation_model
-        coupon_model.description         = strip_tags(each_deal_data_dict['description']) if each_deal_data_dict['description'] else None
-        coupon_model.restrictions        = strip_tags(each_deal_data_dict['fine_print']) if each_deal_data_dict['fine_print'] else None
-        coupon_model.start               = get_date(each_deal_data_dict['created_at'])
-        coupon_model.end                 = get_date(each_deal_data_dict['expires_at'])
-        coupon_model.link                = each_deal_data_dict['url']
-        coupon_model.directlink          = each_deal_data_dict['untracked_url']
-        coupon_model.skimlinks           = each_deal_data_dict['url']
-        coupon_model.status              = 'unconfirmed'
-        coupon_model.lastupdated         = get_date(each_deal_data_dict['updated_at'])
-        coupon_model.created             = get_date(each_deal_data_dict['created_at'])
-        coupon_model.coupon_network      = couponnetwork_model
-        coupon_model.price               = each_deal_data_dict['price']
-        coupon_model.listprice           = each_deal_data_dict['value']
-        coupon_model.discount            = each_deal_data_dict['discount_amount']
-        coupon_model.percent             = int(each_deal_data_dict['discount_percentage'] * 100)
-        coupon_model.image               = each_deal_data_dict['image_url']
-        coupon_model.embedly_title       = each_deal_data_dict['title']
-        coupon_model.embedly_description = each_deal_data_dict['short_title']
-        coupon_model.embedly_image_url   = each_deal_data_dict['image_url']
-        coupon_model.save()
+    else:
+        print 'UPDATING coupon %s' % each_deal_data_dict['title']
+    coupon_model.online              = each_deal_data_dict['online']
+    coupon_model.merchant            = merchant_model
+    coupon_model.merchant_location   = merchantlocation_model
+    coupon_model.description         = strip_tags(each_deal_data_dict['description']) if each_deal_data_dict['description'] else None
+    coupon_model.restrictions        = strip_tags(each_deal_data_dict['fine_print']) if each_deal_data_dict['fine_print'] else None
+    coupon_model.start               = get_date(each_deal_data_dict['created_at'])
+    coupon_model.end                 = get_date(each_deal_data_dict['expires_at'])
+    coupon_model.link                = each_deal_data_dict['url']
+    coupon_model.directlink          = each_deal_data_dict['untracked_url']
+    coupon_model.skimlinks           = each_deal_data_dict['url']
+    coupon_model.status              = 'unconfirmed'
+    coupon_model.lastupdated         = get_date(each_deal_data_dict['updated_at'])
+    coupon_model.created             = get_date(each_deal_data_dict['created_at'])
+    coupon_model.coupon_network      = couponnetwork_model
+    coupon_model.price               = each_deal_data_dict['price']
+    coupon_model.listprice           = each_deal_data_dict['value']
+    coupon_model.discount            = each_deal_data_dict['discount_amount']
+    coupon_model.percent             = int(each_deal_data_dict['discount_percentage'] * 100)
+    coupon_model.image               = each_deal_data_dict['image_url']
+    coupon_model.embedly_title       = each_deal_data_dict['title']
+    coupon_model.embedly_description = each_deal_data_dict['short_title']
+    coupon_model.embedly_image_url   = each_deal_data_dict['image_url']
+    coupon_model.save()
 
-        if category_model:
-            categories = []
-            categories.append(category_model)
-            while category_model.parent:
-                categories.append(category_model.parent)
-                category_model = category_model.parent
-            for cat in categories:
-                coupon_model.categories.add(cat)
-        coupon_model.dealtypes.add(dealtype_model)
-        coupon_model.countries.add(country_model)
-        coupon_model.save()
+    if category_model:
+        categories = []
+        categories.append(category_model)
+        while category_model.parent:
+            categories.append(category_model.parent)
+            category_model = category_model.parent
+        for cat in categories:
+            coupon_model.categories.add(cat)
+    coupon_model.dealtypes.add(dealtype_model)
+    coupon_model.countries.add(country_model)
+    coupon_model.save()
     return coupon_model
 
+#############################################################################################################
+#
+# Helper Methods - Data Intelligence
+#
+#############################################################################################################
+
 def check_and_mark_duplicate(coupon_model):
+    if coupon_model.online == True:
+        return
+
     other_coupons_from_this_merchant = Coupon.all_objects.filter(merchant__ref_id=coupon_model.merchant.ref_id).exclude(ref_id=coupon_model.ref_id)
     if other_coupons_from_this_merchant.filter(is_duplicate=False).count() == 0:
         # This is the case where coupon_model already exists in db as a 'representative' i.e. is_duplicate=False
@@ -771,10 +812,10 @@ def check_duplicate_by_field(deals_to_scrub, suspected_dup_deals_list, field_nam
         try:
             if field_name == 'coupon_directlink':
                 same_deals = Coupon.all_objects.filter(ref_id_source='sqoot', is_duplicate=False, online=False, directlink=x)\
-                                               .filter(Q(end__gt=datetime.datetime.now()) | Q(status='considered-active'))
+                                               .filter(Q(end__gt=datetime.now()) | Q(status='considered-active'))
             elif field_name == 'merchant_name':
                 same_deals = Coupon.all_objects.filter(ref_id_source='sqoot', is_duplicate=False, online=False, merchant__name__contains=x)\
-                                               .filter(Q(end__gt=datetime.datetime.now()) | Q(status='considered-active'))
+                                               .filter(Q(end__gt=datetime.now()) | Q(status='considered-active'))
 
             if same_deals.count() <= 1:
                 continue
@@ -817,7 +858,7 @@ def describe_section(message):
 def get_date(raw_date_string):
     if raw_date_string:
         clean_date_string = raw_date_string[:-4].replace('T', ' ')
-        return datetime.datetime.strptime(clean_date_string, "%Y-%m-%d %H:%M")
+        return datetime.strptime(clean_date_string, "%Y-%m-%d %H:%M")
     return None
 
 def cleanse_address_text(address_string):
