@@ -404,7 +404,7 @@ function render_coupons(data, reset_items) {
 		if (this.coupon_type == 'free_shipping') {
 			return 	'<img src="/static/img/free_shipping_icon.png">Free Shipping';
 		}
-		else if (this.coupon_type == 'on_sale') {
+		else if (this.coupon_type == 'onsale') {
 			return '<img src="/static/img/on_sale_icon.png">On Sale';
 		}
 		else if (this.coupon_type == 'groceries') {

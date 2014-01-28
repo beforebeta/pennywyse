@@ -119,22 +119,10 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
     if category_ids:
         filters['categories__id__in'] = category_ids
     
-    filter_types = Q()
     if coupon_types:
-        if 'coupon_code' in coupon_types:
-            filter_types |= Q(short_desc='COUPON')
+        filters['coupon_type__in'] = coupon_types
 
-        if 'gift' in coupon_types:
-            filter_types |= Q(dealtypes__code='gift')
-        if 'on_sale' in coupon_types:
-            filter_types |= Q(dealtypes__code='sale')
-        if 'free_shipping' in coupon_types:
-            filter_types |= Q(dealtypes__code='freeshipping')
-            filter_types |= Q(dealtypes__code='totallyfreeshipping')
-        if 'printable' in coupon_types:
-            filter_types |= Q(dealtypes__code='printable')
-
-    coupons_list = Coupon.objects.filter(filter_types, **filters)
+    coupons_list = Coupon.objects.filter(**filters)
 
     ordering = 'popularity'
     if sorting == 'newest':
@@ -145,8 +133,6 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
         coupons_list = coupons_list.order_by(ordering)
     
     coupons = list(coupons_list)
-    expired_coupons = list(merchant.get_expired_coupons())
-    coupons += expired_coupons
 
     # preparing pagination
     page = current_page or 1
@@ -252,20 +238,8 @@ def category(request, category_code, current_page=1, category_ids=-1):
 
     filters = {'categories__in': category_ids}
     
-    filter_types = Q()
     if coupon_types:
-        if 'coupon_code' in coupon_types:
-            filter_types |= Q(short_desc='COUPON')
-
-        if 'gift' in coupon_types:
-            filter_types |= Q(dealtypes__code='gift')
-        if 'on_sale' in coupon_types:
-            filter_types |= Q(dealtypes__code='sale')
-        if 'free_shipping' in coupon_types:
-            filter_types |= Q(dealtypes__code='freeshipping')
-            filter_types |= Q(dealtypes__code='totallyfreeshipping')
-        if 'printable' in coupon_types:
-            filter_types |= Q(dealtypes__code='printable')
+        filters['coupon_type__in'] = coupon_types
 
     ordering = 'popularity'
     if sorting == 'newest':
@@ -273,7 +247,7 @@ def category(request, category_code, current_page=1, category_ids=-1):
     elif sorting == 'expiring_soon':
         ordering = 'end'
 
-    coupons = Coupon.objects.filter(filter_types, **filters).order_by(ordering)
+    coupons = Coupon.objects.filter(**filters).order_by(ordering)
 
     # preparing pagination
     page = current_page or 1

@@ -234,7 +234,6 @@ def setup_web_coupons():
         for sm in Merchant.objects.filter(id__in=merchant_ids).order_by('-name'):
             m.similar.add(sm)
         m.save()
-        break
         print 'Calculated similar merchants for %s' % m.name
 
 def refresh_calculated_fields():
@@ -268,6 +267,10 @@ def refresh_calculated_fields():
                                                             .annotate(popularity=Count('merchant__id'))
     for track in tracks:
         Merchant.objects.filter(id=track['merchant_id']).update(popularity=track['popularity'])
+    
+    for c in Coupon.objects.filter(coupon_type__isnull=True).only('categories', 'dealtypes'):
+        c.coupon_type = c.get_coupon_type()
+        c.save()
     
 def refresh_merchant_redirects():
     for coupon in Coupon.objects.all():
