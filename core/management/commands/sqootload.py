@@ -223,12 +223,15 @@ def clean_out_sqoot_data(utc_datetime):
       that are either expired or inactive (both implied and confirmed), and soft-delete them
     * Third, find all unique deals that are either expired or inactive (both implied and confirmed),
       check for folded deals (if so, reassign) and soft-delete them.
+    * Fourth, find all merchants that do not have any active deals, and soft-delete them.
     '''
+    affected_merchant_list = [] # collect a list of merchant pks whose coupons are being soft-deleted
 
     # First
     true_duplicate_deals = Coupon.all_objects.filter(ref_id_source='sqoot', is_deleted=False,
                                                      is_duplicate=True, related_deal__isnull=True)
     true_duplicate_deals.update(is_deleted=True)
+    affected_merchant_list += [c.merchant.pk for c in true_duplicate_deals]
 
     # Second
     folded_deals = Coupon.all_objects.filter(ref_id_source='sqoot', is_deleted=False,
@@ -236,6 +239,7 @@ def clean_out_sqoot_data(utc_datetime):
     folded_deals.filter(last_modified__lt=utc_datetime).update(status='implied-inactive', is_deleted=True)
     folded_deals.filter(status='confirmed-inactive').update(is_deleted=True)
     folded_deals.filter(end__lt=datetime.now(pytz.utc)).update(is_deleted=True)
+    affected_merchant_list += [c.merchant.pk for c in folded_deals]
 
     # Third (Second -> Third; the order matters)
     non_dup_deals = Coupon.all_objects.filter(ref_id_source='sqoot', is_deleted=False, is_duplicate=False)\
@@ -247,6 +251,20 @@ def clean_out_sqoot_data(utc_datetime):
     non_dup_deals.filter(last_modified__lt=utc_datetime).update(status='implied-inactive', is_deleted=True)
     non_dup_deals.filter(status='confirmed-inactive').update(is_deleted=True)
     non_dup_deals.filter(end__lt=datetime.now(pytz.utc)).update(is_deleted=True)
+    affected_merchant_list += [c.merchant.pk for c in non_dup_deals]
+
+    # Fourth
+    affected_merchant_list = list(set(affected_merchant_list))
+    inactive_merchant_list = []
+    for mpk in affected_merchant_list:
+        miq = Merchant.all_objects.get(pk=mpk) # merchant-in-question (miq)
+        num_of_active_coupons_from_miq = Coupon.all_objects.filter(ref_id_source='sqoot',\
+                                                                   merchant=miq, is_deleted=False).count()
+        if num_of_active_coupons_from_miq:
+            continue
+        else:
+            inactive_merchant_list.append(miq.pk)
+    Merchant.all_objects.filter(pk__in=inactive_merchant_list).update(is_deleted=True)
 
 def validate_sqoot_data(args):
     num_of_targets = len(args)
@@ -671,7 +689,6 @@ def get_or_create_merchantlocation(merchant_data_dict, merchant_model, is_online
     merchantlocation_model.region       = merchant_data_dict['region']
     merchantlocation_model.postal_code  = merchant_data_dict['postal_code']
     merchantlocation_model.country      = merchant_data_dict['country']
-    merchantlocation_model.is_deleted   = False
     merchantlocation_model.save()
     return merchantlocation_model
 
@@ -796,7 +813,7 @@ def check_if_deal_gone(coupon_obj):
     'unconfirmed' (default)
     'confirmed-inactive'
     'considered-active'
-    'implied-inactive' (Not used in this function; Refer to validate_sqoot_data() for this status)
+    'implied-inactive' (Not used in this function; Refer to clean_out_sqoot_data() for this status)
     '''
     url = coupon_obj.directlink
     provider_slug = coupon_obj.coupon_network.code

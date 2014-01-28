@@ -13,10 +13,18 @@ class Migration(SchemaMigration):
                       self.gf('django.db.models.fields.BooleanField')(default=False),
                       keep_default=False)
 
+        # Adding field 'Merchant.is_deleted'
+        db.add_column(u'core_merchant', 'is_deleted',
+                      self.gf('django.db.models.fields.BooleanField')(default=False),
+                      keep_default=False)
+
 
     def backwards(self, orm):
         # Deleting field 'Coupon.is_deleted'
         db.delete_column(u'core_coupon', 'is_deleted')
+
+        # Deleting field 'Merchant.is_deleted'
+        db.delete_column(u'core_merchant', 'is_deleted')
 
 
     models = {
@@ -120,6 +128,7 @@ class Migration(SchemaMigration):
             'directlink': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'image': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'is_deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'last_modified': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 1, 28, 0, 0)', 'auto_now': 'True', 'auto_now_add': 'True', 'blank': 'True'}),
             'link': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'db_index': 'True', 'max_length': '255', 'null': 'True', 'blank': 'True'}),
