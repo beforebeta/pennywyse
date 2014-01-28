@@ -121,15 +121,15 @@ $(function() {
 		fetch_items(reset_items=true);
 	});
 	
-	$('.close-category').live('click', function() {
+	$('.current-category').live('click', function() {
 		var category_id = $(this).attr('id');
 		category_ids.splice(category_ids.indexOf(category_id),1);
-		$(this).parent().removeClass('current-category');
-		$(this).parent().addClass('category');
-		$(this).remove();
+		$(this).removeClass('current-category');
+		$(this).addClass('category');
+		$(this).find('.close-category').remove();
 		fetch_items(reset_items=true);
 	});
-	
+		
 	$('.coupon-container').live('mouseover', function() {
 		if (!$(this).hasClass('coupon-banner')) {
 			$(this).find('.use-coupon').show();
