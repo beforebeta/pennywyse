@@ -228,11 +228,13 @@ def setup_web_coupons():
         
     for m in Merchant.objects.all():
         cat_ids = [c['categories'] for c in Coupon.objects.filter(merchant_id=m.id).values('categories').annotate()]
-        merchant_ids = [c['merchant_id'] for c in Coupon.objects.filter(categories__in=cat_ids).values('merchant_id').annotate()][:10]
+        merchant_ids = [c['merchant_id'] for c in Coupon.objects.filter(categories__in=cat_ids)\
+                                                                .values('merchant_id').annotate() if c['merchant_id'] != m.id][:10]
         m.similar.clear()
         for sm in Merchant.objects.filter(id__in=merchant_ids).order_by('-name'):
             m.similar.add(sm)
         m.save()
+        break
         print 'Calculated similar merchants for %s' % m.name
 
 def refresh_calculated_fields():
