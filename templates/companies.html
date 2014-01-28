@@ -2,7 +2,7 @@
 
 			{% block content %}
 			<div class="row middle-container">
-				<div class="main-rail index-rail top-labels-container">
+				<div class="main-rail index-rail top-labels-container visible-md visible-lg">
 						<div class="main-labels">
 							<a href="{% url 'web.views.main.index' %}">Home</a>
 							>
@@ -12,7 +12,7 @@
 						</div>
 					</div>
 				<br clear="both">
-				<div class="left-rail top-rail">
+				<div class="left-rail top-rail visible-md visible-lg">
 					<div class="coupon-container  featured-merchants">
 						<div class="featured-merchants-header">Featured Stores</div>
 						<div class="featured-merchants-list">
@@ -40,10 +40,11 @@
 					</div>
 				<br clear="both">
 				<div class="main-rail merchants">
+					<h4 class="hidden-md hidden-lg">All Merchants</h4>
 					{% for store in stores %}
 	               		<a href="{% url 'web.views.main.coupons_for_company' company_name=store.name_slug company_id=store.id %}">{{store.name}}</a>
                        	{% if forloop.counter|divisibleby:"4" %}
-                       		<hr>
+                       		<hr class="visible0-md visible-lg">
                    		{% endif %}
     	            {% endfor %}
 					
