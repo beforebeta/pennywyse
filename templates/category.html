@@ -15,7 +15,7 @@
 			<div class="row middle-container">
 				<div class="left-rail visible-md visible-lg">
 					<div class="top-labels">
-						<h1>{{ category.name }}</h1>
+						<h1>{{ category.name|cut:"Coupons" }}</h1>
 						<h4>Coupons</h4>
 						{{ category.link }}
 					</div>
@@ -146,7 +146,7 @@
 							{{ category.name }}
 						</div>
 						<div class="sorting">
-							Sort by
+							Sort by:
 							<div class="sorting-toggle">
 								<div class="sorting-item">
 									<a href="javascript:void(null);" class="expiring_soon">Expiring soon</a>

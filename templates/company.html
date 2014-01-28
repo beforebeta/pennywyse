@@ -20,7 +20,7 @@
 					<div class="top-labels">
 						<h1>{{ merchant.name }}</h1>
 						<h4>Coupons</h4>
-						{{ merchant.link }}
+						<a href="{{ merchant.link }}" target="_blank">{{ merchant.link }}</a>
 					</div>
 					{% comment %}
 						<button type="button" class="btn-follow"><img src="/static/img/follow_icon.png">Follow</button>
@@ -178,7 +178,7 @@
 							{{ merchant.name }}
 						</div>
 						<div class="sorting">
-							Sort by
+							Sort by:
 							<div class="sorting-toggle">
 								<div class="sorting-item">
 									<a href="javascript:void(null);" class="expiring_soon">Expiring soon</a>

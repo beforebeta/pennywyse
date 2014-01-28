@@ -212,6 +212,10 @@ hr {
 	margin-bottom: 20px;
 	text-align: center;
 }
+.top-labels a{
+	color: #3cb5b5;
+	text-decoration: none;
+}
 .categories {
 	width: 100% !important;
 }
@@ -287,11 +291,11 @@ hr {
 }
 .sorting {
 	float: right;
-	width: 310px;
+	width: 270px;
 }
 .sorting-toggle {
 	float: right;
-	margin-left: 15px;
+	margin-left: 5px;
 	border: 1px solid #d4d2d0;
 	height: 25px;
 	line-height: 25px;
