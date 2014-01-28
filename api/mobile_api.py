@@ -10,6 +10,7 @@ from geopy.distance import distance as geopy_distance
 from haystack.query import SearchQuerySet, SQ
 from haystack.utils.geo import Point, D
 from elasticsearch import Elasticsearch
+import pytz
 
 from core.util import print_stack_trace
 from core.models import Category
@@ -49,8 +50,8 @@ class MobileResource(ModelResource):
 
         radius = D(mi=float(params_dict['radius'])) if 'radius' in params_keys else D(mi=10)
         user_pnt = Point(lng, lat)
-        sqs = SearchQuerySet().using('mobile_api').filter(django_ct='core.coupon', online=False, is_duplicate=False)\
-                                                .filter(SQ(end__gt=datetime.now()) | SQ(status='considered-active'))\
+        sqs = SearchQuerySet().using('mobile_api').filter(django_ct='core.coupon', online=False, is_duplicate=False, is_deleted=False)\
+                                                .filter(SQ(end__gt=datetime.now(pytz.utc)) | SQ(status='considered-active'))\
                                                 .dwithin('merchant_location', user_pnt, radius).distance('merchant_location', user_pnt)\
                                                 .order_by('distance')
 
@@ -289,8 +290,8 @@ class MobileResource(ModelResource):
                     break
 
                 sqs = SearchQuerySet().using('mobile_api')\
-                                      .filter(django_ct='core.coupon', online=False, is_duplicate=False, mobilequery=random_pick)\
-                                      .filter(SQ(end__gt=datetime.now()) | SQ(status='considered-active'))\
+                                      .filter(django_ct='core.coupon', online=False, is_duplicate=False, is_deleted=False, mobilequery=random_pick)\
+                                      .filter(SQ(end__gt=datetime.now(pytz.utc)) | SQ(status='considered-active'))\
                                       .dwithin('merchant_location', user_pnt, radius)\
                                       .distance('merchant_location', user_pnt).order_by('distance')
                 if (random_pick in popular_nearbys_so_far) or (len(sqs) < 10):

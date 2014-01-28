@@ -10,7 +10,7 @@ from optparse import make_option
 from django.core.management.base import BaseCommand
 from django.conf import settings
 from django.utils.html import strip_tags
-from django.db.models import Q
+from django.db.models import Q, Max
 
 from BeautifulSoup import BeautifulSoup
 from fuzzywuzzy import fuzz
@@ -27,10 +27,15 @@ import json
 
 SQOOT_API_URL = "http://api.sqoot.com/v2/"
 ITEMS_PER_PAGE = 100
-SAVED_MERCHANT_ID_LIST = [int(m.ref_id) for m in Merchant.all_objects.filter(ref_id_source='sqoot').only('ref_id')]
+SAVED_MERCHANT_ID_LIST = [int(m.ref_id) for m in Merchant.all_objects.filter(ref_id_source='sqoot', is_deleted=False).only('ref_id')]
 
 class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
+        make_option('--fullcycle',
+            action='store_true',
+            dest='fullcycle',
+            default=False,
+            help='fullcycle'),
         make_option('--directload',
             action='store_true',
             dest='directload',
@@ -70,7 +75,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         '''
-        --direcload:    For downloading and loading coupons into db directly from sqoot
+        --fullcycle:    A wrapper function for running full cycle of sqootload functions
+        --directload:   For downloading and loading coupons into db directly from sqoot
         --indirecload:  For loading coupons from a file saved via --savedown option
         --savedown:     For downloading coupons from sqoot and saving them into a file
         --validate:     For validating deal;
@@ -82,6 +88,11 @@ class Command(BaseCommand):
                         * Takes one argument that is a file name under 'readonly' folder
         '''
 
+        if options['fullcycle']:
+            try:
+                run_thru_full_cycle()
+            except:
+                print_stack_trace()
         if options['directload']:
             try:
                 refresh_sqoot_data()
@@ -99,7 +110,7 @@ class Command(BaseCommand):
                 print_stack_trace()
         if options['validate']:
             try:
-                validate_sqoot_deals(args)
+                validate_sqoot_data(args)
             except:
                 print_stack_trace()
         if options['analyze']:
@@ -117,6 +128,10 @@ class Command(BaseCommand):
                 read_scrub_list_and_update(args)
             except:
                 print_stack_trace()
+
+def run_thru_full_cycle():
+    latest_run_start_time = refresh_sqoot_data(indirectload=False)
+    clean_out_sqoot_data(latest_run_start_time)
 
 def refresh_sqoot_data(indirectload=False, firsttime=False):
     refresh_start_time = datetime.now(pytz.utc) # Use UTC time to compare & update coupon's 'last_modified' field
@@ -174,11 +189,13 @@ def refresh_sqoot_data(indirectload=False, firsttime=False):
                 is_online_bool = deal_data['deal']['online']
                 merchant_data_dict = deal_data['deal']['merchant']
 
-                # Update all objects below with the latest data from sqoot (b/c 'deal_last_updated' is recent);
+                # Only retrieve if already exists;
                 # 'shortcut=True' is given for get_or_create_category() since all categories were 'get_or_create'd above.
-                merchant_model           = get_or_create_merchant(merchant_data_dict)
-                category_model           = get_or_create_category(deal_data['deal'], categories_dict, shortcut=True)
                 couponnetwork_model      = get_or_create_couponnetwork(deal_data['deal'])
+                category_model           = get_or_create_category(deal_data['deal'], categories_dict, shortcut=True)
+
+                # Update all objects below with the latest data from sqoot (b/c 'deal_last_updated' is recent) even if exists;
+                merchant_model           = get_or_create_merchant(merchant_data_dict)
                 merchantlocation_model   = get_or_create_merchantlocation(merchant_data_dict, merchant_model, is_online_bool)
                 coupon_model             = get_or_create_coupon(deal_data['deal'], merchant_model, category_model, dealtype_model,
                                                                 country_model, couponnetwork_model, merchantlocation_model)
@@ -187,50 +204,51 @@ def refresh_sqoot_data(indirectload=False, firsttime=False):
                 if coupon_ref_id not in SAVED_MERCHANT_ID_LIST:
                     SAVED_MERCHANT_ID_LIST.append(coupon_ref_id)
                 else:
-                    check_and_mark_duplicate(coupon_model)
+                    dedup_softly(coupon_model)
 
                 print '-' * 60
             except:
                 print_stack_trace()
         Coupon.all_objects.filter(ref_id_source='sqoot', ref_id__in=active_coupon_ids).update(last_modified=datetime.now(pytz.utc))
-    # mass update the sqoot deals that
     return refresh_start_time
 
-def savedown_sqoot_data():
-    request_parameters = {
-        'api_key': settings.SQOOT_PUBLIC_KEY,
-    }
-    print "\nSQOOT DATA LOAD STARTING..\n"
+def clean_out_sqoot_data(utc_datetime):
+    '''
+    Summary: Internal garbage collection cycle that finds and soft-delete all
+             irrelevant local coupons, merchants, and merchantlocations.
+    Intent:
+    * First find all true duplicate deals and soft-delete them
+      (i.e. is_duplicate=True, related_deal__isnull=True)
+    * Second, find all folded deals (i.e. is_duplicate=True, related_deal__isnull=True)
+      that are either expired or inactive (both implied and confirmed), and soft-delete them
+    * Third, find all unique deals that are either expired or inactive (both implied and confirmed),
+      check for folded deals (if so, reassign) and soft-delete them.
+    '''
 
-    categories_array = requests.get(SQOOT_API_URL + 'categories', params=request_parameters).json()['categories']
-    categories_dict = establish_categories_dict(categories_array)
-    reorganized_categories_array = reorganize_categories_list(categories_array)
-    for category_dict in reorganized_categories_array:
-        get_or_create_category(category_dict, categories_dict)
+    # First
+    true_duplicate_deals = Coupon.all_objects.filter(ref_id_source='sqoot', is_deleted=False,
+                                                     is_duplicate=True, related_deal__isnull=True)
+    true_duplicate_deals.update(is_deleted=True)
 
-    # loading coupons and merchants
-    describe_section("CHECKING THE LATEST DEAL DATA FROM SQOOT..\n")
-    request_parameters['per_page'] = ITEMS_PER_PAGE
-    active_deal_count = requests.get(SQOOT_API_URL + 'deals', params=request_parameters).json()['query']['total']
-    page_count = int(math.ceil(active_deal_count / float(request_parameters['per_page'])))
+    # Second
+    folded_deals = Coupon.all_objects.filter(ref_id_source='sqoot', is_deleted=False,
+                                             is_duplicate=True, related_deal__isnull=False)
+    folded_deals.filter(last_modified__lt=utc_datetime).update(status='implied-inactive', is_deleted=True)
+    folded_deals.filter(status='confirmed-inactive').update(is_deleted=True)
+    folded_deals.filter(end__lt=datetime.now(pytz.utc)).update(is_deleted=True)
 
-    print '%s deals detected, estimating %s pages to iterate\n' % (active_deal_count, page_count)
+    # Third (Second -> Third; the order matters)
+    non_dup_deals = Coupon.all_objects.filter(ref_id_source='sqoot', is_deleted=False, is_duplicate=False)\
+                                      .filter(Q(last_modified__lt=utc_datetime) | Q(status='confirmed-inactive')\
+                                              | Q(end__lt=datetime.now(pytz.utc)))
+    deals_with_folded_deals = [c.pk for c in non_dup_deals if Coupon.all_objects.filter(related_deal=c).count() != 0]
+    for i in deals_with_folded_deals:
+        reassign_representative_deal(Coupon.all_objects.get(pk=i))
+    non_dup_deals.filter(last_modified__lt=utc_datetime).update(status='implied-inactive', is_deleted=True)
+    non_dup_deals.filter(status='confirmed-inactive').update(is_deleted=True)
+    non_dup_deals.filter(end__lt=datetime.now(pytz.utc)).update(is_deleted=True)
 
-    describe_section("STARTING TO DOWNLOAD SQOOT DEALS..\n")
-
-    sqoot_file = open("sqoot_output.json", "w")
-    sqoot_file.write("[")
-    for p in range(page_count):
-        request_parameters['page'] = p + 1
-        print '## Fetching page %s...\n' % (p + 1)
-        response_in_json = requests.get(SQOOT_API_URL + 'deals', params=request_parameters).json()
-        sqoot_file.write(json.dumps(response_in_json))
-        sqoot_file.write(",")
-    sqoot_file.write("]")
-    sqoot_file.flush()
-    sqoot_file.close()
-
-def validate_sqoot_deals(args):
+def validate_sqoot_data(args):
     num_of_targets = len(args)
     if num_of_targets == 0:
         suspicious_deals = Coupon.all_objects.filter(ref_id_source='sqoot', online=False, end__isnull=True)\
@@ -283,6 +301,40 @@ def validate_sqoot_deals(args):
 
             if ids_in_db_but_not_in_sqoot:
                 Coupon.all_objects.filter(ref_id__in=ids_in_db_but_not_in_sqoot).update(status='implied-inactive')
+
+def savedown_sqoot_data():
+    request_parameters = {
+        'api_key': settings.SQOOT_PUBLIC_KEY,
+    }
+    print "\nSQOOT DATA LOAD STARTING..\n"
+
+    categories_array = requests.get(SQOOT_API_URL + 'categories', params=request_parameters).json()['categories']
+    categories_dict = establish_categories_dict(categories_array)
+    reorganized_categories_array = reorganize_categories_list(categories_array)
+    for category_dict in reorganized_categories_array:
+        get_or_create_category(category_dict, categories_dict)
+
+    # loading coupons and merchants
+    describe_section("CHECKING THE LATEST DEAL DATA FROM SQOOT..\n")
+    request_parameters['per_page'] = ITEMS_PER_PAGE
+    active_deal_count = requests.get(SQOOT_API_URL + 'deals', params=request_parameters).json()['query']['total']
+    page_count = int(math.ceil(active_deal_count / float(request_parameters['per_page'])))
+
+    print '%s deals detected, estimating %s pages to iterate\n' % (active_deal_count, page_count)
+
+    describe_section("STARTING TO DOWNLOAD SQOOT DEALS..\n")
+
+    sqoot_file = open("sqoot_output.json", "w")
+    sqoot_file.write("[")
+    for p in range(page_count):
+        request_parameters['page'] = p + 1
+        print '## Fetching page %s...\n' % (p + 1)
+        response_in_json = requests.get(SQOOT_API_URL + 'deals', params=request_parameters).json()
+        sqoot_file.write(json.dumps(response_in_json))
+        sqoot_file.write(",")
+    sqoot_file.write("]")
+    sqoot_file.flush()
+    sqoot_file.close()
 
 def analyze_sqoot_deals():
     request_parameters = {
@@ -514,13 +566,14 @@ def establish_categories_dict(categories_array):
 def get_or_create_merchant(merchant_data_dict):
     ref_id = merchant_data_dict['id']
     merchant_model, created = Merchant.all_objects.get_or_create(ref_id=ref_id, ref_id_source='sqoot',
-                                                             name=merchant_data_dict['name'])
+                                                                 name=merchant_data_dict['name'])
     if created:
         print "Created merchant %s" % merchant_data_dict['name']
     else:
         print "UPDATING merchant %s" % merchant_data_dict['name']
-    merchant_model.link                 = merchant_data_dict['url']
-    merchant_model.directlink           = merchant_data_dict['url']
+    merchant_model.link         = merchant_data_dict['url']
+    merchant_model.directlink   = merchant_data_dict['url']
+    merchant_model.is_deleted   = False
     merchant_model.save()
     return merchant_model
 
@@ -535,8 +588,7 @@ def get_or_create_category(each_deal_data_dict, categories_dict, shortcut=False)
         category_slug = 'shopping-services'
         category_name = 'Shopping & Services'
     if not category_slug:
-        # In case where Sqoot doesn't show any category for a given deal
-        return None
+        return None # In case where Sqoot doesn't show any category for a given deal
 
     try:
         category_model = Category.objects.get(code=category_slug, ref_id_source='sqoot')
@@ -591,10 +643,8 @@ def get_or_create_couponnetwork(each_deal_data_dict):
     couponnetwork_model, created = CouponNetwork.objects.get_or_create(code=provider_slug)
     if created:
         print 'Created coupon network %s' % each_deal_data_dict['provider_name']
-    else:
-        print 'UPDATING coupon network %s' % each_deal_data_dict['provider_name']
-    couponnetwork_model.name = each_deal_data_dict['provider_name']
-    couponnetwork_model.save()
+        couponnetwork_model.name = each_deal_data_dict['provider_name']
+        couponnetwork_model.save()
     return couponnetwork_model
 
 def get_or_create_merchantlocation(merchant_data_dict, merchant_model, is_online_bool):
@@ -621,6 +671,7 @@ def get_or_create_merchantlocation(merchant_data_dict, merchant_model, is_online
     merchantlocation_model.region       = merchant_data_dict['region']
     merchantlocation_model.postal_code  = merchant_data_dict['postal_code']
     merchantlocation_model.country      = merchant_data_dict['country']
+    merchantlocation_model.is_deleted   = False
     merchantlocation_model.save()
     return merchantlocation_model
 
@@ -654,6 +705,7 @@ def get_or_create_coupon(each_deal_data_dict, merchant_model, category_model, de
     coupon_model.embedly_title       = each_deal_data_dict['title']
     coupon_model.embedly_description = each_deal_data_dict['short_title']
     coupon_model.embedly_image_url   = each_deal_data_dict['image_url']
+    coupon_model.is_deleted          = False
     coupon_model.save()
 
     if category_model:
@@ -675,11 +727,15 @@ def get_or_create_coupon(each_deal_data_dict, merchant_model, category_model, de
 #
 #############################################################################################################
 
-def check_and_mark_duplicate(coupon_model):
+def dedup_softly(coupon_model):
+    '''
+    Check all deals under the same merchant, mark duplicate deals, and fold them under the best deal
+    '''
     if coupon_model.online == True:
         return
 
-    other_coupons_from_this_merchant = Coupon.all_objects.filter(merchant__ref_id=coupon_model.merchant.ref_id).exclude(ref_id=coupon_model.ref_id)
+    other_coupons_from_this_merchant = Coupon.all_objects.filter(merchant__ref_id=coupon_model.merchant.ref_id, is_deleted=False)\
+                                                         .exclude(ref_id=coupon_model.ref_id)
     if other_coupons_from_this_merchant.filter(is_duplicate=False).count() == 0:
         # This is the case where coupon_model already exists in db as a 'representative' i.e. is_duplicate=False
         return
@@ -714,13 +770,33 @@ def check_and_mark_duplicate(coupon_model):
             coupon_model.related_deal = c
             coupon_model.save()
 
+def dedup_aggressively():
+    pass
+
+def reassign_representative_deal(coupon_model):
+    '''
+    Summary: Scan folded deals and reassign a repr. deal out of them before removing the current rep.
+
+    Intent: Look for an alternative rep. deal based on the best discount
+    Note: This function assumes that coupon_model has folded deals (>0) under it.
+    '''
+    merchant_sqoot_id = coupon_model.merchant.ref_id
+    candidates = Coupon.all_objects.filter(merchant__ref_id=merchant_sqoot_id, is_deleted=False)\
+                                   .exclude(ref_id=coupon_model.ref_id)
+    max_disc_percent = candidates.aggregate(Max('percent'))['percent__max']
+    new_rep_deal = candidates.filter(percent=max_disc_percent)[0]
+    new_rep_deal.is_duplicate = False
+    new_rep_deal.related_deal = None
+    new_rep_deal.save()
+    candidates.exclude(pk=new_rep_deal.pk).update(related_deal=new_rep_deal)
+
 def check_if_deal_gone(coupon_obj):
     '''
     Note on coupon status:
     'unconfirmed' (default)
     'confirmed-inactive'
-    'implied-inactive' (Not used in this function; Refer to validate_sqoot_deals() for this status)
     'considered-active'
+    'implied-inactive' (Not used in this function; Refer to validate_sqoot_data() for this status)
     '''
     url = coupon_obj.directlink
     provider_slug = coupon_obj.coupon_network.code
