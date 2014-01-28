@@ -451,6 +451,7 @@ hr {
 	color: #e74c3c;
 	font-size: 20px;
 	font-weight: 300 !important;
+	text-transform: uppercase;
 }
 .short-description a{
 	text-align: center;
@@ -885,6 +886,16 @@ hr {
 	background-color: #d9d9d7;
 	border-radius: 2px;
 }
+
+@media (max-width: 767px) {
+	.top-pagination {
+		line-height: 24px;
+	}
+	.merchants-list {
+		padding-top: 0px !important;
+	}
+}
+
 .merchants {
 	margin-left: 5px;
 	clear: both !important;

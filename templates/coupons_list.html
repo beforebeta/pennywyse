@@ -21,10 +21,12 @@
 			<hr>
 			<h1 class="short-description">{{ coupon.short_desc }}</h1>
 			{{ coupon.get_description }}<br>
-			<span class="ends">Ends {{ coupon.end|date:"m/d/y" }}</span>
+			{% if coupon.end %}
+				<span class="ends">Ends {{ coupon.end|date:"m/d/y" }}</span>
 				<a href="{% url 'web.views.main.coupons_for_company' company_name=coupon.merchant.name_slug company_id=coupon.merchant.id %}" target="_blank" class="merchant-link">
 					<img src="{{ coupon.merchant.image }}">
 				</a>
+			{% endif %}
 		</div>
 		<div class="use-coupon" id="{{ coupon.id }}">
 			Use Coupon
