@@ -1442,7 +1442,7 @@ hr {
 	width: auto !important;
 }
 .mobile-index-rail {
-	width: auto !important;
+	width: 300px !important;
 }
 .navbar-toggle {
 	float: left !important;
@@ -1467,6 +1467,9 @@ hr {
 	display: none;
 	box-shadow: 0px 3px 3px 0px rgba(97, 94, 94, 0.15)
 }
+.mobile-menu #search_form {
+	margin-top: -15px;
+}
 .mobile-menu .search {
 	width: 100% !important;
 }
@@ -1484,9 +1487,10 @@ hr {
 	color: #858585;
 	text-decoration: none;
 }
-#mobile-subscribe-link, .search-label {
+#mobile-subscribe-link a, .search-label {
 	color: #e74c3c !important;
 	font-weight: 500;
+	margin-bottom: -20px;
 }
 .mobile-menu-container {
 	border: 1px solid;
@@ -1505,7 +1509,7 @@ hr {
 	background-color: #f1f1f1;
 	padding-top: 10px;
 	padding-bottom: 10px;
-	height: 70px !important;
+	min-height: 70px !important;
 	display: none;
 }
 .mobile-subscription div {
@@ -1703,6 +1707,12 @@ hr {
 	text-decoration: none;	
 	margin-right: 15px;
 }
+.mobile-coupon-popup .coupon-popup-code span{
+	height: 50px !important;
+	line-height: 50px !important;
+	display: block;
+	text-align: center;
+}
 .mobile-coupon-popup .coupon-popup-code input[type=button]{
 	width: 280px !important;
 	min-width: 280px !important;
@@ -1747,4 +1757,49 @@ hr {
 }
 .fixed {
 	position: fixed !important;
+}
+.mobile-category a{
+	display: block;
+}
+.mobile-merchants {
+	background-color: #fff !important;
+	border-radius: 5px;
+	width: 100% !important;
+}
+.mobile-merchants-rail {
+	padding: 0px !important;
+}
+.mobile-merchants-rail h4{
+	margin-top: 5px !important;
+}
+.mobile-category-container {
+	float: left;
+	text-align: center;
+	width: 130px;
+	margin: 10px 10px 10px 0;
+}
+.mobile-category-container a{
+	text-decoration: none;
+	color: #46a8a7;
+}
+.mobile-subscription-ok {
+	position: fixed;
+	background-color: rgba(0, 0, 0, 0.75);
+	top: 30%;
+	left: 30%;
+	bottom: 0;
+	right: 0;
+	z-index: 5;
+	width: 100px;
+	height: 100px;
+	border-radius: 50px;
+	color: #fff;
+	text-align: center;
+	text-transform: uppercase;
+	font-weight: bold;
+	padding: 20px;
+}
+.mobile-subscription-ok span {
+	font-size: 18pt;
+	color: #46a8a7;
 }

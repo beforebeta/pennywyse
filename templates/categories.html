@@ -2,7 +2,7 @@
 
 			{% block content %}
 			<div class="row middle-container">
-				<div class="main-rail index-rail top-labels-container">
+				<div class="main-rail index-rail top-labels-container visible-md visible-lg">
 						<div class="main-labels">
 							<a href="{% url 'web.views.main.index' %}">Home</a>
 							>
@@ -13,7 +13,7 @@
 					</div>
 				<br clear="both">
 				{% if featured_categories %}
-					<div class="left-rail top-rail">
+					<div class="left-rail top-rail visible-md visible-lg">
 						<div class="coupon-container  featured-merchants">
 							<div class="featured-merchants-header">Featured Categories</div>
 							<div class="featured-merchants-list featured-categories">
@@ -33,14 +33,37 @@
 						</div>
 					</div>
 				{% endif %}
-				<div class="main-rail merchants">
+				<div class="main-rail merchants visible-md visible-lg">
 					{% for category in categories %}
 	               		<a href="{% url 'web.views.main.category' category_code=category.code %}">{{category.name}}</a>
                        	{% if forloop.counter|divisibleby:"4" %}
                        		<hr>
                    		{% endif %}
     	            {% endfor %}
-					
+				</div>
+				<div class="main-rail mobile-merchants-rail hidden-md hidden-lg">
+					<h4>Featured Categories</h4>
+					<div class="mobile-merchants clearfix">
+						{% for category in featured_categories %}
+							<div class="mobile-category-container">
+									<a href="{% url 'web.views.main.category' category_code=category.code %}">
+										<img src="{{ category.icon }}"><br>
+										{{ category.name }}
+									</a>
+							</div>
+						{% endfor %}
+					</div>
+					<h4>All Categories</h4>
+					<div class="mobile-merchants clearfix">
+						{% for category in categories %}
+							<div class="mobile-category-container">
+									<a href="{% url 'web.views.main.category' category_code=category.code %}">
+										<img src="{{ category.icon }}"><br>
+										{{ category.name }}
+									</a>
+							</div>
+						{% endfor %}
+					</div>
 				</div>
 			</div>
 			{% endblock %}

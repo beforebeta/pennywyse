@@ -40,17 +40,18 @@ $(function() {
 		$('.search-main-rail').addClass('mobile-index-rail');
 		$('.main-rail').addClass('mobile-index-rail');
 		is_mobile = true;
-		//fetch_items(reset_items=true);
+		$('.coupon-container').addClass('mobile-coupon-container');
+		$('.coupon-bottom').remove();
 	}
 	
 	$('.expandable').on('click', expandable_select_callback);
 	
 	$('#mobile-menu').click(function() {
 		if ($('.mobile-menu').is(':visible')) {
-			$('.mobile-menu').hide('slide', { direction: 'left' }, 500);
+			$('.mobile-menu').hide('slide', { direction: 'left' }, 250);
 		}
 		else {
-			$('.mobile-menu').show('slide', { direction: 'left' }, 500);
+			$('.mobile-menu').show('slide', { direction: 'left' }, 250);
 		}
 	});
 	
@@ -312,6 +313,9 @@ $(function() {
 		}
 	});
 
+	$('.mobile-subscription-ok').live('click', function() {
+		$(this).remove();
+	});
 });
 
 function select_categories(criteria) {
@@ -585,11 +589,21 @@ function subscribe_form_callback(response, statusText, xhr, $form) {
 	$('#subscribe-form').find('span, br').remove();
 	if (!response.success && typeof(response.errors) != 'undefined') {
 		for (key in response.errors) {
-			$('#subscribe-form').find('input[name='+key+']').before('<span>'+response.errors[key]+'</span><br><br>');
+			html = '<span>'+response.errors[key]+'</span>';
+			if (!is_mobile) {
+				html += '<br><br>';
+			}
+			$('#subscribe-form').find('input[name='+key+']').before(html);
 		}
 	}
 	if (response.success) {
-		$('.subscription-popup-right').html('<span>You have been subscribed. <img src="/static/img/check_icon.png"></span>');
+		if (is_mobile) {
+			$('.mobile-subscription').hide();
+			$('body').append('<div class="mobile-subscription-ok">Got it<br><span class="glyphicon glyphicon-ok"></span></div>');
+		}
+		else {
+			$('.subscription-popup-right').html('<span>You have been subscribed. <img src="/static/img/check_icon.png"></span>');
+		}
 	}
 }
 
@@ -644,7 +658,7 @@ function render_coupon_popup(data, coupon_id) {
 						{{/ code }} \
 						{{^ code }} \
 							<div class="coupon-popup-code"> \
-								No coupon code required.<br> \
+								<span>No coupon code required.</span> \
 								<input type="button" value="Shop at {{ merchant_name }}"> \
 							</div> \
 						{{/ code}} \

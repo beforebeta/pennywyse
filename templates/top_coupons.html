@@ -5,7 +5,7 @@
 				<div class="main-rail index-rail landing-rail">
 					<div class="top-labels-container">
 						<div class="main-labels mobile-index-labels">
-							<a href="javascript:void(null);" class="active" id="most-popular">Popular</a>
+							<a href="javascript:void(null);" class="active" id="most-popular">Most Popular</a>
 							<a href="javascript:void(null);" id="featured-coupons">Featured</a>
 							<a href="javascript:void(null);" id="stores">Stores</a>
 						</div>
@@ -28,11 +28,10 @@
 										<span class="glyphicon glyphicon-chevron-down"></span>
 									</div>
 								</div>
-								
 							</div>
 						</div>
 					
-				<br clear="both">
+					<br clear="both">
 					<div class="coupons more-coupons">
 						{% for top_coupon in top_coupons %}
 							{% with top_coupon.popular.all.0 as coupon %}
