@@ -347,6 +347,9 @@ $(function() {
  		watch: false,
 		height: null,
 		tolerance: 0,
+		callback: function( isTruncated, orgContent ) {
+			$(this).addClass('truncated');
+		},
 	});
 });
 
@@ -471,7 +474,7 @@ function render_coupons(data, reset_items) {
 	else {
 		$('.coupons').append(html);
 	}
-	$(".coupon-description").dotdotdot({
+	$('.coupon-description:not(.truncated)').dotdotdot({
 		ellipsis: '... ',
  		wrap: 'letter',
  		fallbackToLetter: true,
@@ -479,6 +482,9 @@ function render_coupons(data, reset_items) {
  		watch: false,
 		height: null,
 		tolerance: 0,
+		callback: function( isTruncated, orgContent ) {
+			$(this).addClass('truncated');
+		},
 	});
 	init_sticky_header();
 }
@@ -516,6 +522,7 @@ function init_waypoint() {
 }
 
 function fetch_items(reset_items) {
+	NProgress.start();
 	var url = window.location.pathname;
 	var parameters = new Array();
 	var i = 0;
@@ -578,6 +585,7 @@ function fetch_items(reset_items) {
 			$('.more-coupons').waypoint('disable');
 		}
 	}, 'json');
+	NProgress.done();
 }
 
 function fetch_merchants() {

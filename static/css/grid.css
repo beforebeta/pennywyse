@@ -1861,3 +1861,11 @@ hr {
 		width: 1200px !important;
 	}
 }
+
+#nprogress .bar {
+	background-color: #3cafaf !important;
+  	height: 3px !important;
+}
+#nprogress .spinner-icon {
+	display: none !important;
+}
