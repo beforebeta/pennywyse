@@ -275,9 +275,21 @@ hr {
 	background-color: #ebebe8 !important;
 	padding: 10px 0px 20px 20px;
 }
+@media (min-width: 1170px) {
+	.main-rail {
+		width: 942px !important;
+	}
+}
+
 .index-rail {
 	width: 960px !important;
 }
+@media (min-width: 1170px) {
+	.index-rail {
+		width: 1180px !important;
+	}
+}
+
 .main-labels {
 	float: left;
 }
@@ -310,7 +322,11 @@ hr {
 .top-labels-container {
 	height: 25px !important;
 	line-height: 25px !important;
-	overflow:hidden;
+	overflow: hidden;
+	margin: 0 auto;
+}
+.top-labels-index {
+	width: 960px !important;
 }
 .sorting-item {
 	padding-left: 5px !important;
@@ -1834,4 +1850,9 @@ hr {
 	max-height: 84px;
 	line-height: 21px;
 	text-overflow: ellipsis;
+}
+@media (min-width: 1170px) {
+	.index-container, .middle-container {
+		width: 1200px !important;
+	}
 }
