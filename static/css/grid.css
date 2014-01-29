@@ -227,9 +227,11 @@ hr {
 	margin-top: 10px;
 	border-radius: 2px;
 	font-size: 10pt;
+	cursor: pointer;
 }
 .category a {
 	color: #423d3e;
+	text-decoration: none;
 }
 .category:hover {
 	background-color: #d9d9d7;
@@ -248,6 +250,9 @@ hr {
 	margin-right: 10px;
 	color: #fff;
 }
+.similar-stores {
+	margin-right: -40px !important;
+}
 .similar-stores h4 {
 	font-weight: 700 !important;
 	font-size: 14pt !important;
@@ -256,13 +261,13 @@ hr {
 }
 .similar-store {
 	text-align: center;
-	width: 90px;
+	width: 100px;
 	float: left;
 	margin-right: 10px;
 	margin-bottom: 10px;
 }
 .similar-store img {
-	max-width: 90px;
+	max-width: 100px;
 }
 .main-rail {
 	width: 710px;
@@ -316,6 +321,7 @@ hr {
 	border-right: 1px solid #d4d2d0;
 	font-size: 13px !important;
 	font-weight: lighter;
+	cursor: pointer;
 }
 .sorting-item a {
 	color: #8a8586 !important;

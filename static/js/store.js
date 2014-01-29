@@ -64,10 +64,10 @@ $(function() {
 		load_coupon(coupon_id);
 	}
 
-	$('.sorting-item a').click(function(){
+	$('.sorting-item').click(function(){
 		$('.sorting-item').removeClass('selected-sorting');
-		$(this).parent().addClass('selected-sorting');
-		sorting = $(this).attr('class');
+		$(this).addClass('selected-sorting');
+		sorting = $(this).find('a').attr('class');
 		fetch_items(reset_items=true);
 	});
 	
@@ -394,9 +394,6 @@ function render_coupons(data, reset_items) {
    	data.facebook_share_url = function() {
    		return 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(this.full_success_path);
    	};
-   	data.twitter_share_url = function() {
-   		return 'https://twitter.com/share?url=' + encodeURIComponent(this.full_success_path);
-	};
 	data.email_share_url = function() {
 		return encodeURIComponent(this.full_success_path);
 	};

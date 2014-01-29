@@ -12,7 +12,13 @@
 	        	{% if current_page.has_next %}
 	            	<link rel="next" href="http://{{ request.get_host }}{% url 'web.views.main.coupons_for_company' current_page=current_page.next_page_number company_name=merchant.name_slug %}" />
 	        	{% endif %}
-			{% endblock %}
+	        	{% if coupon %}
+	        		<meta property="og:image" content="{{ coupon.og_image }}"/>
+			        <meta property="og:title" content="{{ coupon.og_title }}"/>
+			        <meta property="og:description" content="{{ coupon.og_description }}"/>
+			        <meta property="og:url" content="{{ coupon.og_url }}"/>
+	        	{% endif %}
+	        {% endblock %}
 
 			{% block content %}
 			<div class="row middle-container">

@@ -61,7 +61,8 @@ def index(request, current_page=1):
                     'end': c.end.strftime('%m/%d/%y') if c.end else '',
                     'coupon_type': c.coupon_type,
                     'full_success_path': c.full_success_path(),
-                    'image': c.merchant.image}
+                    'image': c.merchant.image,
+                    'twitter_share_url': c.twitter_share_url}
             data.append(item)
         return HttpResponse(json.dumps({'items': data,
                                         'total_pages': pages.num_pages}), content_type="application/json")
@@ -105,6 +106,7 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
     
     category_ids = request.GET.getlist('category_id', [])
     coupon_types = request.GET.getlist('coupon_type', [])
+    coupon_id = request.GET.get('c', None)
     sorting = request.GET.get('sorting', None)
 
     merchant = get_object_or_404(Merchant, name_slug=slugify(company_name))
@@ -112,6 +114,10 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
         kwargs={'company_name': merchant.name_slug}
         merchant_url = reverse('web.views.main.coupons_for_company', kwargs=kwargs)
         return HttpResponsePermanentRedirect(merchant_url)
+    
+    coupon = None
+    if coupon_id:
+        coupon = Coupon.objects.get(id=coupon_id)
     
     all_categories = merchant.get_coupon_categories()
     filters = {'merchant_id': merchant.id}
@@ -162,7 +168,8 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
                     'end': c.end.strftime('%m/%d/%y') if c.end else '',
                     'full_success_path': c.full_success_path(),
                     'coupon_type': c.coupon_type,
-                    'image': c.merchant.image}
+                    'image': c.merchant.image,
+                    'twitter_share_url': c.twitter_share_url}
             data.append(item)
         return HttpResponse(json.dumps({'items': data,
                                         'total_pages': pages.num_pages,
@@ -176,7 +183,7 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
                "num_coupons": pages.count,
                "separators": separators,
                "coupon_categories": all_categories,
-               "similar_stores": Merchant.objects.all()[:6]}
+               "coupon": coupon}
     
     set_meta_tags(merchant, context)
     if current_page > 1:
@@ -277,7 +284,8 @@ def category(request, category_code, current_page=1, category_ids=-1):
                     'end': c.end.strftime('%m/%d/%y') if c.end else '',
                     'coupon_type': c.coupon_type,
                     'full_success_path': c.full_success_path(),
-                    'image': c.merchant.image}
+                    'image': c.merchant.image,
+                    'twitter_share_url': c.twitter_share_url}
             data.append(item)
         return HttpResponse(json.dumps({'items': data,
                                         'total_pages': pages.num_pages,
