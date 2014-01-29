@@ -1829,3 +1829,9 @@ hr {
 .more-top-categories {
 	margin-top: -25px;
 }
+.coupon-description {
+	max-width: 220px;
+	max-height: 84px;
+	line-height: 21px;
+	text-overflow: ellipsis;
+}

@@ -96,7 +96,9 @@
 									</div>
 									<hr>
 									<h1 class="short-description">{{ coupon.short_desc }}</h1>
-									{{ coupon.text }}<br>
+									<div class="coupon-description">
+										{{ coupon.text }}
+									</div>
 									<span class="ends">Ends {{ coupon.end|date:"m/d/y" }}</span>
 										<a href="{{ merchant_local_path }}" target="_blank" class="merchant-link">
 											<img src="{{ coupon.merchant_image }}">

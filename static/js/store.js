@@ -316,6 +316,16 @@ $(function() {
 	$('.mobile-subscription-ok').live('click', function() {
 		$(this).remove();
 	});
+	
+	$(".coupon-description").dotdotdot({
+		ellipsis: '... ',
+ 		wrap: 'letter',
+ 		fallbackToLetter: true,
+ 		after: null,
+ 		watch: false,
+		height: null,
+		tolerance: 0,
+	});
 });
 
 function select_categories(criteria) {
@@ -369,7 +379,9 @@ function render_coupons(data, reset_items) {
 							</div> \
 							<hr> \
 							<h1 class="short-description">{{ short_desc }}</h1> \
-									{{ description }}<br> \
+									<div class="coupon-description"> \
+										{{ description }} \
+									</div> \
 										<span class="ends">Ends {{ end }}</span> \
 										<a href="{{ merchant_link }}" target="_blank" class="merchant-link"> \
 											<img src="{{ image }}"> \
@@ -407,7 +419,7 @@ function render_coupons(data, reset_items) {
 		else if (this.coupon_type == 'groceries') {
 			return '<img src="/static/img/groceries_icon.png">Groceries';
 		}
-		else if (this.coupon_type == 'coupon') {
+		else if (this.coupon_type == 'coupon_code') {
 			return '<img src="/static/img/coupon_code_icon.png">Coupon';
 		}
 		else if (this.coupon_type == 'printable') {
@@ -426,6 +438,15 @@ function render_coupons(data, reset_items) {
 	else {
 		$('.coupons').append(html);
 	}
+	$(".coupon-description").dotdotdot({
+		ellipsis: '... ',
+ 		wrap: 'letter',
+ 		fallbackToLetter: true,
+ 		after: null,
+ 		watch: false,
+		height: null,
+		tolerance: 0,
+	});
 	init_sticky_header();
 }
 
