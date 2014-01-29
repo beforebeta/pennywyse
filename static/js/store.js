@@ -1,5 +1,6 @@
 var page = 2;
 var mpage = 2;
+var mtotal = 0;
 var sorting = '';
 var category_ids = new Array();
 var coupon_types = new Array();
@@ -230,6 +231,7 @@ $(function() {
 		var citems = $('.search-carousel').find('li').length;
 		var start = citems - 5;
 		var limit = citems - 1;
+		$('.next').css('visibility', 'hidden');
 		if ($('.search-carousel').find('li').length > 5) {
 			$('.search-carousel').jcarousel({
 			  	vertical: true
@@ -243,10 +245,29 @@ $(function() {
 			$('.search-carousel').on('jcarousel:visiblein', 'li:eq('+limit+')', function(event, carousel) {
 			    fetch_merchants();
 			});
+			$('.search-carousel').on('jcarousel:animateend', function(event, carousel) {
+			    var first = $(this).jcarousel('first');
+			    var last = $(this).jcarousel('last');
+			    var lastIndex = $(this).jcarousel('items').index(last);
+			    var firstIndex = $(this).jcarousel('items').index(first);
+			    var total = $(this).jcarousel('items').size();
+			
+			    if (lastIndex == (total - 1)) {
+			    	$('.prev').css('visibility', 'hidden');
+			    }
+			    else {
+			    	$('.prev').css('visibility', 'visible');
+			    }
+			    if (firstIndex == 0) {
+			    	$('.next').css('visibility', 'hidden');
+			    }
+			    else {
+			    	$('.next').css('visibility', 'visible');
+			    }
+			});
 		}
 		else {
-			$('.prev').hide();
-			$('.next').hide();
+			$('.prev').css('visibility', 'hidden');
 		}
 	}
 	
@@ -585,6 +606,7 @@ function fetch_merchants() {
 	$.get(url, function(data) {
 		render_merchants(data);
 		mpage += 1;
+		mtotal = data.total;
 	}, 'json');
 }
 
