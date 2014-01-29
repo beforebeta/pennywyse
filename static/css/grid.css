@@ -698,7 +698,7 @@ hr {
 	background-color: #fff;
 	padding-top: 10px;
 	margin-top: 12px;
-	z-index: 2;
+	z-index: 52;
 	position: absolute;
 	width: 100% !important;
 	margin: 0 auto !important;
@@ -1077,8 +1077,8 @@ hr {
 }
 .top-coupon {
 	width: 250px !important;
-	padding-left: 22px;
-	padding-right: 22px;
+	padding-left: 20px;
+	padding-right: 20px;
 }
 .top-coupon .coupon-body {
 	padding: 0 !important;
@@ -1088,8 +1088,8 @@ hr {
 }
 .featured-coupons {
 	width: 255px !important;
-	padding-left: 22px;
-	padding-right: 22px;
+	padding-left: 20px;
+	padding-right: 20px;
 }
 .top-featured-coupon {
 	border-bottom: 1px solid #d9d9d7 !important;
@@ -1121,7 +1121,7 @@ hr {
 .popular-merchants {
 	border-right: none !important;
 	width: 280px !important;
-	padding-left: 10px;
+	padding-left: 20px;
 }
 .popular-merchants ul {
 	padding: 0px !important;
