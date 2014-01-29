@@ -274,7 +274,7 @@ $(function() {
 		close_popups();
 	});
 	
-	$('#subscribe-form').submit(function() {
+	$('.subscribe-form').submit(function() {
 		$(this).ajaxSubmit({'success': subscribe_form_callback, 'dataType': 'json'});
 		return false;
 	});
@@ -583,14 +583,14 @@ function init_sticky_header() {
 }
 
 function subscribe_form_callback(response, statusText, xhr, $form) {
-	$('#subscribe-form').find('span, br').remove();
+	$form.find('span, br').remove();
 	if (!response.success && typeof(response.errors) != 'undefined') {
 		for (key in response.errors) {
 			html = '<span>'+response.errors[key]+'</span>';
 			if (!is_mobile) {
 				html += '<br><br>';
 			}
-			$('#subscribe-form').find('input[name='+key+']').before(html);
+			$form.find('input[name='+key+']').before(html);
 		}
 	}
 	if (response.success) {
