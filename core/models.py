@@ -491,6 +491,7 @@ class Coupon(models.Model):
     is_duplicate    = models.BooleanField('Duplicate', blank=True, default=False)
     related_deal    = models.ForeignKey('Coupon', blank=True, null=True)
     popularity      = models.IntegerField(blank=True, null=True, default=0)
+    coupon_type     = models.CharField(max_length=255, blank=True, null=True)
 
     embedly_title = models.TextField(blank=True, null=True)
     embedly_description = models.TextField(blank=True, null=True)
@@ -584,17 +585,21 @@ class Coupon(models.Model):
             print_stack_trace()
         return "coupon"
 
-    @property
-    def coupon_type(self):
-        if self.has_deal_type('gift'):
-            return 'gift'
-        if self.has_deal_type('sale'):
-            return 'on_sale'
-        if self.has_deal_type('freeshipping') or self.has_deal_type('totallyfreeshipping'):
-            return 'free_shipping'
-        if self.has_deal_type('printable'):
+    def get_coupon_type(self):
+        category_ids = [c['id'] for c in Category.objects.filter(name__icontains='grocery').values('id')]
+        if self.code:
+            return 'coupon_code'
+        elif self.has_deal_type('freeshipping') or self.has_deal_type('totallyfreeshipping'):
+            return 'free_shipping'        
+        elif self.has_deal_type('printable'):
             return 'printable'
-        return 'coupon'
+        elif self.has_deal_type('gift'):
+            return 'freebies'
+        elif self.categories.filter(id__in=category_ids).count() > 0:
+            return 'groceries'
+        elif self.has_deal_type('sale'):
+            return 'onsale'
+        return 'onsale'
 
     def create_image(self):
         if self.merchant:
@@ -660,7 +665,13 @@ class Coupon(models.Model):
         return False
     
     def full_success_path(self):
-        return 'http://%s/%s' % (Site.objects.get_current().domain, self.local_path())
+        return 'http://%s%s' % (Site.objects.get_current().domain, self.local_path())
+    
+    @property
+    def twitter_share_url(self):
+        params = {'text': '%s at %s from @pushpennycoupon' % (self.short_desc[:75], self.merchant.name),
+                  'url': self.full_success_path()}
+        return 'https://twitter.com/intent/tweet?' + urllib.urlencode(params)
     
 @receiver(post_save, sender=Category)
 @receiver(post_save, sender=Coupon)
