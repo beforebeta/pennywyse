@@ -522,6 +522,7 @@ function init_waypoint() {
 }
 
 function fetch_items(reset_items) {
+	NProgress.configure({ minimum: 0.1 });
 	NProgress.start();
 	var url = window.location.pathname;
 	var parameters = new Array();
@@ -576,6 +577,7 @@ function fetch_items(reset_items) {
 		i++;
 	}
 	$.get(url, function(data) {
+		NProgress.inc();
 		render_coupons(data, reset_items);
 		if (page < data.total_pages) {
 			page += 1;
@@ -584,8 +586,8 @@ function fetch_items(reset_items) {
 		else {
 			$('.more-coupons').waypoint('disable');
 		}
+		NProgress.done();
 	}, 'json');
-	NProgress.done();
 }
 
 function fetch_merchants() {
