@@ -314,7 +314,8 @@ $(function() {
 	});
 
 	$('.mobile-subscription-ok').live('click', function() {
-		$(this).remove();
+		setTimeout(1000);
+		$(this).fadeOut();
 	});
 	
 	$(".coupon-description").dotdotdot({
@@ -617,7 +618,9 @@ function subscribe_form_callback(response, statusText, xhr, $form) {
 	if (response.success) {
 		if (is_mobile) {
 			$('.mobile-subscription').hide();
+			$('.mobile-subscription-ok').remove();
 			$('body').append('<div class="mobile-subscription-ok">Got it<br><span class="glyphicon glyphicon-ok"></span></div>');
+			$('.mobile-subscription-ok').fadeIn();
 		}
 		else {
 			$('.subscription-popup-right').html('<span>You have been subscribed. <img src="/static/img/check_icon.png"></span>');
