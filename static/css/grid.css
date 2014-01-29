@@ -494,14 +494,14 @@ hr {
 }
 .merchant-link {
 	position: absolute;
-	bottom: 5px;
+	bottom: 25px;
 	left: 0;
 	width: 100%;
 	text-align: center;
 }
 .merchant-link img {
-	max-width: 200px;
-	max-height: 100px;
+	max-width: 120px;
+	max-height: 60px;
 }
 .coupon-bottom {
 	height: 30px;

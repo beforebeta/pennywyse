@@ -25,6 +25,12 @@
 			</div>
 			{% if coupon.end %}
 				<span class="ends">Ends {{ coupon.end|date:"m/d/y" }}</span>
+			{% endif %}
+			{% if company_coupons %}
+				<span class="merchant-link">
+					<img src="{{ coupon.image }}">
+				</span>
+			{% else %}
 				<a href="{% url 'web.views.main.coupons_for_company' company_name=coupon.merchant.name_slug company_id=coupon.merchant.id %}" target="_blank" class="merchant-link">
 					<img src="{{ coupon.merchant.image }}">
 				</a>

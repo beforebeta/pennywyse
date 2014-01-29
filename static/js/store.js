@@ -383,10 +383,19 @@ function render_coupons(data, reset_items) {
 									<div class="coupon-description"> \
 										{{ description }} \
 									</div> \
-										<span class="ends">Ends {{ end }}</span> \
-										<a href="{{ merchant_link }}" target="_blank" class="merchant-link"> \
+										{{# end }} \
+											<span class="ends">Ends {{ end }}</span> \
+										{{/end}} \
+										{{# is_company_coupon }} \
+											<span class="merchant-link"> \
 											<img src="{{ image }}"> \
-										</a> \
+											</span> \
+										{{/is_company_coupon }} \
+										{{^ is_company_coupon }} \
+											<a href="{{ merchant_link }}" target="_blank" class="merchant-link"> \
+												<img src="{{ image }}"> \
+											</a> \
+										{{/is_company_coupon }} \
 									</div> \
 									<div class="use-coupon" id="{{ id }}"> \
 										Use Coupon \
@@ -404,6 +413,7 @@ function render_coupons(data, reset_items) {
 								</div> \
 				{{/items}}<br clear="both">';
    	data.is_mobile = is_mobile;
+   	data.is_company_coupon = $('.coupons').hasClass('company-coupons');
    	data.facebook_share_url = function() {
    		return 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(this.full_success_path);
    	};
@@ -431,6 +441,7 @@ function render_coupons(data, reset_items) {
 		}
 	};
 	html = Mustache.to_html(template, data);
+	$('.more-coupons').find('br').remove();
 	$('.prescroll-header').waypoint('disable');
 	$('.merchant-right span').html(data.total_items);
 	if (reset_items) {

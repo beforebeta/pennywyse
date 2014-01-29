@@ -168,7 +168,7 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
                     'end': c.end.strftime('%m/%d/%y') if c.end else '',
                     'full_success_path': c.full_success_path(),
                     'coupon_type': c.coupon_type,
-                    'image': c.merchant.image,
+                    'image': c.image,
                     'twitter_share_url': c.twitter_share_url}
             data.append(item)
         return HttpResponse(json.dumps({'items': data,
