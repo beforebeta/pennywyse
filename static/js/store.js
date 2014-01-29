@@ -413,7 +413,7 @@ function render_coupons(data, reset_items) {
 		else if (this.coupon_type == 'printable') {
 			return '<img src="/static/img/printable_icon.png">Printables';
 		}
-		else if (this.coupon_type == 'gift') {
+		else if (this.coupon_type == 'freebies') {
 			return '<img src="/static/img/freebies_icon.png">Freebies';
 		}
 	};
