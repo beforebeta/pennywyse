@@ -213,7 +213,9 @@ def open_coupon(request, coupon_id):
             'description': coupon.get_description(),
             'image': coupon.merchant.image,
             'local_path': coupon.local_path(),
-            'url': get_visitor_tag(coupon.skimlinks, request.visitor.id)}
+            'url': get_visitor_tag(coupon.skimlinks, request.visitor.id),
+            'twitter_share_url': coupon.twitter_share_url,
+            'full_success_path': coupon.full_success_path()}
     return HttpResponse(json.dumps(item), content_type="application/json")
 
 

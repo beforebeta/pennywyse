@@ -1375,6 +1375,27 @@ hr {
 .coupon-popup-description h2 {
 	text-align: left;
 }
+.mobile-share-bottom {
+	text-transform: uppercase;
+	padding: 15px;
+	color: #8f898a;
+	height: 64px;
+	width: 270px;
+	margin: 0 auto;
+}
+.mobile-share-bottom span {
+	line-height: 16px;
+	width: 100px;
+	float: left;
+}
+.mobile-share-right {
+	float: left;
+	margin-left: 10px;
+	margin-right: -10px;
+}
+.mobile-share-right a{
+	margin-right: 10px;
+}
 .coupon-popup-bottom {
 	height: 90px;
 	background-color: #d9d9d7;
@@ -1746,6 +1767,8 @@ hr {
 }
 .mobile-coupon-popup .coupon-popup-code {
 	padding: 0px !important;
+	height: auto !important;
+	min-height: 130px;
 }
 .mobile-coupon-popup .coupon-popup-header {
 	line-height: 50px !important;
@@ -1777,7 +1800,7 @@ hr {
 	height: auto !important;
 }
 .mobile-coupon-popup .coupon-popup-description {
-	width: 140px !important;
+	width: 200px !important;
 }
 .mobile-coupon-popup input[type=text] {
 	width: 180px !important;
