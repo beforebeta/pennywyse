@@ -70,6 +70,7 @@
 											<li class="expanded-menu-item mobile-category"><a href="{%url 'web.views.main.category' category_code=subcategory.code %}">{{ subcategory.name }}</a></li>
 										{% endfor %}
 								{% endfor %}
+								<li class="expanded-menu-item mobile-category more-items"><a href="{% url 'web.views.main.categories' %}">See all categories &#187;</a></li>
 							<li id="mobile-groceries">
 								<a href="javascript:void(null);" class="menu-link">Groceries</a>
 								<div class="mobile-expand">
@@ -188,7 +189,7 @@
 									</div>
 									<br clear="both">
 								</div>
-																	<div class="more-categories more-top-categories clearfix">
+								<div class="more-categories more-top-categories clearfix">
 									<a href="{% url 'web.views.main.stores' %}">See all stores &#187;</a>
 								</div>
 							</div>

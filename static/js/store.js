@@ -21,7 +21,7 @@ $(function() {
 		init_sticky_header();
 	}
 	else {
-		if ($('.index-container').length > 0) {
+		if ($('.index-container').length > 0 && $(window).width() > 768) {
 			$('.header').removeClass('hidden');
 			$('.header').addClass('top-search sticky');
 			$('.menu-row').addClass('top-menu');

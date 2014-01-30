@@ -137,6 +137,9 @@
 										<a href="{{ merchant.local_path }}"><img src="{{ merchant.image }}"></a>
 									</li>
 								{% endfor %}
+								<li class="more-items">
+									<a href="{% url 'web.views.main.stores' %}">See all stores &#187;</a>
+								</li>
 							</ul>
 						{% endfor %}
 						
