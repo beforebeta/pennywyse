@@ -1181,7 +1181,7 @@ hr {
 	font-weight: normal !important;
 }
 .subscription-popup h4 {
-	font-weight: lighter !important;
+	font-weight: 300 !important;
 }
 .subscription-popup-left {
 	width: 265px;
@@ -1925,4 +1925,8 @@ hr {
 .more-items {
 	text-align: right;
 	font-weight: bold !important;
+}
+.category-dropdown-container {
+	width: 775px;
+	margin: 0 auto;
 }
