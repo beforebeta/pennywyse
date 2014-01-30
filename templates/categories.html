@@ -8,7 +8,7 @@
 							>
 							<a href="{% url 'web.views.main.categories' %}">Categories</a>
 							>
-							<h1>All categories</h1>
+							<h1>{% if is_grocery %}Grocery Categories{% else %}All categories{% endif %}</h1>
 						</div>
 					</div>
 				<br clear="both">
