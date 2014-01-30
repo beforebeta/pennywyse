@@ -42,7 +42,7 @@ h4 {
 }
 @media (min-width: 1180px) {
 	.row {
-		width: 1180px !important;
+		width: 1156px !important;
 	}
 }
 .mobile-row {
@@ -63,7 +63,7 @@ h4 {
 }
 @media (min-width: 1180px) {
 	.main-row {
-		width: 1180px !important;
+		width: 1156px !important;
 	}
 }
 .header {
