@@ -1797,6 +1797,9 @@ hr {
 	text-decoration: none;	
 	margin-right: 15px;
 }
+.coupon-popup-code span{
+	display: block;
+}
 .mobile-coupon-popup .coupon-popup-code span{
 	height: 50px !important;
 	line-height: 50px !important;
