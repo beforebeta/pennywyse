@@ -1759,6 +1759,7 @@ hr {
 	top: 60px !important;
 	left: 0px !important;
 	width: 320px !important;
+	position: absolute !important;
 }
 .mobile-coupon-popup .coupon-popup-body {
 	margin-left: 0px !important;
@@ -1800,7 +1801,7 @@ hr {
 	height: auto !important;
 }
 .mobile-coupon-popup .coupon-popup-description {
-	width: 200px !important;
+	width: 140px !important;
 }
 .mobile-coupon-popup input[type=text] {
 	width: 180px !important;
