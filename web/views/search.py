@@ -1,7 +1,9 @@
 import json
 from django.core.paginator import Paginator
-from django.http import HttpResponse
+from django.core.urlresolvers import reverse
+from django.http import HttpResponse, HttpResponseRedirect
 from haystack.query import SearchQuerySet
+from core.models import Merchant
 from web.views.main import render_response
 from web.utils import FuzzySearchQuerySet
 
@@ -12,6 +14,10 @@ def search(request, current_page=1):
     is_trending = request.GET.get('is_trending', None)
     
     if query:
+        merchant = Merchant.objects.filter(name=query).only('name_slug')
+        if merchant.count() == 1:
+            merchant_url = reverse('web.views.main.coupons_for_company', kwargs={'company_name': merchant[0].name_slug})
+            return HttpResponseRedirect(merchant_url)
         parameters = {'django_ct':'core.coupon', 'content':query}
         if is_new:
             parameters['is_new'] = True
@@ -21,7 +27,6 @@ def search(request, current_page=1):
             parameters['coupon_type'] = coupon_type
         merchants_list = FuzzySearchQuerySet().combined_filter(django_ct='core.merchant',
                                             total_coupon_count__gt=0, content=query)
-        print parameters
         coupons_list = SearchQuerySet().filter(**parameters)
         pages = Paginator(coupons_list, 12)
         merchant_pages = Paginator(merchants_list, 10)
