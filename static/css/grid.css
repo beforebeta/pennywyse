@@ -40,6 +40,11 @@ h4 {
 	width: 960px;
 	margin: 0 auto;
 }
+@media (min-width: 1180px) {
+	.row {
+		width: 1180px !important;
+	}
+}
 .mobile-row {
 	margin-bottom: 20px;
 	width: auto;
@@ -55,6 +60,11 @@ h4 {
 }
 .main-row span {
 	font-size: 11px;
+}
+@media (min-width: 1180px) {
+	.main-row {
+		width: 1180px !important;
+	}
 }
 .header {
 	height: 60px !important;
@@ -327,11 +337,6 @@ hr {
 @media (max-width: 767px) {
 	.top-labels-container {
 		overflow: hidden;
-	}
-}
-@media (min-width: 767px) {
-	.top-labels-index {
-		width: 960px !important;
 	}
 }
 .sorting-item {
@@ -637,6 +642,10 @@ hr {
 }
 .search-container {
 	float: left !important;
+	left: 50%;
+	width: 485px;
+	position: absolute;
+	margin-left: -242.5px;
 }
 .search-container img {
 	margin-left: 20px;
