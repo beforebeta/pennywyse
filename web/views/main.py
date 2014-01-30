@@ -208,7 +208,7 @@ def open_coupon(request, coupon_id):
         raise Http404
 
     item = {'merchant_name': coupon.merchant.name,
-            'merchant_link': coupon.merchant.local_path(),
+            'merchant_link': coupon.merchant.directlink,
             'code': coupon.code,
             'short_desc': coupon.short_desc,
             'description': coupon.get_description(),
