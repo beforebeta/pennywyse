@@ -734,6 +734,7 @@ function render_coupon_popup(data, coupon_id) {
 								<a href="javascript:close_coupon_popup();"><img src="/static/img/close_coupon.png"></a> \
 							{{/is_mobile}} \
 						</div> \
+						{{# is_mobile}}<div class="mobile-coupon-body">{{/is_mobile}} \
 						{{# code }} \
 						<div class="coupon-popup-code"> \
 							<input type="text" value="{{ code }}" placeholder="coupon" readonly> \
@@ -784,14 +785,17 @@ function render_coupon_popup(data, coupon_id) {
 							</div> \
 							{{# is_mobile }} \
 								<div class="mobile-share-bottom"> \
-									<span>Share this coupon:</span> \
-									<div class="mobile-share-right"> \
-										<a href="{{ facebook_share_url }}"><img src="/static/img/mobile_facebook_icon.png"></a> \
-										<a href="{{ twitter_share_url }}""><img src="/static/img/mobile_twitter_icon.png"></a> \
-										<a href="mailto:?body={{ email_share_url }}"><img src="/static/img/mobile_email_icon.png"></a> \
+									<div class="mobile-share-main"> \
+										<span>Share this coupon:</span> \
+										<div class="mobile-share-right"> \
+											<a href="{{ facebook_share_url }}"><img src="/static/img/mobile_facebook_icon.png"></a> \
+											<a href="{{ twitter_share_url }}""><img src="/static/img/mobile_twitter_icon.png"></a> \
+											<a href="mailto:?body={{ email_share_url }}"><img src="/static/img/mobile_email_icon.png"></a> \
+										</div> \
 									</div> \
 								</div> \
 							{{/is_mobile}} \
+							{{# is_mobile}}</div>{{/is_mobile}} \
 					</div>';
 	html = Mustache.to_html(template, data);
 	$('.subscription-popup').after(html);

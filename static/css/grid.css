@@ -1391,8 +1391,8 @@ hr {
 	padding: 15px;
 	color: #8f898a;
 	height: 64px;
-	width: 270px;
-	margin: 0 auto;
+
+	background-color: #ebebe8 !important;
 }
 .mobile-share-bottom span {
 	line-height: 16px;
@@ -1406,6 +1406,10 @@ hr {
 }
 .mobile-share-right a{
 	margin-right: 10px;
+}
+.mobile-share-main {
+	width: 270px;
+	margin: 0 auto;
 }
 .coupon-popup-bottom {
 	height: 90px;
@@ -1771,6 +1775,12 @@ hr {
 	left: 0px !important;
 	width: 320px !important;
 	position: absolute !important;
+	background-color: #ebebe8 !important;
+}
+.mobile-coupon-body {
+	background-color: #fff !important;
+	margin: 10px;
+	border-radius: 2px;
 }
 .mobile-coupon-popup .coupon-popup-body {
 	margin-left: 0px !important;
@@ -1781,6 +1791,7 @@ hr {
 	padding: 0px !important;
 	height: auto !important;
 	min-height: 130px;
+	border: none !important;
 }
 .mobile-coupon-popup .coupon-popup-header {
 	line-height: 50px !important;
@@ -1836,6 +1847,7 @@ hr {
 }
 .mobile-coupon-popup .coupon-popup-bottom {
 	height: auto !important;
+	border-radius: 0 0 2px 2px;
 }
 .mobile-coupon-popup .coupon-popup-subscribe {
 	width: auto !important;
