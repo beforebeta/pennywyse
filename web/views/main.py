@@ -62,7 +62,8 @@ def index(request, current_page=1):
                     'coupon_type': c.coupon_type,
                     'full_success_path': c.full_success_path(),
                     'image': c.merchant.image,
-                    'twitter_share_url': c.twitter_share_url}
+                    'twitter_share_url': c.twitter_share_url,
+                    'merchant_link': c.merchant.local_path()}
             data.append(item)
         return HttpResponse(json.dumps({'items': data,
                                         'total_pages': pages.num_pages}), content_type="application/json")
@@ -291,7 +292,8 @@ def category(request, category_code, current_page=1, category_ids=-1):
                     'coupon_type': c.coupon_type,
                     'full_success_path': c.full_success_path(),
                     'image': c.merchant.image,
-                    'twitter_share_url': c.twitter_share_url}
+                    'twitter_share_url': c.twitter_share_url,
+                    'merchant_link': c.merchant.local_path()}
             data.append(item)
         return HttpResponse(json.dumps({'items': data,
                                         'total_pages': pages.num_pages,

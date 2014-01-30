@@ -426,7 +426,7 @@ function render_coupons(data, reset_items) {
 										{{/end}} \
 										{{# is_company_coupon }} \
 											<span class="merchant-link"> \
-											<img src="{{ image }}"> \
+												<img src="{{ image }}"> \
 											</span> \
 										{{/is_company_coupon }} \
 										{{^ is_company_coupon }} \
