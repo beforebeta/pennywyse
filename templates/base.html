@@ -121,12 +121,12 @@
 					<li class="menu-item category-item">
 						<a href="#" class="menu-link">Top Coupons</a>
 						<ul class="row dropdown-row stores-row"><li>
-							<div class="main-row">
+							<div class="main-dropdown-row">
 								<div class="top-coupons-row">	
 									<div class="top-coupon-types top-coupons">
 										<div>
 											{% for top_coupon in top_coupons %}
-												<a href="javascript:void(null);" id="tc-{{ top_coupon.id }}">{{ top_coupon.name }}</a><br>
+												<a href="javascript:void(null);" id="tc-{{ top_coupon.id }}" {% if forloop.first %}class="top-coupon-active"{% endif %}>{{ top_coupon.name }}</a><br>
 											{% endfor %}
 										</div>
 									</div>

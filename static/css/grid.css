@@ -54,11 +54,11 @@ h4 {
 	margin-top: 20px;
 	margin-bottom: 0;
 }
-.main-row {
+.main-row, .main-dropdown-row {
 	width: 960px;
 	margin: 0 auto;
 }
-.main-row span {
+.main-row span, .main-dropdown-row span {
 	font-size: 11px;
 }
 @media (min-width: 1180px) {
@@ -1085,9 +1085,9 @@ hr {
 	background-repeat: no-repeat;
 	color: #423d3e;
 }
-.top-coupon-types a:hover {
-	color: #e74c3c;
-	background-image: url('../img/arrow_hover.png');
+.top-coupon-types a:hover, .top-coupon-active {
+	color: #e74c3c !important;
+	background-image: url('../img/arrow_hover.png') !important;
 }
 .top-coupon {
 	width: 250px !important;

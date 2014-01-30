@@ -360,6 +360,11 @@ $(function() {
 			$(this).addClass('truncated');
 		},
 	});
+	
+	$('.top-coupon-types a').mouseover(function() {
+		$('.top-coupon-types a').removeClass('top-coupon-active');
+		$(this).addClass('top-coupon-active');
+	});
 });
 
 function select_categories(criteria) {
