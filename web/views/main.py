@@ -218,18 +218,22 @@ def open_coupon(request, coupon_id):
 
 
 @ensure_csrf_cookie
-def categories(request, is_grocery=False):
-    if is_grocery:
-        root_category = get_object_or_404(Category, code='grocery')
-        categories = [root_category] + list(Category.objects.filter(parent=root_category))
-        context = {'categories': categories}
-    else:
-        context={
-            "categories": Category.objects.filter(is_featured=False, parent__isnull=True).order_by('name'),
-            "featured_categories": Category.objects.filter(is_featured=True).order_by('name'),
-        }
-    context['is_grocery'] = is_grocery
+def categories(request):
+    context={
+             "categories": Category.objects.filter(is_featured=False, parent__isnull=True).order_by('name'),
+             "featured_categories": Category.objects.filter(is_featured=True).order_by('name'),
+    }
     return render_response("categories.html", request, context)
+
+@ensure_csrf_cookie
+def groceries(request):
+    root_category = get_object_or_404(Category, code='grocery')
+    categories = [root_category] + list(Category.objects.filter(parent=root_category))
+    context = {'categories': categories,
+               'is_grocery': True,
+               }
+    return render_response("categories.html", request, context)
+
 
 
 @ensure_csrf_cookie

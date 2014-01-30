@@ -1869,3 +1869,6 @@ hr {
 #nprogress .spinner-icon {
 	display: none !important;
 }
+.items-list-container {
+	width: 960px !important;
+}
