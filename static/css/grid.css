@@ -681,7 +681,7 @@ hr {
 	vertical-align: center;
 }
 .mobile-logo {
-	width: 250px !important;
+	width: 173px !important;
 	vertical-align: center;
 	margin: 0 auto;
 }
@@ -1015,10 +1015,12 @@ hr {
 	margin-right: 0px !important;
 }
 .prescroll-header {
-	background-image: url('../img/mugs_january_1280.gif');
+	background-image: url('../img/offwhite-cable_cropped.jpg');
 	background-repeat: no-repeat;
 	background-position: center;
+	background-size: cover;
 	height: 264px !important;
+	max-height: 264px !important;
 	position: relative;
 }
 .top-container {
