@@ -16,21 +16,30 @@ $(function() {
 	$('.pagination').remove();
 	
 	// enabling sticky header only on landing page and only for desktop pages
-	if ($('.index-container').length > 0 && $(window).width() > 768) {
+	if ($('.landing-container').length > 0 && $(window).width() > 768) {
 		is_sticky = true;
 		init_sticky_header();
 	}
 	else {
-		$('.header').removeClass('hidden');
-		$('.header').addClass('top-search');
-		$('.header').addClass('fixed-container');
-		$('.menu-row').addClass('top-menu');
-		$('.menu-row').addClass('bottom-shadow');
-		$('.menu-row').addClass('fixed-container');
-		$('.menu-row').removeClass('sticky');
-		$('.prescroll-header').addClass('hidden');
-		$('.top-header').removeClass('sticky');
-		$('.top-header').addClass('fixed-container');
+		if ($('.index-container').length > 0) {
+			$('.header').removeClass('hidden');
+			$('.header').addClass('top-search sticky');
+			$('.menu-row').addClass('top-menu');
+			$('.menu-row').addClass('bottom-shadow');
+			$('.prescroll-header').addClass('hidden');
+		}
+		else {
+			$('.header').removeClass('hidden');
+			$('.header').addClass('top-search');
+			$('.header').addClass('fixed-container');
+			$('.menu-row').addClass('top-menu');
+			$('.menu-row').addClass('bottom-shadow');
+			$('.menu-row').addClass('fixed-container');
+			$('.menu-row').removeClass('sticky');
+			$('.prescroll-header').addClass('hidden');
+			$('.top-header').removeClass('sticky');
+			$('.top-header').addClass('fixed-container');			
+		}
 	}
 	
 	// applying styles for mobile layout, if necessary width has been detected
