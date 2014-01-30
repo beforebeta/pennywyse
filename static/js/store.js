@@ -743,7 +743,7 @@ function render_coupon_popup(data, coupon_id) {
 						{{^ code }} \
 							<div class="coupon-popup-code"> \
 								<span>No coupon code required.</span> \
-								<input type="button" value="Shop at {{ merchant_name }}"> \
+								<input type="button" value="Shop at {{ merchant_name }}" onclick="redirect_to(\'{{ merchant_link }}\')"> \
 							</div> \
 						{{/ code}} \
 						<div class="coupon-popup-body"> \
@@ -881,4 +881,7 @@ function expandable_select_callback() {
 	$(this).find('li:not(.selected)').show();
 	$(this).off('click');
 	$(this).find('.expanded-choices li').on('click', expandable_callback);
+}
+function redirect_to(url) {
+	window.location = url;	
 }
