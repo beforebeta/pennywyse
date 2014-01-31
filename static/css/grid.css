@@ -1977,7 +1977,7 @@ hr {
 	width: 165px;
 	height: 95px;
 	line-height: 95px;
-	margin: 0px auto !important;
+	margin: 0px auto !important; 
 	margin-bottom: 15px !important;
 	list-style: none;
 	overflow: hidden;
@@ -2000,6 +2000,14 @@ hr {
 	margin-bottom: -30px;
 	padding-right: 0px !important;
 	height: 100px !important;
+}
+@media (max-width: 710px) {
+	.no-results {
+		width: 260px !important;
+		padding: 20px !important;
+		text-align: left !important;
+		height: 120px !important;
+	}
 }
 @media (min-width: 1170px) {
 	.no-results {
