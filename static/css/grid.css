@@ -1527,6 +1527,7 @@ hr {
 }
 .mobile-index-rail {
 	width: 300px !important;
+	margin-left: 10px !important;
 }
 .navbar-toggle {
 	float: left !important;
