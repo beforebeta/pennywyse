@@ -1483,8 +1483,8 @@ hr {
 	margin: 0 !important;
 	padding: 0 5px 5px 5px !important;
 	font-size: 11pt;
-	text-transform: uppercase;
 	color: #000 !important;
+	text-transform: capitalize;
 }
 .index-labels-dropdown:hover {
 	border-radius: 2px;
@@ -1950,7 +1950,7 @@ hr {
 .mobile-coupon-description {
 	margin: 5px;
 }
-.no-search-results {
+.no-search-results, .no-results {
 	background-color: #f7f7f6;
 	margin-top: 10px;
 	height: 120px !important;
@@ -1987,4 +1987,22 @@ hr {
 }
 .tc-link {
 	cursor: default;
+}
+.no-merchants {
+	background-color: #f7f7f6;
+	padding: 20px;
+	text-align: left !important;
+	height: 120px !important;
+}
+.no-results {
+	width: 940px !important;
+	margin-right: -40px !important;
+	margin-bottom: -30px;
+	padding-right: 0px !important;
+	height: 100px !important;
+}
+@media (min-width: 1170px) {
+	.no-results {
+		width: 1170px !important;
+	}
 }

@@ -55,7 +55,8 @@ def search(request, current_page=1):
                                 'full_success_path': c.full_success_path,
                                 'image': c.merchant_image,
                                 'id': c.pk,
-                                'code': c.code}
+                                'code': c.code,
+                                'merchant_link': c.merchant_local_path}
                         data.append(item)
                 except:
                     pass
