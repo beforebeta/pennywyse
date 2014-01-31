@@ -90,7 +90,7 @@
 								<div>
 									<div class="email-subscribe">
 										<form action="/e/subscribe/" method="post" class="subscribe-form">{% csrf_token %}
-										{{ form.email }}
+										{{ subscription_form.email }}
 									</div>
 									<button>let me<br>know</button>
 									</form>
@@ -295,7 +295,7 @@
 						{% endcomment %}
 						<div class="email-subscribe">
 							<form action="/e/subscribe/" method="post" class="subscribe-form">{% csrf_token %}
-							{{ form.email }}
+							{{ subscription_form.email }}
 						</div>
 						<input type="submit" value="start saving">
 						</form>

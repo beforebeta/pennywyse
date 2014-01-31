@@ -9,6 +9,6 @@ def base(request):
                "top_categories": CategorySection.objects.all(),
                "top_coupons": TopCouponSection.objects.all(),
                "top_groceries": Category.objects.filter(name='Grocery Coupons')[0],
-               "form": EmailSubscriptionForm(),
+               "subscription_form": EmailSubscriptionForm(),
                "canonical_url": settings.BASE_URL_NO_APPENDED_SLASH + request.path}
     return context
