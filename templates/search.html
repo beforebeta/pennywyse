@@ -43,11 +43,13 @@
 						</div>
 					</div>
 				<br clear="both">
-				<div class="main-rail index-rail landing-rail">
-					<div class="coupon-container coupon-body search-merchants-container no-results">
-						Hm, it looks like there are <b>no matching results</b>, but here are some other stores and coupons you might like.
+				{% if not coupons and suggested_merchants %}
+					<div class="main-rail index-rail landing-rail">
+						<div class="coupon-container coupon-body search-merchants-container no-results">
+							Hm, it looks like there are <b>no matching results</b>, but here are some other stores and coupons you might like.
+						</div>
 					</div>
-				</div>
+				{% endif %}
 				<div class="left-rail search-rail  visible-lg visible-md">
 					{% if suggested_merchants and coupons %}
 						<div class="coupon-container coupon-body search-merchants-container no-merchants">
