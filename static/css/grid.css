@@ -588,7 +588,7 @@ hr {
 	border-bottom: #ef5b5b 4px solid;
 	margin-bottom: -4px;
 	display: inline-block;
-	z-index: 4;
+	z-index: 54;
 	position: relative;
 }
 .menu-item:hover > ul {
@@ -1984,4 +1984,7 @@ hr {
 	-webkit-box-shadow: 0px 2px 2px 2px rgba(97,94,94,0.15);
 	-moz-box-shadow: 0px 2px 2px 0px rgba(97,94,94,0.15);
 	box-shadow: 0px 2px 2px 0px rgba(97, 94, 94, 0.15);
+}
+.tc-link {
+	cursor: default;
 }

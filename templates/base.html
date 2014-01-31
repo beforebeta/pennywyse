@@ -119,7 +119,7 @@
 			<div class="row">
 				<ul class="menu">
 					<li class="menu-item category-item">
-						<a href="#" class="menu-link">Top Coupons</a>
+						<a href="#" class="menu-link tc-link">Top Coupons</a>
 						<ul class="row dropdown-row stores-row"><li>
 							<div class="main-dropdown-row">
 								<div class="top-coupons-row">	
@@ -271,7 +271,7 @@
 		<div class="header-container header prescroll-header bottom-shadow">
 				<div class="row">
 					<div class="search-container top-container">
-						<h1><a href="{% url 'web.views.main.index' %}"><img src="/static/img/Pushpenny-388_logo.png"></a></h1>
+						<a href="{% url 'web.views.main.index' %}"><img src="/static/img/Pushpenny-388_logo.png"></a>
 						<form action="/search/" id="search_form">
 						<input name="q" type="text" placeholder="Search over 50,000+ coupons from 6,000+ stores" class="search" value="{{ query }}">
 						</form>
