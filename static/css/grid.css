@@ -584,7 +584,7 @@ hr {
 .menu-item a.menu-link {
 	display: inline-block;
 }
-.menu-item:hover a.menu-link {
+.menu-item:hover a.menu-link, .active-dropdown-link {
 	border-bottom: #ef5b5b 4px solid;
 	margin-bottom: -4px;
 	display: inline-block;

@@ -372,6 +372,23 @@ $(function() {
 		base_url = '/';
 		fetch_items(reset_items=true);
 	}
+	
+	$('.menu-item').mouseover(function() {
+		$('.menu-item').find('.menu-link').removeClass('active-dropdown-link');
+		$('.active-dropdown-item').hide();
+		$('.menu-item').find('ul').removeClass('active-dropdown-item');
+		$(this).find('ul').addClass('active-dropdown-item');
+		$(this).find('.menu-link').addClass('active-dropdown-link');
+	});
+	
+	$('.main-dropdown-section').mouseover(function() {
+		$('.active-dropdown-item').show();
+	});
+	$('.active-dropdown-item').live('mouseout', function(){
+		$(this).hide();
+		$('.menu-item').find('.menu-link').removeClass('active-dropdown-link');
+	});
+
 });
 
 function select_categories(criteria) {
