@@ -48,6 +48,7 @@
 				
 				<div class="left-rail search-rail  visible-lg visible-md">
 					<div class="coupon-container coupon-body search-merchants-container">
+						{% if merchants %}
 						<a href="javascript:void(null);" class="next"><img src="/static/img/up-arrow.png" ></a>
 						<div class="search-carousel">
 							<ul class="search-merchants-list">
@@ -59,13 +60,31 @@
 							</ul>
 						</div>
 						<a href="javascript:void(null);" class="prev"><img src="/static/img/down-arrow.png" ></a>
+						{% endif %}
+						{% if suggested_merchants %}
+							<div class="suggested-merchants">
+								<span>You might like</span>
+								<ul>
+									{% for merchant in suggested_merchants %}
+										<li>
+											<a href="{{ merchant.local_path }}"><img src="{{ merchant.image }}"></a>
+										</li>
+									{% endfor %}
+								</ul>
+							</div>
+						{% endif %}
 					</div>
 					
 				</div>
 				<div class="main-rail search-main-rail">
+					{% if not coupons %}
+					<div class="coupon-container coupon-body no-search-results">
+						Hm, it looks like there <b>no matching results</b>, but we have recommended a few other things you might like.
+					</div>
+					{% endif %}
 					<div class="coupons more-coupons">
 						{% for coupon in coupons %}
-							<div class="coupon-container {% if forloop.counter|divisibleby:3 %}coupon-last{% endif %}">
+							<div class="coupon-container">
 								<div class="coupon-body">
 									<div class="coupon-header">
 										{% if coupon.coupon_type == 'free_shipping' %}

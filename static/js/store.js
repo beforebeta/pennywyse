@@ -11,6 +11,7 @@ var is_sticky = false;
 var deal_type_filters_active = false;
 var current_url = window.location.href;
 var is_mobile = false;
+var base_url = window.location.pathname;
 $(function() {
 	// removing pagination block, to be displayed with disabled JS only 
 	$('.pagination').remove();
@@ -365,6 +366,12 @@ $(function() {
 		$('.top-coupon-types a').removeClass('top-coupon-active');
 		$(this).addClass('top-coupon-active');
 	});
+	
+	if ($('.no-search-results').length > 0) {
+		is_trending = true;
+		base_url = '/';
+		fetch_items(reset_items=true);
+	}
 });
 
 function select_categories(criteria) {
@@ -538,7 +545,7 @@ function init_waypoint() {
 function fetch_items(reset_items) {
 	NProgress.configure({ minimum: 0.1 });
 	NProgress.start();
-	var url = window.location.pathname;
+	var url = base_url;
 	var parameters = new Array();
 	var i = 0;
 	var q = $('input[name=q]').val();

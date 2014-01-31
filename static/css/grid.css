@@ -1950,3 +1950,38 @@ hr {
 .mobile-coupon-description {
 	margin: 5px;
 }
+.no-search-results {
+	background-color: #f7f7f6;
+	margin-top: 10px;
+	height: 120px !important;
+	padding: 40px;
+	width: 710px;
+	text-align: center;
+}
+@media (min-width: 1170px) {
+	.no-search-results {
+		width: 925px !important;
+	}
+}
+.suggested-merchants span {
+	color: #ef5b5b !important;
+	text-transform: uppercase;
+	margin-top: 10px;
+	margin-bottom: 20px;
+	display: block;
+}
+.suggested-merchants ul {
+	padding: 0 !important;
+}
+.suggested-merchants li {
+	width: 165px;
+	height: 95px;
+	line-height: 95px;
+	margin: 0px auto !important;
+	margin-bottom: 15px !important;
+	list-style: none;
+	overflow: hidden;
+	-webkit-box-shadow: 0px 2px 2px 2px rgba(97,94,94,0.15);
+	-moz-box-shadow: 0px 2px 2px 0px rgba(97,94,94,0.15);
+	box-shadow: 0px 2px 2px 0px rgba(97, 94, 94, 0.15);
+}

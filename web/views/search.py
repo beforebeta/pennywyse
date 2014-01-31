@@ -12,6 +12,7 @@ def search(request, current_page=1):
     coupon_type = request.GET.get('coupon_type', None)
     is_new = request.GET.get('is_new', None)
     is_trending = request.GET.get('is_trending', None)
+    context = {}
     
     if query:
         merchant = Merchant.objects.filter(name=query).only('name_slug')
@@ -27,6 +28,8 @@ def search(request, current_page=1):
             parameters['coupon_type'] = coupon_type
         merchants_list = FuzzySearchQuerySet().combined_filter(django_ct='core.merchant',
                                             total_coupon_count__gt=0, content=query)
+        if not merchants_list:
+            context['suggested_merchants'] = Merchant.objects.filter(is_featured=True)[:5]
         coupons_list = SearchQuerySet().filter(**parameters)
         pages = Paginator(coupons_list, 12)
         merchant_pages = Paginator(merchants_list, 10)
@@ -60,8 +63,8 @@ def search(request, current_page=1):
             return HttpResponse(json.dumps({'items': data,
                                         'total_pages': pages.num_pages}), content_type="application/json")
         merchants = merchant_pages.page(current_page).object_list
+        context['coupons'] = pages.page(current_page).object_list
     else:
         merchants = None
-    context = {'query': query,
-               'merchants': merchants}
+    context.update(query=query, merchants=merchants)
     return render_response(template_file="search.html", request=request, context=context)
