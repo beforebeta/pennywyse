@@ -1,5 +1,10 @@
 {% extends "base.html" %}
 
+			{% block head %}
+			    {{ block.super }}
+	        	<link rel="canonical" href="http://{{ request.get_host }}{% url 'web.views.main.stores' %}">
+	        {% endblock %}
+
 			{% block content %}
 			<div class="row middle-container items-list-container">
 				<div class="main-rail index-rail top-labels-container items-list-container visible-md visible-lg">
@@ -12,6 +17,11 @@
 						</div>
 					</div>
 				<br clear="both">
+				{% if MERCHANTS_PAGE_TEXT %}
+					<div class="left-rail top-rail visible-md visible-lg">
+						{{ MERCHANTS_PAGE_TEXT|safe }}
+					</div>
+				{% endif %}
 				<div class="left-rail top-rail visible-md visible-lg">
 					<div class="coupon-container  featured-merchants">
 						<div class="featured-merchants-header">Featured Stores</div>

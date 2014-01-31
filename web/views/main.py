@@ -13,6 +13,7 @@ from django.template.context import RequestContext
 from django.template.defaultfilters import slugify
 from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import ensure_csrf_cookie
+from constance import config
 from core.models import Category, Coupon, DealType, Merchant, base_description
 from core.util import encode_uri_component, print_stack_trace
 from core.util.pagination import AlphabeticalPagination
@@ -225,6 +226,7 @@ def categories(request):
     context={
              "categories": Category.objects.filter(is_featured=False, parent__isnull=True).order_by('name'),
              "featured_categories": Category.objects.filter(is_featured=True).order_by('name'),
+             "CATEGORIES_PAGE_TEXT": getattr(config, 'CATEGORIES_PAGE_TEXT', None),
     }
     return render_response("categories.html", request, context)
 
@@ -234,6 +236,7 @@ def groceries(request):
     categories = [root_category] + list(Category.objects.filter(parent=root_category))
     context = {'categories': categories,
                'is_grocery': True,
+               'GROCERIS_PAGE_TEXT': getattr(config, 'GROCERIS_PAGE_TEXT', None),
                }
     return render_response("categories.html", request, context)
 
@@ -343,6 +346,7 @@ def stores(request, page='popular'):
         "pagination": AlphabeticalPagination(page),
         "featured_merchants": Merchant.objects.filter(is_featured=True),
         "page": page,
+        "MERCHANTS_PAGE_TEXT": getattr(config, 'MERCHANTS_PAGE_TEXT', None),
     }
     return render_response("companies.html", request, context)
 

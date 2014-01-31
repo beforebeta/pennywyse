@@ -17,6 +17,7 @@
 	            		<link rel="next" href="http://{{ request.get_host }}{% url 'web.views.main.category' current_page=current_page.next_page_number category_code=category.code %}" />
 	        		{% endif %}
 	        	{% endif %}
+	        	<link rel="canonical" href="http://{{ request.get_host }}{% url 'web.views.main.category' category_code=category.code %}">
 			{% endblock %}
 			
 			{% block content %}

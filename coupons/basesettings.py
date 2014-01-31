@@ -285,7 +285,9 @@ CELERYBEAT_SCHEDULE = {
 }
 
 CONSTANCE_CONFIG = {
-    'CATEGORY_PAGE_TEXT': ('', 'Category text.')
+    'CATEGORIES_PAGE_TEXT': ('', 'Categories text.'),
+    'MERCHANTS_PAGE_TEXT': ('', 'Merchants text.'),
+    'GROCERIS_PAGE_TEXT': ('', 'Groceries text.'),
 }
 
 CONSTANCE_BACKEND = 'constance.backends.redisd.RedisBackend'
