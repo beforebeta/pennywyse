@@ -3,10 +3,18 @@
 		{% block head %}
 			{{ block.super }}
 			{% if current_page.has_previous %}
-            	<link rel="prev" href="http://{{ request.get_host }}{% url 'web.views.main.index' current_page=current_page.previous_page_number %}" />
+            	{% if current_page.previous_page_number == 1 %}
+            		<link rel="prev" href="http://{{ request.get_host }}{% url 'web.views.main.index' %}" />
+            	{% else %}
+            		<link rel="prev" href="http://{{ request.get_host }}{% url 'web.views.main.index' current_page=current_page.previous_page_number %}" />
+        		{% endif %}
         	{% endif %}
         	{% if current_page.has_next %}
-            	<link rel="next" href="http://{{ request.get_host }}{% url 'web.views.main.index' current_page=current_page.next_page_number %}" />
+            	{% if current_page.next_page_number == 1 %}
+            		<link rel="next" href="http://{{ request.get_host }}{% url 'web.views.main.index' %}" />
+            	{% else %}
+            		<link rel="next" href="http://{{ request.get_host }}{% url 'web.views.main.index' current_page=current_page.next_page_number %}" />
+        		{% endif %}
         	{% endif %}
 		{% endblock %}
 		

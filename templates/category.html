@@ -4,10 +4,18 @@
 			    {{ block.super }}
 				<meta name="title" content="{{ category.name }} Coupons | Hand Verified Discounts @ PushPenny">
 				{% if current_page.has_previous %}
-	            	<link rel="prev" href="http://{{ request.get_host }}{% url 'web.views.main.category' current_page=current_page.previous_page_number category_code=category.code %}" />
+	            	{% if current_page.previous_page_number == 1 %}
+	            		<link rel="prev" href="http://{{ request.get_host }}{% url 'web.views.main.category' category_code=category.code %}" />
+	            	{% else %}
+	            		<link rel="prev" href="http://{{ request.get_host }}{% url 'web.views.main.category' current_page=current_page.previous_page_number category_code=category.code %}" />
+	        		{% endif %}
 	        	{% endif %}
 	        	{% if current_page.has_next %}
-	            	<link rel="next" href="http://{{ request.get_host }}{% url 'web.views.main.category' current_page=current_page.next_page_number category_code=category.code %}" />
+	            	{% if current_page.next_page_number == 1 %}
+	            		<link rel="next" href="http://{{ request.get_host }}{% url 'web.views.main.category' category_code=category.code %}" />
+	            	{% else %}
+	            		<link rel="next" href="http://{{ request.get_host }}{% url 'web.views.main.category' current_page=current_page.next_page_number category_code=category.code %}" />
+	        		{% endif %}
 	        	{% endif %}
 			{% endblock %}
 			

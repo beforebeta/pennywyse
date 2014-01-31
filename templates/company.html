@@ -7,10 +7,18 @@
 				{% endif %}
 				<meta name="title" content="{{ merchant.name }} Coupons | Hand Verified Discounts @ PushPenny">
 				{% if current_page.has_previous %}
-	            	<link rel="prev" href="http://{{ request.get_host }}{% url 'web.views.main.coupons_for_company' current_page=current_page.previous_page_number company_name=merchant.name_slug %}" />
+	            	{% if current_page.previous_page_number == 1 %}
+	            		<link rel="prev" href="http://{{ request.get_host }}{% url 'web.views.main.coupons_for_company' company_name=merchant.name_slug %}" />
+	            	{% else %}
+	            		<link rel="prev" href="http://{{ request.get_host }}{% url 'web.views.main.coupons_for_company' current_page=current_page.previous_page_number company_name=merchant.name_slug %}" />
+	        		{% endif %}
 	        	{% endif %}
 	        	{% if current_page.has_next %}
-	            	<link rel="next" href="http://{{ request.get_host }}{% url 'web.views.main.coupons_for_company' current_page=current_page.next_page_number company_name=merchant.name_slug %}" />
+	           		{% if current_page.next_page_number == 1 %}
+	           			<link rel="next" href="http://{{ request.get_host }}{% url 'web.views.main.coupons_for_company' company_name=merchant.name_slug %}" />
+	           		{% else %}
+	            		<link rel="next" href="http://{{ request.get_host }}{% url 'web.views.main.coupons_for_company' current_page=current_page.next_page_number company_name=merchant.name_slug %}" />
+	        		{% endif %}
 	        	{% endif %}
 	        	{% if coupon %}
 	        		<meta property="og:image" content="{{ coupon.og_image }}"/>
