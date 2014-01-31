@@ -1,0 +1,2 @@
+fc_start_time,last_inventory,beg_inventory,implied_attrition,total_inactives,total_dedups,implied_net_adds,end_inventory,fc_end_time,refresh_took,validate_took,dedup_took
+2014-01-31 15:58:45.284148+00:00,100,100,100,100,100,100,100,2014-01-31 15:58:45.284148+00:00,100,100,100

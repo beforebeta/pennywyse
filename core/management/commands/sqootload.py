@@ -2,11 +2,13 @@
 import os
 from datetime import datetime
 from datetime import timedelta
+from dateutil.parser import parse
 import math
 import time
 import re
 import requests
 from optparse import make_option
+import csv
 
 from django.core.management.base import BaseCommand
 from django.conf import settings
@@ -149,12 +151,56 @@ class Command(BaseCommand):
 def run_thru_full_cycle(args):
     firsttime = True if 'firsttime' in args else False
 
-    latest_refresh_start_time = refresh_sqoot_data(firsttime=firsttime)
-    clean_out_sqoot_data(latest_refresh_start_time)
-    validate_sqoot_data(latest_refresh_start_time)
-    num_of_deals_deduped = dedup_sqoot_data_aggressively(latest_refresh_start_time, firsttime=firsttime)
+    path = os.path.join(settings.BASE_DIR, 'logonly', 'sqootload_running_log.txt')
+    try:
+        f = open(path, 'r')
+    except IOError:
+        print_stack_trace()
 
-def refresh_sqoot_data(indirectload=False, firsttime=False):
+    all_rows = f.readlines()
+    if len(all_rows) == 1:
+        last_row = None
+    else:
+        last_row = all_rows[-1]
+        latest_stats = last_row.replace('\r\n', '').split(',')
+    f.close()
+
+    last_run_start_time = parse(latest_stats[0]) if last_row else None
+    last_inventory_count = int(latest_stats[7])  if last_row else 0
+    beg_inventory_count = Coupon.all_objects.filter(ref_id_source='sqoot', is_deleted=False,
+                                                    is_duplicate=False, online=False,
+                                                    status='considered-active',
+                                                    end__gt=datetime.now(pytz.utc)).count()
+    implied_attrition = last_inventory_count - beg_inventory_count if last_inventory_count else 0
+    fullcycle_starttime = datetime.now(pytz.utc)
+    refresh_start_time, refresh_end_time, sqoot_raw_active, num_of_soft_dedups = refresh_sqoot_data(last_run_start_time, firsttime=firsttime)
+    _, num_of_implied_inactive, cleanout_endtime = clean_out_sqoot_data(refresh_start_time)
+    num_of_confirmed_inactive, validate_endtime = validate_sqoot_data(refresh_start_time)
+    num_of_hard_dedups, hard_dedup_endtime = dedup_sqoot_data_hard(refresh_start_time, firsttime=firsttime)
+    clean_out_sqoot_data(refresh_start_time)
+    end_inventory_count = Coupon.all_objects.filter(ref_id_source='sqoot', is_deleted=False,
+                                                            is_duplicate=False, online=False,
+                                                            status='considered-active').count()
+    fullcycle_endtime = datetime.now(pytz.utc)
+    describe_section("ALL DONE AND LOGGING THINGS..\n")
+
+    num_of_total_inactives = num_of_implied_inactive + num_of_confirmed_inactive
+    num_of_total_dedups = num_of_soft_dedups + num_of_hard_dedups
+    implied_net_adds = end_inventory_count - (beg_inventory_count - num_of_total_inactives - num_of_total_dedups)
+
+    refresh_took = refresh_end_time - refresh_start_time
+    validate_took = validate_endtime - cleanout_endtime
+    hard_dedup_took = hard_dedup_endtime - validate_endtime
+
+    with open(path, 'a') as csvfile:
+        log_writer = csv.writer(csvfile)
+        log_writer.writerow([fullcycle_starttime, last_inventory_count, beg_inventory_count,
+                             implied_attrition, num_of_total_inactives, num_of_total_dedups,
+                             implied_net_adds, end_inventory_count, fullcycle_endtime, refresh_took.seconds/60,
+                             validate_took.seconds/60, hard_dedup_took.seconds/60])
+    csvfile.close()
+
+def refresh_sqoot_data(last_run_start_time, indirectload=False, firsttime=False):
     refresh_start_time = datetime.now(pytz.utc) # Use UTC time to compare & update coupon's 'last_modified' field
     request_parameters = {
         'api_key': settings.SQOOT_PUBLIC_KEY,
@@ -172,22 +218,25 @@ def refresh_sqoot_data(indirectload=False, firsttime=False):
     # loading coupons and merchants
     describe_section("CHECKING THE LATEST DEAL DATA FROM SQOOT..\n")
     request_parameters['per_page'] = ITEMS_PER_PAGE
-    active_deal_count = requests.get(SQOOT_API_URL + 'deals', params=request_parameters).json()['query']['total']
-    page_count = int(math.ceil(active_deal_count / float(request_parameters['per_page'])))
-    print '%s deals detected, estimating %s pages to iterate\n' % (active_deal_count, page_count)
+    sqoot_active_deal_count = requests.get(SQOOT_API_URL + 'deals', params=request_parameters).json()['query']['total']
+    page_count = int(math.ceil(sqoot_active_deal_count / float(request_parameters['per_page'])))
+    print '%s deals detected, estimating %s pages to iterate\n' % (sqoot_active_deal_count, page_count)
 
     describe_section("STARTING TO DOWNLOAD SQOOT DEALS..\n")
-    request_parameters['provider_slugs'] = 'yelp'
     # Since there's only one country & dealtype for all sqoot deals - no need to check it for each coupon
     country_model       = get_or_create_country()
     dealtype_model      = get_or_create_dealtype()
 
-    two_days_ago_datetime = datetime.now() - timedelta(days=2) # 1 day buffer based on daily run assumption, hence 2 days
+    # two_days_ago_datetime = datetime.now() - timedelta(days=2) # 1 day buffer based on daily run assumption, hence 2 days
     sqoot_output_deals = None
     if indirectload:
         sqoot_output_deals = json.loads(open("sqoot_output.json","r").read())
 
+    num_of_soft_dedups = 0
     for p in range(page_count):
+    # for p in range(55): # DEBUG!!!
+    #     if p < 40: # DEBUG!!!
+    #         continue
         request_parameters['page'] = p + 1
         print '## Fetching page %s...\n' % (p + 1)
 
@@ -202,9 +251,8 @@ def refresh_sqoot_data(indirectload=False, firsttime=False):
             sqoot_coupon_id = int(deal_data['deal']['id'])
             active_coupon_ids.append(sqoot_coupon_id)
 
-            deal_last_updated = datetime.strptime(deal_data['deal']['updated_at'],\
-                                         "%Y-%m-%dT%H:%M:%SZ")
-            if (not firsttime) and (deal_last_updated < two_days_ago_datetime):
+            deal_last_updated = parse(deal_data['deal']['updated_at']+'+0000')
+            if (not firsttime) and (deal_last_updated < last_run_start_time):
                 continue
 
             try:
@@ -226,13 +274,15 @@ def refresh_sqoot_data(indirectload=False, firsttime=False):
                 if coupon_ref_id not in SAVED_MERCHANT_ID_LIST:
                     SAVED_MERCHANT_ID_LIST.append(coupon_ref_id)
                 else:
-                    dedup_scoot_data_softly(coupon_model)
+                    dedup_scoot_data_soft(coupon_model)
+                    num_of_soft_dedups += 1
 
                 print '-' * 60
             except:
                 print_stack_trace()
         Coupon.all_objects.filter(ref_id_source='sqoot', ref_id__in=active_coupon_ids).update(last_modified=datetime.now(pytz.utc))
-    return refresh_start_time
+    refresh_end_time = datetime.now(pytz.utc)
+    return refresh_start_time, refresh_end_time, sqoot_active_deal_count, num_of_soft_dedups
 
 def clean_out_sqoot_data(refresh_start_time):
     '''
@@ -247,20 +297,22 @@ def clean_out_sqoot_data(refresh_start_time):
       and soft-delete them.
     * Fourth, find all inactive merchants (no active deals), and soft-delete them.
     '''
+    describe_section("clean_out_sqoot_data IS BEGINNING..\n")
     affected_merchant_list = [] # collect a list of merchant pks whose coupons are being soft-deleted
+    num_of_soft_deleted = 0
 
     # First
     true_duplicate_deals = Coupon.all_objects.filter(ref_id_source='sqoot', is_deleted=False,
                                                      is_duplicate=True, related_deal__isnull=True)
-    true_duplicate_deals.update(is_deleted=True)
+    num_of_soft_deleted += true_duplicate_deals.update(is_deleted=True)
     affected_merchant_list += [c.merchant.pk for c in true_duplicate_deals]
 
     # Second
     folded_deals = Coupon.all_objects.filter(ref_id_source='sqoot', is_deleted=False,
                                              is_duplicate=True, related_deal__isnull=False)
-    folded_deals.filter(last_modified__lt=refresh_start_time).update(status='implied-inactive', is_deleted=True)
-    folded_deals.filter(status='confirmed-inactive').update(is_deleted=True)
-    folded_deals.filter(end__lt=datetime.now(pytz.utc)).update(is_deleted=True)
+    num_of_soft_deleted += folded_deals.filter(last_modified__lt=refresh_start_time).update(status='implied-inactive', is_deleted=True)
+    num_of_soft_deleted += folded_deals.filter(status='confirmed-inactive').update(is_deleted=True)
+    num_of_soft_deleted += folded_deals.filter(end__lt=datetime.now(pytz.utc)).update(is_deleted=True)
     affected_merchant_list += [c.merchant.pk for c in folded_deals]
 
     # Third (Second -> Third; the order matters)
@@ -271,9 +323,9 @@ def clean_out_sqoot_data(refresh_start_time):
     deals_with_folded_deals = [c.pk for c in non_dup_deals if Coupon.all_objects.filter(related_deal=c).count() != 0]
     for i in deals_with_folded_deals:
         reassign_representative_deal(Coupon.all_objects.get(pk=i))
-    non_dup_deals.filter(last_modified__lt=refresh_start_time).update(status='implied-inactive', is_deleted=True)
-    non_dup_deals.filter(status='confirmed-inactive').update(is_deleted=True)
-    non_dup_deals.filter(end__lt=datetime.now(pytz.utc)).update(is_deleted=True)
+    num_of_implied_inactive = non_dup_deals.filter(last_modified__lt=refresh_start_time).update(status='implied-inactive', is_deleted=True)
+    num_of_soft_deleted += non_dup_deals.filter(status='confirmed-inactive').update(is_deleted=True)
+    num_of_soft_deleted += non_dup_deals.filter(end__lt=datetime.now(pytz.utc)).update(is_deleted=True)
     affected_merchant_list += [c.merchant.pk for c in non_dup_deals]
 
     # Fourth
@@ -289,7 +341,12 @@ def clean_out_sqoot_data(refresh_start_time):
             inactive_merchant_list.append(miq.pk)
     Merchant.all_objects.filter(pk__in=inactive_merchant_list).update(is_deleted=True)
 
+    num_of_soft_deleted += num_of_implied_inactive
+    cleanout_endtime = datetime.now(pytz.utc)
+    return num_of_soft_deleted, num_of_implied_inactive, cleanout_endtime
+
 def validate_sqoot_data(refresh_start_time=None, pulseonly=False, stoptime=None):
+    describe_section("validate_sqoot_data IS BEGINNING..\n")
     '''
     Summary: Fetch a deal page and validate deal information and availabilty.
 
@@ -300,7 +357,9 @@ def validate_sqoot_data(refresh_start_time=None, pulseonly=False, stoptime=None)
     all_active_deals_on_display = Coupon.all_objects.filter(ref_id_source='sqoot', is_deleted=False,
                                                             is_duplicate=False, online=False)\
                                                     .filter(Q(status='unconfirmed') | Q(status='considered-active'))
-    considered_active_list = confirmed_inactive_list = [] # coupon pk's
+    considered_active_list = [] # coupon pk's
+    confirmed_inactive_list = [] # coupon pk's
+    blah_counter = 0 #DEBUG!!!
     for c in all_active_deals_on_display:
         if stoptime and (datetime.now() >= stoptime):
             break
@@ -322,26 +381,31 @@ def validate_sqoot_data(refresh_start_time=None, pulseonly=False, stoptime=None)
             continue
         else:
             confirm_or_correct_deal_data(c, response)
+        blah_counter += 1 #DEBUG!!!
+        print '.......validated', blah_counter # DEBUG!!!
     Coupon.all_objects.filter(pk__in=considered_active_list).update(status='considered-active')
-    Coupon.all_objects.filter(pk__in=confirmed_inactive_list).update(status='confirmed-inactive')
+    num_of_confirmed_inactive = Coupon.all_objects.filter(pk__in=confirmed_inactive_list).update(status='confirmed-inactive')
+    validate_endtime = datetime.now(pytz.utc)
+    return num_of_confirmed_inactive, validate_endtime
 
-def dedup_sqoot_data_aggressively(refresh_start_time, firsttime=False):
+def dedup_sqoot_data_hard(refresh_start_time, firsttime=False):
+    describe_section("dedup_sqoot_data_hard IS BEGINNING..\n")
     # Grab all active deals on display to users for deduping.
     deals_to_dedup = Coupon.all_objects.filter(ref_id_source='sqoot', is_deleted=False,
                                                is_duplicate=False, online=False, status='considered-active')
     if not firsttime:
         # If not first time, further filter down to only the newly added unique deals for deduping.
         deals_to_dedup = deals_to_dedup.filter(date_added__gt=refresh_start_time)
-
+    import ipdb; ipdb.set_trace()
     duplicate_deals_list = [] # List of duplicate coupon pks .
     duplicate_deals_list = crosscheck_by_field(deals_to_dedup, duplicate_deals_list, 'coupon_directlink')
     duplicate_deals_list = crosscheck_by_field(deals_to_dedup, duplicate_deals_list, 'merchant_name')
     duplicate_deals_list = list(set(duplicate_deals_list))
+    import ipdb; ipdb.set_trace()
 
-    num_of_deals_deduped = Coupon.all_objects.filter(pk__in=duplicate_deals_list).update(is_duplicate=True)
-    return num_of_deals_deduped
-
-
+    num_of_hard_dedups = Coupon.all_objects.filter(pk__in=duplicate_deals_list).update(is_duplicate=True)
+    hard_dedup_endtime = datetime.now(pytz.utc)
+    return num_of_hard_dedups, hard_dedup_endtime
 
 
 #############################################################################################################
@@ -769,7 +833,7 @@ def get_or_create_coupon(each_deal_data_dict, merchant_model, category_model, de
 #
 #############################################################################################################
 
-def dedup_scoot_data_softly(coupon_model):
+def dedup_scoot_data_soft(coupon_model):
     '''
     Check all deals under the same merchant, mark duplicate deals, and fold them under the best deal
     '''
@@ -904,7 +968,7 @@ def check_if_deal_dead(coupon_obj, response, sqoot_url):
     if provider_slug == 'dealchicken':
         time_ribbon = soup.find("p", { "id" : "timeRibbon" })
         soldout = soup.find("p", { "class" : "soldout" })
-        if soldout or time_ribbon.text == "Sorry, this deal is over!":
+        if soldout or (time_ribbon and time_ribbon.text == "Sorry, this deal is over!"):
             return True
 
     if provider_slug == 'doubletake-deals':
@@ -977,8 +1041,13 @@ def compare_location_between(deal_obj_one, deal_obj_two):
     location_one = deal_obj_one.merchant_location
     location_two = deal_obj_two.merchant_location
 
-    if not location_one.address:
+    if not location_one:
         return True, deal_obj_one # is_duplicate?, which_deal
+    if not location_two:
+        return True, deal_obj_two
+
+    if not location_one.address:
+        return True, deal_obj_one
     if not location_two.address:
         return True, deal_obj_two
 
