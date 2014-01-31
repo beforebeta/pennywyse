@@ -231,7 +231,7 @@ $(function() {
 	});
 	
 	$('.coupon-type li').click(function() {
-		var coupon_type = $(this).attr('id');
+		coupon_type = $(this).attr('id');
 		$('.coupon-type li').removeClass('active');
 		$(this).addClass('active');
 		fetch_items(reset_items=true);
