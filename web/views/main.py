@@ -53,7 +53,7 @@ def index(request, current_page=None):
             parameters['is_popular'] = True
         
         coupons = Coupon.objects.filter(**parameters).order_by("-date_added")
-        pages = Paginator(coupons, 12)
+        pages = Paginator(coupons, 24)
         for c in pages.page(current_page).object_list:
             item = {'id': c.id,
                     'merchant_name': c.merchant.name,
@@ -74,9 +74,9 @@ def index(request, current_page=None):
     
     parameters['is_new'] = True
     coupons = Coupon.objects.filter(**parameters).order_by("-date_added")
-    pages = Paginator(coupons, 12)
+    pages = Paginator(coupons, 24)
     
-    page = current_page or 1
+    page = int(current_page or 1)
     if int(page) > pages.num_pages:
         page = pages.num_pages
     ppages = range(1, pages.num_pages+1)
@@ -86,8 +86,8 @@ def index(request, current_page=None):
             ppages = ppages[:8] + ppages[-3:]
             separators = 1
         else:
-            page_next = current_page + 2
-            page_prev = current_page - 2
+            page_next = page + 2
+            page_prev = page - 2
             ppages = ppages[:3] + ppages[page_prev:page_next] + ppages[-3:]
             separators = 2
 
@@ -146,8 +146,8 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
     coupons = list(coupons_list)
 
     # preparing pagination
-    page = current_page or 1
-    pages = Paginator(coupons, 12)
+    page = int(current_page or 1)
+    pages = Paginator(coupons, 24)
     if int(page) > pages.num_pages:
         page = pages.num_pages
     ppages = range(1, pages.num_pages+1)
@@ -157,8 +157,8 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
             ppages = ppages[:8] + ppages[-3:]
             separators = 1
         else:
-            page_next = current_page + 2
-            page_prev = current_page - 2
+            page_next = page + 2
+            page_prev = page - 2
             ppages = ppages[:3] + ppages[page_prev:page_next] + ppages[-3:]
             separators = 2
     
@@ -274,8 +274,8 @@ def category(request, category_code, current_page=None, category_ids=-1):
     coupons = Coupon.objects.filter(**filters).order_by(ordering)
 
     # preparing pagination
-    page = current_page or 1
-    pages = Paginator(coupons, 12)
+    page = int(current_page or 1)
+    pages = Paginator(coupons, 24)
     if int(page) > pages.num_pages:
         page = pages.num_pages
     ppages = range(1, pages.num_pages+1)
@@ -285,8 +285,8 @@ def category(request, category_code, current_page=None, category_ids=-1):
             ppages = ppages[:8] + ppages[-3:]
             separators = 1
         else:
-            page_next = current_page + 2
-            page_prev = current_page - 2
+            page_next = page + 2
+            page_prev = page - 2
             ppages = ppages[:3] + ppages[page_prev:page_next] + ppages[-3:]
             separators = 2
     
