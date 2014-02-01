@@ -204,8 +204,8 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
 
 @ensure_csrf_cookie
 def redirect_to_open_coupon(request, company_name, coupon_label, coupon_id):
-    return HttpResponsePermanentRedirect('{0}/coupons/{1}/{2}/{3}'.format(settings.BASE_URL_NO_APPENDED_SLASH, 
-                                                                          company_name, coupon_label, coupon_id))
+    coupon = get_object_or_404(Coupon, id=coupon_id)
+    return HttpResponsePermanentRedirect(coupon.local_path())
 
 
 @ensure_csrf_cookie
