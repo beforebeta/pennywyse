@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 			
+			{% block title %}{{ merchant.name }} Coupons | Hand Verified Discounts @ PushPenny{% endblock %}
+			
 			{% block head %}
 			    {{ block.super }}
 				{% if coupon_id %}
 				 	<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
 				{% endif %}
-				<meta name="title" content="{{ merchant.name }} Coupons | Hand Verified Discounts @ PushPenny">
+				<meta name="description" content="{{ merchant.name }} Coupons | Hand Verified Discounts @ PushPenny">
 				{% if current_page.has_previous %}
 	            	{% if current_page.previous_page_number == 1 %}
 	            		<link rel="prev" href="http://{{ request.get_host }}{% url 'web.views.main.coupons_for_company' company_name=merchant.name_slug %}" />

@@ -39,7 +39,7 @@ def set_meta_tags(subject, context):
 
 
 @ensure_csrf_cookie
-def index(request, current_page=1):
+def index(request, current_page=None):
     parameters = {}
 
     # handling AJAX request 
@@ -68,6 +68,9 @@ def index(request, current_page=1):
             data.append(item)
         return HttpResponse(json.dumps({'items': data,
                                         'total_pages': pages.num_pages}), content_type="application/json")
+    
+    if current_page and int(current_page) == 1:
+        return HttpResponsePermanentRedirect(reverse('web.views.main.index'))
     
     parameters['is_new'] = True
     coupons = Coupon.objects.filter(**parameters).order_by("-date_added")
@@ -177,6 +180,11 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
                                         'total_pages': pages.num_pages,
                                         'total_items': pages.count}), content_type="application/json")
     
+    if current_page and int(current_page) == 1:
+        return HttpResponsePermanentRedirect(reverse('web.views.main.coupons_for_company', 
+                                                     kwargs={'company_name': merchant.name_slug,
+                                                             'company_id': merchant.id}))
+    
     context = {"coupons": pages.page(page).object_list,
                "merchant": merchant,
                "num_pages": pages.num_pages,
@@ -243,11 +251,10 @@ def groceries(request):
 
 
 @ensure_csrf_cookie
-def category(request, category_code, current_page=1, category_ids=-1):
+def category(request, category_code, current_page=None, category_ids=-1):
     sorting = request.GET.get('sorting', None)
     coupon_types = request.GET.getlist('coupon_type', [])
-    current_page = int(current_page)
-    category = Category.objects.get(code=category_code, ref_id_source__isnull=True)
+    category = Category.objects.get(code=category_code)
 
     coupon_category_ids = Coupon.objects.filter(categories=category.id).values('categories').annotate()
     category_ids = [c['categories'] for c in coupon_category_ids]
@@ -302,9 +309,9 @@ def category(request, category_code, current_page=1, category_ids=-1):
                                         'total_pages': pages.num_pages,
                                         'total_items': pages.count}), content_type="application/json")
     
-
-    if int(current_page) > pages.num_pages:
-        current_page=pages.num_pages
+    if current_page and int(current_page) == 1:
+        return HttpResponsePermanentRedirect(reverse('web.views.main.category', 
+                                                     kwargs={'category_code': category.code}))
 
     context = {"num_pages": pages.num_pages,
                "category": category,
