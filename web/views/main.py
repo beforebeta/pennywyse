@@ -52,7 +52,8 @@ def index(request, current_page=None):
         if is_trending:
             parameters['is_popular'] = True
         
-        coupons = Coupon.objects.filter(**parameters).order_by("-date_added")
+        coupons = Coupon.objects.filter(Q(end__gt=datetime.datetime.now()) | Q(end__isnull=True), 
+                                        **parameters).order_by("-date_added")
         pages = Paginator(coupons, 24)
         for c in pages.page(current_page).object_list:
             item = {'id': c.id,
