@@ -5,7 +5,7 @@
 				<div class="main-rail index-rail landing-rail">
 					<div class="top-labels-container">
 						<div class="main-labels mobile-index-labels">
-							<a href="javascript:void(null);" class="active" id="most-popular">Most Popular</a>
+							<a href="javascript:void(null);" class="active" id="most-popular">Popular</a>
 							<a href="javascript:void(null);" id="featured-coupons">Featured</a>
 							<a href="javascript:void(null);" id="stores">Stores</a>
 						</div>
@@ -20,12 +20,12 @@
 									<div class="expandable-selected">
 										<ul class="mobile-coupon-type expanded-choices coupon-type-select">
 											{% for top_coupon in top_coupons %}
-												<li id="{{ top_coupon.id }}">{{ top_coupon.name }}</li>
+												<li id="{{ top_coupon.id }}" {% if forloop.first %}class="selected"{% endif %}>{{ top_coupon.name }}</li>
 											{% endfor %}
 										</ul>
-									</div>
-									<div class="coupons-types-expand">
-										<span class="glyphicon glyphicon-chevron-down"></span>
+										<div class="coupons-types-expand">
+											<span class="glyphicon glyphicon-chevron-down"></span>
+										</div>
 									</div>
 								</div>
 							</div>

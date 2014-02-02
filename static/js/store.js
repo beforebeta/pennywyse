@@ -389,6 +389,8 @@ $(function() {
 		$('.menu-item').find('.menu-link').removeClass('active-dropdown-link');
 	});
 
+	
+	
 });
 
 function select_categories(criteria) {
@@ -560,8 +562,10 @@ function init_waypoint() {
 }
 
 function fetch_items(reset_items) {
-	NProgress.configure({ minimum: 0.1 });
-	NProgress.start();
+	if (!is_mobile) {
+		NProgress.configure({ minimum: 0.1 });
+		NProgress.start();
+	}
 	var url = base_url;
 	var parameters = new Array();
 	var i = 0;
@@ -615,7 +619,9 @@ function fetch_items(reset_items) {
 		i++;
 	}
 	$.get(url, function(data) {
-		NProgress.inc();
+		if (!is_mobile) {
+			NProgress.inc();
+		}
 		render_coupons(data, reset_items);
 		if (page < data.total_pages) {
 			page += 1;
@@ -624,7 +630,9 @@ function fetch_items(reset_items) {
 		else {
 			$('.more-coupons').waypoint('disable');
 		}
-		NProgress.done();
+		if (!is_mobile) {
+			NProgress.done();
+		}
 	}, 'json');
 }
 

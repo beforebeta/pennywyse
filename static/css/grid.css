@@ -133,12 +133,8 @@ hr {
 .merchant-left, .merchant-right {
 	float: left;
 	text-align: center;
-	margin-bottom: 20px;
-	height: 70px;
 }
-.merchant-left {
-	line-height: 70px;
-}
+
 .merchant-right {
 	text-transform: uppercase;
 	font-size: 10pt !important;
@@ -861,7 +857,7 @@ hr {
 	background-color: #5757a2;
 }
 .mobile-index-labels {
-	margin-right: -10px !important;
+	width: 280px !important;
 }
 .index-labels a, .mobile-index-labels a {
 	font-size: 11pt;
@@ -874,7 +870,8 @@ hr {
 	float: left;
 }
 .mobile-index-labels a {
-	margin-right: 8px !important;
+	margin-right: 0px !important;
+	width: 33% !important;
 }
 .index-labels a:hover, .mobile-index-labels a:hover  {
 	text-decoration: none;
@@ -1721,13 +1718,20 @@ hr {
 	margin-right: -5px;
 	z-index: 1;
 	position: relative;
+	margin-bottom: 10px;
+}
+.center-mobile-label {
+	text-transform: uppercase;
+	font-size: 10pt !important;
 }
 .left-mobile-rail {
 	width: 190px;
-	height: 95px;
 	float:left;
 	text-transform: uppercase;
 	font-size: 10pt !important;
+}
+.left-mobile-rail, .right-mobile-rail {
+	margin-bottom: 10px;
 }
 .left-mobile-rail .merchant {
 	margin-top: 0px !important;
@@ -1736,21 +1740,18 @@ hr {
 	font-size: 18pt !important;
 }
 .right-mobile-rail {
-	width: 110px;
 	float: left;
-	height: 95px;
 }
 .right-mobile-rail .filter{
-	margin-top: 50px;
 	vertical-align: bottom;
 	border-radius: 0px;
 	background-color: #46a8a7;
 	color: #fff;
 	text-transform: uppercase;
 	text-align:center;
-	height: 40px;
-	line-height: 40px;
-	width: 100px;
+	height: 50px;
+	line-height: 50px;
+	width: 85px;
 }
 .filter .mobile-expand {
 	width: 30px !important;
@@ -1760,7 +1761,7 @@ hr {
 	float: left;
 }
 .expandable-selected {
-	float: left;
+	float: right;
 }
 .mobile-coupon-container {
 	height: 300px !important;
@@ -2014,4 +2015,15 @@ hr {
 	.no-results {
 		width: 1170px !important;
 	}
+}
+.coupon-type-select, .ordering-select {
+	text-transform: capitalize !important;
+	float:left;
+	width: 110px;
+}
+#featured-coupons {
+	text-align: center;
+}
+#stores {
+	text-align: right;
 }
