@@ -21,7 +21,7 @@ from geopy import geocoders
 # from haystack.utils.geo import D
 # from haystack.query import SearchQuerySet, SQ
 import pytz
-
+import time
 from core.models import DealType, Category, Coupon, Merchant, Country, CouponNetwork, MerchantLocation
 from tests.for_api.sample_data_feed import top_50_us_cities_dict
 from readonly.scrub_list import SCRUB_LIST
@@ -361,28 +361,31 @@ def validate_sqoot_data(refresh_start_time=None, pulseonly=False, stoptime=None)
     confirmed_inactive_list = [] # coupon pk's
     blah_counter = 0 #DEBUG!!!
     for c in all_active_deals_on_display:
-        if stoptime and (datetime.now() >= stoptime):
-            break
+        try:
+            if stoptime and (datetime.now() >= stoptime):
+                break
 
-        sqoot_url = c.directlink
-        is_bad_link, response = fetch_page(sqoot_url)
-        if is_bad_link:
-            confirmed_inactive_list.append(c.pk)
-            continue
+            sqoot_url = c.directlink
+            is_bad_link, response = fetch_page(sqoot_url)
+            if is_bad_link:
+                confirmed_inactive_list.append(c.pk)
+                continue
 
-        is_deal_dead = check_if_deal_dead(c, response, sqoot_url)
-        if is_deal_dead:
-            confirmed_inactive_list.append(c.pk)
-        else:
-            considered_active_list.append(c.pk)
+            is_deal_dead = check_if_deal_dead(c, response, sqoot_url)
+            if is_deal_dead:
+                confirmed_inactive_list.append(c.pk)
+            else:
+                considered_active_list.append(c.pk)
 
-        if pulseonly and refresh_start_time and (refresh_start_time > c.date_added):
-            # Data check only the newly added deals.
-            continue
-        else:
-            confirm_or_correct_deal_data(c, response)
-        blah_counter += 1 #DEBUG!!!
-        print '.......validated', blah_counter # DEBUG!!!
+            if pulseonly and refresh_start_time and (refresh_start_time > c.date_added):
+                # Data check only the newly added deals.
+                continue
+            else:
+                confirm_or_correct_deal_data(c, response)
+            blah_counter += 1 #DEBUG!!!
+            print '.......validated', blah_counter # DEBUG!!!
+        except:
+            print_stack_trace()
     Coupon.all_objects.filter(pk__in=considered_active_list).update(status='considered-active')
     num_of_confirmed_inactive = Coupon.all_objects.filter(pk__in=confirmed_inactive_list).update(status='confirmed-inactive')
     validate_endtime = datetime.now(pytz.utc)
@@ -893,16 +896,26 @@ def reassign_representative_deal(coupon_model):
     new_rep_deal.save()
     candidates.exclude(pk=new_rep_deal.pk).update(related_deal=new_rep_deal)
 
-def fetch_page(sqoot_url):
+def fetch_page(sqoot_url, tries=1):
     '''
     Summary: Check if url is valid and return a boolean with a response.
     '''
-    if not sqoot_url:
-        return True, None
-    response = requests.get(sqoot_url)
-    if response.status_code != 200:
-        return True, None
-    return False, response
+    try:
+        if not sqoot_url:
+            return True, None
+        response = requests.get(sqoot_url)
+        if response.status_code != 200:
+            return True, None
+        return False, response
+    except Exception, e:
+        print_stack_trace()
+        print "^---- Offending URL: ", sqoot_url
+        if tries < 3:
+            print "Retrying in 5 seconds, maybe the server just needs a break"
+            time.sleep(5)
+            return fetch_page(sqoot_url, tries+1)
+        else:
+            raise e #reraise exception
 
 def check_if_deal_dead(coupon_obj, response, sqoot_url):
     '''
