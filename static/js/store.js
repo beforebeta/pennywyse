@@ -769,7 +769,7 @@ function render_coupon_popup(data, coupon_id) {
 							<div class="coupon-popup-description"> \
 								<h2 class="short-description">{{ short_desc }}</h2> \
 									{{^ is_mobile }} \
-										{{& description }} \
+										<div class="coupon-description">{{& description }}</div> \
 									{{/is_mobile}} \
 									{{# code }} \
 										<br><a href="{{ url }}" target="_blank">Shop at {{ merchant_name }} &raquo;</a> \
@@ -820,6 +820,18 @@ function render_coupon_popup(data, coupon_id) {
 	if (is_mobile) {
 		$('.mobile-container').addClass('fixed');
 	}
+	$(".coupon-description").dotdotdot({
+		ellipsis: '... ',
+ 		wrap: 'letter',
+ 		fallbackToLetter: true,
+ 		after: null,
+ 		watch: false,
+		height: null,
+		tolerance: 0,
+		callback: function( isTruncated, orgContent ) {
+			$(this).addClass('truncated');
+		},
+	});
 	init_clipboard($('#coupon-code-' + coupon_id));
 }
 
