@@ -1,3 +1,4 @@
 User-agent: *
 Disallow: /search/
+Disallow: */?c
 Sitemap: http://s3.amazonaws.com/pushpenny/sitemap.xml
