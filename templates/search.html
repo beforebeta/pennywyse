@@ -2,8 +2,8 @@
 
 			{% block content %}
 			<div class="row middle-container index-container">
-				<div class="main-rail index-rail top-labels-container">
-						<div class="main-labels index-labels">
+				<div class="main-rail index-rail top-labels-container visible-md visible-lg">
+						<div class="main-labels index-labels ">
 							<a href="javascript:void(null);" class="active" id="new">New</a>
 							<a href="javascript:void(null);" id="trending">Trending</a>
 							<a href="javascript:void(null);" id="expiring_soon">Expiring Soon</a>
@@ -26,19 +26,30 @@
 								</li>
 							</ul>
 						</div>
-						<div class="top-labels-container coupon-types hidden-md hidden-lg">
+					</div>
+					<div class="main-rail index-rail landing-rail mobile-index-rail hidden-md hidden-lg">
+						<div class="main-labels mobile-index-labels">
+							<a href="javascript:void(null);" class="active" id="new">New</a>
+							<a href="javascript:void(null);" id="trending">Trending</a>
+							<a href="javascript:void(null);" id="expiring_soon">Expiring</a>
+						</div>
+						<div class="top-labels-container coupon-types ">
 							<div class="main-labels index-labels">
 								<div class="expandable">
-									Coupon type: <span>{{ top_coupons.0.name }}</span>
-									<div class="coupons-types-expand">
-										<span class="glyphicon glyphicon-chevron-down"></span>
+									<div class="expandable-label">
+										Coupon type:
+									</div>
+									<div class="expandable-selected">
+										<ul class="mobile-coupon-type expanded-choices coupon-type-select">
+											{% for top_coupon in top_coupons %}
+												<li id="{{ top_coupon.id }}" {% if forloop.first %}class="selected"{% endif %}>{{ top_coupon.name }}</li>
+											{% endfor %}
+										</ul>
+										<div class="coupons-types-expand">
+											<span class="glyphicon glyphicon-chevron-down"></span>
+										</div>
 									</div>
 								</div>
-								<ul class="mobile-coupon-type expanded-choices">
-									{% for top_coupon in top_coupons %}
-										<li id="{{ top_coupon.id }}">{{ top_coupon.name }}</li>
-									{% endfor %}
-								</ul>
 							</div>
 						</div>
 					</div>

@@ -551,7 +551,7 @@ function init_waypoint() {
 		}
 	}, {
 		offset: function() {
-			return $(window).height() * 1.5 - $(this).outerHeight();
+			return $(window).height() * 1.7 - $(this).outerHeight();
 		},
 	});
 }

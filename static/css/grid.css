@@ -1525,6 +1525,7 @@ hr {
 .mobile-index-rail {
 	width: 300px !important;
 	margin-left: 5px !important;
+	padding: 10px 0px 10px 20px !important;
 }
 .navbar-toggle {
 	float: left !important;
@@ -2021,9 +2022,9 @@ hr {
 	float:left;
 	width: 110px;
 }
-#featured-coupons, #trending {
+.mobile-index-labels #featured-coupons, .mobile-index-labels #trending {
 	text-align: center;
 }
-#stores, #expiring_soon {
+.mobile-index-labels #stores, .mobile-index-labels #expiring_soon {
 	text-align: right;
 }
