@@ -1,126 +1,194 @@
 {% extends "base.html" %}
-{% load coupon_extras %}
+			
+			{% block title %}{{ category.name }} Coupons | Hand Verified Discounts @ PushPenny{% endblock %}
+			
+			{% block head %}
+			    {{ block.super }}
+				<meta name="description" content="{{ category.name }} Coupons | Hand Verified Discounts @ PushPenny">
+				{% if current_page.has_previous %}
+	            	{% if current_page.previous_page_number == 1 %}
+	            		<link rel="prev" href="http://{{ request.get_host }}{% url 'web.views.main.category' category_code=category.code %}" />
+	            	{% else %}
+	            		<link rel="prev" href="http://{{ request.get_host }}{% url 'web.views.main.category' current_page=current_page.previous_page_number category_code=category.code %}" />
+	        		{% endif %}
+	        	{% endif %}
+	        	{% if current_page.has_next %}
+	            	{% if current_page.next_page_number == 1 %}
+	            		<link rel="next" href="http://{{ request.get_host }}{% url 'web.views.main.category' category_code=category.code %}" />
+	            	{% else %}
+	            		<link rel="next" href="http://{{ request.get_host }}{% url 'web.views.main.category' current_page=current_page.next_page_number category_code=category.code %}" />
+	        		{% endif %}
+	        	{% endif %}
+	        	<link rel="canonical" href="http://{{ request.get_host }}{% url 'web.views.main.category' category_code=category.code %}">
+			{% endblock %}
+			
+			{% block content %}
+			<div class="row middle-container index-container">
+				<div class="left-rail visible-md visible-lg">
+					<div class="top-labels">
+						<h1>{{ category.name|cut:"Coupons" }} Coupons</h1>
+						{{ category.link }}
+					</div>
+					{% comment %}
+						<button type="button" class="btn-follow"><img src="/static/img/follow_icon.png">Follow</button>
+					{% endcomment %}
+					<div class="merchant">
+						<div class="merchant-left">
+							<img src="{{ category.icon }}" class="merchant-logo">
+						</div>
+						<div class="merchant-right">
+							<span>{{ num_coupons }}</span>
+							<br>
+							coupons
+						</div>
+					</div>
+					<hr>
+					<div class="filters">
+						<h4>Filters</h4>
+						<b>TYPE</b>
+						<div class="filter-links">
+							Select: <a href="javascript:select_filters('all');">All</a> | <a href="javascript:select_filters('none');">None</a>
+						</div>
+						<div class="filter-icons">
+							<div class="filter-container coupon-code" id="coupon_code">
+								<div class="filter-icon coupon-code-icon selected"></div>
+								Coupon Codes
+							</div>
+							<div class="filter-container shipping" id="free_shipping">
+								<div class="filter-icon shipping-icon selected"></div>
+								Free Shipping
+							</div>
+							<div class="filter-container on-sale last" id="onsale">
+								<div class="filter-icon on-sale-icon selected"></div>
+								On Sale
+							</div>
+							<div class="filter-container groceries" id="groceries">
+								<div class="filter-icon groceries-icon selected"></div>
+								Groceries
+							</div>
+							<div class="filter-container printable" id="printable">
+								<div class="filter-icon printable-icon selected"></div>
+								Printables
+							</div>
+							<div class="filter-container freebies last" id="freebies">
+								<div class="filter-icon freebies-icon selected"></div>
+								Freebies
+							</div>
+						</div>
 
-{% block header_block %}
-  <h1 class="text-center">Coupons For {{ category.name }}</h1>
-{% endblock %}  {# header_block #}
-
-{% block fbtags %}
-  <meta property="og:title" content="Hand Verified Coupon Codes for {{ categories.name }} from PennyWyse"/>
-  <meta property="og:url" content="{{ CURRENT_URL }}"/>
-{% endblock %}
-
-{% block pagination_links %}
-	{% if current_page.has_previous %}
-		<link rel="prev" href="/coupons/{{merchant.name_slug}}/{{merchant.id}}/page/{{current_page.previous_page_number}}/{% if comma_categories %}categories/{{comma_categories}}/{% endif %}" />
-	{% endif %}
-	{% if current_page.has_next %}
-		<link rel="next" href="/coupons/{{merchant.name_slug}}/{{merchant.id}}/page/{{current_page.next_page_number}}/{% if comma_categories %}categories/{{comma_categories}}/{% endif %}" />
-	{% endif %}
-{% endblock %}
-
-
-{% block main %}
-<div role="main">
-  <div class="stripe-regular" style="border-bottom: 2px solid #DDDDDD">
-    <section class="company-box">
-      <div class="row">
-        <div class="column">
-          <div class="wrapper-3 tertiary">
-            <div class="row collapse">
-              <div class="large-8 columns">
-                <div class="splitter-right">
-                  <div class="inner">
-                    <div class="row collapse">
-                      <div class="large-4 columns"> </div>
-                      <div class="large-8 columns">
-                        <div class="space-left">
-                          <h2 class="alt" style="font-size:2em;"><a href="/coupons/{{ category.name }}/">{{ category.name }}</a></h2>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="large-4 columns">
-                <div class="splitter-left">
-                  <div class="inner dark-bg">
-                    <div class="row">
-                      <div class="large-6 columns text-center">
-                        <h3>Total Coupons</h3>
-                      </div>
-                      <div class="large-6 columns">
-                        <div class="coupons-count">
-                          <p class="value primary">{{ num_coupons }}</p>
-                          <h4>coupons</h4>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <div class="row">
-      <div class="large-9 columns">
-        <div class="coupons-wrapper">
-          <div class="row">
-            <div class="large-12 columns">
-              <h2>Coupons <span class="alt">by</span> <a href="/coupons/{{ merchant.name_slug }}/{{ merchant.id }}/">{{ merchant.name }}</a> <span>- {{ num_coupons }} of {{ total_coupon_count }} coupons</span></h2>
-            </div>
-          </div>
-          <ul class="rr items-landscape">
-            {% for coupon in coupons %}
-              {% show_coupon coupon %}
-            {% endfor %}
-          </ul>
-        </div>
-        <ul class="rr pagination">
-          {% for page in pages %}
-            <li style="width: 55px;text-align: center;" {% if current_page_idx == page %}class="current"{% endif %}>
-              <a style="padding:10px 0px;" href="/categories/{{ category.code }}/page/{{ page }}/">{{ page }}</a>
-            </li>
-            {% if num_pages > 12 %}
-		          {% if separators == 2 and forloop.counter == 3 or separators == 2 and forloop.counter == 7 or separators == 1 and forloop.counter == 8 %}
-		          		<li style="width: 55px;text-align: center;">
-		          			...
-		          		</li>
-		          {% endif %}
-	          {% endif %}
-          {% endfor %}
-        </ul>
-      </div>
-      <aside class="large-3 columns main-sidebar bg">
-        <div class="wrapper-3 secondary block">
-            <h2 class="alt inner">Filter Coupons</h2>
-            <h5 class="inner">Categories &nbsp;(<a id="clear_categories" href="">clear</a>)</h5>
-            <ul class="rr inner checklist">
-              {% show_category_filters coupon_categories form_path %}
-            </ul>
-        </div>
-      </aside>
-    </div>
-  </div>
-</div>
-{% endblock %} {# main #}
-
-{% block end_of_body %}
-{% comment %}
-<script type="text/javascript">
-    try{
-        mixpanel.track("Category Page Opened", {
-            "company" : "{{ category.code }}",
-            "id"      : "{{ category.id }}",
-            "utm_source"    : "{{ visitor.acquisition_source }}",
-            "utm_medium"    : "{{ visitor.acquisition_medium }}",
-            "utm_term"      : "{{ visitor.acquisition_term }}",
-            "utm_content"   : "{{ visitor.acquisition_content }}",
-            "utm_campaign"  : "{{ visitor.acquisition_campaign }}"
-        });
-    }catch(e){}
-</script>
-{% endcomment %}
-{% endblock %}
+					</div>
+				</div>
+				<div class="center-mobile-rail bottom-shadow hidden-md hidden-lg">
+					<div class="center-mobile-label">{{ category.name }} coupons</div>
+					<div class="left-mobile-rail">
+						<div class="merchant">
+							<div class="merchant-left">
+								<img src="{{ category.icon }}" class="merchant-logo">
+							</div>
+							<div class="merchant-right">
+								<span>{{ num_coupons }}</span>
+								<br>
+								coupons
+							</div>
+						</div>
+					</div>
+					<div class="right-mobile-rail">
+						<div class="filter">Filter
+							<div class="mobile-expand">
+								<span class="glyphicon glyphicon-chevron-down"></span>
+							</div>
+						</div>
+					</div>
+					<br clear="both">
+					<div class="mobile-filters hidden">
+						<div class="top-labels-container coupon-types">
+							<div class="main-labels index-labels">
+								<div class="expandable">
+									<div class="expandable-label">
+										Coupon type:
+									</div>
+									<div class="expandable-selected">
+										<ul class="mobile-coupon-type expanded-choices coupon-type-select">
+											<li class="selected" id="coupon_code">Coupon Codes</li>
+											<li id="free_shipping">Free Shipping</li>
+											<li id="onsale">On Sale</li>
+											<li id="groceries">Groceries</li>
+											<li id="printable">Printables</li>
+											<li id="freebies">Freebies</li>
+										</ul>
+										<div class="coupons-types-expand">
+											<span class="glyphicon glyphicon-chevron-down"></span>
+										</div>										
+									</div>
+								</div>
+								
+							</div>
+						</div>
+						<br clear="both">
+						<div class="top-labels-container coupon-types ">
+							<div class="main-labels index-labels">
+								<div class="expandable">
+									<div class="expandable-label">
+										Sort by:
+									</div>
+									<div class="expandable-selected">
+										<ul class="mobile-coupon-type expanded-choices ordering-select">
+											<li class="selected" id="expiring_soon">Expiring Soon</li>
+											<li id="popularity">Popularity</li>
+											<li id="newest">Newest</li>
+										</ul>
+										<div class="coupons-types-expand">
+											<span class="glyphicon glyphicon-chevron-down"></span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="main-rail">
+					<div class="top-labels-container visible-md visible-lg">
+						<div class="main-labels">
+							<a href="{% url 'web.views.main.index' %}">Home</a>
+							>
+							<a href="{% url 'web.views.main.categories' %}">Categories</a>
+							>
+							{{ category.name }}
+						</div>
+						<div class="sorting">
+							Sort by:
+							<div class="sorting-toggle">
+								<div class="sorting-item">
+									<a href="javascript:void(null);" class="expiring_soon">Expiring soon</a>
+								</div>
+								<div class="sorting-item selected-sorting">
+									<a href="javascript:void(null);" class="popularity">Popularity</a>
+								</div>
+								<div class="sorting-item sorting-item-last">
+									<a href="javascript:void(null);" class="newest">Newest</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="coupons {% if num_pages > 1 %}more-coupons{% endif %}">
+						{% include 'coupons_list.html' %}
+					</div>
+					<ul class="pagination">
+		          		{% for page in pages %}
+		                	<li>
+		                  		{% if page == 1 %}
+		                  			<a href="{% url 'web.views.main.category' category_code=category.code %}">{{ page }}</a>
+		                  		{% else %}
+		                  			<a href="{% url 'web.views.main.category' current_page=page category_code=category.code %}">{{ page }}</a>
+		                  		{% endif %}
+		                  	</li>
+		                  	{% if num_pages > 12 %}
+		                  		{% if separators == 2 and forloop.counter == 3 or separators == 2 and forloop.counter == 7 or separators == 1 and forloop.counter == 8 %}
+		                    		<li>...</li>
+		                    	{% endif %}
+		                  	{% endif %}
+		          		{% endfor %}
+	        		</ul>
+				</div>
+			</div>
+			{% endblock %}

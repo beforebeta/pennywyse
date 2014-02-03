@@ -4,54 +4,37 @@ from api.mobile_api import MobileResource
 admin.autodiscover()
 mobile_resource = MobileResource()
 
-# Uncomment the next two lines to enable the admin:
-
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'coupons.views.home', name='home'),
-    # url(r'^coupons/', include('coupons.foo.urls')),
-
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
 )
 
-########################################################################################
 # Web
-########################################################################################
 urlpatterns += patterns('web.views.main',
     url(r'^$', 'index'),
-    url(r'^privacy-and-terms/$', 'privacy'),
+    url(r'^page/(?P<current_page>[\d]+)/$', 'index'),
+    url(r'^top-coupons/$', 'top_coupons'),
     url(r'^coupons/(?P<company_name>[a-zA-Z0-9-_]+)/$', 'coupons_for_company'),
     url(r'^coupons/(?P<company_name>[a-zA-Z0-9-_]+)/(?P<company_id>[\d]+)/$', 'coupons_for_company'),
-
     url(r'^coupons/(?P<company_name>[a-zA-Z0-9-_]+)/page/(?P<current_page>[\d]+)/$', 'coupons_for_company'),
     url(r'^coupons/(?P<company_name>[a-zA-Z0-9-_]+)/(?P<company_id>[\d]+)/page/(?P<current_page>[\d]+)/$', 'coupons_for_company'),
 
     url(r'^coupons/(?P<company_name>[a-zA-Z0-9-_]+)/page/(?P<current_page>[\d]+)/categories/(?P<category_ids>sh_[a-fA-F0-9]+)/$', 'coupons_for_company'),
     url(r'^coupons/(?P<company_name>[a-zA-Z0-9-_]+)/(?P<company_id>[\d]+)/page/(?P<current_page>[\d]+)/categories/(?P<category_ids>sh_[a-fA-F0-9]+)/$', 'coupons_for_company'),
 
-    url(r'^coupons/(?P<company_name>[a-zA-Z0-9-_]+)/(?P<coupon_label>[a-z0-9-_]+)/(?P<coupon_id>[\d]+)/$', 'open_coupon'),
-    #do not kill old links:
+    # do not kill old links:
     url(r'^coupon/(?P<company_name>[a-zA-Z0-9-_]+)/(?P<coupon_label>[a-z0-9-_]+)/(?P<coupon_id>[\d]+)/$', 'redirect_to_open_coupon'),
-    url(r'^coupons/(?P<company_name>[a-zA-Z0-9-_]+)/(?P<coupon_label>[a-zA-Z0-9-_]+)/(?P<coupon_id>[\d]+)/ty/$', 'coupon_success_page'),
+    url(r'^coupons/(?P<company_name>[a-zA-Z0-9-_]+)/(?P<coupon_label>[a-z0-9-_]+)/(?P<coupon_id>[\d]+)/$', 'redirect_to_open_coupon'),
+    url(r'^coupons/(?P<company_name>[a-zA-Z0-9-_]+)/(?P<coupon_label>[a-zA-Z0-9-_]+)/(?P<coupon_id>[\d]+)/ty/$', 'redirect_to_open_coupon'),
 
     url(r'^categories/(?P<category_code>[a-zA-Z0-9-]+)/page/(?P<current_page>[\d]+)/$', 'category'),
     url(r'^categories/(?P<category_code>[a-zA-Z0-9-]+)/$', 'category'),
     url(r'^categories/$', 'categories'),
+    url(r'^groceries/$', 'groceries'),
     url(r'^stores/(?P<page>[#a-zA-Z]+)/$', 'stores'),
     url(r'^stores/$', 'stores'),
-
-# /blog/ is being served by WordPress
-#    url(r'^blog/', include('articles.urls')),
-    url(r'^robots\.txt$', 'robots_txt'),
-    url(r'^sitemap\.xml$', 'sitemap'),
-)
-
-urlpatterns += patterns('web.views.ajax',
-    url(r'^a/subscribe/$', 'ajax_subscribe'),
+    url(r'^e/subscribe/$', 'email_subscribe'),
+    url(r'^o/(?P<coupon_id>[\d]+)/$', 'open_coupon'),
+    url(r'^p/(?P<url>[a-zA-Z0-9-_]+)/', 'flatpage'),
 )
 
 urlpatterns += patterns('tracking.views',
@@ -59,35 +42,19 @@ urlpatterns += patterns('tracking.views',
 )
 
 urlpatterns += patterns('web.views.search',
-    url(r'^search/$', 'search')
-)
-
-urlpatterns += patterns('web.views.email',
-    url(r'^emailA$', 'email_a'),
-    url(r'^emailB$', 'email_b'),
-    url(r'^emailC$', 'email_c'),
-    url(r'^emailD$', 'email_d'),
+    url(r'^search/$', 'search'),
+    url(r'^search/page/(?P<current_page>[\d]+)/$', 'search')
 )
 
 handler404 = 'web.views.main.index'
 
-########################################################################################
 # WebSvcs
-########################################################################################
-
 urlpatterns += patterns('websvcs.views.image',
     url(r'^s/image/(?P<image_url>.+)/(?P<height>[\d]+)x(?P<width>[\d]+)/$', 'image_resize'),
     url(r'^s/image/(?P<image_url>http.+)/$', 'image')
 )
 
-urlpatterns += patterns('websvcs.views.subscriptions',
-    url(r'^e/subscribe/$', 'email_subscribe')
-)
-
-########################################################################################
 # API
-########################################################################################
-
 urlpatterns += patterns('api.views',
     url(r'^v2/deals', 'deals'),
     url(r'^v2/localinfo', 'localinfo'),
@@ -96,4 +63,9 @@ urlpatterns += patterns('api.views',
 urlpatterns += patterns('',
     url(r'^v3/deals', mobile_resource.deals_return_response),
     url(r'^v3/localinfo', mobile_resource.localinfo_return_response),
+)
+
+# flatpages
+urlpatterns += patterns('django.contrib.flatpages.views',
+    (r'^(?P<url>.*/)$', 'flatpage'),
 )

@@ -1,23 +1,14 @@
 from django.conf import settings
 
-from websvcs.models import EmailSubscription
-
+from core.models import Category
+from web.models import CategorySection, TopCouponSection
+from web.forms import EmailSubscriptionForm
 
 def base(request):
-    context = {
-        'WEBSITE_NAME'  : settings.WEBSITE_NAME,
-        "BASE_URL_NO_APPENDED_SLASH" : settings.BASE_URL_NO_APPENDED_SLASH,
-        "CURRENT_URL"   : "%s%s" % (settings.BASE_URL_NO_APPENDED_SLASH, request.get_full_path()),
-        "ACQUISITION_SOURCE_LOGO_URL": request.session.get('acquisition_source_logo_url', ''),
-    }
-    #check newsletter subscription
-    if "key" in request.session:
-        key = request.session["key"]
-        if EmailSubscription.objects.filter(session_key=key).count()>0:
-            context["SHOW_NEWSLETTER_SUBSCRIPTION_BAR"] = False
-        else:
-            context["SHOW_NEWSLETTER_SUBSCRIPTION_BAR"] = True
-    else:
-        context["SHOW_NEWSLETTER_SUBSCRIPTION_BAR"] = True
-
+    context = {"visitor": getattr(request, 'visitor', None),
+               "top_categories": CategorySection.objects.all(),
+               "top_coupons": TopCouponSection.objects.all(),
+               "top_groceries": Category.objects.filter(name='Grocery Coupons')[0],
+               "subscription_form": EmailSubscriptionForm(),
+               "canonical_url": settings.BASE_URL_NO_APPENDED_SLASH + request.path}
     return context

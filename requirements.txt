@@ -26,7 +26,6 @@ lxml==3.2.4
 django-tastypie==0.10.0
 python-mimeparse==0.1.4
 newrelic
-pysolr==3.1.0
 whoosh==2.5.5
 django-constance==0.6
 django-nose
@@ -42,3 +41,5 @@ redis==2.8.0
 geopy==0.96.2
 elasticsearch==0.4.3
 -e git+git://github.com/seatgeek/fuzzywuzzy.git#egg=fuzzywuzzy
+-e git+https://github.com/toastdriven/pysolr#egg=pysolr
+python-memcached

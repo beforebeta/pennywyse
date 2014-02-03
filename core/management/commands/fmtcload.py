@@ -2,12 +2,15 @@ from BeautifulSoup import BeautifulStoneSoup
 import datetime
 from lxml import etree
 from optparse import make_option
+import re
 from urlparse import urlparse, parse_qs
 
 from django.core.management.base import BaseCommand
 from django.conf import settings
+from django.db.models import Count
 from core.models import Category, Country, Coupon, DealType, Merchant, MerchantAffiliateData
 from core.util import print_stack_trace, extract_url_from_skimlinks
+from tracking.models import ClickTrack
 from websvcs.models import EmbedlyMerchant
 
 import HTMLParser
@@ -16,6 +19,7 @@ import requests
 
 IFRAME_DISALLOWED = ['eBay', 'eBay Canada']
 DATETIME_FORMAT = '%b-%d-%I%M%p-%G'
+SIMILAR_MERCHANTS_LIMIT = 10
 
 class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
@@ -110,6 +114,7 @@ def refresh_merchants():
             skimlinks = merchant.find('skimlinks').text
             homepageurl = merchant.find('homepageurl').text
             model, created = Merchant.objects.get_or_create(name=name)
+            model.name = name.strip()
             model.directlink = homepageurl
             model.skimlinks = skimlinks
             model.link = homepageurl
@@ -149,9 +154,8 @@ def refresh_deals():
             coupon.merchant=merchant
 
             coupon.categories.clear()
-            for category in deal.findall("category"):
+            for category in deal.find("categories"):
                 coupon.categories.add(Category.objects.get(code=category.text))
-
             coupon.dealtypes.clear()
             dealtypes = deal.find('dealtypes')
             for dealtype in dealtypes.findall("type"):
@@ -205,24 +209,32 @@ def setup_web_coupons():
         print_stack_trace()
 
     try:
-
-        if Coupon.objects.filter(is_new=True).count() == 0:
-            for coupon in Coupon.active_objects.get_new_coupons(8):
-                coupon.is_new = True
-                coupon.save()
+        Coupon.objects.filter(is_featured=True).update(is_featured=False)
+        for coupon in Coupon.active_objects.get_new_coupons(200):
+            coupon.is_new = True
+            coupon.save()
 
     except:
         print_stack_trace()
 
     try:
-
-        if Coupon.objects.filter(is_popular=True).count() == 0:
-            for coupon in Coupon.active_objects.get_popular_coupons(8):
-                coupon.is_popular = True
-                coupon.save()
+        Coupon.objects.filter(is_featured=True).update(is_featured=False)
+        for coupon in Coupon.active_objects.get_popular_coupons(200):
+            coupon.is_popular = True
+            coupon.save()
 
     except:
         print_stack_trace()
+        
+    for m in Merchant.objects.all():
+        cat_ids = [c['categories'] for c in Coupon.objects.filter(merchant_id=m.id).values('categories').annotate()]
+        merchant_ids = [c['merchant_id'] for c in Coupon.objects.filter(categories__in=cat_ids)\
+                                                                .values('merchant_id').annotate() if c['merchant_id'] != m.id][:10]
+        m.similar.clear()
+        for sm in Merchant.objects.filter(id__in=merchant_ids).order_by('-name'):
+            m.similar.add(sm)
+        m.save()
+        print 'Calculated similar merchants for %s' % m.name
 
 def refresh_calculated_fields():
     section("Refresh Calculated Fields")
@@ -232,7 +244,34 @@ def refresh_calculated_fields():
         except:
             print "Error with: ", m.name, m.id
             print_stack_trace()
-
+    regex = r'coupons/(?P<company_name>[a-zA-Z0-9-_]+)/(?P<coupon_label>[a-z0-9-_]+)/(?P<coupon_id>[\d]+)/$'
+    for ct in ClickTrack.objects.filter(coupon__isnull=True):
+        r = re.search(regex, ct.target_url)
+        if r:
+            try:
+                coupon = Coupon.objects.get(pk=r.groups()[2])
+                ct.coupon = coupon
+            except Coupon.DoesNotExist:
+                ct.coupon = None
+            ct.save()
+    for ct in ClickTrack.objects.filter(merchant__isnull=True):
+        if ct.coupon:
+            ct.coupon.merchant = ct.coupon.merchant
+            ct.save()
+    tracks = ClickTrack.objects.exclude(coupon__isnull=True).values('coupon_id')\
+                                                            .annotate(popularity=Count('coupon__id'))
+    for track in tracks:
+        Coupon.objects.filter(id=track['coupon_id']).update(popularity=track['popularity'])
+    
+    tracks = ClickTrack.objects.exclude(merchant__isnull=True).values('merchant_id')\
+                                                            .annotate(popularity=Count('merchant__id'))
+    for track in tracks:
+        Merchant.objects.filter(id=track['merchant_id']).update(popularity=track['popularity'])
+    
+    for c in Coupon.objects.filter(coupon_type__isnull=True).only('categories', 'dealtypes'):
+        c.coupon_type = c.get_coupon_type()
+        c.save()
+    
 def refresh_merchant_redirects():
     for coupon in Coupon.objects.all():
         if coupon.link and not coupon.merchant.redirect:

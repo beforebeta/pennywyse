@@ -1,187 +1,324 @@
-{% load static %}
-{% load compress %}
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>{{ page_title }}</title>
-    <meta name="description" content="{{ page_description }}">
-    <meta name="viewport" content="width=device-width">
-
-    {# Place favicon.ico and apple-touch-icon.png in the root directory #}
-    <link rel="shortcut icon" type="image/x-icon" href="{% static "img/favicon.ico" %}">
-    <link rel="apple-touch-icon" href="{% static "img/favicon.png" %}" />
-    <link rel="canonical" href="{{ canonical_url }}">
-	{% block pagination_links %}{% endblock %}
-
-    <!--<link href='http://fonts.googleapis.com/css?family=Ubuntu:400,300,700' rel='stylesheet' type='text/css'>-->
-    <link href='https://fonts.googleapis.com/css?family=Lato:400,700,700italic,900,400italic,300' rel='stylesheet' type='text/css'>
-
-    {% compress css %}
-    <link rel="stylesheet" href="{% static "css/normalize.css" %}">
-    <link rel="stylesheet" href="{% static "css/foundation.css" %}">
-    {# <!--<link rel="stylesheet" href="{% static "css/ubuntu.css" %}">--> #}
-    <link rel="stylesheet" href="{% static "css/flexslider.css" %}">
-    <link rel="stylesheet" href="{% static "css/main.css" %}">
-    <link rel="stylesheet" href="{% static "css/mq-0.css" %}" media="screen and (max-width: 32.5em)" />
-    <link rel="stylesheet" href="{% static "css/mq-32.css" %}" media="screen and (min-width: 32.5em)" />
-    <link rel="stylesheet" href="{% static "css/mq-48.css" %}" media="screen and (min-width: 48em)" />
-    <link rel="stylesheet" href="{% static "css/mq-67.css" %}" media="screen and (min-width: 67.5em)" />
-    <link rel="stylesheet" href="{% static "css/carousel.css" %}"/>
-    <link rel="stylesheet" href="{% static "css/header.css" %}">
-
-    <!--[if (lt IE 9)&(!IEMobile)]>
-    <link rel="stylesheet" href="{% static "css/foundation-ie8.css" %}">
-    <link rel="stylesheet" href="{% static "css/mq-32.css" %}"/>
-    <link rel="stylesheet" href="{% static "css/mq-48.css" %}"/>
-    <link rel="stylesheet" href="{% static "css/mq-67.css" %}"/>
-    <![endif]-->
-    {% endcompress %}
-
-	{# <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> --> #}
-    <script>window.jQuery || document.write('<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"><\/script>')</script>
-
-    {% compress js %}
-    <script src="{% static "js/vendor/modernizr-2.6.2.min.js" %}"></script>
-    <script src="{% static "js/plugins.js" %}"></script>
-    {% endcompress %}
-
-    {% block head_tags %}
-    {% endblock %}
-
-    {% block fbtags %}
-        <meta property="og:image" content="{{ og_image }}"/>
-        <meta property="og:title" content="{{ og_title }}"/>
-        <meta property="og:description" content="{{ og_description }}"/>
-        <meta property="og:url" content="{{ og_url }}"/>
-    {% endblock %}
-
-</head>
-<body>
-<!--[if lt IE 7]>
-<p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
-<![endif]-->
-
-<div class="page home">
-    <header role="banner" class="cf">
-      {% include 'layouts/_header.html' %}
-      {% block header_block %}
-      {% endblock %}
-      {% block newsletter_subscription %}
-      		{% include 'layouts/_newsletter_subscription_bar.html' %}
-      {% endblock %}
-    </header>
-
-    {% block main %}
-    {% endblock %}
-
-    {% block content %}
-    {% endblock %}
-
-    <footer role="contentinfo">
-        {% block popular_companies %}
-	        <div class="stripe-regular">
-	            <div class="row">
-	                <div class="column">
-	                    <h2>Popular Companies</h2>
-	                </div>
-	            </div>
-	            <div class="row collapse">
-	                <div class="column">
-	                    <div class="popular-companies flexslider">
-	                        <ul class="rr slides pop-companies">
-	                            {% for pop_company in pop_companies %}
-	                            <li>
-	                                <a href="{% url 'web.views.main.coupons_for_company' company_name=pop_company.name_slug company_id=pop_company.id %}" class="wrapper-5 small">
-	                                  <img src="{{ pop_company.get_image }}" alt="{{ pop_company.name }}">
-	                                </a>
-	                            </li>
-	                            {% endfor %}
-	                        </ul>
-	                    </div>
-	                </div>
-	            </div>
-	        </div>
-        {% endblock %}
-
-        <div class="stripe-dark pre-footer-wrap">
-            <div class="row">
-                <div class="large-5 columns">
-                    <h3 class="alt">About</h3>
-                    <p>
-                        {{ WEBSITE_NAME }} is America's best and largest source for working coupon codes. All codes on PushPenny are hand verified by a team right here in the US. We have all the best coupons and deals from over 6,000 brands and retailers. So if its a great coupon, we will have it and we will give you the simplest way to find it and use it.
-                    </p>
-                </div>
-                <div class="small-6 large-3 large-offset-1 columns">
-
-                </div>
-                <nav class="small-6 large-2 large-offset-1 columns">
-                    <h3 class="alt">Menu</h3>
-                    <ul class="rr footer-menu">
-                        <li><a href="/">Home</a></li>
-                        <li><a href="/privacy-and-terms/" target="_blank">Terms &amp; Conditions</a></li>
-                        <li><a href="/privacy-and-terms/" target="_blank">Privacy Policy</a></li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-
-        <div class="stripe-darker footer-wrap">
-            <div class="row">
-                <div class="large-3 columns">
-                    <div class="logo">
-                        <a href="#">{{ WEBSITE_NAME }}</a><span style="font-style:normal;font-size:30px;">™</span>
-                    </div>
-                </div>
-                <div class="large-6 columns">
-                    <div class="copyright">Copyright &copy; 2013, {{ WEBSITE_NAME }}. All rights reserved.</div>
-                </div>
-                <div class="large-3 columns">
-                    <ul class="rr social">
-                        <li><a href="http://www.twitter.com/pushpennycoupon" target="_blank" class="ir tw">Twitter</a></li>
-                        <li><a href="http://www.facebook.com/pushpennycoupon" target="_blank" class="ir fb">Facebook</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-    </footer>
-
-</div>
-
-    <script src="/static/js/main.js"></script>
-	<script type="text/javascript">
-		var _gaq = _gaq || [];
-		_gaq.push(['_setAccount', ' UA-42711247-1']);
-		_gaq.push(['_trackPageview']);
-		(function() {
-		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true; 
-		
-		ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
-		
-		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-		})();
-	</script>
-    <script type="text/javascript">
-        var clicky_site_ids = clicky_site_ids || [];
-        clicky_site_ids.push(100637453);
-        (function() {
-            var s = document.createElement('script');
-            s.type = 'text/javascript';
-            s.async = true;
-            s.src = '//static.getclicky.com/js';
-            ( document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0] ).appendChild( s );
-        })();
-    </script>
-    <script type="text/javascript">(function(e,b){if(!b.__SV){var a,f,i,g;window.mixpanel=b;a=e.createElement("script");a.type="text/javascript";a.async=!0;a.src=("https:"===e.location.protocol?"https:":"http:")+'//cdn.mxpnl.com/libs/mixpanel-2.2.min.js';f=e.getElementsByTagName("script")[0];f.parentNode.insertBefore(a,f);b._i=[];b.init=function(a,e,d){function f(b,h){var a=h.split(".");2==a.length&&(b=b[a[0]],h=a[1]);b[h]=function(){b.push([h].concat(Array.prototype.slice.call(arguments,0)))}}var c=b;"undefined"!==
-        typeof d?c=b[d]=[]:d="mixpanel";c.people=c.people||[];c.toString=function(b){var a="mixpanel";"mixpanel"!==d&&(a+="."+d);b||(a+=" (stub)");return a};c.people.toString=function(){return c.toString(1)+".people (stub)"};i="disable track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config people.set people.set_once people.increment people.append people.track_charge people.clear_charges people.delete_user".split(" ");for(g=0;g<i.length;g++)f(c,i[g]);
-    b._i.push([a,e,d])};b.__SV=1.2}})(document,window.mixpanel||[]);
-    mixpanel.init("3d3d512c8e3abb7052561dcaa0187132");</script>
-    {% block end_of_body %}
-    {% endblock %}
-</body>
+<html lang="en">
+	<head>
+		<title>{% block title %}PushPenny | Hand Verified Coupon Codes{% endblock %}</title>
+		{% block head %}
+			<meta charset="utf-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<link href="/static/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+			<link href="/static/css/tipsy.css" rel="stylesheet">
+			<link href="/static/css/grid.css" rel="stylesheet">
+			<link href="/static/css/nprogress.css" rel="stylesheet">
+			<link rel="shortcut icon" type="image/png" href="/static/img/pushpenny-favicon.png">
+    		<link rel="apple-touch-icon" href="/static/img/pushpenny-favicon.png" />
+    		<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+			<script type="text/javascript" src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+			<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+			<script type="text/javascript" src="/static/js/waypoints.min.js"></script>
+			<script type="text/javascript" src="/static/js/store.js"></script>
+			<script type="text/javascript" src="/static/js/mustache.js"></script>
+			<script type="text/javascript" src="/static/js/jquery.jcarousel-core.min.js"></script>
+			<script type="text/javascript" src="/static/js/jquery.form.js"></script>
+			<script type="text/javascript" src="/static/js/jquery.clipboard.js"></script>
+			<script type="text/javascript" src="/static/js/jquery.tipsy.js"></script>
+			<script type="text/javascript" src="/static/js/jquery.purl.js"></script>
+			<script type="text/javascript" src="/static/js/jquery.dotdotdot.min.js"></script>
+			<script type="text/javascript" src="/static/js/nprogress.js"></script>
+		{% endblock %}
+	</head>
+	<body>
+		<div class="header-container top-header main-dropdown-section sticky visible-md visible-lg">
+			<div class="main-row">
+				<span>100% verified coupons guaranteed</span>
+				<div class="top-links">
+					<div class="header-links">
+						<a href="/about/">About</a>
+						<a href="/about/">Help</a>
+					</div>
+					<a href="http://twitter.com/pushpennycoupon" target="_blank"><img src="/static/img/twitter_icon.png"></a>
+					<a href="https://www.facebook.com/pushpennycoupon" target="_blank"><img src="/static/img/facebook_icon.png"></a>
+					<a href="https://plus.google.com/105363253284126279882/posts" target="_blank"><img src="/static/img/gplus_icon.png"></a>
+				</div>
+			</div>
+		</div>
+		<div class="header-container header hidden-md hidden-lg">
+				<div class="mobile-row">
+					    <button type="button" class="navbar-toggle" id="mobile-menu">
+					      <span class="icon-bar"></span>
+					      <span class="icon-bar"></span>
+					      <span class="icon-bar"></span>
+					    </button>
+						<ul class="mobile-menu">
+							<li>
+								<span class="search-label">Search</span>
+								<form action="/search/" id="search_form">
+								<input name="q" type="text" placeholder="Search over 50,000+ coupons" class="search" value="{{ query }}">
+								</form>
+							</li>
+							<li class="top-coupons-link">
+								<a href="javascript:void(null);" class="menu-link">Top Coupons</a>
+							</li>
+							<li id="mobile-categories">
+								<a href="javascript:void(null);" class="menu-link">Categories</a>
+								<div class="mobile-expand">
+									<span class="glyphicon glyphicon-chevron-down"></span>
+								</div>
+							</li>
+								{% for category in top_categories %}
+										{% for subcategory in category.category_set.all %}
+											<li class="expanded-menu-item mobile-category"><a href="{%url 'web.views.main.category' category_code=subcategory.code %}">{{ subcategory.name }}</a></li>
+										{% endfor %}
+								{% endfor %}
+								<li class="expanded-menu-item mobile-category more-items"><a href="{% url 'web.views.main.categories' %}">See all categories &#187;</a></li>
+							<li id="mobile-groceries">
+								<a href="javascript:void(null);" class="menu-link">Groceries</a>
+								<div class="mobile-expand">
+									<span class="glyphicon glyphicon-chevron-down"></span>
+								</div>
+							</li>
+							{% for grocery in top_groceries.category_set.all %}
+								<li class="expanded-menu-item mobile-grocery"><a href="{% url 'web.views.main.category' category_code=grocery.code %}">{{ grocery.name }}</a></li>
+							{% endfor %}
+							<li>
+								<a href="/blog" class="menu-link">Magazine</a>
+							</li>
+							<li id="mobile-subscribe-link">
+								<a href="javascript:void(null);"  class="menu-link">Subscribe</a>
+							</li>
+							<li class="mobile-subscription">
+								<div>
+									<div class="email-subscribe">
+										<form action="/e/subscribe/" method="post" class="subscribe-form">{% csrf_token %}
+										{{ subscription_form.email }}
+									</div>
+									<button>let me<br>know</button>
+									</form>
+								</div>
+							</li>
+						</ul>
+					<div class="mobile-logo"><a href="{% url 'web.views.main.index' %}"><img src="/static/img/Pushpenny-respMobile-logo.png"></a></div>
+				</div>
+		</div>
+		<div class="header-container header hidden visible-md visible-lg">
+				<div class="row">
+					<div class="logo"><a href="{% url 'web.views.main.index' %}"><img src="/static/img/logo.png"></a>
+					</div>
+					<div class="search-container">
+						<form action="/search/" id="search_form">
+						<input name="q" type="text" placeholder="Search over 50,000+ coupons from 6,000+ stores" class="search" value="{{ query }}">
+						</form>
+						{% comment %}
+							<a href="#">Sign Up</a> |
+							<a href="#">Login</a>
+						{% endcomment %}
+					</div>
+				</div>
+		</div>
+		<div class="header-container menu-row main-dropdown-section sticky visible-md visible-lg">
+			<div class="row">
+				<ul class="menu">
+					<li class="menu-item category-item">
+						<a href="#" class="menu-link tc-link">Top Coupons</a>
+						<ul class="row dropdown-row stores-row"><li>
+							<div class="main-dropdown-row">
+								<div class="top-coupons-row">	
+									<div class="top-coupon-types top-coupons">
+										<div>
+											{% for top_coupon in top_coupons %}
+												<a href="javascript:void(null);" id="tc-{{ top_coupon.id }}" {% if forloop.first %}class="top-coupon-active"{% endif %}>{{ top_coupon.name }}</a><br>
+											{% endfor %}
+										</div>
+									</div>
+									<div class="top-coupons top-coupon">
+										<b>Most popular</b>
+										{% for top_coupon in top_coupons %}
+											{% if top_coupon.popular.all.0 %}
+												<div class="coupon-body top-popular-coupon {% if not forloop.first %}hidden{% endif %}" id="pc-{{ top_coupon.id }}">
+													<h2 class="short-description">
+														<a href="{{ top_coupon.popular.all.0.full_success_path }}">
+															{{ top_coupon.popular.all.0.short_desc }}
+														</a>
+													</h2>
+													<a href="{{ top_coupon.popular.all.0.full_success_path }}" class="top-coupon-link">
+														{{ top_coupon.popular.all.0.get_description }}<br>
+													</a>
+													<span class="ends">Ends {{ top_coupon.popular.all.0.end|date:"m/d/y" }}</span>
+													<div class="description">
+														<a href="{{ top_coupon.popular.all.0.merchant.local_path }}">
+															<img src="{{ top_coupon.popular.all.0.merchant.image }}">
+														</a>
+													</div>
+												</div>
+											{% endif %}
+										{% endfor %}
+									</div>
+									<div class="top-coupons featured-coupons">
+										<b>Featured coupons</b>
+										{% for top_coupon in top_coupons %}
+											<div class="top-featured-section {% if not forloop.first %}hidden{% endif %}" id="fc-{{ top_coupon.id }}">
+											{% for featured_coupon in top_coupon.featured.all %}
+												<div class="top-featured-coupon {% if foorloop.first %}first-coupon{% elif forloop.last %}last-coupon{% endif %}">
+													<div class="featured-image">
+														<a href="{{ featured_coupon.merchant.local_path }}">
+															<img src="{{ featured_coupon.merchant.image }}">
+														</a>
+													</div>
+													<div class="featured-description">
+														<a href="{{ featured_coupon.full_success_path }}">
+															{{ featured_coupon.get_description }}
+														</a>
+													</div><br clear="both">
+												</div>
+											{% endfor %}
+											</div>
+										{% endfor %}
+									</div>
+									<div class="top-coupons popular-merchants">
+										<b>Stores</b>
+										{% for top_coupon in top_coupons %}
+										<ul class="top-store{% if not forloop.first %} hidden{% endif %}" id="st-{{ top_coupon.id }}">
+											{% for merchant in top_coupon.stores.all %}
+												<li>
+													<a href="{{ merchant.local_path }}"><img src="{{ merchant.image }}"></a>
+												</li>
+											{% endfor %}
+										</ul>
+										{% endfor %}
+										<br clear="both">
+									</div>
+									<br clear="both">
+								</div>
+								<div class="more-categories more-top-categories clearfix">
+									<a href="{% url 'web.views.main.stores' %}">See all stores &#187;</a>
+								</div>
+							</div>
+						</ul>
+					</li>
+					<li class="menu-item category-item">
+						<a href="{% url 'web.views.main.categories' %}" class="menu-link">Categories</a>
+						<ul class="row main-row dropdown-row category-row"><li>
+							<div class="main-dropdown-row">
+								<div class="clearfix category-dropdown-container">
+									{% for category in top_categories %}
+										<div class="category-label">{{ category.name }}</div>
+									{% endfor %}
+									<br clear="both">
+									{% for category in top_categories %}
+										<div class="category-container">
+											{% for subcategory in category.category_set.all %}
+												<a href="{%url 'web.views.main.category' category_code=subcategory.code %}">{{ subcategory.name }}</a><br>
+											{% endfor %}
+										</div>
+									{% endfor %}
+								</div>
+								<div class="more-categories clearfix">
+									<a href="{% url 'web.views.main.categories' %}">See all categories &#187;</a>
+								</div>
+							</div>
+						</li></ul>
+					</li>
+					<li class="menu-item">
+						<a href="{% url 'web.views.main.groceries' %}" class="menu-link">Groceries</a>
+						<ul class="row main-row dropdown-row groceries-row"><li>
+							<div class="main-dropdown-row">
+								<div class="clearfix">
+									{% for grocery in top_groceries.category_set.all %}
+										{% if forloop.counter == 1 %}
+											<div class="category-container store-row">
+										{% endif %}
+										<a href="{% url 'web.views.main.category' category_code=grocery.code %}">{{ grocery.name }}</a><br>
+										{% if forloop.counter|divisibleby:"6" %}
+											</div><div class="category-container store-row">
+										{% endif %}
+										{% if forloop.last %}
+											</div>
+										{% endif %}
+									{% endfor %}
+								</div>
+								<div class="more-categories clearfix">
+									<a href="{% url 'web.views.main.category' category_code=top_groceries.code %}">See all groceries &#187;</a>
+								</div>
+							</div>
+						</li></ul>
+					</li>
+					{% comment %}
+					<li class="menu-item">
+						<a href="#">Local</a>
+						<ul class="row main-row dropdown-row local-row"><li>
+							<div class="main-dropdown-row">
+								<div class="local-search-container">
+									<form>
+									<input type="text" placeholder="Search by city, state or zip code" class="search">
+									</form>
+								</div>
+								<div class="more-categories clearfix">
+									<a href="#">See all cities &#187;</a>
+								</div>
+							</div>
+						</li></ul>
+					</li>
+					{% endcomment %}
+					<li class="menu-item">
+						<a href="/blog" class="menu-link">Magazine</a>
+					</li>
+					<li class="menu-item menu-item-latest">
+						<a href="javascript:void(null);" id="subscribe-link" class="menu-link">Subscribe</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="header-container header prescroll-header bottom-shadow">
+				<div class="row">
+					<div class="search-container top-container">
+						<a href="{% url 'web.views.main.index' %}"><img src="/static/img/Pushpenny-388_logo.png"></a>
+						<form action="/search/" id="search_form">
+						<input name="q" type="text" placeholder="Search over 50,000+ coupons from 6,000+ stores" class="search" value="{{ query }}">
+						</form>
+					</div>
+				</div>
+		</div>
+		<div class="subscription-popup">
+			<div class="main-row">
+				<div class="subscription-row">
+					<div class="subscription-popup-left">
+					<h2><img src="/static/img/pushpenny_icon.png">Push that Penny.</h2>
+					<h3>Subscribe and save on Everything. Anywhere.</h3>
+					<h4>We'll send you tips to help you learn how to get
+					the most out of your penny.</h4>
+					</div>
+					<div class="subscription-popup-right">
+						Sign up with your email address to get the latest offers and enter to win a $100 Amazon Gift Card.<br><br>
+						{% comment %}
+							<div class="facebook-subscribe">Sign up with Facebook</div>
+							<div class="subscribe-delimiter"><hr><span>or</span><hr></div>
+						{% endcomment %}
+						<div class="email-subscribe">
+							<form action="/e/subscribe/" method="post" class="subscribe-form">{% csrf_token %}
+							{{ subscription_form.email }}
+						</div>
+						<input type="submit" value="start saving">
+						</form>
+					</div>
+				</div>
+				<a href="javascript:void(null);" id="close-subscription-popup"><img src="/static/img/exit_icon.png"></a>
+			</div>
+		</div>
+		<div class="overlay"></div>
+		<div class="main-container">
+			{% block content %}{% endblock %}
+		</div>
+		<!-- /container -->
+		<script type="text/javascript">
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', ' UA-42711247-1']);
+			_gaq.push(['_trackPageview']);
+			(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true; 
+	
+			ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
+	
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			})();
+		</script>
+	</body>
 </html>

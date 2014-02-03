@@ -1,117 +1,53 @@
 {% extends "base.html" %}
-{% load static %}
-{% load compress %}
 
-{% block head_tags %}
-    {% compress css %}
-    <link rel="stylesheet" href="{% static "css/carousel.css" %}" type="text/css" media="screen" />
-    {% endcompress %}
-    {% compress js %}
-    <script src="{% static "js/vendor/jcarousellite.min.js" %}"></script>
-    <script src="{% static "js/carousel.js" %}"></script>
-    {% endcompress %}
-{% endblock %}
-
-{% block header_block %}
-{% include "carousel/carousel_main.html" %}
-{% endblock %}
-
-{% block main %}
-
-          <div role="main">
-
-            <div class="stripe-regular items-carousel-wrap">
-              <div class="row">
-                <div class="column">
-                  <h1 class='discrete-h1 h2'>New Coupons</h1>
-                </div>
-              </div>
-              <div class="row collapse">
-                <div class="column">
-                  <div class="items-carousel flexslider">
-                    <ul class="rr slides">
-                        {% for coupon in new_coupons %}
-                        <li>
-                            <div class="wrapper-3 item-thumb"  data-rid="{{ coupon.ref_id }}">
-                                <div class="top">
-                                    <a href="/coupons/{{ coupon.merchant.name_slug }}/{{ coupon.merchant.id }}/">
-                                        <figure class="prodimg">
-                                            <img src="{{ coupon.get_image }}" alt="{{ coupon.description }}" style="display:normal">
-                                        </figure>
-                                    </a>
-                                    <h2 class="alt" style="max-height: 45px; overflow: hidden;"><a target="_blank" href="{{ coupon.success_path }}">{{ coupon.description }}</a></h2>
-                                </div>
-                                <div class="bottom">
-                                    <p class="value secondary">{{ coupon.short_desc }}</p>
-                                    <h6><a href="/coupons/{{ coupon.merchant.name_slug }}/">{{ coupon.merchant.name }}</a></h6>
-                                    <a href="{{ coupon.success_path }}" target="_blank" class="input button green secondary">Learn more</a>
-                                </div>
-                            </div>
-                        </li>
-                        {% endfor %}
-
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="stripe-white big items-carousel-wrap">
-              <div class="row">
-                <div class="column">
-                  <h2>Popular Coupons</h2>
-                </div>
-              </div>
-              <div class="row collapse">
-                <div class="column">
-                  <div class="items-carousel flexslider">
-                    <ul class="rr slides">
-
-                        {% for coupon in pop_coupons %}
-                        <li>
-                            <div class="wrapper-3-alt item-thumb" data-rid="{{ coupon.ref_id }}">
-                                <div class="top">
-                                    <a href="/coupons/{{ coupon.merchant.name_slug }}/{{ coupon.merchant.id }}/">
-                                        <figure class="prodimg">
-                                            <img src="{{ coupon.get_image }}" alt="{{ coupon.description }}" style="display:normal">
-                                        </figure>
-                                    </a>
-                                    <h2 class="alt" style="max-height: 45px; overflow: hidden;"><a target="_blank" href="{{ coupon.success_path }}">{{ coupon.description }}</a></h2>
-                                </div>
-                                <div class="bottom">
-                                    <p class="value secondary">{{ coupon.short_desc }}</p>
-                                    <h6><a href="/coupons/{{ coupon.merchant.name_slug }}/">{{ coupon.merchant.name }}</a></h6>
-                                    <a target="_blank" href="{{ coupon.success_path }}/" class="input button green secondary">Learn More</a>
-                                </div>
-                            </div>
-                        </li>
-                        {% endfor %}
-
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-{% endblock %}
-
-{% block end_of_body %}
-{% comment %}
-<script type="text/javascript">
-    try{
-        mixpanel.track("Home Page Opened", {
-            "utm_source"    : "{{ visitor.acquisition_source }}",
-            "utm_medium"    : "{{ visitor.acquisition_medium }}",
-            "utm_term"      : "{{ visitor.acquisition_term }}",
-            "utm_content"   : "{{ visitor.acquisition_content }}",
-            "utm_campaign"  : "{{ visitor.acquisition_campaign }}"
-        });
-    }catch(e){}
-</script>
-{% endcomment %}
-{% endblock %}
-
-
-
+		{% block head %}
+			{{ block.super }}
+			<meta name="description" content=" <meta name="description" content="PushPenny is America's best and largest source for working coupon codes. All codes on PushPenny are hand verified by a team right here in the US. We have all the best coupons and deals from over 6,000 brands and retailers. So if its a great coupon, we will have it and we will give you the simplest way to find it and use it.">
+			{% if current_page.has_previous %}
+            	{% if current_page.previous_page_number == 1 %}
+            		<link rel="prev" href="http://{{ request.get_host }}{% url 'web.views.main.index' %}" />
+            	{% else %}
+            		<link rel="prev" href="http://{{ request.get_host }}{% url 'web.views.main.index' current_page=current_page.previous_page_number %}" />
+        		{% endif %}
+        	{% endif %}
+        	{% if current_page.has_next %}
+            	{% if current_page.next_page_number == 1 %}
+            		<link rel="next" href="http://{{ request.get_host }}{% url 'web.views.main.index' %}" />
+            	{% else %}
+            		<link rel="next" href="http://{{ request.get_host }}{% url 'web.views.main.index' current_page=current_page.next_page_number %}" />
+        		{% endif %}
+        	{% endif %}
+        	<link rel="canonical" href="http://{{ request.get_host }}{% url 'web.views.main.index' %}">
+		{% endblock %}
+		
+		{% block content %}
+			<div class="row middle-container landing-container">
+				<div class="main-rail index-rail landing-rail">
+					<div class="top-labels-container top-labels-index">
+						<div class="main-labels index-labels">
+							<a href="javascript:void(null);" class="active" id="new">New</a>
+							<a href="javascript:void(null);" id="trending">Trending</a>
+						</div>
+					</div>
+					<div class="coupons more-coupons">
+						{% include 'coupons_list.html' %}
+					</div>
+					<ul class="pagination">
+		          		{% for page in pages %}
+		                	<li>
+		                  		{% if page == 1 %}
+		                  			<a href="{% url 'web.views.main.index' %}">{{ page }}</a>
+		                  		{% else %}
+		                  			<a href="{% url 'web.views.main.index' current_page=page %}">{{ page }}</a>
+		                  		{% endif %}
+		                  	</li>
+		                  	{% if num_pages > 12 %}
+		                  		{% if separators == 2 and forloop.counter == 3 or separators == 2 and forloop.counter == 7 or separators == 1 and forloop.counter == 8 %}
+		                    		<li>...</li>
+		                    	{% endif %}
+		                  	{% endif %}
+		          		{% endfor %}
+	        		</ul>					
+				</div>
+			</div>
+			{% endblock %}

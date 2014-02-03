@@ -15,6 +15,7 @@ class CouponNetworkAdmin(admin.ModelAdmin):
 
 class CategoryAdmin(admin.ModelAdmin):
     readonly_fields = ['ref_id', 'ref_id_source']
+    search_fields = ('name', )
 
 class CityPictureAdmin(admin.ModelAdmin):
     pass

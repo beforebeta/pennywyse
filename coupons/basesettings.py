@@ -31,9 +31,7 @@ BASE_URL_NO_APPENDED_SLASH = "http://localhost:8002"
 try: os.makedirs(IMAGE_LOCAL_COPY_DIR)
 except: pass
 
-ADMINS = (
-# ('Your Name', 'your_email@example.com'),
-)
+ADMINS = ()
 
 WEBSITE_NAME = 'PushPenny'
 
@@ -167,6 +165,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.humanize',
     'django.contrib.gis', # GeoDjango
+    'django.contrib.flatpages',
     'compressor',
     'constance',
     'djcelery',
@@ -286,7 +285,9 @@ CELERYBEAT_SCHEDULE = {
 }
 
 CONSTANCE_CONFIG = {
-    'CATEGORY_PAGE_TEXT': ('', 'Category text.')
+    'CATEGORIES_PAGE_TEXT': ('', 'Categories text.'),
+    'MERCHANTS_PAGE_TEXT': ('', 'Merchants text.'),
+    'GROCERIS_PAGE_TEXT': ('', 'Groceries text.'),
 }
 
 CONSTANCE_BACKEND = 'constance.backends.redisd.RedisBackend'

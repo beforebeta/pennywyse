@@ -1,67 +1,67 @@
-import re
-
-from django.db.models import Q
-from django.http import HttpResponseRedirect
-from core.models import Merchant, Coupon
+import json
+from django.core.paginator import Paginator
+from django.core.urlresolvers import reverse
+from django.http import HttpResponse, HttpResponseRedirect
 from haystack.query import SearchQuerySet
-from web.views.main import render_response
+from core.models import Merchant
+from web.views.main import render_response, SORTING_MAPPING
 from web.utils import FuzzySearchQuerySet
 
-def normalize_query(query_string,
-                    findterms=re.compile(r'"([^"]+)"|(\S+)').findall,
-                    normspace=re.compile(r'\s{2,}').sub):
-    ''' Splits the query string in invidual keywords, getting rid of unecessary spaces
-        and grouping quoted words together.
-        Example:
-
-        >>> normalize_query('  some random  words "with   quotes  " and   spaces')
-        ['some', 'random', 'words', 'with quotes', 'and', 'spaces']
-
-    '''
-    return [normspace(' ', (t[0] or t[1]).strip()) for t in findterms(query_string)]
-
-def get_query(query_string, search_fields):
-    ''' Returns a query, that is a combination of Q objects. That combination
-        aims to search keywords within a model by testing the given search fields.
-
-    '''
-    query = None # Query to search for every search term
-    terms = normalize_query(query_string)
-    for term in terms:
-        or_query = None # Query to search for a given term in each field
-        for field_name in search_fields:
-            q = Q(**{"%s__icontains" % field_name: term})
-            if or_query is None:
-                or_query = q
-            else:
-                or_query = or_query | q
-        if query is None:
-            query = or_query
-        else:
-            query = query & or_query
-    return query
-
-def search_model(model, query, fields, order_by="-date_added", objects=None):
-    if not objects:
-        objects=model.objects
-    entry_query = get_query(query.lower(), fields)
-    return model.objects.filter(entry_query).order_by(order_by)
-
-def search(request):
+def search(request, current_page=1):
     query = request.GET.get("q","").strip()
+    coupon_type = request.GET.get('coupon_type', None)
+    sorting = request.GET.get('sorting', None)
+    ordering = SORTING_MAPPING.get(sorting, 'popularity')
+    context = {}
+    
     if query:
-        merchants = FuzzySearchQuerySet().combined_filter(django_ct='core.merchant',
-                                            total_coupon_count__gt=0, content=query)[:5]
-        coupons = SearchQuerySet().filter(django_ct='core.coupon', content=query)[:10]
-        merchant_ids = ['core.merchant.%s' % c.merchant_id for c in coupons]
-        if merchant_ids:
-            relevant_merchants = SearchQuerySet().filter(django_ct='core.merchant', id__in=merchant_ids).order_by('-coupon_count')
-        else:
-            relevant_merchants = None
+        merchant = Merchant.objects.filter(name=query).only('name_slug')
+        if merchant.count() == 1:
+            merchant_url = reverse('web.views.main.coupons_for_company', kwargs={'company_name': merchant[0].name_slug})
+            return HttpResponseRedirect(merchant_url)
+        parameters = {'django_ct':'core.coupon', 'content':query}
+        if coupon_type:
+            parameters['coupon_type'] = coupon_type
+        merchants_list = FuzzySearchQuerySet().combined_filter(django_ct='core.merchant',
+                                            total_coupon_count__gt=0, content=query)
+        if not merchants_list:
+            context['suggested_merchants'] = Merchant.objects.filter(is_featured=True)[:5]
+        coupons_list = SearchQuerySet().filter(**parameters).order_by(ordering)
+        pages = Paginator(coupons_list, 20)
+        merchant_pages = Paginator(merchants_list, 10)
+        if request.is_ajax():
+            data = []
+            fetch_merchants = request.GET.get('fetch_merchants', None)
+            if fetch_merchants:
+                try:
+                    for m in merchant_pages.page(current_page).object_list:
+                        item = {'local_path': m.local_path,
+                                'image': m.image}
+                        data.append(item)
+                except:
+                    pass
+            else:
+                try:
+                    for c in pages.page(current_page).object_list:
+                        item = {'merchant_name': c.merchant_name,
+                                'short_desc': c.short_desc,
+                                'description': c.text,
+                                'end': c.end.strftime('%m/%d/%y') if c.end else '',
+                                'coupon_type': c.coupon_type,
+                                'full_success_path': c.full_success_path,
+                                'image': c.merchant_image,
+                                'id': c.pk,
+                                'code': c.code,
+                                'merchant_link': c.merchant_local_path}
+                        data.append(item)
+                except:
+                    pass
+                    
+            return HttpResponse(json.dumps({'items': data,
+                                        'total_pages': pages.num_pages}), content_type="application/json")
+        merchants = merchant_pages.page(current_page).object_list
+        context['coupons'] = pages.page(current_page).object_list
     else:
-        merchants = coupons = relevant_merchants = None
-    context = {'query': query,
-               'merchants': merchants,
-               'coupons': coupons,
-               'relevant_merchants': relevant_merchants}
-    return render_response(template_file="search-results.html", request=request, context=context)
+        merchants = None
+    context.update(query=query, merchants=merchants)
+    return render_response(template_file="search.html", request=request, context=context)

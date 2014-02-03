@@ -79,11 +79,12 @@ ShortenedURL_IDENTIFIER = '#SHORT-'
 class EmailSubscription(models.Model):
     app         = models.CharField(max_length=255, db_index=True)
     session_key = models.CharField(max_length=255, db_index=True)
-    email       = models.CharField(max_length=255, db_index=True)
+    email       = models.EmailField(max_length=255, db_index=True)
     first_name  = models.CharField(max_length=255, null=True, blank=True)
     last_name   = models.CharField(max_length=255, null=True, blank=True)
     full_name   = models.CharField(max_length=255, null=True, blank=True)
     context     = PickledObjectField(default={})
+    source_url  = models.CharField(max_length=255, null=True, blank=True)
 
     date_added = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True, auto_now_add=True)
@@ -91,8 +92,6 @@ class EmailSubscription(models.Model):
     def __unicode__(self):  # Python 3: def __str__(self):
         return "%s, %s, %s" % (self.app, self.email, self.full_name)
 
-    def __unicode__(self):  # Python 3: def __str__(self):
-        return "%s %s" % (self.app, self.email)
 
 class EmbedlyCache:
     def __init__(self):

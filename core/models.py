@@ -10,7 +10,8 @@ from django.conf import settings
 from django.core.cache import cache
 from django.core.paginator import Paginator
 from django.core.urlresolvers import reverse
-from django.contrib.gis.db import models as models# Switching to GeoDjango models
+from django.contrib.gis.db import models as models  # Switching to GeoDjango models
+from django.contrib.sites.models import Site
 from django.db.models.query_utils import Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -19,7 +20,7 @@ from django.contrib.gis.geos import Point
 
 from core.util import print_stack_trace, get_first_google_image_result, get_description_tag_from_url
 from tracking.commission.skimlinks import get_merchant_description
-
+from web.models import CategorySection, TopCouponSection
 
 def get_descriptive_image(name):
     return get_first_google_image_result(name)
@@ -39,7 +40,6 @@ def get_description(model):
     return ''
 
 base_description = "PushPenny | Hand Verified Coupon Codes"
-icon_url = "http://pushpenny.com/static/img/fbog.png"
 
 #######################################################################################################################
 #
@@ -54,8 +54,10 @@ class Category(models.Model):
     name            = models.CharField(max_length=255, blank=True, null=True, db_index=True)
     description     = models.CharField(max_length=255, blank=True, null=True)
     parent          = models.ForeignKey("Category", blank=True, null=True)
-    image           = models.TextField(blank=True, null=True)
+    image           = models.TextField(blank=True, null=True, default='/static/img/favicon.png')
+    icon            = models.TextField(blank=True, null=True, default='/static/img/category_icons/placeholder.jpg')
     is_featured     = models.BooleanField('Featured', blank=True, default=False)
+    navigation_section = models.ForeignKey(CategorySection, blank=True, null=True)
 
     date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
     last_modified   = models.DateTimeField(default=datetime.datetime.now(), auto_now=True, auto_now_add=True)
@@ -72,7 +74,8 @@ class Category(models.Model):
         return self.coupon_set.all().filter(end__lt=datetime.datetime.now()).order_by("-created")[:100]
 
     def get_active_coupons(self):
-        return self.coupon_set.all().exclude(merchant_id__isnull=True).filter(Q(end__gt=datetime.datetime.now()) | Q(end__isnull=True)).order_by("-created")
+        return self.coupon_set.all().exclude(merchant_id__isnull=True)\
+                                    .filter(Q(end__gt=datetime.datetime.now()) | Q(end__isnull=True)).order_by("-created")
 
     def get_coupon_count(self):
         return self.get_active_coupons().count()
@@ -86,7 +89,7 @@ class Category(models.Model):
         coupons = list(coupons.filter(Q(categories__id__in=selected_categories) |\
                                       Q(categories__id__isnull=True)))
         coupons = coupons + list(self.get_expired_coupons())
-        return Paginator(coupons, 10)
+        return Paginator(coupons, 12)
 
     def display_name(self):
         return self.name
@@ -169,6 +172,10 @@ class Merchant(models.Model):
     date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
     last_modified   = models.DateTimeField(default=datetime.datetime.now(), auto_now=True, auto_now_add=True)
     use_skimlinks   = models.BooleanField(default=True)
+    is_featured     = models.BooleanField('Featured', blank=True, default=False)
+    popularity      = models.IntegerField(blank=True, null=True, default=0)
+    similar         = models.ManyToManyField('Merchant', blank=True, null=True)
+    navigation_section = models.ForeignKey(TopCouponSection, blank=True, null=True, related_name='stores')
 
     all_objects = models.Manager()
     objects = MerchantManager()
@@ -276,7 +283,7 @@ class Merchant(models.Model):
         return self.name
 
     def local_path(self):
-        return "/coupons/{0}/{1}/".format(self.name_slug, self.id)
+        return "/coupons/{0}/".format(self.name_slug)
 
     def page_description(self):
         return "Coupons for {0} | {1} | {2}".format(self.name, self.description, base_description)
@@ -483,6 +490,8 @@ class Coupon(models.Model):
     is_popular      = models.BooleanField('Popular', blank=True, default=False)
     is_duplicate    = models.BooleanField('Duplicate', blank=True, default=False)
     related_deal    = models.ForeignKey('Coupon', blank=True, null=True)
+    popularity      = models.IntegerField(blank=True, null=True, default=0)
+    coupon_type     = models.CharField(max_length=255, blank=True, null=True)
 
     embedly_title = models.TextField(blank=True, null=True)
     embedly_description = models.TextField(blank=True, null=True)
@@ -490,6 +499,8 @@ class Coupon(models.Model):
 
     date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
     last_modified   = models.DateTimeField(default=datetime.datetime.now(), auto_now=True, auto_now_add=True)
+    featured_in = models.ForeignKey(TopCouponSection, blank=True, null=True, related_name='featured')
+    popular_in = models.ForeignKey(TopCouponSection, blank=True, null=True, related_name='popular')
 
     objects = CouponManager()
     active_objects = ActiveCouponManager()
@@ -574,21 +585,32 @@ class Coupon(models.Model):
             print_stack_trace()
         return "coupon"
 
+    def get_coupon_type(self):
+        category_ids = [c['id'] for c in Category.objects.filter(name__icontains='grocery').values('id')]
+        if self.code:
+            return 'coupon_code'
+        elif self.has_deal_type('freeshipping') or self.has_deal_type('totallyfreeshipping'):
+            return 'free_shipping'        
+        elif self.has_deal_type('printable'):
+            return 'printable'
+        elif self.has_deal_type('gift'):
+            return 'freebies'
+        elif self.categories.filter(id__in=category_ids).count() > 0:
+            return 'groceries'
+        elif self.has_deal_type('sale'):
+            return 'onsale'
+        return 'onsale'
+
     def create_image(self):
         if self.merchant:
             return self.merchant.image
-#            if self.categories.count()>0:
-#                if self.categories.exclude(name="apparel").count()>0:
-#                    return self.categories.exclude(name="apparel")[0].image
-#                else:
-#                    return self.categories.all()[0].image
         return settings.DEFAULT_IMAGE
 
     def save(self, *args, **kwargs):
         if self.description:
             if self.description.endswith("."):
                 self.description = self.description[:-1]
-            #Hierarchy for setting short desc
+            # Hierarchy for setting short desc
             self.short_desc = self.create_short_desc()
             self.desc_slug = slugify(self.description)[:175]
         super(Coupon, self).save(*args, **kwargs)
@@ -609,7 +631,7 @@ class Coupon(models.Model):
         return category in [c.code for c in self.categories.all()]
 
     def local_path(self):
-        return "/coupons/{0}/{1}/{2}/".format(self.merchant.name_slug, self.desc_slug, self.id)
+        return "/coupons/%s/?c=%s" % (self.merchant.name_slug, self.id)
 
     def success_path(self):
         return reverse('web.views.main.coupon_success_page', kwargs={'company_name': self.merchant.name_slug,
@@ -641,7 +663,16 @@ class Coupon(models.Model):
         if now > self.end:
             return True
         return False
-
+    
+    def full_success_path(self):
+        return 'http://%s%s' % (Site.objects.get_current().domain, self.local_path())
+    
+    @property
+    def twitter_share_url(self):
+        params = {'text': '%s at %s from @pushpennycoupon' % (self.short_desc[:75], self.merchant.name),
+                  'url': self.full_success_path()}
+        return 'https://twitter.com/intent/tweet?' + urllib.urlencode(params)
+    
 @receiver(post_save, sender=Category)
 @receiver(post_save, sender=Coupon)
 @receiver(post_save, sender=Merchant)
