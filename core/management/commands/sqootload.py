@@ -59,6 +59,11 @@ class Command(BaseCommand):
             dest='validate',
             default=False,
             help='validate'),
+        make_option('--deduphard',
+            action='store_true',
+            dest='deduphard',
+            default=False,
+            help='deduphard'),
         make_option('--analyze',
             action='store_true',
             dest='analyze',
@@ -130,6 +135,11 @@ class Command(BaseCommand):
 
             try:
                 validate_sqoot_data(pulseonly=pulseonly, stoptime=stoptime)
+            except:
+                print_stack_trace()
+        if options['deduphard']:
+            try:
+                dedup_sqoot_data_hard()
             except:
                 print_stack_trace()
         if options['analyze']:
@@ -391,12 +401,12 @@ def validate_sqoot_data(refresh_start_time=None, pulseonly=False, stoptime=None)
     validate_endtime = datetime.now(pytz.utc)
     return num_of_confirmed_inactive, validate_endtime
 
-def dedup_sqoot_data_hard(refresh_start_time, firsttime=False):
+def dedup_sqoot_data_hard(refresh_start_time=None, firsttime=False):
     describe_section("dedup_sqoot_data_hard IS BEGINNING..\n")
     # Grab all active deals on display to users for deduping.
     deals_to_dedup = Coupon.all_objects.filter(ref_id_source='sqoot', is_deleted=False,
                                                is_duplicate=False, online=False, status='considered-active')
-    if not firsttime:
+    if (not firsttime) and refresh_start_time:
         # If not first time, further filter down to only the newly added unique deals for deduping.
         deals_to_dedup = deals_to_dedup.filter(date_added__gt=refresh_start_time)
 
