@@ -33,6 +33,21 @@ ITEMS_PER_PAGE = 100
 SAVED_MERCHANT_ID_LIST = [int(m.ref_id) for m in Merchant.all_objects.filter(ref_id_source='sqoot', is_deleted=False).only('ref_id')]
 
 class Command(BaseCommand):
+    '''
+    Summary Sqootload instructions:
+    * --fullcycle:
+        * A wraper function meant to be run as a daily maintance task.
+        * Runs refresh_sqoot_data(), validate_sqoot_data(), clean_out_sqoot_data(), dedup_sqoot_data_hard() all together.
+        * Takes 'firsttime' argument when deployed & run for the first time.
+          (e.g. ./manage.py sqootload firsttime --fullcycle)
+        * Logs summary stats into 'sqootload_running_log.txt' under 'logonly' folder when finished.
+        * Following the first time, 'firsttime' argument can be dropped (e.g. ./manage.py sqootload --fullcycle),
+          provided that the first run was succesfully completed with a log.
+    * -- validate
+
+    Notes on individual functions:
+
+    '''
     option_list = BaseCommand.option_list + (
         make_option('--fullcycle',
             action='store_true',
@@ -82,20 +97,6 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        '''
-        --fullcycle:    A wrapper function for running full cycle of sqootload functions
-        --directload:   For downloading and loading coupons into db directly from sqoot
-        --indirecload:  For loading coupons from a file saved via --savedown option
-        --savedown:     For downloading coupons from sqoot and saving them into a file
-        --validate:     For validating deal;
-                        * If no args are given, it will validate all local deals that have no expiry date
-                        * If multiple args are given (as CityPicture.code), then it will only validate deals within 100mi
-                          of the target city by comaring against sqoot
-        --scrubprepare: For preparing to do a semi-manual check process by outputting into '^' seperatated file
-        --scrubexecute: For reading a tab seperatated file after checking semi-manually for data corrections;
-                        * Takes one argument that is a file name under 'readonly' folder
-        '''
-
         if options['fullcycle']:
             try:
                 run_thru_full_cycle(args)
@@ -159,6 +160,12 @@ class Command(BaseCommand):
                 print_stack_trace()
 
 def run_thru_full_cycle(args):
+    '''
+    Summary: A wrapper function to run daily refresh, validate, dedup and clean functions consecutively.
+
+    Note: Takes 'firsttime' argument.
+    '''
+
     firsttime = True if 'firsttime' in args else False
 
     path = os.path.join(settings.BASE_DIR, 'logonly', 'sqootload_running_log.txt')
@@ -211,6 +218,10 @@ def run_thru_full_cycle(args):
     csvfile.close()
 
 def refresh_sqoot_data(last_run_start_time, indirectload=False, firsttime=False):
+    '''
+    Summary: Iterate through Sqoot's entire coupon payload and download and update accordingly.
+    '''
+
     refresh_start_time = datetime.now(pytz.utc) # Use UTC time to compare & update coupon's 'last_modified' field
     request_parameters = {
         'api_key': settings.SQOOT_PUBLIC_KEY,
@@ -298,9 +309,8 @@ def clean_out_sqoot_data(refresh_start_time):
     '''
     Summary: Internal garbage collection cycle that finds and soft-delete all
              irrelevant and stale local coupons and merchants.
-    Intent:
+    Note:
     * First find all true duplicate deals and soft-delete them
-      (i.e. is_duplicate=True, related_deal__isnull=True)
     * Second, find all folded deals (i.e. is_duplicate=True, related_deal__isnull=True)
       that are stale (either expired or inactive, both implied and confirmed), and soft-delete them
     * Third, find all unique deals that are stale, check for folded deals (if so, reassign)
@@ -359,10 +369,6 @@ def validate_sqoot_data(refresh_start_time=None, pulseonly=False, stoptime=None)
     describe_section("validate_sqoot_data IS BEGINNING..\n")
     '''
     Summary: Fetch a deal page and validate deal information and availabilty.
-
-    Intent:
-    * Check for two things (i) deal information (price and location) and (ii) deal availability.
-    * If (i) isn't correct, correct them. If (ii) is not available, mark them 'confirmed-inactive'.
     '''
     all_active_deals_on_display = Coupon.all_objects.filter(ref_id_source='sqoot', is_deleted=False,
                                                             is_duplicate=False, online=False)\
@@ -402,6 +408,9 @@ def validate_sqoot_data(refresh_start_time=None, pulseonly=False, stoptime=None)
     return num_of_confirmed_inactive, validate_endtime
 
 def dedup_sqoot_data_hard(refresh_start_time=None, firsttime=False):
+    '''
+    Summary: Further dedup coupons by checking deals under common fields vs. their locations.
+    '''
     describe_section("dedup_sqoot_data_hard IS BEGINNING..\n")
     # Grab all active deals on display to users for deduping.
     deals_to_dedup = Coupon.all_objects.filter(ref_id_source='sqoot', is_deleted=False,
@@ -658,7 +667,6 @@ def read_scrub_list_and_update(args):
 #############################################################################################################
 
 def reorganize_categories_list(categories_array):
-    '''Manual renaming of "Retail & Services" to "Shopping & Services"'''
     categories_list = []
     for category in categories_array:
         category_name = category['category']['name']
@@ -671,7 +679,6 @@ def reorganize_categories_list(categories_array):
     return categories_list
 
 def establish_categories_dict(categories_array):
-    '''Manual renaming of "Retail & Services" to "Shopping & Services"'''
     categories_dict = {}
     for category in categories_array:
         category_slug = category['category']['slug']
@@ -703,7 +710,6 @@ def get_or_create_merchant(merchant_data_dict):
 
 def get_or_create_category(each_deal_data_dict, categories_dict, shortcut=False):
     '''
-    * Manual renaming of "Retail & Services" to "Shopping & Services"
     * 'shortcut' option is for simply retreiving the category object.
     '''
     category_slug = each_deal_data_dict['category_slug']
@@ -892,8 +898,9 @@ def reassign_representative_deal(coupon_model):
     '''
     Summary: Scan folded deals and reassign a repr. deal out of them before removing the current rep.
 
-    Intent: Look for an alternative rep. deal based on the best discount
-    Note: This function assumes that coupon_model has folded deals (>0) under it.
+    Note:
+    * Look for an alternative rep. deal based on the best discount
+    * This function assumes that coupon_model has folded deals (>0) under it.
     '''
     merchant_sqoot_id = coupon_model.merchant.ref_id
     candidates = Coupon.all_objects.filter(merchant__ref_id=merchant_sqoot_id, is_deleted=False)\
