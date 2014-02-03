@@ -856,10 +856,10 @@ hr {
 	background-image: url('../img/freebies_white.png');
 	background-color: #5757a2;
 }
-.mobile-index-labels {
+.mobile-index-labels, .mobile-search-ordering {
 	width: 280px !important;
 }
-.index-labels a, .mobile-index-labels a {
+.index-labels a, .mobile-index-labels a, .mobile-search-ordering a {
 	font-size: 11pt;
 	font-weight: 300;
 	text-transform: uppercase;
@@ -869,14 +869,14 @@ hr {
 	display: block;
 	float: left;
 }
-.mobile-index-labels a {
+.mobile-index-labels a, .mobile-search-ordering a {
 	margin-right: 0px !important;
 	width: 33% !important;
 }
-.index-labels a:hover, .mobile-index-labels a:hover  {
+.index-labels a:hover, .mobile-index-labels a:hover, .mobile-search-ordering a:hover {
 	text-decoration: none;
 }
-.index-labels a.active, .mobile-index-labels a.active {
+.index-labels a.active, .mobile-index-labels a.active, .mobile-search-ordering a.active {
 	color: #ef5b5b !important;
 	font-weight: 500 !important;
 }
@@ -2021,9 +2021,9 @@ hr {
 	float:left;
 	width: 110px;
 }
-#featured-coupons {
+#featured-coupons, #trending {
 	text-align: center;
 }
-#stores {
+#stores, #expiring_soon {
 	text-align: right;
 }

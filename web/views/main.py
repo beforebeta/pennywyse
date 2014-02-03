@@ -41,21 +41,25 @@ def set_meta_tags(subject, context):
 @ensure_csrf_cookie
 def index(request, current_page=None):
     parameters = {}
+    page = int(current_page or 1)
 
     # handling AJAX request 
     if request.is_ajax():
         data = []
         is_new = request.GET.get('is_new', None)
         is_trending = request.GET.get('is_trending', None)
+        coupon_types = request.GET.getlist('coupon_type', [])
         if is_new:
             parameters['is_new'] = True
         if is_trending:
             parameters['is_popular'] = True
+        if coupon_types:
+            parameters['coupon_type__in'] = coupon_types
         
         coupons = Coupon.objects.filter(Q(end__gt=datetime.datetime.now()) | Q(end__isnull=True), 
                                         **parameters).order_by("-date_added")
         pages = Paginator(coupons, 24)
-        for c in pages.page(current_page).object_list:
+        for c in pages.page(page).object_list:
             item = {'id': c.id,
                     'merchant_name': c.merchant.name,
                     'short_desc': c.short_desc,
@@ -77,7 +81,6 @@ def index(request, current_page=None):
     coupons = Coupon.objects.filter(**parameters).order_by("-date_added")
     pages = Paginator(coupons, 24)
     
-    page = int(current_page or 1)
     if int(page) > pages.num_pages:
         page = pages.num_pages
     ppages = range(1, pages.num_pages+1)
