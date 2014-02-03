@@ -176,7 +176,11 @@
 					<ul class="pagination">
 		          		{% for page in pages %}
 		                	<li>
-		                  		<a href="{% url 'web.views.main.category' current_page=page category_code=category.code %}">{{ page }}</a>
+		                  		{% if page == 1 %}
+		                  			<a href="{% url 'web.views.main.category' category_code=category.code %}">{{ page }}</a>
+		                  		{% else %}
+		                  			<a href="{% url 'web.views.main.category' current_page=page category_code=category.code %}">{{ page }}</a>
+		                  		{% endif %}
 		                  	</li>
 		                  	{% if num_pages > 12 %}
 		                  		{% if separators == 2 and forloop.counter == 3 or separators == 2 and forloop.counter == 7 or separators == 1 and forloop.counter == 8 %}
