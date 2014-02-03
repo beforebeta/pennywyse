@@ -26,8 +26,7 @@
 			<div class="row middle-container index-container">
 				<div class="left-rail visible-md visible-lg">
 					<div class="top-labels">
-						<h1>{{ category.name|cut:"Coupons" }}</h1>
-						<h4>Coupons</h4>
+						<h1>{{ category.name|cut:"Coupons" }} Coupons</h1>
 						{{ category.link }}
 					</div>
 					{% comment %}
@@ -35,7 +34,7 @@
 					{% endcomment %}
 					<div class="merchant">
 						<div class="merchant-left">
-							<img src="{{ category.image }}" class="merchant-logo">
+							<img src="{{ category.icon }}" class="merchant-logo">
 						</div>
 						<div class="merchant-right">
 							<span>{{ num_coupons }}</span>

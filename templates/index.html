@@ -2,7 +2,7 @@
 
 		{% block head %}
 			{{ block.super }}
-			
+			<meta name="description" content=" <meta name="description" content="PushPenny is America's best and largest source for working coupon codes. All codes on PushPenny are hand verified by a team right here in the US. We have all the best coupons and deals from over 6,000 brands and retailers. So if its a great coupon, we will have it and we will give you the simplest way to find it and use it.">
 			{% if current_page.has_previous %}
             	{% if current_page.previous_page_number == 1 %}
             		<link rel="prev" href="http://{{ request.get_host }}{% url 'web.views.main.index' %}" />

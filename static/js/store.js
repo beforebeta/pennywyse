@@ -428,7 +428,7 @@ function render_coupons(data, reset_items) {
 								</div> \
 							</div> \
 							<hr> \
-							<h1 class="short-description">{{ short_desc }}</h1> \
+							<h2 class="short-description">{{ short_desc }}</h2> \
 									<div class="coupon-description"> \
 										{{ description }} \
 									</div> \
