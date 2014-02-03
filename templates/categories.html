@@ -35,8 +35,9 @@
 								{% for category in featured_categories %}
 									<div class="featured-category">
 										<div class="featured-category-container">
-											<a href="{% url 'web.views.main.category' category_code=category.code %}">{{ category.name }}</a>
+											<a href="{% url 'web.views.main.category' category_code=category.code %}"><img src="{{ category.icon }}"></a>
 										</div>
+										<a href="{% url 'web.views.main.category' category_code=category.code %}">{{ category.name }}</a>
 									</div>
 									{% if forloop.counter == 6 %}
 			                       		<hr>

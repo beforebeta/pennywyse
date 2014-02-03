@@ -796,7 +796,7 @@ hr {
 .groceries-row {
 	display: none;
 }
-.merchant-logo, .coupon-container {
+.merchant-logo, .coupon-container, .featured-category-container {
 	-webkit-box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.15);
 	-moz-box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.15);
 	box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.15);
@@ -966,7 +966,7 @@ hr {
 	margin-right: 10px !important;
 	width: 145px;
 	height: 95px;
-	line-height: 95px;
+	font-size: 10pt;
 	margin: 0px auto;
 	margin-bottom: 10px !important;
 	list-style: none;
@@ -975,24 +975,27 @@ hr {
 	text-overflow: ellipsis;
 	float: left;
 }
+.featured-category a{
+	color: #46a8a7 !important;
+	text-decoration: none;
+}
 .featured-category:nth-child(6) {
 	margin-right: 0px !important;
 }
 .featured-category-container {
-	background-color: #ebebe8;
 	border-radius: 2px;
-	color: #423d3e;
-	margin-top: 30px !important;
-	height: 30px !Important;
-	line-height: 30px !important;
+	margin-top: 10px !important;
+	height: 60px !Important;
+	line-height: 60px !important;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	padding-left: 5px;
 	padding-right: 5px;
+	width: 120px;
 }
 .featured-category-container a{
-	color: #423d3e;
+	color: #46a8a7 !important;
 }
 .featured-merchant {
 	text-align: center;
