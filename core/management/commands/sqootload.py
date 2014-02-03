@@ -35,18 +35,22 @@ SAVED_MERCHANT_ID_LIST = [int(m.ref_id) for m in Merchant.all_objects.filter(ref
 class Command(BaseCommand):
     '''
     Summary Sqootload instructions:
-    * --fullcycle:
+    * --fullcycle (daily full cycle):
         * A wraper function meant to be run as a daily maintance task.
         * Runs refresh_sqoot_data(), validate_sqoot_data(), clean_out_sqoot_data(), dedup_sqoot_data_hard() all together.
-        * Takes 'firsttime' argument when deployed & run for the first time.
-          (e.g. ./manage.py sqootload firsttime --fullcycle)
-        * Logs summary stats into 'sqootload_running_log.txt' under 'logonly' folder when finished.
-        * Following the first time, 'firsttime' argument can be dropped (e.g. ./manage.py sqootload --fullcycle),
-          provided that the first run was succesfully completed with a log.
-    * -- validate
-
-    Notes on individual functions:
-
+        * To run:
+            * Takes 'firsttime' argument if deployed & run for the first time.
+              (e.g. ./manage.py sqootload firsttime --fullcycle)
+            * Following the first time, 'firsttime' argument can be dropped (e.g. ./manage.py sqootload --fullcycle),
+              provided that the first run was succesfully completed with a log.
+        * Reads and logs summary stats from/into 'sqootload_running_log.txt' under 'logonly' folder when finished.
+    * --validate (daily short & interim cycle):
+        * Fetch a deal page and validate deal information and availabilty.
+        * Meant to be run daily between the --fullcycle runs.
+        * Takes 'pulseonly' argument for running on a standalone basis, separately from --fullcycle;
+          When 'pulseonly' argument given, only the availabilty of the deal will be checked.
+        * To run:
+            * (e.g. ./manage.py sqootload pulseonly --validate)
     '''
     option_list = BaseCommand.option_list + (
         make_option('--fullcycle',
@@ -375,7 +379,7 @@ def validate_sqoot_data(refresh_start_time=None, pulseonly=False, stoptime=None)
                                                     .filter(Q(status='unconfirmed') | Q(status='considered-active'))
     considered_active_list = [] # coupon pk's
     confirmed_inactive_list = [] # coupon pk's
-    blah_counter = 0 #DEBUG!!!
+    # blah_counter = 0 #DEBUG!!!
     for c in all_active_deals_on_display:
         try:
             if stoptime and (datetime.now() >= stoptime):
@@ -398,8 +402,8 @@ def validate_sqoot_data(refresh_start_time=None, pulseonly=False, stoptime=None)
                 continue
             else:
                 confirm_or_correct_deal_data(c, response)
-            blah_counter += 1 #DEBUG!!!
-            print '.......validated', blah_counter # DEBUG!!!
+            # blah_counter += 1 #DEBUG!!!
+            # print '.......validated', blah_counter # DEBUG!!!
         except:
             print_stack_trace()
     Coupon.all_objects.filter(pk__in=considered_active_list).update(status='considered-active')
