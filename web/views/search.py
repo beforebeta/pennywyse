@@ -4,14 +4,14 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from haystack.query import SearchQuerySet
 from core.models import Merchant
-from web.views.main import render_response
+from web.views.main import render_response, SORTING_MAPPING
 from web.utils import FuzzySearchQuerySet
 
 def search(request, current_page=1):
     query = request.GET.get("q","").strip()
     coupon_type = request.GET.get('coupon_type', None)
-    is_new = request.GET.get('is_new', None)
-    is_trending = request.GET.get('is_trending', None)
+    sorting = request.GET.get('sorting', None)
+    ordering = SORTING_MAPPING.get(sorting, 'popularity')
     context = {}
     
     if query:
@@ -20,18 +20,14 @@ def search(request, current_page=1):
             merchant_url = reverse('web.views.main.coupons_for_company', kwargs={'company_name': merchant[0].name_slug})
             return HttpResponseRedirect(merchant_url)
         parameters = {'django_ct':'core.coupon', 'content':query}
-        if is_new:
-            parameters['is_new'] = True
-        if is_trending:
-            parameters['is_popular'] = True
         if coupon_type:
             parameters['coupon_type'] = coupon_type
         merchants_list = FuzzySearchQuerySet().combined_filter(django_ct='core.merchant',
                                             total_coupon_count__gt=0, content=query)
         if not merchants_list:
             context['suggested_merchants'] = Merchant.objects.filter(is_featured=True)[:5]
-        coupons_list = SearchQuerySet().filter(**parameters)
-        pages = Paginator(coupons_list, 12)
+        coupons_list = SearchQuerySet().filter(**parameters).order_by(ordering)
+        pages = Paginator(coupons_list, 20)
         merchant_pages = Paginator(merchants_list, 10)
         if request.is_ajax():
             data = []

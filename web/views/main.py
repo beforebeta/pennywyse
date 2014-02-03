@@ -22,6 +22,12 @@ from tracking.utils import get_visitor_tag
 from web.forms import EmailSubscriptionForm
 from websvcs.models import EmailSubscription
 
+SORTING_MAPPING = {'newest': '-date_added',
+                   'new': '-date_added',
+                   'expiring_soon': 'end',
+                   'trending': 'popularity'}
+
+
 def render_response(template_file, request, context={}):
     """Shortcut to render function with constant list of parameters"""
     return render_to_response(template_file, context, context_instance=RequestContext(request))
@@ -40,25 +46,23 @@ def set_meta_tags(subject, context):
 
 @ensure_csrf_cookie
 def index(request, current_page=None):
-    parameters = {}
+    parameters = {'is_featured': True}
     page = int(current_page or 1)
+    sorting = request.GET.get('sorting', None)
 
     # handling AJAX request 
     if request.is_ajax():
         data = []
-        is_new = request.GET.get('is_new', None)
-        is_trending = request.GET.get('is_trending', None)
         coupon_types = request.GET.getlist('coupon_type', [])
-        if is_new:
-            parameters['is_new'] = True
-        if is_trending:
-            parameters['is_popular'] = True
+
         if coupon_types:
             parameters['coupon_type__in'] = coupon_types
         
         coupons = Coupon.objects.filter(Q(end__gt=datetime.datetime.now()) | Q(end__isnull=True), 
-                                        **parameters).order_by("-date_added")
-        pages = Paginator(coupons, 24)
+                                        **parameters)
+        ordering = SORTING_MAPPING.get(sorting, 'popularity')
+        coupons = coupons.order_by(ordering)
+        pages = Paginator(coupons, 20)
         for c in pages.page(page).object_list:
             item = {'id': c.id,
                     'merchant_name': c.merchant.name,
@@ -77,9 +81,9 @@ def index(request, current_page=None):
     if current_page and int(current_page) == 1:
         return HttpResponsePermanentRedirect(reverse('web.views.main.index'))
     
-    parameters['is_new'] = True
-    coupons = Coupon.objects.filter(**parameters).order_by("-date_added")
-    pages = Paginator(coupons, 24)
+    coupons = Coupon.objects.filter(Q(end__gt=datetime.datetime.now()) | Q(end__isnull=True),
+                                    **parameters).order_by("-date_added")
+    pages = Paginator(coupons, 20)
     
     if int(page) > pages.num_pages:
         page = pages.num_pages
@@ -138,20 +142,13 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
         filters['coupon_type__in'] = coupon_types
 
     coupons_list = Coupon.objects.filter(**filters)
-
-    ordering = 'popularity'
-    if sorting == 'newest':
-        ordering = '-date_added'
-    elif sorting == 'expiring_soon':
-        ordering = 'end'
-    if sorting:
-        coupons_list = coupons_list.order_by(ordering)
-    
+    ordering = SORTING_MAPPING.get(sorting, 'popularity')
+    coupons_list = coupons_list.order_by(ordering)
     coupons = list(coupons_list)
 
     # preparing pagination
     page = int(current_page or 1)
-    pages = Paginator(coupons, 24)
+    pages = Paginator(coupons, 20)
     if int(page) > pages.num_pages:
         page = pages.num_pages
     ppages = range(1, pages.num_pages+1)
@@ -269,17 +266,12 @@ def category(request, category_code, current_page=None, category_ids=-1):
     if coupon_types:
         filters['coupon_type__in'] = coupon_types
 
-    ordering = 'popularity'
-    if sorting == 'newest':
-        ordering = '-date_added'
-    elif sorting == 'expiring_soon':
-        ordering = 'end'
-
+    ordering = SORTING_MAPPING.get(sorting, 'popularity')
     coupons = Coupon.objects.filter(**filters).order_by(ordering)
 
     # preparing pagination
     page = int(current_page or 1)
-    pages = Paginator(coupons, 24)
+    pages = Paginator(coupons, 20)
     if int(page) > pages.num_pages:
         page = pages.num_pages
     ppages = range(1, pages.num_pages+1)

@@ -5,8 +5,6 @@ var sorting = '';
 var category_ids = new Array();
 var coupon_types = new Array();
 var coupon_type = '';
-var is_new = false;
-var is_trending = false;
 var is_sticky = false;
 var deal_type_filters_active = false;
 var current_url = window.location.href;
@@ -193,14 +191,7 @@ $(function() {
 		var filter_type = $(this).attr('id');
 		if (filter_type != 'coupon_type') {
 			$(this).addClass('active');
-			if (filter_type == 'new') {
-				is_new = true;
-				is_trending = false;
-			}
-			else {
-				is_trending = true;
-				is_new = false;
-			}
+			sorting = filter_type;
 			fetch_items(reset_items=true);
 		}
 	});
@@ -363,7 +354,6 @@ $(function() {
 	});
 	
 	if ($('.no-search-results').length > 0 || $('.no-results').length > 0) {
-		is_trending = true;
 		base_url = '/';
 		fetch_items(reset_items=true);
 	}
@@ -579,12 +569,6 @@ function fetch_items(reset_items) {
 	}
 	if (coupon_types.length > 0) {
 		parameters['coupon_type'] = coupon_types;
-	}
-	if (is_new) {
-		parameters['is_new'] = is_new;
-	}
-	if (is_trending) {
-		parameters['is_trending'] = is_trending;
 	}
 	if (coupon_type) {
 		parameters['coupon_type'] = coupon_type;
