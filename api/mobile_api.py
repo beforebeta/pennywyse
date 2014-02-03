@@ -88,7 +88,7 @@ class MobileResource(ModelResource):
         end_point = page * per_page
 
         deals = []
-        # import ipdb; ipdb.set_trace()
+
         for sqs_obj in sqs[start_point:end_point]:
             merchant_pnt = sqs_obj.merchant_location
             dist_to_user = geopy_distance((user_pnt.y, user_pnt.x), (merchant_pnt.y, merchant_pnt.x)).miles

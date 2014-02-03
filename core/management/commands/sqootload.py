@@ -21,7 +21,7 @@ from geopy import geocoders
 # from haystack.utils.geo import D
 # from haystack.query import SearchQuerySet, SQ
 import pytz
-import time
+
 from core.models import DealType, Category, Coupon, Merchant, Country, CouponNetwork, MerchantLocation
 from tests.for_api.sample_data_feed import top_50_us_cities_dict
 from readonly.scrub_list import SCRUB_LIST
@@ -399,12 +399,11 @@ def dedup_sqoot_data_hard(refresh_start_time, firsttime=False):
     if not firsttime:
         # If not first time, further filter down to only the newly added unique deals for deduping.
         deals_to_dedup = deals_to_dedup.filter(date_added__gt=refresh_start_time)
-    import ipdb; ipdb.set_trace()
+
     duplicate_deals_list = [] # List of duplicate coupon pks .
     duplicate_deals_list = crosscheck_by_field(deals_to_dedup, duplicate_deals_list, 'coupon_directlink')
     duplicate_deals_list = crosscheck_by_field(deals_to_dedup, duplicate_deals_list, 'merchant_name')
     duplicate_deals_list = list(set(duplicate_deals_list))
-    import ipdb; ipdb.set_trace()
 
     num_of_hard_dedups = Coupon.all_objects.filter(pk__in=duplicate_deals_list).update(is_duplicate=True)
     hard_dedup_endtime = datetime.now(pytz.utc)
