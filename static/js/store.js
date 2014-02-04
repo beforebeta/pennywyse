@@ -917,5 +917,5 @@ function expandable_select_callback() {
 	$(this).find('.expanded-choices li').on('click', expandable_callback);
 }
 function redirect_to(url) {
-	window.location = url;	
+	window.open(url, '_blank');
 }
