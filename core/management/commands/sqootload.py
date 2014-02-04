@@ -27,6 +27,7 @@ from tests.for_api.sample_data_feed import top_50_us_cities_dict
 from readonly.scrub_list import SCRUB_LIST
 from core.util import print_stack_trace
 import json
+from multiprocessing import Pool
 
 SQOOT_API_URL = "http://api.sqoot.com/v2/"
 ITEMS_PER_PAGE = 100
@@ -369,6 +370,7 @@ def clean_out_sqoot_data(refresh_start_time):
     cleanout_endtime = datetime.now(pytz.utc)
     return num_of_soft_deleted, num_of_implied_inactive, cleanout_endtime
 
+
 def validate_sqoot_data(refresh_start_time=None, pulseonly=False, stoptime=None):
     describe_section("validate_sqoot_data IS BEGINNING..\n")
     '''
@@ -379,17 +381,20 @@ def validate_sqoot_data(refresh_start_time=None, pulseonly=False, stoptime=None)
                                                     .filter(Q(status='unconfirmed') | Q(status='considered-active'))
     considered_active_list = [] # coupon pk's
     confirmed_inactive_list = [] # coupon pk's
-    # blah_counter = 0 #DEBUG!!!
-    for c in all_active_deals_on_display:
+    blah_counter = 0 #DEBUG!!!
+    print "validating", len(all_active_deals_on_display), "deals"
+
+    def validate_deal(c):
         try:
+            print c.directlink
             if stoptime and (datetime.now() >= stoptime):
-                break
+                return
 
             sqoot_url = c.directlink
             is_bad_link, response = fetch_page(sqoot_url)
             if is_bad_link:
                 confirmed_inactive_list.append(c.pk)
-                continue
+                return
 
             is_deal_dead = check_if_deal_dead(c, response, sqoot_url)
             if is_deal_dead:
@@ -399,13 +404,45 @@ def validate_sqoot_data(refresh_start_time=None, pulseonly=False, stoptime=None)
 
             if pulseonly and refresh_start_time and (refresh_start_time > c.date_added):
                 # Data check only the newly added deals.
-                continue
+                return
             else:
                 confirm_or_correct_deal_data(c, response)
-            # blah_counter += 1 #DEBUG!!!
-            # print '.......validated', blah_counter # DEBUG!!!
+            #blah_counter += 1 #DEBUG!!!
+            #print '.......validated', blah_counter # DEBUG!!!
         except:
             print_stack_trace()
+
+    #for c in all_active_deals_on_display:
+    #    try:
+    #        if stoptime and (datetime.now() >= stoptime):
+    #            break
+    #
+    #        sqoot_url = c.directlink
+    #        is_bad_link, response = fetch_page(sqoot_url)
+    #        if is_bad_link:
+    #            confirmed_inactive_list.append(c.pk)
+    #            continue
+    #
+    #        is_deal_dead = check_if_deal_dead(c, response, sqoot_url)
+    #        if is_deal_dead:
+    #            confirmed_inactive_list.append(c.pk)
+    #        else:
+    #            considered_active_list.append(c.pk)
+    #
+    #        if pulseonly and refresh_start_time and (refresh_start_time > c.date_added):
+    #            # Data check only the newly added deals.
+    #            continue
+    #        else:
+    #            confirm_or_correct_deal_data(c, response)
+    #        blah_counter += 1 #DEBUG!!!
+    #        print '.......validated', blah_counter # DEBUG!!!
+    #    except:
+    #        print_stack_trace()
+
+    validators = Pool(50)
+    validators.map(validate_deal, list(all_active_deals_on_display))
+    print "FINISHED VALIDATING...."
+    
     Coupon.all_objects.filter(pk__in=considered_active_list).update(status='considered-active')
     num_of_confirmed_inactive = Coupon.all_objects.filter(pk__in=confirmed_inactive_list).update(status='confirmed-inactive')
     validate_endtime = datetime.now(pytz.utc)
