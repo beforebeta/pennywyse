@@ -4,7 +4,7 @@ from core.models import Coupon, Category, Merchant, MerchantLocation, CouponNetw
 
 class CouponAdmin(admin.ModelAdmin):
     search_fields = ['description',"short_desc", "merchant__name"]
-    readonly_fields = ['ref_id', 'ref_id_source', 'merchant']
+    readonly_fields = ['ref_id', 'ref_id_source', 'merchant', 'merchant_location']
     exclude = ['related_deal']
 
 class MerchantAdmin(admin.ModelAdmin):
