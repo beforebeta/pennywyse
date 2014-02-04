@@ -13,6 +13,7 @@ from django.template.context import RequestContext
 from django.template.defaultfilters import slugify
 from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.vary import vary_on_headers
 from constance import config
 from core.models import Category, Coupon, DealType, Merchant, base_description
 from core.util import encode_uri_component, print_stack_trace
@@ -45,6 +46,8 @@ def set_meta_tags(subject, context):
 
 
 @ensure_csrf_cookie
+@vary_on_headers('X-Requested-With')
+@cache_page(60 * 60 * 24)
 def index(request, current_page=None):
     parameters = {'is_featured': True}
     page = int(current_page or 1)
@@ -114,6 +117,8 @@ def top_coupons(request, current_page=1):
 
 
 @ensure_csrf_cookie
+@vary_on_headers('X-Requested-With')
+@cache_page(60 * 60 * 24)
 def coupons_for_company(request, company_name, company_id=None, current_page=None, category_ids=None):
     """List of coupons for given merchant."""
     
@@ -146,7 +151,8 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
     if coupon_types:
         filters['coupon_type__in'] = coupon_types
 
-    coupons_list = Coupon.objects.filter(**filters)
+    coupons_list = Coupon.objects.filter(Q(end__gt=datetime.datetime.now()) | Q(end__isnull=True),
+                                         **filters)
     ordering = SORTING_MAPPING.get(sorting, 'popularity')
     coupons_list = coupons_list.order_by(ordering)
     coupons = list(coupons_list)
@@ -223,7 +229,7 @@ def open_coupon(request, coupon_id):
         raise Http404
 
     item = {'merchant_name': coupon.merchant.name,
-            'merchant_link': coupon.merchant.directlink,
+            'merchant_link': get_visitor_tag(coupon.merchant.skimlinks, request.visitor.id),
             'code': coupon.code,
             'short_desc': coupon.short_desc,
             'description': coupon.get_description(),
@@ -236,6 +242,7 @@ def open_coupon(request, coupon_id):
 
 
 @ensure_csrf_cookie
+@cache_page(60 * 60 * 24)
 def categories(request):
     context={
              "categories": Category.objects.filter(is_featured=False, parent__isnull=True).order_by('name'),
@@ -245,6 +252,7 @@ def categories(request):
     return render_response("categories.html", request, context)
 
 @ensure_csrf_cookie
+@cache_page(60 * 60 * 24)
 def groceries(request):
     root_category = get_object_or_404(Category, code='grocery')
     categories = [root_category] + list(Category.objects.filter(parent=root_category))
@@ -257,6 +265,8 @@ def groceries(request):
 
 
 @ensure_csrf_cookie
+@vary_on_headers('X-Requested-With')
+@cache_page(60 * 60 * 24)
 def category(request, category_code, current_page=None, category_ids=-1):
     sorting = request.GET.get('sorting', None)
     coupon_types = request.GET.getlist('coupon_type', [])
@@ -272,7 +282,8 @@ def category(request, category_code, current_page=None, category_ids=-1):
         filters['coupon_type__in'] = coupon_types
 
     ordering = SORTING_MAPPING.get(sorting, 'popularity')
-    coupons = Coupon.objects.filter(**filters).order_by(ordering)
+    coupons = Coupon.objects.filter(Q(end__gt=datetime.datetime.now()) | Q(end__isnull=True),
+                                    **filters).order_by(ordering)
 
     # preparing pagination
     page = int(current_page or 1)
@@ -331,6 +342,7 @@ def category(request, category_code, current_page=None, category_ids=-1):
 
 
 @ensure_csrf_cookie
+@cache_page(60 * 60 * 24)
 def stores(request, page='popular'):
     """List of stores, ordered by alphabet."""
 
