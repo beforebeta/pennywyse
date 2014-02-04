@@ -199,33 +199,7 @@ def refresh_deals():
 
 def setup_web_coupons():
     section("Setup Web Coupons")
-    try:
-        Coupon.objects.filter(is_featured=True).update(is_featured=False)
-        for name in ['Amazon', 'Bed Bath & Beyond', 'Best Buy', 'Neiman Marcus', 'Macy\'s', 'Sears', 'Target', 'ToysRUs']:
-            coupon = Merchant.objects.get(name=name).get_top_coupon()
-            coupon.is_featured = True
-            coupon.save()
-    except:
-        print_stack_trace()
-
-    try:
-        Coupon.objects.filter(is_featured=True).update(is_featured=False)
-        for coupon in Coupon.active_objects.get_new_coupons(200):
-            coupon.is_new = True
-            coupon.save()
-
-    except:
-        print_stack_trace()
-
-    try:
-        Coupon.objects.filter(is_featured=True).update(is_featured=False)
-        for coupon in Coupon.active_objects.get_popular_coupons(200):
-            coupon.is_popular = True
-            coupon.save()
-
-    except:
-        print_stack_trace()
-        
+            
     for m in Merchant.objects.all():
         cat_ids = [c['categories'] for c in Coupon.objects.filter(merchant_id=m.id).values('categories').annotate()]
         merchant_ids = [c['merchant_id'] for c in Coupon.objects.filter(categories__in=cat_ids)\
@@ -299,7 +273,7 @@ def load():
     refresh_deals()
     setup_web_coupons()
     refresh_calculated_fields()
-    refresh_merchant_redirects()
+    #refresh_merchant_redirects()
 
 def embedly(args):
     _from = 0
