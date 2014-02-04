@@ -786,7 +786,7 @@ function render_coupon_popup(data, coupon_id) {
 									 	Notify me when {{ merchant_name }} has new coupons \
 									{{/is_mobile}} \
 									{{^ is_mobile }} \
-										Should we notify you when we add new coupons and deals for Store?<br> \
+										Should we notify you when we add new coupons and deals for {{ merchant_name }}?<br> \
 									{{/is_mobile}} \
 									<form action="/e/subscribe/" method="post" class="coupon-subscribe-form"> \
 										<input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf }}"> \

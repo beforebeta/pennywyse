@@ -122,7 +122,12 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
     coupon_id = request.GET.get('c', None)
     sorting = request.GET.get('sorting', None)
 
-    merchant = get_object_or_404(Merchant, name_slug=slugify(company_name))
+    try:
+        merchant = Merchant.objects.get(name_slug=slugify(company_name))
+    except Merchant.DoesNotExist:
+        raise Http404
+    
+    
     if company_id:
         kwargs={'company_name': merchant.name_slug}
         merchant_url = reverse('web.views.main.coupons_for_company', kwargs=kwargs)
@@ -330,7 +335,7 @@ def stores(request, page='popular'):
     """List of stores, ordered by alphabet."""
 
     category = request.GET.get('category', None)
-    ordering = '-name'
+    ordering = 'name'
     if page == '#':
         filters = {'name__regex': r'^[0-9]'}
     elif page == 'popular':
