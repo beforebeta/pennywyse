@@ -445,7 +445,7 @@ def validate_sqoot_data(refresh_start_time=None, pulseonly=False, stoptime=None)
     #    except:
     #        print_stack_trace()
 
-    validators = Pool(50)
+    validators = Pool(15)
     validators.map(validate_deal, list(all_active_deals_on_display))
     print "FINISHED VALIDATING...."
 
