@@ -260,7 +260,7 @@ def groceries(request):
 def category(request, category_code, current_page=None, category_ids=-1):
     sorting = request.GET.get('sorting', None)
     coupon_types = request.GET.getlist('coupon_type', [])
-    category = Category.objects.get(code=category_code)
+    category = Category.objects.get(code=category_code, ref_id_source__isnull=True)
 
     coupon_category_ids = Coupon.objects.filter(categories=category.id).values('categories').annotate()
     category_ids = [c['categories'] for c in coupon_category_ids]
@@ -294,7 +294,7 @@ def category(request, category_code, current_page=None, category_ids=-1):
     # handling AJAX request 
     if request.is_ajax():
         data = []
-        for c in pages.page(current_page).object_list:
+        for c in pages.page(page).object_list:
             item = {'id': c.id,
                     'merchant_name': c.merchant.name,
                     'short_desc': c.short_desc,
