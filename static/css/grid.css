@@ -956,6 +956,7 @@ hr {
 }
 .featured-merchants-list {
 	padding: 20px;
+	margin-right: -20px;
 }
 .featured-merchants-list img {
 	max-width: 150px;
