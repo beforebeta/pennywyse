@@ -866,6 +866,11 @@ function init_clipboard(element) {
 			text_input.tipsy({trigger: 'manual', gravity: 'sw', opacity: 1});
 			text_input.tipsy('show');
             return text_input.val();
+        },
+        afterCopy: function() {
+        	setTimeout(function (){
+	        	$('.tipsy').remove();
+	        }, 1000);
         }
     });
 }
