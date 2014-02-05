@@ -17,7 +17,9 @@
             		<link rel="next" href="http://{{ request.get_host }}{% url 'web.views.main.index' current_page=current_page.next_page_number %}" />
         		{% endif %}
         	{% endif %}
-        	<link rel="canonical" href="http://{{ request.get_host }}{% url 'web.views.main.index' %}">
+        	{% if current_page.next_page_number == 1 %}
+        		<link rel="canonical" href="http://{{ request.get_host }}{% url 'web.views.main.index' %}">
+			{% endif %}
 		{% endblock %}
 		
 		{% block content %}
