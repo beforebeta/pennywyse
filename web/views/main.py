@@ -4,6 +4,7 @@ from uuid import uuid4
 from django.conf import settings
 from django.contrib.flatpages.views import flatpage
 from django.contrib.sites.models import get_current_site
+from django.core.cache import cache
 from django.core.paginator import Paginator
 from django.core.urlresolvers import reverse
 from django.db.models.query_utils import Q
@@ -44,10 +45,21 @@ def set_meta_tags(subject, context):
                    og_url=subject.og_url(),
                    canonical_url=subject.og_url())
 
+def adaptive_cache_page(f):
+    def wrapper(request, *args, **kwargs):
+        if request.is_ajax():
+            return f(request, *args, **kwargs)
+        cache_key = '_'.join(['%s:%s' % (k, w) for k,w in kwargs.items()])
+        cached_response = cache.get(cache_key, None)
+        if cached_response:
+            return HttpResponse(cached_response)
+        r = f(request, *args, **kwargs)
+        cache.set(cache_key, r, 60 * 60 * 24)
+        return r
+    return wrapper
 
 @ensure_csrf_cookie
-@vary_on_headers('X-Requested-With')
-@cache_page(60 * 60 * 24)
+@adaptive_cache_page
 def index(request, current_page=None):
     parameters = {'is_featured': True}
     page = int(current_page or 1)
@@ -117,8 +129,7 @@ def top_coupons(request, current_page=1):
 
 
 @ensure_csrf_cookie
-@vary_on_headers('X-Requested-With')
-@cache_page(60 * 60 * 24)
+@adaptive_cache_page
 def coupons_for_company(request, company_name, company_id=None, current_page=None, category_ids=None):
     """List of coupons for given merchant."""
     
@@ -265,8 +276,7 @@ def groceries(request):
 
 
 @ensure_csrf_cookie
-@vary_on_headers('X-Requested-With')
-@cache_page(60 * 60 * 24)
+@adaptive_cache_page
 def category(request, category_code, current_page=None, category_ids=-1):
     sorting = request.GET.get('sorting', None)
     coupon_types = request.GET.getlist('coupon_type', [])
