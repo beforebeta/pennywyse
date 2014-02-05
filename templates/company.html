@@ -28,7 +28,9 @@
 			        <meta property="og:description" content="{{ coupon.og_description }}"/>
 			        <meta property="og:url" content="{{ coupon.og_url }}"/>
 	        	{% endif %}
-	        	<link rel="canonical" href="http://{{ request.get_host }}{% url 'web.views.main.coupons_for_company' company_name=merchant.name_slug %}">
+	        	{% if current_page.next_page_number == 1 %}
+	        		<link rel="canonical" href="http://{{ request.get_host }}{% url 'web.views.main.coupons_for_company' company_name=merchant.name_slug %}">
+	        	{% endif %}
 	        {% endblock %}
 
 			{% block content %}
@@ -104,17 +106,19 @@
 							{% endif %}
 						{% endfor %}
 					</div>
-					<hr>
-					<div class="similar-stores">
-						<h4>Similar Stores</h4>
-						{% for store in merchant.similar.all %}
-							<div class="similar-store">
-								<a href="{% url 'web.views.main.coupons_for_company' company_name=store.name_slug %}">
-									<img src="{{ store.image }}" class="merchant-logo">
-								</a>
-							</div>
-						{% endfor %}
-					</div>
+					{% if merchant.similar.all %}
+						<hr>
+						<div class="similar-stores">
+							<h4>Similar Stores</h4>
+							{% for store in merchant.similar.all %}
+								<div class="similar-store">
+									<a href="{% url 'web.views.main.coupons_for_company' company_name=store.name_slug %}">
+										<img src="{{ store.image }}" class="merchant-logo">
+									</a>
+								</div>
+							{% endfor %}
+						</div>
+					{% endif %}
 				</div>
 				<div class="center-mobile-rail bottom-shadow hidden-md hidden-lg">
 					<div class="center-mobile-label">{{ merchant.name }} coupons</div>
@@ -208,6 +212,11 @@
 							</div>
 						</div>
 					</div>
+					{% if not coupons %}
+						<div class="coupon-container coupon-body no-search-results">
+							Oops it looks like {{ merchant.name }} does not have any coupons active currently. But we have recommended a few other things you might like.
+						</div>
+					{% endif %}
 					<div class="coupons company-coupons {% if num_pages > 1 %}more-coupons{% endif %}">
 						{% with company_coupons=True %}
 							{% include 'coupons_list.html' %}
