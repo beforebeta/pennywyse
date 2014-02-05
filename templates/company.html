@@ -28,7 +28,7 @@
 			        <meta property="og:description" content="{{ coupon.og_description }}"/>
 			        <meta property="og:url" content="{{ coupon.og_url }}"/>
 	        	{% endif %}
-	        	{% if current_page.next_page_number == 1 %}
+	        	{% if current_page.next_page_number == 2 %}
 	        		<link rel="canonical" href="http://{{ request.get_host }}{% url 'web.views.main.coupons_for_company' company_name=merchant.name_slug %}">
 	        	{% endif %}
 	        {% endblock %}
