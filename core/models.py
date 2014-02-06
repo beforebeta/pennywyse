@@ -489,6 +489,7 @@ class Coupon(models.Model):
     is_new          = models.BooleanField('New', blank=True, default=False)
     is_popular      = models.BooleanField('Popular', blank=True, default=False)
     is_duplicate    = models.BooleanField('Duplicate', blank=True, default=False)
+    is_active       = models.BooleanField('Active', blank=True, default=True)
     related_deal    = models.ForeignKey('Coupon', blank=True, null=True)
     popularity      = models.IntegerField(blank=True, null=True, default=0)
     coupon_type     = models.CharField(max_length=255, blank=True, null=True)
@@ -665,7 +666,7 @@ class Coupon(models.Model):
         return False
     
     def full_success_path(self):
-        return 'http://%s%s' % (Site.objects.get_current().domain, self.local_path())
+        return 'http://%s%s' % (settings.BASE_URL_NO_APPENDED_SLASH, self.local_path())
     
     @property
     def twitter_share_url(self):

@@ -59,9 +59,9 @@ def adaptive_cache_page(f):
     return wrapper
 
 @ensure_csrf_cookie
-@adaptive_cache_page
+#@adaptive_cache_page
 def index(request, current_page=None):
-    parameters = {'is_featured': True}
+    parameters = {'is_featured': True, 'is_active': True}
     page = int(current_page or 1)
     sorting = request.GET.get('sorting', None)
 
@@ -73,16 +73,15 @@ def index(request, current_page=None):
         if coupon_types:
             parameters['coupon_type__in'] = coupon_types
         
-        coupons = Coupon.objects.filter(Q(end__gt=datetime.datetime.now()) | Q(end__isnull=True), 
-                                        **parameters)
+        coupons = Coupon.objects.filter(**parameters)\
+                                .only('id', 'short_desc', 'description', 'end', 'coupon_type', 'merchant')
         ordering = SORTING_MAPPING.get(sorting, 'popularity')
         coupons = coupons.order_by(ordering)
         pages = Paginator(coupons, 20)
         for c in pages.page(page).object_list:
             item = {'id': c.id,
-                    'merchant_name': c.merchant.name,
                     'short_desc': c.short_desc,
-                    'description': c.get_description(),
+                    'description': c.description,
                     'end': c.end.strftime('%m/%d/%y') if c.end else '',
                     'coupon_type': c.coupon_type,
                     'full_success_path': c.full_success_path(),
@@ -129,7 +128,7 @@ def top_coupons(request, current_page=1):
 
 
 @ensure_csrf_cookie
-@adaptive_cache_page
+#@adaptive_cache_page
 def coupons_for_company(request, company_name, company_id=None, current_page=None, category_ids=None):
     """List of coupons for given merchant."""
     
@@ -154,7 +153,7 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
         coupon = Coupon.objects.get(id=coupon_id)
     
     all_categories = merchant.get_coupon_categories()
-    filters = {'merchant_id': merchant.id}
+    filters = {'merchant_id': merchant.id, 'is_active': True}
     
     if category_ids:
         filters['categories__id__in'] = category_ids
@@ -162,14 +161,39 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
     if coupon_types:
         filters['coupon_type__in'] = coupon_types
 
-    coupons_list = Coupon.objects.filter(Q(end__gt=datetime.datetime.now()) | Q(end__isnull=True),
-                                         **filters)
+    page = int(current_page or 1)
     ordering = SORTING_MAPPING.get(sorting, 'popularity')
-    coupons_list = coupons_list.order_by(ordering)
-    coupons = list(coupons_list)
+
+    # handling AJAX request 
+    if request.is_ajax():
+        coupons_list = Coupon.objects.filter(**filters)\
+                                    .only('id', 'short_desc', 'description', 'end', 'coupon_type', 'merchant', 'image')
+        ordering = SORTING_MAPPING.get(sorting, 'popularity')
+        coupons = coupons_list.order_by(ordering)
+    
+        # preparing pagination
+        pages = Paginator(coupons, 20)
+    
+        data = []
+        for c in pages.page(page).object_list:
+            item = {'id': c.id,
+                    'merchant_name': merchant.name,
+                    'short_desc': c.short_desc,
+                    'description': c.description,
+                    'end': c.end.strftime('%m/%d/%y') if c.end else '',
+                    'full_success_path': c.full_success_path(),
+                    'coupon_type': c.coupon_type,
+                    'image': c.image,
+                    'twitter_share_url': c.twitter_share_url}
+                    
+            data.append(item)
+        return HttpResponse(json.dumps({'items': data,
+                                        'total_pages': pages.num_pages,
+                                        'total_items': pages.count}), content_type="application/json")
+
+    coupons = Coupon.objects.filter(**filters).order_by(ordering)
 
     # preparing pagination
-    page = int(current_page or 1)
     pages = Paginator(coupons, 20)
     if int(page) > pages.num_pages:
         page = pages.num_pages
@@ -184,24 +208,6 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
             page_prev = page - 2
             ppages = ppages[:3] + ppages[page_prev:page_next] + ppages[-3:]
             separators = 2
-    
-    # handling AJAX request 
-    if request.is_ajax():
-        data = []
-        for c in pages.page(page).object_list:
-            item = {'id': c.id,
-                    'merchant_name': c.merchant.name,
-                    'short_desc': c.short_desc,
-                    'description': c.get_description(),
-                    'end': c.end.strftime('%m/%d/%y') if c.end else '',
-                    'full_success_path': c.full_success_path(),
-                    'coupon_type': c.coupon_type,
-                    'image': c.image,
-                    'twitter_share_url': c.twitter_share_url}
-            data.append(item)
-        return HttpResponse(json.dumps({'items': data,
-                                        'total_pages': pages.num_pages,
-                                        'total_items': pages.count}), content_type="application/json")
     
     if current_page and int(current_page) == 1:
         return HttpResponsePermanentRedirect(reverse('web.views.main.coupons_for_company', 
@@ -276,7 +282,7 @@ def groceries(request):
 
 
 @ensure_csrf_cookie
-@adaptive_cache_page
+#@adaptive_cache_page
 def category(request, category_code, current_page=None, category_ids=-1):
     sorting = request.GET.get('sorting', None)
     coupon_types = request.GET.getlist('coupon_type', [])
@@ -286,35 +292,20 @@ def category(request, category_code, current_page=None, category_ids=-1):
     category_ids = [c['categories'] for c in coupon_category_ids]
     coupon_categories = Category.objects.filter(id__in=category_ids)
 
-    filters = {'categories__in': category_ids}
+    filters = {'categories__in': category_ids, 'is_active': True}
     
     if coupon_types:
         filters['coupon_type__in'] = coupon_types
 
     ordering = SORTING_MAPPING.get(sorting, 'popularity')
-    coupons = Coupon.objects.filter(Q(end__gt=datetime.datetime.now()) | Q(end__isnull=True),
-                                    **filters).order_by(ordering)
-
-    # preparing pagination
     page = int(current_page or 1)
-    pages = Paginator(coupons, 20)
-    if int(page) > pages.num_pages:
-        page = pages.num_pages
-    ppages = range(1, pages.num_pages+1)
-    separators = 0
-    if pages.num_pages > 12:
-        if page <= 5 or page >= pages.num_pages - 3:
-            ppages = ppages[:8] + ppages[-3:]
-            separators = 1
-        else:
-            page_next = page + 2
-            page_prev = page - 2
-            ppages = ppages[:3] + ppages[page_prev:page_next] + ppages[-3:]
-            separators = 2
     
     # handling AJAX request 
     if request.is_ajax():
         data = []
+        coupons = Coupon.objects.filter(**filters).order_by(ordering)\
+                                 .only('id', 'short_desc', 'description', 'end', 'coupon_type', 'merchant')
+        pages = Paginator(coupons, 20)
         for c in pages.page(page).object_list:
             item = {'id': c.id,
                     'merchant_name': c.merchant.name,
@@ -330,6 +321,25 @@ def category(request, category_code, current_page=None, category_ids=-1):
         return HttpResponse(json.dumps({'items': data,
                                         'total_pages': pages.num_pages,
                                         'total_items': pages.count}), content_type="application/json")
+    
+    coupons = Coupon.objects.filter(Q(end__gt=datetime.datetime.now()) | Q(end__isnull=True),
+                                    **filters).order_by(ordering)
+
+    # preparing pagination
+    pages = Paginator(coupons, 20)
+    if int(page) > pages.num_pages:
+        page = pages.num_pages
+    ppages = range(1, pages.num_pages+1)
+    separators = 0
+    if pages.num_pages > 12:
+        if page <= 5 or page >= pages.num_pages - 3:
+            ppages = ppages[:8] + ppages[-3:]
+            separators = 1
+        else:
+            page_next = page + 2
+            page_prev = page - 2
+            ppages = ppages[:3] + ppages[page_prev:page_next] + ppages[-3:]
+            separators = 2
     
     if current_page and int(current_page) == 1:
         return HttpResponsePermanentRedirect(reverse('web.views.main.category', 
