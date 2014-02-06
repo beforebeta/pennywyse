@@ -5,9 +5,11 @@ from optparse import make_option
 import re
 from urlparse import urlparse, parse_qs
 
+from django.core.cache import cache
 from django.core.management.base import BaseCommand
 from django.conf import settings
 from django.db.models import Count
+from django.db.models.query_utils import Q
 from core.models import Category, Country, Coupon, DealType, Merchant, MerchantAffiliateData
 from core.util import print_stack_trace, extract_url_from_skimlinks
 from tracking.models import ClickTrack
@@ -213,13 +215,16 @@ def setup_web_coupons():
 def refresh_calculated_fields():
     section("Refresh Calculated Fields")
     for m in Merchant.objects.all():
+        print 'Calculating coupons for %s' % m.name
         try:
             m.refresh_coupon_count()
         except:
             print "Error with: ", m.name, m.id
             print_stack_trace()
+    
     regex = r'coupons/(?P<company_name>[a-zA-Z0-9-_]+)/(?P<coupon_label>[a-z0-9-_]+)/(?P<coupon_id>[\d]+)/$'
     for ct in ClickTrack.objects.filter(coupon__isnull=True):
+        print 'Processing click track %s' % ct.id
         r = re.search(regex, ct.target_url)
         if r:
             try:
@@ -229,9 +234,11 @@ def refresh_calculated_fields():
                 ct.coupon = None
             ct.save()
     for ct in ClickTrack.objects.filter(merchant__isnull=True):
+        print 'Processing click track %s' % ct.id
         if ct.coupon:
             ct.coupon.merchant = ct.coupon.merchant
             ct.save()
+    
     tracks = ClickTrack.objects.exclude(coupon__isnull=True).values('coupon_id')\
                                                             .annotate(popularity=Count('coupon__id'))
     for track in tracks:
@@ -240,11 +247,17 @@ def refresh_calculated_fields():
     tracks = ClickTrack.objects.exclude(merchant__isnull=True).values('merchant_id')\
                                                             .annotate(popularity=Count('merchant__id'))
     for track in tracks:
+        print 'Processing click track %s' % track.id
         Merchant.objects.filter(id=track['merchant_id']).update(popularity=track['popularity'])
     
     for c in Coupon.objects.filter(coupon_type__isnull=True).only('categories', 'dealtypes'):
+        print 'Calculating coupon type for coupon %s' % c.id
         c.coupon_type = c.get_coupon_type()
         c.save()
+    
+    Coupon.objects.exclude(Q(end__gt=datetime.datetime.now()) | Q(end__isnull=True)).update(is_active=False)
+    
+    cache.clear()
     
 def refresh_merchant_redirects():
     for coupon in Coupon.objects.all():
@@ -273,7 +286,7 @@ def load():
     refresh_deals()
     setup_web_coupons()
     refresh_calculated_fields()
-    #refresh_merchant_redirects()
+    refresh_merchant_redirects()
 
 def embedly(args):
     _from = 0
