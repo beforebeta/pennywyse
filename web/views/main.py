@@ -59,7 +59,7 @@ def adaptive_cache_page(f):
     return wrapper
 
 @ensure_csrf_cookie
-#@adaptive_cache_page
+@adaptive_cache_page
 def index(request, current_page=None):
     parameters = {'is_featured': True, 'is_active': True}
     page = int(current_page or 1)
@@ -128,7 +128,7 @@ def top_coupons(request, current_page=1):
 
 
 @ensure_csrf_cookie
-#@adaptive_cache_page
+@adaptive_cache_page
 def coupons_for_company(request, company_name, company_id=None, current_page=None, category_ids=None):
     """List of coupons for given merchant."""
     
@@ -282,7 +282,7 @@ def groceries(request):
 
 
 @ensure_csrf_cookie
-#@adaptive_cache_page
+@adaptive_cache_page
 def category(request, category_code, current_page=None, category_ids=-1):
     sorting = request.GET.get('sorting', None)
     coupon_types = request.GET.getlist('coupon_type', [])
@@ -403,3 +403,6 @@ def email_subscribe(request):
         else:
             data['errors'] = form.errors
     return HttpResponse(json.dumps(data), content_type="application/json")
+
+def not_found(request):
+    return render_response("not_found.html", request, {})

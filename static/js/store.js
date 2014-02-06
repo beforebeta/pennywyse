@@ -196,6 +196,13 @@ $(function() {
 		}
 	});
 	
+	if ($('.not-found-container').length > 0) {
+		page = 1;
+		sorting = 'new';
+		base_url = '/';
+		fetch_items(reset_items=true);
+	}
+	
 	// switching between "most popular", "featured" and "stores" sections on "top coupons" mobile page
 	$('.mobile-index-labels a').click(function() {
 		$('.mobile-index-labels a').removeClass('active');

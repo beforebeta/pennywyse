@@ -46,8 +46,6 @@ urlpatterns += patterns('web.views.search',
     url(r'^search/page/(?P<current_page>[\d]+)/$', 'search')
 )
 
-handler404 = 'web.views.main.index'
-
 # WebSvcs
 urlpatterns += patterns('websvcs.views.image',
     url(r'^s/image/(?P<image_url>.+)/(?P<height>[\d]+)x(?P<width>[\d]+)/$', 'image_resize'),
@@ -69,3 +67,5 @@ urlpatterns += patterns('',
 urlpatterns += patterns('django.contrib.flatpages.views',
     (r'^(?P<url>.*/)$', 'flatpage'),
 )
+
+handler404 = 'web.views.main.not_found'
