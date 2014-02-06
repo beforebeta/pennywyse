@@ -1957,7 +1957,7 @@ hr {
 .mobile-coupon-description {
 	margin: 5px;
 }
-.no-search-results, .no-results {
+.no-search-results, .no-results, .not-found {
 	background-color: #f7f7f6;
 	margin-top: 10px;
 	height: 120px !important;
@@ -2000,7 +2000,7 @@ hr {
 	text-align: left !important;
 	height: 120px !important;
 }
-.no-results {
+.no-results, .not-found {
 	width: 940px !important;
 	margin-right: -40px !important;
 	margin-bottom: -30px;
@@ -2008,7 +2008,7 @@ hr {
 	height: 100px !important;
 }
 @media (max-width: 710px) {
-	.no-results {
+	.no-results, .not-found {
 		width: 260px !important;
 		padding: 20px !important;
 		text-align: left !important;
@@ -2016,7 +2016,7 @@ hr {
 	}
 }
 @media (min-width: 1170px) {
-	.no-results {
+	.no-results, .not-found {
 		width: 1170px !important;
 	}
 }
@@ -2030,4 +2030,10 @@ hr {
 }
 .mobile-index-labels #stores, .mobile-index-labels #expiring_soon {
 	text-align: right;
+}
+.not-found {
+	height: 80px !important;
+	padding: 0px !important;
+	text-align: center;
+	margin-bottom: 20px;
 }
