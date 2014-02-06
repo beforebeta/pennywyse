@@ -404,5 +404,8 @@ def email_subscribe(request):
             data['errors'] = form.errors
     return HttpResponse(json.dumps(data), content_type="application/json")
 
+@cache_page(60 * 60 * 24)
 def not_found(request):
-    return render_response("not_found.html", request, {})
+    response = render_response("not_found.html", request, {})
+    response.status_code = 404
+    return response
