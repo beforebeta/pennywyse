@@ -666,7 +666,7 @@ class Coupon(models.Model):
         return False
     
     def full_success_path(self):
-        return 'http://%s%s' % (settings.BASE_URL_NO_APPENDED_SLASH, self.local_path())
+        return settings.BASE_URL_NO_APPENDED_SLASH + self.local_path()
     
     @property
     def twitter_share_url(self):

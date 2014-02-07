@@ -152,7 +152,6 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
     if coupon_id:
         coupon = Coupon.objects.get(id=coupon_id)
     
-    all_categories = merchant.get_coupon_categories()
     filters = {'merchant_id': merchant.id, 'is_active': True}
     
     if category_ids:
@@ -185,12 +184,12 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
                     'coupon_type': c.coupon_type,
                     'image': c.image,
                     'twitter_share_url': c.twitter_share_url}
-                    
             data.append(item)
         return HttpResponse(json.dumps({'items': data,
                                         'total_pages': pages.num_pages,
                                         'total_items': pages.count}), content_type="application/json")
 
+    all_categories = merchant.get_coupon_categories()
     coupons = Coupon.objects.filter(**filters).order_by(ordering)
 
     # preparing pagination

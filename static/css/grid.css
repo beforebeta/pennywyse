@@ -1016,7 +1016,7 @@ hr {
 	margin-right: 0px !important;
 }
 .prescroll-header {
-	background-image: url('../img/valentines_day2_cropped.png');
+	background-image: url('../img/wood_heart_cropped.png');
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: cover;
@@ -1401,7 +1401,7 @@ hr {
 	float: left;
 }
 .mobile-share-right {
-	float: left;
+	float: right;
 	margin-left: 10px;
 	margin-right: -10px;
 }
@@ -1839,7 +1839,6 @@ hr {
 	width: 180px !important;
 	line-height: 16px !important;
 	height: 50px !important;
-	float: left;
 }
 .mobile-coupon-popup  button {
 	background-color: #46a8a7;
@@ -1856,8 +1855,14 @@ hr {
 	height: auto !important;
 	border-radius: 0 0 2px 2px;
 }
+.mobile-coupon-popup .coupon-popup-bottom input[type=text] {
+	float: left;
+}
 .mobile-coupon-popup .coupon-popup-subscribe {
 	width: auto !important;
+}
+.mobile-coupon-popup .coupon-popup-subscribe input[type=text] {
+	border: none !important;
 }
 .mobile-overlay {
 	position: fixed;
