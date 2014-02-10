@@ -953,26 +953,13 @@ function merchant_button_callback() {
 	redirect_to(merchant_url);
 }
 function redirect_to(url) {
-	if (window.chrome) {
-		var click_event = document.createEvent('MouseEvents');
-		var a = document.createElement('a');
-		a.href = url;
-		click_event.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, true, false, false, false, 0, null);
-    	a.dispatchEvent(click_event);
-	}
-	else {
-		window.open(url, '_blank');
-	}
+	window.open(url, '_blank');
 }
 
 function prepend_promo_container() {
     var data = {'is_mobile': is_mobile};
 	if ($('.landing-container').length == 1 && $('.promo-container').length == 0) {
-		var promo_coupon = '<div class="coupon-container {{# is_mobile}}mobile-coupon-container{{/is_mobile}} promo-container"> \
-								<a href="http://pushpenny.com/magazine/pushpenny-sweet-nothings-instagram-contest-2014" target="_blank"> \
-									<img src="/static/img/valentine_promo.png" target="_blank"> \
-								</a> \
-							</div>';
+		var promo_coupon = '<div class="coupon-container {{# is_mobile}}mobile-coupon-container{{/is_mobile}} promo-container" onclick="javascript:redirect_to(\'http://pushpenny.com/magazine/pushpenny-sweet-nothings-instagram-contest-2014\');"></div>';
 		html = Mustache.to_html(promo_coupon, data);
 		$('.coupons').prepend(html);
 	}
