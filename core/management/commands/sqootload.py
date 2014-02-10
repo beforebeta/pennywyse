@@ -201,7 +201,7 @@ def run_thru_full_cycle(args):
     refresh_start_time, refresh_end_time, sqoot_raw_active, num_of_soft_dedups = refresh_sqoot_data(last_run_start_time, firsttime=firsttime)
     _, num_of_implied_inactive, cleanout_endtime = clean_out_sqoot_data(refresh_start_time)
     validate_endtime = validate_sqoot_data(refresh_start_time)
-    num_of_hard_dedups, hard_dedup_endtime = dedup_sqoot_data_hard(refresh_start_time, firsttime=firsttime)
+    hard_dedup_endtime = dedup_sqoot_data_hard(refresh_start_time, firsttime=firsttime)
     clean_out_sqoot_data(refresh_start_time)
     end_inventory_count = Coupon.all_objects.filter(ref_id_source='sqoot', is_deleted=False,
                                                             is_duplicate=False, online=False,
@@ -210,7 +210,7 @@ def run_thru_full_cycle(args):
     describe_section("ALL DONE AND LOGGING THINGS..", show_time())
 
     num_of_total_inactives = num_of_implied_inactive # + num_of_confirmed_inactive
-    num_of_total_dedups = num_of_soft_dedups + num_of_hard_dedups
+    num_of_total_dedups = num_of_soft_dedups #+ num_of_hard_dedups
     implied_net_adds = end_inventory_count - (beg_inventory_count - num_of_total_inactives - num_of_total_dedups)
 
     refresh_took = refresh_end_time - refresh_start_time
@@ -453,15 +453,74 @@ def dedup_sqoot_data_hard(refresh_start_time=None, firsttime=False):
         # If not first time, further filter down to only the newly added unique deals for deduping.
         deals_to_dedup = deals_to_dedup.filter(date_added__gt=refresh_start_time)
 
-    duplicate_deals_list = [] # List of duplicate coupon pks .
-    duplicate_deals_list = crosscheck_by_field(deals_to_dedup, duplicate_deals_list, 'coupon_directlink')
-    duplicate_deals_list = crosscheck_by_field(deals_to_dedup, duplicate_deals_list, 'merchant_name')
-    duplicate_deals_list = list(set(duplicate_deals_list))
+    crosscheck_by_field(deals_to_dedup, 'coupon_directlink')
+    crosscheck_by_field(deals_to_dedup, 'merchant_name')
 
-    num_of_hard_dedups = Coupon.all_objects.filter(pk__in=duplicate_deals_list).update(is_duplicate=True)
     hard_dedup_endtime = datetime.now(pytz.utc)
-    return num_of_hard_dedups, hard_dedup_endtime
+    return hard_dedup_endtime
 
+def crosscheck_by_field(deals_to_dedup, field_name):
+    duplicate_deals_list = [] # List of duplicate coupon pks.
+
+    # Need to revise how dealing w/ duplicate_deals_list
+
+    if field_name == 'coupon_directlink':
+        field_list = list(set([d.directlink for d in deals_to_dedup]))
+    elif field_name == 'merchant_name':
+        field_list = list(set([d.merchant.name for d in deals_to_dedup]))
+    else:
+        return
+
+    all_active_deals = len(deals_to_dedup)
+    all_uniques_by_field = len(field_list)
+    print "\n...Detected {} unique deals by '{}' field to dedup out of {} total".format(all_uniques_by_field, field_name, all_active_deals), show_time()
+
+    progress_count = 1
+    for x in field_list:
+        try:
+            same_looking_deals = Coupon.all_objects.filter(ref_id_source='sqoot', is_duplicate=False,
+                                                           is_deleted=False, online=False)\
+                                                   .exclude(end__lt=datetime.now(pytz.utc))
+            if field_name == 'coupon_directlink':
+                same_looking_deals = same_looking_deals.filter(directlink=x)
+            elif field_name == 'merchant_name':
+                same_looking_deals = same_looking_deals.filter(merchant__name__contains=x)
+
+            if same_looking_deals.count() <= 1:
+                print '({}/{}) DEDUP-HARD:'.format(progress_count, all_uniques_by_field), '...no duplicate, skipping...', show_time()
+                progress_count += 1
+                continue
+
+            print '({}/{}) DEDUP-HARD:'.format(progress_count, all_uniques_by_field), show_time(), 'all deals with {}=={}'.format(field_name, x)
+            while True:
+                current_count = same_looking_deals.count()
+                if current_count == 1:
+                    break
+                else:
+                    for c in same_looking_deals[1:current_count]:
+                        if c.is_duplicate:
+                            continue
+
+                        does_it_look_duplicate, which_deal = compare_location_between(same_looking_deals[0], c)
+                        if not does_it_look_duplicate:
+                            continue
+
+                        if which_deal == same_looking_deals[0]:
+                            duplicate_deals_list.append(which_deal.pk)
+                            break
+                        else:
+                            duplicate_deals_list.append(which_deal.pk)
+                    same_looking_deals = same_looking_deals.exclude(pk=same_looking_deals[0].pk)
+            progress_count += 1
+            if progress_count >= 200:
+                duplicate_deals_list = list(set(duplicate_deals_list))
+                Coupon.all_objects.filter(pk__in=duplicate_deals_list).update(is_duplicate=True)
+                duplicate_deals_list = []
+                progress_count = 1
+        except:
+            print "!!!ERROR: field: {}".format(x)
+            print_stack_trace()
+    print "FINISHED DEDUPING HARD....", show_time()
 
 #############################################################################################################
 #
@@ -1055,50 +1114,6 @@ def check_if_deal_dead(coupon_obj, response, sqoot_url):
 def confirm_or_correct_deal_data(coupon_model, response):
     pass
 
-def crosscheck_by_field(deals_to_dedup, duplicate_deals_list, field_name):
-    if field_name == 'coupon_directlink':
-        field_list = list(set([d.directlink for d in deals_to_dedup]))
-    elif field_name == 'merchant_name':
-        field_list = list(set([d.merchant.name for d in deals_to_dedup]))
-    else:
-        return duplicate_deals_list
-
-    for x in field_list:
-        try:
-            same_looking_deals = Coupon.all_objects.filter(ref_id_source='sqoot', is_duplicate=False,
-                                                           is_deleted=False, online=False)\
-                                                   .exclude(end__lt=datetime.now(pytz.utc))
-            if field_name == 'coupon_directlink':
-                same_looking_deals = same_looking_deals.filter(directlink=x)
-            elif field_name == 'merchant_name':
-                same_looking_deals = same_looking_deals.filter(merchant__name__contains=x)
-
-            if same_looking_deals.count() <= 1:
-                continue
-            print 'DEDUP-HARD: all deals with {}={}'.format(field_name, x), show_time()
-            while True:
-                current_count = same_looking_deals.count()
-                if current_count == 1:
-                    break
-                else:
-                    for c in same_looking_deals[1:current_count]:
-                        if c.pk in duplicate_deals_list:
-                            continue
-
-                        does_it_look_duplicate, which_deal = compare_location_between(same_looking_deals[0], c)
-                        if not does_it_look_duplicate:
-                            continue
-
-                        if which_deal == same_looking_deals[0]:
-                            duplicate_deals_list.append(which_deal.pk)
-                            break
-                        else:
-                            duplicate_deals_list.append(which_deal.pk)
-                    same_looking_deals = same_looking_deals.exclude(pk=same_looking_deals[0].pk)
-        except:
-            print "!!!ERROR: field: {}".format(x)
-            print_stack_trace()
-    return duplicate_deals_list
 
 def compare_location_between(deal_obj_one, deal_obj_two):
     location_one = deal_obj_one.merchant_location
