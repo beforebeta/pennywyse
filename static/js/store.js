@@ -388,7 +388,7 @@ $(function() {
 		$(this).hide();
 		$('.menu-item').find('.menu-link').removeClass('active-dropdown-link');
 	});
-
+	
 	prepend_promo_container();
 });
 
@@ -967,7 +967,7 @@ function redirect_to(url) {
 
 function prepend_promo_container() {
     var data = {'is_mobile': is_mobile};
-	if ($('.promo-container').length == 0) {
+	if ($('.landing-container').length == 1 && $('.promo-container').length == 0) {
 		var promo_coupon = '<div class="coupon-container {{# is_mobile}}mobile-coupon-container{{/is_mobile}} promo-container"> \
 								<a href="http://pushpenny.com/magazine/pushpenny-sweet-nothings-instagram-contest-2014" target="_blank"> \
 									<img src="/static/img/valentine_promo.png" target="_blank"> \
