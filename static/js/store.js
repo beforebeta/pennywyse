@@ -389,6 +389,7 @@ $(function() {
 		$('.menu-item').find('.menu-link').removeClass('active-dropdown-link');
 	});
 
+	prepend_promo_container();
 });
 
 function select_categories(criteria) {
@@ -432,7 +433,7 @@ function select_filters(criteria) {
 }
 
 function render_coupons(data, reset_items) {
-	template = '{{#items}} \
+	var template = '{{#items}} \
 					<div class="coupon-container {{# is_mobile}}mobile-coupon-container{{/is_mobile}}"> \
 						<div class="coupon-body"> \
 							<div class="coupon-header"> \
@@ -502,7 +503,8 @@ function render_coupons(data, reset_items) {
 			return '<img src="/static/img/freebies_icon.png">Freebies';
 		}
 	};
-	html = Mustache.to_html(template, data);
+	
+	html =  Mustache.to_html(template, data);
 	$('.more-coupons').find('br').remove();
 	$('.prescroll-header').waypoint('disable');
 	$('.merchant-right span').html(data.total_items);
@@ -512,6 +514,7 @@ function render_coupons(data, reset_items) {
 	else {
 		$('.coupons').append(html);
 	}
+	prepend_promo_container();
 	$('.coupon-description:not(.truncated)').dotdotdot({
 		ellipsis: '... ',
  		wrap: 'letter',
@@ -959,5 +962,18 @@ function redirect_to(url) {
 	}
 	else {
 		window.open(url, '_blank');
+	}
+}
+
+function prepend_promo_container() {
+    var data = {'is_mobile': is_mobile};
+	if ($('.promo-container').length == 0) {
+		var promo_coupon = '<div class="coupon-container {{# is_mobile}}mobile-coupon-container{{/is_mobile}} promo-container"> \
+								<a href="http://pushpenny.com/magazine/pushpenny-sweet-nothings-instagram-contest-2014" target="_blank"> \
+									<img src="/static/img/valentine_promo.png" target="_blank"> \
+								</a> \
+							</div>';
+		html = Mustache.to_html(promo_coupon, data);
+		$('.coupons').prepend(html);
 	}
 }
