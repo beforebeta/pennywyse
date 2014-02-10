@@ -6,6 +6,7 @@ var category_ids = new Array();
 var coupon_types = new Array();
 var coupon_type = '';
 var is_sticky = false;
+var is_touch = false;
 var deal_type_filters_active = false;
 var current_url = window.location.href;
 var is_mobile = false;
@@ -41,16 +42,23 @@ $(function() {
 		}
 	}
 	
+	if ('ontouchstart' in window || window.DocumentTouch && document instanceof DocumentTouch) {
+		is_touch = true;
+	}
+		
 	// applying styles for mobile layout, if necessary width has been detected
 	if ($(window).width() < 768) {
+		is_mobile = true;
 		$('.main-container').addClass('mobile-container');
 		$('.middle-container').addClass('mobile-middle-container');
 		$('.index-rail').addClass('mobile-index-rail');
 		$('.search-main-rail').addClass('mobile-index-rail');
 		$('.main-rail').addClass('mobile-index-rail');
-		is_mobile = true;
 		$('.coupon-container').addClass('mobile-coupon-container');
 		$('.coupon-bottom').remove();
+	}
+	else if (is_touch) {
+		$('.use-coupon').addClass('fixed-use-coupon');
 	}
 	
 	$('.expandable').on('click', expandable_select_callback);
@@ -381,8 +389,6 @@ $(function() {
 		$('.menu-item').find('.menu-link').removeClass('active-dropdown-link');
 	});
 
-	
-	
 });
 
 function select_categories(criteria) {
@@ -744,7 +750,7 @@ function render_coupon_popup(data, coupon_id) {
 	data.email_share_url = function() {
 		return encodeURIComponent(this.full_success_path);
 	};
-	var template = '<div class="coupon-popup {{# is_mobile }}mobile-coupon-popup{{/is_mobile}}"> \
+	var template = '<div class="coupon-popup {{# is_mobile }}mobile-coupon-popup{{/is_mobile}}" data-href="{{ url }}"> \
 						<div class="coupon-popup-header"> \
 							{{# is_mobile }} \
 								<a href="javascript:close_coupon_popup();">back</a> \
@@ -764,7 +770,7 @@ function render_coupon_popup(data, coupon_id) {
 						{{^ code }} \
 							<div class="coupon-popup-code"> \
 								<span>No coupon code required.</span> \
-								<input type="button" value="Shop at {{ merchant_name }}" onclick="redirect_to(\'{{ merchant_link }}\')"> \
+								<input type="button" value="Shop at {{ merchant_name }}" class="merchant-button" data-href="{{ merchant_link }}"> \
 							</div> \
 						{{/ code}} \
 						<div class="coupon-popup-body"> \
@@ -773,18 +779,24 @@ function render_coupon_popup(data, coupon_id) {
 									<img src="{{ image }}" class="merchant-logo"> \
 								</a> \
 							</div> \
-							<div class="coupon-popup-description"> \
-								<h2 class="short-description">{{ short_desc }}</h2> \
-									{{^ is_mobile }} \
-										<div class="coupon-description">{{& description }}</div> \
-									{{/is_mobile}} \
+							{{# is_mobile }} \
+								<a href="#"><h2 class="short-description">{{ short_desc }}</h2></a> \
+								<span class="coupon-description">{{& description }}</span> \
+								{{# code }} \
+									<br><a href="{{ url }}" target="_blank">Shop at {{ merchant_name }} &raquo;</a> \
+								{{/ code }} \
+								\
+							{{/is_mobile}} \
+							{{^is_mobile}} \
+								<div class="coupon-popup-description"> \
+									<h2 class="short-description">{{ short_desc }}</h2> \
+									<div class="coupon-description">{{& description }}</div> \
 									{{# code }} \
 										<br><a href="{{ url }}" target="_blank">Shop at {{ merchant_name }} &raquo;</a> \
 									{{/ code }} \
-							</div> \
-							{{# is_mobile }} \
-								<div class="mobile-coupon-description">{{& description }}</div> \
+								</div> \
 							{{/is_mobile}} \
+							\
 							<br clear="both"> \
 						</div> \
 							<div class="coupon-popup-bottom"> \
@@ -840,6 +852,7 @@ function render_coupon_popup(data, coupon_id) {
 		},
 	});
 	init_clipboard($('#coupon-code-' + coupon_id));
+	$('.merchant-button').on('click', merchant_button_callback);
 }
 
 function close_coupon_popup() {
@@ -856,12 +869,13 @@ function close_coupon_popup() {
 
 function close_popups() {
 	$('.subscription-popup').hide();
-	$('.coupon-popup').hide();
+	$('.coupon-popup').remove();
 	$('.overlay').hide();
 	$('.tipsy').remove();
 	$('.prescroll-header').waypoint('enable');
 	var state_obj = {'coupon_id': null};
 	history.pushState(state_obj, "Coupon Page", current_url);
+	$('.merchant-button').off('click');
 }
 
 function init_clipboard(element) {
@@ -875,6 +889,8 @@ function init_clipboard(element) {
             return text_input.val();
         },
         afterCopy: function() {
+        	var coupon_url = $('.coupon-popup').attr('data-href');
+        	redirect_to(coupon_url);
         	setTimeout(function (){
 	        	$('.tipsy').remove();
 	        }, 1000);
@@ -928,6 +944,20 @@ function expandable_select_callback() {
 	$(this).off('click');
 	$(this).find('.expanded-choices li').on('click', expandable_callback);
 }
+
+function merchant_button_callback() {
+	var merchant_url = $(this).attr('data-href');
+	redirect_to(merchant_url);
+}
 function redirect_to(url) {
-	window.open(url, '_blank');
+	if (window.chrome) {
+		var click_event = document.createEvent('MouseEvents');
+		var a = document.createElement('a');
+		a.href = url;
+		click_event.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, true, false, false, false, 0, null);
+    	a.dispatchEvent(click_event);
+	}
+	else {
+		window.open(url, '_blank');
+	}
 }
