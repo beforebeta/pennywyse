@@ -29,7 +29,7 @@ class Command(BaseCommand):
     def generate_category_urls(self):
         self.stdout.write('Generating Category URLs...')
         file = open('/tmp/pushpenny_sitemap_category_urls.txt', 'w')
-        for category in Category.objects.all():
+        for category in Category.objects.filter(ref_id_source__isnull=True):
             file.write('http://pushpenny.com/categories/%s/ changefreq=weekly priority=0.7\n' % category.code)
 
             page_count = int((category.get_active_coupons().count() / 10.0) + 0.5)

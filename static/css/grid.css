@@ -2046,3 +2046,6 @@ hr {
 .mobile-coupon-container .use-coupon {
 	margin-top: 0 !important;
 }
+.promo-container img {
+	border-radius: 2px;
+}
