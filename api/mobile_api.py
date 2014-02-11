@@ -91,6 +91,8 @@ class MobileResource(ModelResource):
 
         for sqs_obj in sqs[start_point:end_point]:
             merchant_pnt = sqs_obj.merchant_location
+            if not merchant_pnt:
+                continue
             dist_to_user = geopy_distance((user_pnt.y, user_pnt.x), (merchant_pnt.y, merchant_pnt.x)).miles
 
             deal_description = sqs_obj.text

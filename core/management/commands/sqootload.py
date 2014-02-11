@@ -32,7 +32,7 @@ import json
 
 SQOOT_API_URL = "http://api.sqoot.com/v2/"
 ITEMS_PER_PAGE = 100
-SAVED_MERCHANT_ID_LIST = [int(m.ref_id) for m in Merchant.all_objects.filter(ref_id_source='sqoot', is_deleted=False).only('ref_id')]
+# SAVED_MERCHANT_ID_LIST = [int(m.ref_id) for m in Merchant.all_objects.filter(ref_id_source='sqoot', is_deleted=False).only('ref_id')]
 EASTERN_TZ = pytz.timezone('US/Eastern')
 
 class Command(BaseCommand):
@@ -190,42 +190,46 @@ def run_thru_full_cycle(args):
         latest_stats = last_row.replace('\r\n', '').split(',')
     f.close()
 
-    last_run_start_time = parse(latest_stats[0]) if last_row else None
-    last_inventory_count = int(latest_stats[7])  if last_row else 0
-    beg_inventory_count = Coupon.all_objects.filter(ref_id_source='sqoot', is_deleted=False,
-                                                    is_duplicate=False, online=False,
-                                                    status='considered-active',
-                                                    end__gt=datetime.now(pytz.utc)).count()
-    implied_attrition = last_inventory_count - beg_inventory_count if last_inventory_count else 0
-    fullcycle_starttime = datetime.now(pytz.utc)
-    refresh_start_time, refresh_end_time, sqoot_raw_active, num_of_soft_dedups = refresh_sqoot_data(last_run_start_time, firsttime=firsttime)
+    last_refresh_time = parse(latest_stats[1]) if last_row else None
+    # last_inventory_count = int(latest_stats[7])  if last_row else 0
+    # beg_inventory_count = Coupon.all_objects.filter(ref_id_source='sqoot', is_deleted=False,
+    #                                                 is_duplicate=False, online=False,
+    #                                                 status='considered-active',
+    #                                                 end__gt=datetime.now(pytz.utc)).count()
+    # implied_attrition = last_inventory_count - beg_inventory_count if last_inventory_count else 0
+    # fullcycle_starttime = datetime.now(pytz.utc)
+    refresh_start_time, refresh_end_time, sqoot_raw_active, num_of_soft_dedups = refresh_sqoot_data(last_refresh_time, firsttime=firsttime)
+    with open(path, 'a') as csvfile:
+        log_writer = csv.writer(csvfile)
+        log_writer.writerow(['wip ', refresh_start_time,])
+    csvfile.close()
+
     _, num_of_implied_inactive, cleanout_endtime = clean_out_sqoot_data(refresh_start_time)
     validate_endtime = validate_sqoot_data(refresh_start_time)
     hard_dedup_endtime = dedup_sqoot_data_hard(refresh_start_time, firsttime=firsttime)
     clean_out_sqoot_data(refresh_start_time)
-    end_inventory_count = Coupon.all_objects.filter(ref_id_source='sqoot', is_deleted=False,
-                                                            is_duplicate=False, online=False,
-                                                            status='considered-active').count()
+    # end_inventory_count = Coupon.all_objects.filter(ref_id_source='sqoot', is_deleted=False,
+    #                                                         is_duplicate=False, online=False,
+    #                                                         status='considered-active').count()
     fullcycle_endtime = datetime.now(pytz.utc)
     describe_section("ALL DONE AND LOGGING THINGS..", show_time())
 
-    num_of_total_inactives = num_of_implied_inactive # + num_of_confirmed_inactive
-    num_of_total_dedups = num_of_soft_dedups #+ num_of_hard_dedups
-    implied_net_adds = end_inventory_count - (beg_inventory_count - num_of_total_inactives - num_of_total_dedups)
+    # num_of_total_inactives = num_of_implied_inactive # + num_of_confirmed_inactive
+    # num_of_total_dedups = num_of_soft_dedups #+ num_of_hard_dedups
+    # implied_net_adds = end_inventory_count - (beg_inventory_count - num_of_total_inactives - num_of_total_dedups)
 
     refresh_took = refresh_end_time - refresh_start_time
     validate_took = validate_endtime - cleanout_endtime
     hard_dedup_took = hard_dedup_endtime - validate_endtime
+    total_script_took = fullcycle_endtime - refresh_end_time
 
     with open(path, 'a') as csvfile:
         log_writer = csv.writer(csvfile)
-        log_writer.writerow([fullcycle_starttime, last_inventory_count, beg_inventory_count,
-                             implied_attrition, num_of_total_inactives, num_of_total_dedups,
-                             implied_net_adds, end_inventory_count, fullcycle_endtime, refresh_took.seconds/60,
-                             validate_took.seconds/60, hard_dedup_took.seconds/60])
+        log_writer.writerow(['done', refresh_start_time, refresh_took.seconds/60, validate_took.seconds/60,
+                             hard_dedup_took.seconds/60, total_script_took.seconds/60])
     csvfile.close()
 
-def refresh_sqoot_data(last_run_start_time, indirectload=False, firsttime=False):
+def refresh_sqoot_data(last_refresh_time, indirectload=False, firsttime=False):
     '''
     Summary: Iterate through Sqoot's entire coupon payload and download and update accordingly.
     '''
@@ -262,13 +266,13 @@ def refresh_sqoot_data(last_run_start_time, indirectload=False, firsttime=False)
         sqoot_output_deals = json.loads(open("sqoot_output.json","r").read())
 
     num_of_soft_dedups = 0
-    for p in range(page_count):
-    # for p in range(1): # DEBUG!!!
+    # for p in range(page_count):
+    for p in range(100): # DEBUG!!!
         # if p < 40: # DEBUG!!!
         #     continue # DEBUG!!!
         request_parameters['page'] = p + 1
         print "\n"
-        print '## Fetching page %s...' % (p + 1), show_time()
+        print '## Fetching page {} out of {}...'.format(p + 1, page_count), show_time()
         print "\n"
 
         if indirectload:
@@ -283,7 +287,7 @@ def refresh_sqoot_data(last_run_start_time, indirectload=False, firsttime=False)
             active_coupon_ids.append(sqoot_coupon_id)
 
             deal_last_updated = parse(deal_data['deal']['updated_at']+'+0000')
-            if (not firsttime) and last_run_start_time and (deal_last_updated < last_run_start_time):
+            if (not firsttime) and last_refresh_time and (deal_last_updated < last_refresh_time):
                 continue
 
             try:
@@ -296,14 +300,17 @@ def refresh_sqoot_data(last_run_start_time, indirectload=False, firsttime=False)
                 # 'shortcut=True' is given for get_or_create_category() since all categories were 'get_or_create'd above.
                 couponnetwork_model      = get_or_create_couponnetwork(deal_data['deal'])
                 category_model           = get_or_create_category(deal_data['deal'], categories_dict, shortcut=True)
-                merchant_model           = get_or_create_merchant(merchant_data_dict)
+                merchant_model, merchant_created = get_or_create_merchant(merchant_data_dict)
                 merchantlocation_model   = get_or_create_merchantlocation(merchant_data_dict, merchant_model, is_online_bool)
                 coupon_model             = get_or_create_coupon(deal_data['deal'], merchant_model, category_model, dealtype_model,
                                                                 country_model, couponnetwork_model, merchantlocation_model)
 
-                coupon_ref_id = int(coupon_model.merchant.ref_id)
-                if coupon_ref_id not in SAVED_MERCHANT_ID_LIST:
-                    SAVED_MERCHANT_ID_LIST.append(coupon_ref_id)
+                # coupon_ref_id = int(coupon_model.merchant.ref_id)
+                # if coupon_ref_id not in SAVED_MERCHANT_ID_LIST:
+                #     SAVED_MERCHANT_ID_LIST.append(coupon_ref_id)
+                if merchant_created:
+                    print 'DEDUP-SOFT: ...newly created merchant for this coupon, so moving on...', show_time() # DEBUG!!!
+                    pass
                 else:
                     print 'DEDUP-SOFT: coupon %s' % coupon_model.embedly_title, show_time()
                     dedup_scoot_data_soft(coupon_model)
@@ -472,10 +479,11 @@ def crosscheck_by_field(deals_to_dedup, field_name):
         return
 
     all_active_deals = len(deals_to_dedup)
-    all_uniques_by_field = len(field_list)
-    print "\n...Detected {} unique deals by '{}' field to dedup out of {} total".format(all_uniques_by_field, field_name, all_active_deals), show_time()
+    num_of_unique_fields = len(field_list)
+    print "\n...Detected {} deals by '{}' field to dedup out of {} total active deals".format(num_of_unique_fields, field_name, all_active_deals), show_time()
 
     progress_count = 1
+    clear_cache_timer = 1
     for x in field_list:
         try:
             same_looking_deals = Coupon.all_objects.filter(ref_id_source='sqoot', is_duplicate=False,
@@ -487,18 +495,19 @@ def crosscheck_by_field(deals_to_dedup, field_name):
                 same_looking_deals = same_looking_deals.filter(merchant__name__contains=x)
 
             if same_looking_deals.count() <= 1:
-                print '({}/{}) DEDUP-HARD:'.format(progress_count, all_uniques_by_field), '...no duplicate, skipping...', show_time()
+                print show_time(), '({}/{}) DEDUP-HARD:'.format(progress_count, num_of_unique_fields), '...no duplicate, skipping...'
                 progress_count += 1
+                clear_cache_timer += 1
                 continue
 
-            print '({}/{}) DEDUP-HARD:'.format(progress_count, all_uniques_by_field), show_time(), 'all deals with {}=={}'.format(field_name, x)
+            print show_time(), '({}/{}) DEDUP-HARD:'.format(progress_count, num_of_unique_fields), 'all deals with {}=={}'.format(field_name, x)
             while True:
                 current_count = same_looking_deals.count()
                 if current_count == 1:
                     break
                 else:
                     for c in same_looking_deals[1:current_count]:
-                        if c.is_duplicate:
+                        if c.is_duplicate or (c.pk in duplicate_deals_list):
                             continue
 
                         does_it_look_duplicate, which_deal = compare_location_between(same_looking_deals[0], c)
@@ -512,11 +521,12 @@ def crosscheck_by_field(deals_to_dedup, field_name):
                             duplicate_deals_list.append(which_deal.pk)
                     same_looking_deals = same_looking_deals.exclude(pk=same_looking_deals[0].pk)
             progress_count += 1
-            if progress_count >= 200:
+            clear_cache_timer += 1
+            if clear_cache_timer >= 100:
                 duplicate_deals_list = list(set(duplicate_deals_list))
                 Coupon.all_objects.filter(pk__in=duplicate_deals_list).update(is_duplicate=True)
                 duplicate_deals_list = []
-                progress_count = 1
+                clear_cache_timer = 1
         except:
             print "!!!ERROR: field: {}".format(x)
             print_stack_trace()
@@ -799,7 +809,7 @@ def get_or_create_merchant(merchant_data_dict):
     merchant_model.directlink   = merchant_data_dict['url']
     merchant_model.is_deleted   = False
     merchant_model.save()
-    return merchant_model
+    return merchant_model, created
 
 def get_or_create_category(each_deal_data_dict, categories_dict, shortcut=False):
     '''
@@ -900,7 +910,13 @@ def get_or_create_coupon(each_deal_data_dict, merchant_model, category_model, de
         print show_time(), 'CREATED   : coupon %s' % each_deal_data_dict['title']
     else:
         print show_time(), 'UPDATING  : coupon %s' % each_deal_data_dict['title']
-    coupon_model.online              = each_deal_data_dict['online']
+
+    if merchantlocation_model:
+        coupon_model.online              = each_deal_data_dict['online']
+    else:
+        print 'this coupon has no location model', ref_id
+        coupon_model.online          = True
+
     coupon_model.merchant            = merchant_model
     coupon_model.merchant_location   = merchantlocation_model
     coupon_model.description         = strip_tags(each_deal_data_dict['description']) if each_deal_data_dict['description'] else None
