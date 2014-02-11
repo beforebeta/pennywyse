@@ -242,7 +242,17 @@ def refresh_sqoot_data(last_refresh_time, indirectload=False, firsttime=False):
 
     # loading categories
     describe_section("ESTABLISHING CATEGORY DICTIONARY..", show_time())
-    categories_array = requests.get(SQOOT_API_URL + 'categories', params=request_parameters, timeout=5).json()['categories']
+    request_try = 1
+    while True:
+        try:
+            categories_array = requests.get(SQOOT_API_URL + 'categories', params=request_parameters, timeout=5).json()['categories']
+            request_try = 1
+            break
+        except:
+            print "Request timed out after 5 seconds. Let's wait another 5 seconds and try again."
+            time.sleep(5)
+            request_try += 1
+            print "Trying for the {} time...".format(request_try)
     categories_dict = establish_categories_dict(categories_array) # Returns a dict with child: parent categories
     reorganized_categories_array = reorganize_categories_list(categories_array) # list of dict with 'category_name', and 'category_slug'
     for category_dict in reorganized_categories_array:
@@ -251,7 +261,16 @@ def refresh_sqoot_data(last_refresh_time, indirectload=False, firsttime=False):
     # loading coupons and merchants
     describe_section("CHECKING THE LATEST DEAL DATA FROM SQOOT..", show_time())
     request_parameters['per_page'] = ITEMS_PER_PAGE
-    sqoot_active_deal_count = requests.get(SQOOT_API_URL + 'deals', params=request_parameters, timeout=5).json()['query']['total']
+    while True:
+        try:
+            sqoot_active_deal_count = requests.get(SQOOT_API_URL + 'deals', params=request_parameters, timeout=5).json()['query']['total']
+            request_try = 1
+            break
+        except:
+            print "Request timed out after 5 seconds. Let's wait another 5 seconds and try again."
+            time.sleep(5)
+            request_try += 1
+            print "Trying for the {} time...".format(request_try)
     page_count = int(math.ceil(sqoot_active_deal_count / float(request_parameters['per_page'])))
     print '%s deals detected, estimating %s pages to iterate' % (sqoot_active_deal_count, page_count), show_time()
 
@@ -278,7 +297,16 @@ def refresh_sqoot_data(last_refresh_time, indirectload=False, firsttime=False):
         if indirectload:
             response_in_json = sqoot_output_deals[p]
         else:
-            response_in_json = requests.get(SQOOT_API_URL + 'deals', params=request_parameters, timeout=5).json()
+            while True:
+                try:
+                    response_in_json = requests.get(SQOOT_API_URL + 'deals', params=request_parameters, timeout=5).json()
+                    request_try = 1
+                    break
+                except:
+                    print "Request timed out after 5 seconds. Let's wait another 5 seconds and try again."
+                    time.sleep(5)
+                    request_try += 1
+                    print "Trying for the {} time...".format(request_try)
 
         active_coupon_ids = [] # List of sqoot coupon ids to hold all active deal ids per page, as set 'page' request_parameters.
         deals_data = response_in_json['deals']
