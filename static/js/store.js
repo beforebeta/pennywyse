@@ -773,7 +773,7 @@ function render_coupon_popup(data, coupon_id) {
 						{{^ code }} \
 							<div class="coupon-popup-code"> \
 								<span>No coupon code required.</span> \
-								<input type="button" value="Shop at {{ merchant_name }}" class="merchant-button" data-href="{{ merchant_link }}"> \
+								<input type="button" value="Shop at {{ merchant_name }}" class="merchant-button" data-href="{{ url }}"> \
 							</div> \
 						{{/ code}} \
 						<div class="coupon-popup-body"> \
