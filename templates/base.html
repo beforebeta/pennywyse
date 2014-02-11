@@ -5,6 +5,8 @@
 		{% block head %}
 			<meta charset="utf-8">
 			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+            <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
 			<link href="/static/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
 			<link href="/static/css/tipsy.css" rel="stylesheet">
 			<link href="/static/css/grid.css" rel="stylesheet">
@@ -280,6 +282,15 @@
 		</div>
 		<div class="header-container header prescroll-header bottom-shadow">
 				<div class="row top-row">
+					<div class="top-left-container">
+						What's Make PushPenny So Great for Coupons?
+						<ul>
+							<li>One of the largest sources of verified coupon codes</li>
+							<li>Backed by the PushPenny promise</li>
+							<li>Huge Database of local offers</li>
+							<li>PushPenny Magazine is the ultimate guide to frugal living</li>
+						</ul>
+					</div>
 					<div class="search-container top-container">
 						<a href="{% url 'web.views.main.index' %}"></a>
 						<form action="/search/" id="search_form">
