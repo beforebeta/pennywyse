@@ -168,6 +168,7 @@ class Merchant(models.Model):
     directlink      = models.TextField(blank=True, null=True)
     skimlinks       = models.TextField(blank=True, null=True)
     redirect        = models.NullBooleanField()
+    is_deleted      = models.BooleanField('Soft-deleted', blank=True, default=False)
 
     date_added      = models.DateTimeField(default=datetime.datetime.now(), auto_now_add=True)
     last_modified   = models.DateTimeField(default=datetime.datetime.now(), auto_now=True, auto_now_add=True)
@@ -490,6 +491,7 @@ class Coupon(models.Model):
     is_popular      = models.BooleanField('Popular', blank=True, default=False)
     is_duplicate    = models.BooleanField('Duplicate', blank=True, default=False)
     is_active       = models.BooleanField('Active', blank=True, default=True)
+    is_deleted      = models.BooleanField('Soft-deleted', blank=True, default=False)
     related_deal    = models.ForeignKey('Coupon', blank=True, null=True)
     popularity      = models.IntegerField(blank=True, null=True, default=0)
     coupon_type     = models.CharField(max_length=255, blank=True, null=True)
@@ -591,7 +593,7 @@ class Coupon(models.Model):
         if self.code:
             return 'coupon_code'
         elif self.has_deal_type('freeshipping') or self.has_deal_type('totallyfreeshipping'):
-            return 'free_shipping'        
+            return 'free_shipping'
         elif self.has_deal_type('printable'):
             return 'printable'
         elif self.has_deal_type('gift'):
@@ -664,16 +666,16 @@ class Coupon(models.Model):
         if now > self.end:
             return True
         return False
-    
+
     def full_success_path(self):
         return settings.BASE_URL_NO_APPENDED_SLASH + self.local_path()
-    
+
     @property
     def twitter_share_url(self):
         params = {'text': '%s at %s from @pushpennycoupon' % (self.short_desc[:75], self.merchant.name),
                   'url': self.full_success_path()}
         return 'https://twitter.com/intent/tweet?' + urllib.urlencode(params)
-    
+
 @receiver(post_save, sender=Category)
 @receiver(post_save, sender=Coupon)
 @receiver(post_save, sender=Merchant)

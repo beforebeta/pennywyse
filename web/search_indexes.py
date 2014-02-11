@@ -19,6 +19,7 @@ class CouponIndex(indexes.SearchIndex, indexes.Indexable):
     merchant_id = indexes.IntegerField(model_attr='merchant__id', null=True)
     coupon_type = indexes.CharField(model_attr='coupon_type', null=True)
     popularity = indexes.IntegerField(model_attr='popularity', null=True)
+    is_deleted = indexes.BooleanField(model_attr='is_deleted', null=True)
 
     def get_model(self):
         return Coupon
