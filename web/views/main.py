@@ -148,10 +148,6 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
         merchant_url = reverse('web.views.main.coupons_for_company', kwargs=kwargs)
         return HttpResponsePermanentRedirect(merchant_url)
     
-    coupon = None
-    if coupon_id:
-        coupon = Coupon.objects.get(id=coupon_id)
-    
     filters = {'merchant_id': merchant.id, 'is_active': True}
     
     if category_ids:
@@ -189,6 +185,10 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
                                         'total_pages': pages.num_pages,
                                         'total_items': pages.count}), content_type="application/json")
 
+    coupon = None
+    if coupon_id:
+        coupon = Coupon.objects.get(id=coupon_id)
+    
     all_categories = merchant.get_coupon_categories()
     coupons = Coupon.objects.filter(**filters).order_by(ordering)
 
@@ -321,8 +321,7 @@ def category(request, category_code, current_page=None, category_ids=-1):
                                         'total_pages': pages.num_pages,
                                         'total_items': pages.count}), content_type="application/json")
     
-    coupons = Coupon.objects.filter(Q(end__gt=datetime.datetime.now()) | Q(end__isnull=True),
-                                    **filters).order_by(ordering)
+    coupons = Coupon.objects.filter(**filters).order_by(ordering)
 
     # preparing pagination
     pages = Paginator(coupons, 20)
