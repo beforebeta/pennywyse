@@ -1,62 +1,79 @@
 import requests
-import random
+from collections import Counter
 from django.conf import settings
-from django.template.defaultfilters import slugify
-from .sample_data_feed import top_50_us_cities_dict, sample_query_strings
+from .sample_data_feed import top_50_us_cities_dict
 
 request_parameters = {
-        # 'api_key': settings.SQOOT_PUBLIC_KEY,
-        'api_key': 'xhtihz',
+        'api_key': settings.SQOOT_PUBLIC_KEY,
         'per_page': 100,
-        'radius': 10,
-        'order': 'distance'
+        'radius': 100,
     }
 
-SQOOT_API_URL = "http://api.sqoot.com/v2/"
-LOCAL_API_URL = "http://localhost:8000/v3/"
-MATCH_THRESHOLD = 0.6
+PUSHPENNY_API_URL = "http://api.pushpenny.com/v2/"
+MIN_DEAL_QUANTITY = 100
+MAX_CONSEC_DUPS = 2 # Must be >1
+MAX_TOTAL_DUPS = 4
 
-# def test_local_deals_api_page_one_vs_sqoot():
-#     categories_list = get_categories_list()
-#     picked_category = random.sample(categories_list, 1)[0]
-#     request_parameters['category_slugs'] = slugify(picked_category)
-#     for location in top_50_us_cities_dict.values():
-#         request_parameters['location'] = location
-#         local_response, sqoot_response = fetch_local_and_sqoot_responses(request_parameters)
-#         sqoot_deals_list = sqoot_response['deals']
-#         local_deals_list = local_response['deals']
-#         if len(sqoot_deals_list) == 0:
-#             continue
-#         else:
-#             yield check_deals_match_vs_threshold, local_deals_list, sqoot_deals_list
+##################################################################################################
+# Tests for '/deals' end point
+##################################################################################################
 
-def test_local_deals_response_ordered_by_distance():
-    picked_location = random.sample(top_50_us_cities_dict.values(), 1)
-    request_parameters['location'] = picked_location
-    local_response, sqoot_response = fetch_local_and_sqoot_responses(request_parameters)
-    distance_list = [int(deal['deal']['merchant']['dist_to_user_mi']) for deal in local_response['deals']]
-    assert distance_list == sorted(distance_list)
+def test_mobile_api_in_service():
+    api_response = fetch_api_response(request_parameters)
+    assert api_response.status_code == 200
 
+def test_enough_local_deals_available():
+    for name, lat_lng in top_50_us_cities_dict.iteritems():
+        request_parameters['location'] = lat_lng
+        api_response = fetch_api_response(request_parameters)
+        yield check_deals_quantity_above_threshold, api_response, MIN_DEAL_QUANTITY, name
+
+def test_consec_dup_deals_minimized():
+    # Check only the first page in each city.
+    for name, lat_lng in top_50_us_cities_dict.iteritems():
+        request_parameters['location'] = lat_lng
+        api_response = fetch_api_response(request_parameters)
+        yield check_consec_dups_within_threshold, api_response, MAX_CONSEC_DUPS, name
+
+def test_total_dup_deals_minimized():
+    # Check only the first page in each city.
+    for name, lat_lng in top_50_us_cities_dict.iteritems():
+        request_parameters['location'] = lat_lng
+        api_response = fetch_api_response(request_parameters)
+        yield check_total_dups_within_threshold, api_response, MAX_TOTAL_DUPS, name
 
 ##################################################################################################
 # Helper Methods
 ##################################################################################################
 
-def check_deals_match_vs_threshold(local_deals_list, sqoot_deals_list):
-    # default 'per_page' is 20 for both sqoot and local api
-    local_deal_ids_list = [deal_dict['deal']['id'] for deal_dict in local_deals_list]
-    sqoot_deal_ids_list = [deal_dict['deal']['id'] for deal_dict in sqoot_deals_list]
-    common_deals = list(set(local_deal_ids_list) & set(sqoot_deal_ids_list))
-    common_deal_ratio = float(len(common_deals)) / float(len(sqoot_deal_ids_list))
-    assert common_deal_ratio > MATCH_THRESHOLD
+def fetch_api_response(request_parameters):
+    return requests.get(PUSHPENNY_API_URL + 'deals', params=request_parameters)
 
+def check_deals_quantity_above_threshold(api_response, minimum_threshold, reference_string=None):
+    num_of_total_available = api_response.json()['query']['total']
+    assert num_of_total_available >= minimum_threshold
 
-def fetch_local_and_sqoot_responses(request_parameters):
-    local_response = requests.get(LOCAL_API_URL + 'deals', params=request_parameters).json()
-    sqoot_response = requests.get(SQOOT_API_URL + 'deals', params=request_parameters).json()
-    return local_response, sqoot_response
+def check_consec_dups_within_threshold(api_response, maximum_threshold, reference_string=None):
+    short_titles = [each['deal']['short_title'] for each in api_response.json()['deals']]
+    allowed_consec_dups = (maximum_threshold - 1)
 
-def get_categories_list():
-    sqoot_categories = requests.get(SQOOT_API_URL + 'categories', params=request_parameters).json()['categories']
-    categories_list = [category['category']['name'] for category in sqoot_categories]
-    return categories_list
+    consec_dups_detected = 0
+    previous_deal_title = None
+    for s in short_titles:
+        if not previous_deal_title:
+            previous_deal_title = s
+            continue
+        if s == previous_deal_title:
+            consec_dups_detected += 1
+            previous_deal_title = s
+            if consec_dups_detected > allowed_consec_dups:
+                break
+        else:
+            consec_dups_detected = 0
+            previous_deal_title = s
+    assert consec_dups_detected <= allowed_consec_dups
+
+def check_total_dups_within_threshold(api_response, maximum_threshold, reference_string=None):
+    short_titles = [each['deal']['short_title'] for each in api_response.json()['deals']]
+    dup_deals_above_threshold = [k + " ->" + str(v) for k, v in Counter(short_titles).items() if v > maximum_threshold]
+    assert len(dup_deals_above_threshold) == 0
