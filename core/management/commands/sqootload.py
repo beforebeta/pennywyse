@@ -370,29 +370,29 @@ def clean_out_sqoot_data(refresh_start_time):
     # First
     true_duplicate_deals = Coupon.all_objects.filter(ref_id_source='sqoot', is_deleted=False,
                                                      is_duplicate=True, related_deal__isnull=True)
-    num_of_soft_deleted += true_duplicate_deals.update(is_deleted=True)
     affected_merchant_list += [c.merchant.pk for c in true_duplicate_deals]
+    num_of_soft_deleted += true_duplicate_deals.update(is_deleted=True)
 
     # Second
     folded_deals = Coupon.all_objects.filter(ref_id_source='sqoot', is_deleted=False,
                                              is_duplicate=True, related_deal__isnull=False)
+    affected_merchant_list += [c.merchant.pk for c in folded_deals]
     num_of_soft_deleted += folded_deals.filter(last_modified__lt=refresh_start_time).update(status='implied-inactive', is_deleted=True)
     num_of_soft_deleted += folded_deals.filter(status='confirmed-inactive').update(is_deleted=True)
     num_of_soft_deleted += folded_deals.filter(end__lt=datetime.now(pytz.utc)).update(is_deleted=True)
-    affected_merchant_list += [c.merchant.pk for c in folded_deals]
 
     # Third (Second -> Third; the order matters)
     non_dup_deals = Coupon.all_objects.filter(ref_id_source='sqoot', is_deleted=False, is_duplicate=False)\
                                       .filter(Q(last_modified__lt=refresh_start_time)\
                                             | Q(status='confirmed-inactive')\
                                             | Q(end__lt=datetime.now(pytz.utc)))
-    deals_with_folded_deals = [c.pk for c in non_dup_deals if Coupon.all_objects.filter(related_deal=c).count() != 0]
+    affected_merchant_list += [c.merchant.pk for c in non_dup_deals]
+    deals_with_folded_deals = [c.pk for c in non_dup_deals if Coupon.all_objects.filter(related_deal=c, is_deleted=False).count() != 0]
     for i in deals_with_folded_deals:
         reassign_representative_deal(Coupon.all_objects.get(pk=i))
     num_of_implied_inactive = non_dup_deals.filter(last_modified__lt=refresh_start_time).update(status='implied-inactive', is_deleted=True)
     num_of_soft_deleted += non_dup_deals.filter(status='confirmed-inactive').update(is_deleted=True)
     num_of_soft_deleted += non_dup_deals.filter(end__lt=datetime.now(pytz.utc)).update(is_deleted=True)
-    affected_merchant_list += [c.merchant.pk for c in non_dup_deals]
 
     # Fourth
     affected_merchant_list = list(set(affected_merchant_list))
@@ -1042,6 +1042,8 @@ def reassign_representative_deal(coupon_model):
     merchant_sqoot_id = coupon_model.merchant.ref_id
     candidates = Coupon.all_objects.filter(merchant__ref_id=merchant_sqoot_id, is_deleted=False)\
                                    .exclude(ref_id=coupon_model.ref_id)
+    if len(candidates) == 0:
+        return
     max_disc_percent = candidates.aggregate(Max('percent'))['percent__max']
     new_rep_deal = candidates.filter(percent=max_disc_percent)[0]
     new_rep_deal.is_duplicate = False
