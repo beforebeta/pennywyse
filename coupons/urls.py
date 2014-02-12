@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from api.mobile_api import MobileResource
+
 admin.autodiscover()
 mobile_resource = MobileResource()
 
@@ -34,7 +35,10 @@ urlpatterns += patterns('web.views.main',
     url(r'^stores/$', 'stores'),
     url(r'^e/subscribe/$', 'email_subscribe'),
     url(r'^o/(?P<coupon_id>[\d]+)/$', 'open_coupon'),
-    url(r'^p/(?P<url>[a-zA-Z0-9-_]+)/', 'flatpage'),
+)
+
+urlpatterns += patterns('django.contrib.flatpages.views',
+   url(r'^p/(?P<url>[a-zA-Z0-9-_]+)/', 'flatpage'),                 
 )
 
 urlpatterns += patterns('tracking.views',

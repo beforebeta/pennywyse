@@ -11,6 +11,7 @@
 			<link href="/static/css/nprogress.css" rel="stylesheet">
 			<link rel="shortcut icon" type="image/png" href="/static/img/pushpenny-favicon.png">
     		<link rel="apple-touch-icon" href="/static/img/pushpenny-favicon.png" />
+    		<script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
     		<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 			<script type="text/javascript" src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 			<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
@@ -27,6 +28,16 @@
 		{% endblock %}
 	</head>
 	<body>
+		<div id="fb-root"></div>
+		<script>
+	      (function(d, s, id){
+	         var js, fjs = d.getElementsByTagName(s)[0];
+	         if (d.getElementById(id)) {return;}
+	         js = d.createElement(s); js.id = id;
+	         js.src = "//connect.facebook.net/en_US/all.js";
+	         fjs.parentNode.insertBefore(js, fjs);
+	       }(document, 'script', 'facebook-jssdk'));
+	    </script>
 		<div class="header-container top-header main-dropdown-section sticky visible-md visible-lg">
 			<div class="main-row">
 				<span>100% verified coupons guaranteed</span>

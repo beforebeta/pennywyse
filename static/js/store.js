@@ -389,6 +389,10 @@ $(function() {
 		$('.menu-item').find('.menu-link').removeClass('active-dropdown-link');
 	});
 	
+	$('.facebook-share-url').live('click', function() {
+		return !window.open(this.href, 'Share on Facebook', 'width=600,height=300');
+	});
+	
 	prepend_promo_container();
 });
 
@@ -467,7 +471,7 @@ function render_coupons(data, reset_items) {
 										<div class="coupon-bottom"> \
 											<div class="coupon-right-bottom"> \
 												Share \
-												<a href="{{ facebook_share_url }}"><img src="/static/img/facebook_share_icon.png"></a> \
+												<a href="{{ facebook_share_url }}" class="facebook-share-url"><img src="/static/img/facebook_share_icon.png"></a> \
 												<a href="{{ twitter_share_url }}""><img src="/static/img/twitter_share_icon.png"></a> \
 												<a href="mailto:?body={{ email_share_url }}"><img src="/static/img/email_share_icon.png"></a> \
 											</div> \
@@ -828,7 +832,7 @@ function render_coupon_popup(data, coupon_id) {
 									<div class="mobile-share-main"> \
 										<span>Share this coupon:</span> \
 										<div class="mobile-share-right"> \
-											<a href="{{ facebook_share_url }}"><img src="/static/img/mobile_facebook_icon.png"></a> \
+											<a href="{{ facebook_share_url }}" class="facebook-share-url"><img src="/static/img/mobile_facebook_icon.png"></a> \
 											<a href="{{ twitter_share_url }}""><img src="/static/img/mobile_twitter_icon.png"></a> \
 											<a href="mailto:?body={{ email_share_url }}"><img src="/static/img/mobile_email_icon.png"></a> \
 										</div> \
