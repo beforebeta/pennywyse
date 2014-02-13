@@ -28,6 +28,7 @@ a:hover {
 	background-color: #ef5b5b;
 	text-transform: uppercase;
 	font-size: 10pt;
+	font-family: 'Montserrat', sans-serif;
 }
 .top-header span {
 	margin-left: 165px;
@@ -125,7 +126,7 @@ hr {
 }
 .merchant {
 	clear: both !important;
-	font-family: 'Open Sans', sans-serif;
+	font-family: 'Montserrat', sans-serif;
 	font-weight: 300;
 	margin-top: 20px;
 	margin-bottom: 20px;
@@ -145,6 +146,9 @@ hr {
 	font-weight: 300 !important;
 	font-size: 28pt;
 }
+.filters {
+	font-family: 'Montserrat', sans-serif;
+}
 .filters h4 {
 	font-weight: 700 !important;
 	font-size: 13pt !important;
@@ -154,12 +158,14 @@ hr {
 .filter-links {
 	float: right;
 	font-size: 10pt;
+	font-family: 'Montserrat', sans-serif;
 }
 .filter-links a {
 	color: #3cb5b5;
 }
 .filter-icons {
 	margin-top: 20px !important;
+	font-family: 'Open Sans', sans-serif;
 }
 .filter-container {
 	float: left;
@@ -217,6 +223,7 @@ hr {
 .top-labels {
 	margin-bottom: 20px;
 	text-align: center;
+	font-family: 'Montserrat', sans-serif;
 }
 .top-labels a{
 	color: #3cb5b5;
@@ -260,6 +267,7 @@ hr {
 	margin-right: -40px !important;
 }
 .similar-stores h4 {
+	font-family: 'Montserrat', sans-serif;
 	font-weight: 700 !important;
 	font-size: 14pt !important;
 	text-transform: none !important;
@@ -314,7 +322,7 @@ hr {
 }
 .sorting {
 	float: right;
-	width: 270px;
+	width: 304px;
 }
 .sorting-toggle {
 	float: right;
@@ -329,6 +337,7 @@ hr {
 	height: 25px !important;
 	line-height: 25px !important;
 	margin: 0 auto;
+	font-family: 'Montserrat', sans-serif;
 }
 @media (max-width: 767px) {
 	.top-labels-container {
@@ -453,6 +462,7 @@ hr {
 	float: left;
 	height: 16px !important;
 	line-height: 16px !important;
+	font-family: 'Montserrat', sans-serif;
 }
 .coupon-left-label img {
 	margin-top: -2px;
@@ -485,6 +495,7 @@ hr {
 	font-size: 20px;
 	font-weight: 300 !important;
 	text-transform: uppercase;
+	font-family: 'Montserrat', sans-serif;
 }
 .short-description a{
 	text-align: center;
@@ -495,6 +506,7 @@ hr {
 .ends {
 	color: #807a7b;
 	font-size: 9pt;
+	font-family: 'Open Sans', sans-serif;
 }
 .description {
 	color: #807a7b;
@@ -602,6 +614,9 @@ hr {
 	padding: 0px !important;
 	line-height: 20px !important;
 }
+.menu-link {
+	font-family: 'Montserrat', sans-serif;
+}
 .current-menu-item {
 	color: #27ae60 !important;
 	background-image: url('../img/polygon.png');
@@ -639,6 +654,7 @@ hr {
 	background-repeat: no-repeat;
 	background-position: 8px 8px;
 	border-radius: 2px;
+	font-family: 'Open Sans', sans-serif;
 }
 .search-container {
 	float: left !important;
@@ -756,6 +772,7 @@ hr {
 	text-transform: uppercase;
 	padding-right: 10px;
 	margin-bottom: 10px;
+	font-family: 'Montserrat', sans-serif;
 }
 .more-categories a{
 	color: #3cb5b5;
@@ -1328,6 +1345,7 @@ hr {
 	font-size: 12pt;
 	padding-left: 10px;
 	padding-right: 10px;
+	font-family: 'Montserrat', sans-serif;
 }
 .coupon-popup-header a {
 	float: right;
@@ -1355,6 +1373,7 @@ hr {
 	background-color: #3cb5b5;
 	width: auto;
 	min-width: 300px;
+	font-family: 'Montserrat', sans-serif;
 }
 .coupon-popup-code input::-webkit-input-placeholder {
     color: #000;
@@ -1401,6 +1420,9 @@ hr {
 }
 .coupon-popup-description h2 {
 	text-align: left;
+}
+.coupon-subscribe-form {
+	font-family: 'Montserrat', sans-serif;
 }
 .mobile-share-bottom {
 	text-transform: uppercase;
@@ -1950,6 +1972,7 @@ hr {
 	max-height: 84px;
 	line-height: 21px;
 	text-overflow: ellipsis;
+	font-family: 'Open Sans', sans-serif;
 }
 @media (min-width: 1170px) {
 	.index-container, .middle-container {
@@ -1977,6 +2000,7 @@ hr {
 .category-dropdown-container {
 	width: 775px;
 	margin: 0 auto;
+	font-family: 'Montserrat', sans-serif;
 }
 .mobile-coupon-description {
 	margin: 5px;
