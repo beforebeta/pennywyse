@@ -267,8 +267,12 @@ def refresh_sqoot_data(last_refresh_time, indirectload=False, firsttime=False):
                     print 'DEDUP-SOFT: ...newly created merchant for this coupon, so moving on...', show_time() # DEBUG!!!
                     pass
                 else:
-                    print 'DEDUP-SOFT: coupon %s' % coupon_model.embedly_title, show_time()
+                    try:
+                        print 'DEDUP-SOFT: coupon %s' % coupon_model.embedly_title, show_time()
+                    except:
+                        pass
                     dedup_scoot_data_soft(coupon_model)
+
 
                 print '-' * 60
             except:
