@@ -140,6 +140,7 @@ hr {
 	text-transform: uppercase;
 	font-size: 10pt !important;
 	margin-left: 15px;
+	margin-top: -10px;
 }
 .merchant-right span {
 	margin: 0px !important;
@@ -154,6 +155,7 @@ hr {
 	font-size: 13pt !important;
 	text-transform: none !important;
 	margin-bottom: 10px !important;
+	font-family: 'Montserrat', sans-serif;
 }
 .filter-links {
 	float: right;
@@ -269,7 +271,7 @@ hr {
 .similar-stores h4 {
 	font-family: 'Montserrat', sans-serif;
 	font-weight: 700 !important;
-	font-size: 14pt !important;
+	font-size: 13pt !important;
 	text-transform: none !important;
 	margin-bottom: 10px !important;
 }
@@ -556,6 +558,10 @@ hr {
 .coupon-right-bottom {
 	float: right;
 }
+.coupon-right-bottom span {
+	margin-right: 5px;
+	font-family: 'Montserrat', sans-serif;
+}
 .coupon-right-bottom img {
 	margin-top: -3px !important;
 }
@@ -725,11 +731,11 @@ hr {
 	margin-top: -50px;
 	display: none;
 	cursor: pointer;
+	font-family: 'Montserrat', sans-serif;
 }
 .use-coupon a {
 	text-decoration: none;
 	color: #fff;
-	font-family: 'Montserrat', sans-serif;
 }
 .dropdown-row {
 	background-color: #fff;
@@ -826,6 +832,7 @@ hr {
 }
 .groceries-row {
 	display: none;
+	font-family: 'Montserrat', sans-serif;
 }
 .merchant-logo, .coupon-container, .featured-category-container {
 	-webkit-box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.15);
@@ -948,6 +955,7 @@ hr {
 	text-transform: uppercase;
 	font-size: 11pt;
 	padding-left: 10px;
+	font-family: 'Montserrat', sans-serif;
 }
 .top-pagination a {
 	padding: 5px !important;
@@ -993,6 +1001,12 @@ hr {
 	max-width: 150px;
 	max-height: 95px;
 }
+.featured-merchants-list hr {
+	margin-right: 35px;
+}
+.featured-categories hr {
+	margin-right: 45px !important;
+}
 .featured-category {
 	text-align: center;
 	margin-right: 10px !important;
@@ -1006,6 +1020,7 @@ hr {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	float: left;
+	font-family: 'Montserrat', sans-serif;
 }
 .featured-category a{
 	color: #46a8a7 !important;
@@ -1025,6 +1040,8 @@ hr {
 	padding-left: 5px;
 	padding-right: 5px;
 	width: 120px;
+	margin: 0 auto;
+	margin-bottom: 10px;
 }
 .featured-category-container a{
 	color: #46a8a7 !important;
@@ -1108,6 +1125,7 @@ hr {
 	text-transform: uppercase;
 	font-size: 10pt;
 	color: #423d3e;
+	font-family: 'Montserrat', sans-serif;
 }
 .top-coupon-types div{
 	padding-top: 15px;
@@ -1119,6 +1137,7 @@ hr {
 	background-position: right center;
 	background-repeat: no-repeat;
 	color: #423d3e;
+	font-family: 'Montserrat', sans-serif;
 }
 .top-coupon-types a:hover, .top-coupon-active {
 	color: #e74c3c !important;
@@ -1387,7 +1406,7 @@ hr {
 .coupon-popup-code input:-ms-input-placeholder {
     color: #000;
 }
-.coupon-popup-code input[type=button]:hover {
+.coupon-popup-code input[type=button]:hover, .coupon-popup-bottom input[type=submit]:hover, .hover {
     box-shadow: 0px 3px 3px 0px rgba(97, 94, 94, 0.30);
 }
 .coupon-popup-body {
@@ -1457,7 +1476,7 @@ hr {
 	padding: 15px;
 }
 .coupon-popup-bottom input {
-	border: 1px solid #15a0a8;
+	border: none;
 	border-radius: 2px;
 }
 .coupon-popup-bottom input[type=text] {
