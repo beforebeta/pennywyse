@@ -59,10 +59,14 @@ def get_or_create_merchant(merchant_data_dict):
     ref_id = merchant_data_dict['id']
     merchant_model, created = Merchant.all_objects.get_or_create(ref_id=ref_id, ref_id_source='sqoot',
                                                                  name=merchant_data_dict['name'])
-    if created:
-        print show_time(), "CREATED   : merchant %s" % merchant_data_dict['name']
-    else:
-        print show_time(), "UPDATING  : merchant %s" % merchant_data_dict['name']
+    try:
+        if created:
+            print show_time(), "CREATED   : merchant %s" % merchant_data_dict['name']
+        else:
+            print show_time(), "UPDATING  : merchant %s" % merchant_data_dict['name']
+    except:
+        pass
+
     merchant_model.link         = merchant_data_dict['url']
     merchant_model.directlink   = merchant_data_dict['url']
     merchant_model.is_deleted   = False
@@ -133,7 +137,10 @@ def get_or_create_couponnetwork(each_deal_data_dict):
     provider_slug = each_deal_data_dict['provider_slug']
     couponnetwork_model, created = CouponNetwork.objects.get_or_create(code=provider_slug)
     if created:
-        print show_time(), 'CREATED   : coupon network %s' % each_deal_data_dict['provider_name']
+        try:
+            print show_time(), 'CREATED   : coupon network %s' % each_deal_data_dict['provider_name']
+        except:
+            pass
         couponnetwork_model.name = each_deal_data_dict['provider_name']
         couponnetwork_model.save()
     return couponnetwork_model
@@ -150,8 +157,11 @@ def get_or_create_merchantlocation(merchant_data_dict, merchant_model, is_online
 
     merchantlocation_model, created = MerchantLocation.objects.get_or_create(geometry=point_wkt, merchant=merchant_model)
     if created:
-        print show_time(), 'CREATED   : location %s, %s for merchant %s' % (merchant_data_dict['locality'], merchant_data_dict['address'],
-                                                           merchant_model.name)
+        try:
+            print show_time(), 'CREATED   : location %s, %s for merchant %s' % (merchant_data_dict['locality'], merchant_data_dict['address'],
+                                                                                merchant_model.name)
+        except:
+            pass
         merchantlocation_model.address      = merchant_data_dict['address']
         merchantlocation_model.locality     = merchant_data_dict['locality']
         merchantlocation_model.region       = merchant_data_dict['region']
@@ -164,15 +174,22 @@ def get_or_create_coupon(each_deal_data_dict, merchant_model, category_model, de
                          country_model, couponnetwork_model, merchantlocation_model):
     ref_id = each_deal_data_dict['id']
     coupon_model, created = Coupon.all_objects.get_or_create(ref_id=ref_id, ref_id_source='sqoot')
-    if created:
-        print show_time(), 'CREATED   : coupon %s' % each_deal_data_dict['title']
-    else:
-        print show_time(), 'UPDATING  : coupon %s' % each_deal_data_dict['title']
+
+    try:
+        if created:
+            print show_time(), 'CREATED   : coupon %s' % each_deal_data_dict['title']
+        else:
+            print show_time(), 'UPDATING  : coupon %s' % each_deal_data_dict['title']
+    except:
+        pass
 
     if merchantlocation_model:
         coupon_model.online              = each_deal_data_dict['online']
     else:
-        print 'this coupon has no location model', ref_id
+        try:
+            print 'this coupon has no location model', ref_id
+        except:
+            pass
         coupon_model.online          = True
 
     coupon_model.merchant            = merchant_model
@@ -252,7 +269,10 @@ def crosscheck_by_field(deals_to_dedup, field_name):
 
     all_active_deals = len(deals_to_dedup)
     num_of_unique_fields = len(field_list)
-    print "\n...Detected {} deals by '{}' field to dedup out of {} total active deals".format(num_of_unique_fields, field_name, all_active_deals), show_time()
+    try:
+        print "\n...Detected {} deals by '{}' field to dedup out of {} total active deals".format(num_of_unique_fields, field_name, all_active_deals), show_time()
+    except:
+        pass
 
     progress_count = 1
     clear_cache_timer = 1
@@ -272,7 +292,11 @@ def crosscheck_by_field(deals_to_dedup, field_name):
                 clear_cache_timer += 1
                 continue
 
-            print show_time(), '({}/{}) DEDUP-HARD:'.format(progress_count, num_of_unique_fields), 'all deals with {}=={}'.format(field_name, x)
+            try:
+                print show_time(), '({}/{}) DEDUP-HARD:'.format(progress_count, num_of_unique_fields), 'all deals with {}=={}'.format(field_name, x)
+            except:
+                pass
+
             while True:
                 current_count = same_looking_deals.count()
                 if current_count == 1:
@@ -300,7 +324,10 @@ def crosscheck_by_field(deals_to_dedup, field_name):
                 duplicate_deals_list = []
                 clear_cache_timer = 1
         except:
-            print "!!!ERROR: field: {}".format(x)
+            try:
+                print "!!!ERROR: field: {}".format(x)
+            except:
+                pass
             print_stack_trace()
 
 def compare_location_between(deal_obj_one, deal_obj_two):
