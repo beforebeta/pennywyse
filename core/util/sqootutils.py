@@ -3,6 +3,8 @@ from dateutil.parser import parse
 import requests
 import time
 import re
+import os
+import csv
 
 import pytz
 from fuzzywuzzy import fuzz
@@ -10,6 +12,7 @@ from BeautifulSoup import BeautifulSoup
 
 from django.utils.html import strip_tags
 from django.db.models import Max
+from django.conf import settings
 
 from core.models import DealType, Category, Coupon, Merchant, Country, CouponNetwork, MerchantLocation
 from core.util import print_stack_trace
@@ -20,6 +23,7 @@ EASTERN_TZ = pytz.timezone('US/Eastern')
 # 1. Helper Methods - Data Gathering
 # 2. Helper Methods - Data Intelligence
 # 3. Helper Methods - Formatting
+# 4. Helper Methods - Logging
 
 #############################################################################################################
 #
@@ -504,3 +508,54 @@ def cleanse_address_text(address_string):
     clean_address = (' ').join(address_broken_down)
     return clean_address
 
+
+#############################################################################################################
+#
+# 4. Helper Methods - Logging
+#
+#############################################################################################################
+
+SQOOT_LOG_PATH = os.path.join(settings.BASE_DIR, 'misc','logonly', 'sqootload_running_log.txt')
+
+# Which stage: ['row to look for', 'column to look for']
+LOOKUP_PER_STAGE     = {'refresh':   ['refresh', 1],
+                        'cleanout':   ['refresh', 1],
+                        'validate':  ['validate', 2],
+                        'deduphard': ['deduphard', 2],}
+
+def read_sqoot_log(current_stage):
+    row_to_lookup, column_to_lookup = LOOKUP_PER_STAGE[current_stage]
+
+    try:
+        f = open(SQOOT_LOG_PATH, 'r')
+    except IOError:
+        print_stack_trace()
+
+    all_rows = f.readlines()
+    if len(all_rows) == 1:
+        f.close()
+        return None
+    else:
+        last_ten_rows = all_rows[:10]
+        latest_runs_of_this_step = [r for r in last_ten_rows if r.replace('\r\n', '').split(',')[0] == row_to_lookup]
+        if len(latest_runs_of_this_step) == 0:
+            f.close()
+            return None
+        very_last_run = latest_runs_of_this_step[-1]
+        timestamp_string = very_last_run.replace('\r\n', '').split(',')[column_to_lookup]
+        timestamp_wanted = parse(timestamp_string)
+        f.close()
+        return timestamp_wanted
+
+def write_sqoot_log(finished_stage, start_time, end_time):
+    time_took = end_time - start_time
+
+    try:
+        with open(SQOOT_LOG_PATH, 'a') as csvfile:
+            log_writer = csv.writer(csvfile)
+            log_writer.writerow([finished_stage, start_time, end_time, time_took.seconds/60,])
+        csvfile.close()
+    except:
+        print_stack_trace()
+        print "^-- WARNING: Problem logging it: {}{}{}{}{}{}{}"\
+                .format(finished_stage, ",", start_time, ",", end_time, ",", time_took.seconds/60)
