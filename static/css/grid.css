@@ -777,6 +777,7 @@ hr {
 	text-align: right;
 	text-transform: uppercase;
 	padding-right: 10px;
+	margin-top: 10px;
 	margin-bottom: 10px;
 	font-family: 'Montserrat', sans-serif;
 }
@@ -1004,14 +1005,11 @@ hr {
 .featured-merchants-list hr {
 	margin-right: 35px;
 }
-.featured-categories hr {
-	margin-right: 45px !important;
-}
 .featured-category {
 	text-align: center;
 	margin-right: 10px !important;
 	width: 145px;
-	height: 95px;
+	height: 100px;
 	font-size: 10pt;
 	margin: 0px auto;
 	margin-bottom: 10px !important;
@@ -2042,6 +2040,7 @@ hr {
 	margin-top: 10px;
 	margin-bottom: 20px;
 	display: block;
+	font-family: 'Montserrat', sans-serif;
 }
 .suggested-merchants ul {
 	padding: 0 !important;
