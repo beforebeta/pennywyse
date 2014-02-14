@@ -149,7 +149,6 @@ def refresh_sqoot_data(indirectload=False, firsttime=False):
     Summary: Iterate through Sqoot's entire coupon payload and download and update accordingly.
     '''
     last_refresh_start_time = read_sqoot_log('refresh')
-
     refresh_start_time = datetime.now(pytz.utc) # Use UTC time to compare & update coupon's 'last_modified' field
     request_parameters = {
         'api_key': settings.SQOOT_PUBLIC_KEY,
@@ -199,7 +198,7 @@ def refresh_sqoot_data(indirectload=False, firsttime=False):
         sqoot_output_deals = json.loads(open("sqoot_output.json","r").read())
 
     # for p in range(page_count):
-    for p in range(10): # DEBUG!!!
+    for p in range(5): # DEBUG!!!
         request_parameters['page'] = p + 1
         print "\n"
         print '## Fetching page {} out of {}...'.format(p + 1, page_count), show_time()
@@ -260,6 +259,8 @@ def refresh_sqoot_data(indirectload=False, firsttime=False):
         Coupon.all_objects.filter(ref_id_source='sqoot', ref_id__in=active_coupon_ids).update(last_modified=datetime.now(pytz.utc))
     refresh_end_time = datetime.now(pytz.utc)
     write_sqoot_log('refresh', refresh_start_time, refresh_end_time)
+    print '\n'
+    print "GOOD NEWS! refresh_sqoot_data IS ALL DONE AND LOGGING IT", show_time()
 
 def dedup_scoot_data_soft(coupon_model):
     '''
@@ -369,6 +370,8 @@ def clean_out_sqoot_data(firsttime=False):
     Merchant.all_objects.filter(pk__in=inactive_merchant_list).update(is_deleted=True)
     cleanout_end_time = datetime.now(pytz.utc)
     write_sqoot_log('cleanout', cleanout_start_time, cleanout_end_time)
+    print '\n'
+    print "GOOD NEWS! cleanout_sqoot_data IS ALL DONE AND LOGGING IT", show_time()
 
 def validate_sqoot_data(firsttime=False, pulseonly=False):
     '''
@@ -388,6 +391,8 @@ def validate_sqoot_data(firsttime=False, pulseonly=False):
     print "FINISHED VALIDATING....", show_time()
     validate_end_time = datetime.now(pytz.utc)
     write_sqoot_log('validate', validate_start_time, validate_end_time)
+    print '\n'
+    print "GOOD NEWS! validate_sqoot_data IS ALL DONE AND LOGGING IT", show_time()
 
 def go_validate((coupon_model, last_validate_end_time, firsttime, pulseonly)):
     try:
@@ -442,3 +447,6 @@ def dedup_sqoot_data_hard(firsttime=False):
 
     deduphard_end_time = datetime.now(pytz.utc)
     write_sqoot_log('deduphard', deduphard_start_time, deduphard_end_time)
+    print '\n'
+    print "GOOD NEWS! dedup_sqoot_data_hard IS ALL DONE AND LOGGING IT", show_time()
+

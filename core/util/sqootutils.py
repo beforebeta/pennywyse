@@ -548,14 +548,14 @@ def read_sqoot_log(current_stage):
         return timestamp_wanted
 
 def write_sqoot_log(finished_stage, start_time, end_time):
-    minutes_took = (end_time - start_time)/60
+    time_took = end_time - start_time
 
     try:
         with open(SQOOT_LOG_PATH, 'a') as csvfile:
             log_writer = csv.writer(csvfile)
-            log_writer.writerow([finished_stage, start_time, end_time, minutes_took,])
+            log_writer.writerow([finished_stage, start_time, end_time, time_took.seconds/60,])
         csvfile.close()
     except:
         print_stack_trace()
         print "^-- WARNING: Problem logging it: {}{}{}{}{}{}{}"\
-                .format(finished_stage, ",", start_time, ",", end_time, ",", minutes_took)
+                .format(finished_stage, ",", start_time, ",", end_time, ",", time_took.seconds/60)
