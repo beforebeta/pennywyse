@@ -198,7 +198,7 @@ def refresh_sqoot_data(indirectload=False, firsttime=False):
         sqoot_output_deals = json.loads(open("sqoot_output.json","r").read())
 
     # for p in range(page_count):
-    for p in range(5): # DEBUG!!!
+    for p in range(100): # DEBUG!!!
         request_parameters['page'] = p + 1
         print "\n"
         print '## Fetching page {} out of {}...'.format(p + 1, page_count), show_time()
