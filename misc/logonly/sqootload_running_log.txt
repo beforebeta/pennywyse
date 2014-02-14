@@ -1,2 +1,1 @@
-status,refresh_start_time,refresh_took,validate_took,dedup_took,total_script_took
-done,2014-01-31 15:58:45.284148+00:00,100,100,100,100
+finished_step,start_time,end_time,minutes_took
