@@ -231,6 +231,9 @@ hr {
 	color: #3cb5b5;
 	text-decoration: none;
 }
+.top-labels h1 {
+	font-family: 'Montserrat', sans-serif !important;
+}
 .categories {
 	width: 100% !important;
 }
@@ -244,8 +247,8 @@ hr {
 	font-size: 10pt;
 	cursor: pointer;
 }
-.category a {
-	color: #423d3e;
+.category a, .sorting-item a:hover {
+	color: #423d3e !important;
 	text-decoration: none;
 }
 .category:hover {
