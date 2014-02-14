@@ -129,7 +129,7 @@ hr {
 	font-family: 'Montserrat', sans-serif;
 	font-weight: 300;
 	margin-top: 20px;
-	margin-bottom: 20px;
+	margin-bottom: -10px;
 }
 .merchant-left, .merchant-right {
 	float: left;
@@ -1353,7 +1353,7 @@ hr {
 	left: 50%;
 	margin-left: -250px; 
 	z-index: 5;
-	width: 500px;
+	width: 600px;
 	height: 375px;
 }
 .coupon-popup-header {
