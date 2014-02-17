@@ -10,12 +10,14 @@ import pytz
 from fuzzywuzzy import fuzz
 from BeautifulSoup import BeautifulSoup
 
-from django.utils.html import strip_tags
+from django.conf import settings
+from django.db import reset_queries
 from django.db.models import Max
 from django.conf import settings
+from django.utils.html import strip_tags
 
 from core.models import DealType, Category, Coupon, Merchant, Country, CouponNetwork, MerchantLocation
-from core.util import print_stack_trace
+from core.util import print_stack_trace, handle_exceptions
 
 EASTERN_TZ = pytz.timezone('US/Eastern')
 
@@ -255,6 +257,25 @@ def fetch_page(sqoot_url, tries=1):
             raise e #reraise exception
 
 
+@handle_exceptions
+def update_coupon_data(deal_data, categories_dict, merchant_data_dict, is_online_bool, dealtype_model, country_model):
+    # Note: Only retrieve if already exists: 'couponnetwork_model', 'category_model', 'merchantlocation_model'
+    # Note: Update with the latest data from sqoot even if exists: 'merchant_model', 'coupon_model'
+    # 'shortcut=True' is given for get_or_create_category() since all categories were 'get_or_create'd above.
+    couponnetwork_model      = get_or_create_couponnetwork(deal_data['deal'])
+    category_model           = get_or_create_category(deal_data['deal'], categories_dict, shortcut=True)
+    merchant_model, merchant_created = get_or_create_merchant(merchant_data_dict)
+    merchantlocation_model   = get_or_create_merchantlocation(merchant_data_dict, merchant_model, is_online_bool)
+    coupon_model             = get_or_create_coupon(deal_data['deal'], merchant_model, category_model, dealtype_model,
+                                                    country_model, couponnetwork_model, merchantlocation_model)
+
+    if merchant_created:
+        print 'DEDUP-SOFT: ...newly created merchant for this coupon, so moving on...', show_time() # DEBUG!!!
+        pass
+    else:
+        print 'DEDUP-SOFT: coupon %s' % coupon_model.embedly_title, show_time()
+        dedup_scoot_data_soft(coupon_model)
+
 #############################################################################################################
 #
 # 2. Helper Methods - Data Intelligence
@@ -477,6 +498,57 @@ def check_if_deal_dead(coupon_obj, response, sqoot_url):
 def confirm_or_correct_deal_data(coupon_model, response):
     pass
 
+
+def reset_db_queries():
+    if settings.DEBUG:
+        reset_queries()
+
+
+@handle_exceptions
+def dedup_scoot_data_soft(coupon_model):
+    '''
+    Check all deals under the same merchant, mark duplicate deals, and fold them under the best deal
+    '''
+    
+    if coupon_model.online == True:
+        return
+
+    other_coupons_from_this_merchant = Coupon.all_objects.filter(merchant__ref_id=coupon_model.merchant.ref_id, is_deleted=False)\
+                                                         .exclude(ref_id=coupon_model.ref_id)
+    if other_coupons_from_this_merchant.filter(is_duplicate=False).count() == 0:
+        # This is the case where coupon_model already exists in db as a 'representative' i.e. is_duplicate=False
+        return
+
+    for c in other_coupons_from_this_merchant:
+        info_match_count = 0
+        info_match_count += 1 if coupon_model.description == c.description else 0
+        info_match_count += 1 if coupon_model.embedly_title == c.embedly_title else 0
+        info_match_count += 1 if coupon_model.embedly_description == c.embedly_description else 0
+        info_match_count += 1 if coupon_model.price == c.price else 0
+        info_match_count += 1 if coupon_model.listprice == c.listprice else 0
+        if info_match_count == 5:
+            coupon_model.is_duplicate = True
+            Coupon.all_objects.filter(related_deal=coupon_model).update(related_deal=None)
+            coupon_model.save()
+            break
+
+        if c.is_duplicate == True:
+            continue
+
+        if coupon_model.percent > c.percent:
+            c.is_duplicate = True
+            coupons_folded_under_c = Coupon.all_objects.filter(related_deal=c)
+            for coupon_obj in coupons_folded_under_c:
+                coupon_obj.related_deal = coupon_model
+                coupon_obj.save()
+            Coupon.all_objects.filter(related_deal=c).update(related_deal=None)
+            c.related_deal = coupon_model
+            c.save()
+        else:
+            coupon_model.is_duplicate = True
+            coupon_model.related_deal = c
+            coupon_model.save()
+    reset_db_queries()
 
 #############################################################################################################
 #
