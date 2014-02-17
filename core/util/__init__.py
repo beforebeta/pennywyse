@@ -75,11 +75,11 @@ def adaptive_cache_page(f):
     return wrapper
 
 class CustomPaginator(Paginator):
-    
+
     def __init__(self, *args, **kwargs):
         self.current_page = kwargs.pop('current_page', 1)
         return super(CustomPaginator, self).__init__(*args, **kwargs)
-    
+
     @property
     def separators(self):
         separators = 0
@@ -88,7 +88,7 @@ class CustomPaginator(Paginator):
                 separators = 1
             separators = 2
         return separators
-    
+
     @property
     def separated_pages(self):
         ppages = range(1, self.num_pages+1)
@@ -100,3 +100,13 @@ class CustomPaginator(Paginator):
                 page_prev = self.current_page - 2
                 ppages = ppages[:3] + ppages[page_prev:page_next] + ppages[-3:]
         return ppages
+
+def handle_exceptions(f):
+    def wrapper(*args, **kwargs):
+        try:
+            return f(*args, **kwargs)
+        except KeyboardInterrupt as e:
+            raise e
+        except:
+            print_stack_trace()
+    return wrapper
