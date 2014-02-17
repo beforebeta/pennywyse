@@ -16,13 +16,13 @@ from django.conf import settings
 from django.db.models import Q
 
 from core.models import Coupon, Merchant
-from core.util import print_stack_trace
+from core.util import print_stack_trace, handle_exceptions
 from core.util.sqootutils import (reorganize_categories_list, establish_categories_dict, get_or_create_merchant,
                                   get_or_create_category, get_or_create_dealtype, get_or_create_country,
                                   get_or_create_couponnetwork, get_or_create_merchantlocation, get_or_create_coupon,
                                   fetch_page, confirm_or_correct_deal_data, check_if_deal_dead, reassign_representative_deal,
                                   describe_section, show_time, crosscheck_by_field,
-                                  read_sqoot_log, write_sqoot_log,)
+                                  read_sqoot_log, write_sqoot_log, reset_db_queries, update_coupon_data)
 
 '''
 Functions Flow Summary:
@@ -58,92 +58,56 @@ class Command(BaseCommand):
             * To run:
                 * (e.g. ./manage.py sqootload pulseonly --validate)
     '''
+    
     option_list = BaseCommand.option_list + (
-        make_option('--fullcycle',
-            action='store_true',
-            dest='fullcycle',
-            default=False,
-            help='fullcycle'),
-        make_option('--directload',
-            action='store_true',
-            dest='directload',
-            default=False,
-            help='directload'),
-        make_option('--indirectload',
-            action='store_true',
-            dest='indirectload',
-            default=False,
-            help='indirectload'),
-        make_option('--cleanout',
-            action='store_true',
-            dest='cleanout',
-            default=False,
-            help='cleanout'),
-        make_option('--validate',
-            action='store_true',
-            dest='validate',
-            default=False,
-            help='validate'),
-        make_option('--deduphard',
-            action='store_true',
-            dest='deduphard',
-            default=False,
-            help='deduphard'),
+        make_option('--cleanout', action='store_true', dest='cleanout', default=False, help='cleanout'),
+        make_option('--fullcycle', action='store_true', dest='fullcycle', default=False, help='fullcycle'),
+        make_option('--directload', action='store_true', dest='directload', default=False, help='directload'),
+        make_option('--indirectload', action='store_true', dest='indirectload', default=False, help='indirectload'),
+        make_option('--validate', action='store_true', dest='validate', default=False, help='validate'),
+        make_option('--deduphard', action='store_true', dest='deduphard', default=False, help='deduphard'),
     )
 
     def handle(self, *args, **options):
-        if options['fullcycle']:
-            try:
-                run_thru_full_cycle(args)
-            except:
-                print_stack_trace()
-        if options['directload']:
-            firsttime = True if 'firsttime' in args else False
-            try:
-                refresh_sqoot_data(firsttime=firsttime)
-            except:
-                print_stack_trace()
-        if options['indirectload']:
-            firsttime = True if 'firsttime' in args else False
-            try:
-                refresh_sqoot_data(indirectload=True, firsttime=firsttime)
-            except:
-                print_stack_trace()
-        if options['cleanout']:
-            firsttime = True if 'firsttime' in args else False
-            try:
-                clean_out_sqoot_data(firsttime=firsttime)
-            except:
-                print_stack_trace()
-        if options['validate']:
-            firsttime = True if 'firsttime' in args else False
-            pulseonly = True if 'pulseonly' in args else False
-            try:
-                validate_sqoot_data(firsttime=firsttime, pulseonly=pulseonly)
-            except:
-                print_stack_trace()
-        if options['deduphard']:
-            firsttime = True if 'firsttime' in args else False
-            try:
-                dedup_sqoot_data_hard(firsttime=firsttime)
-            except:
-                print_stack_trace()
+        firsttime = args.get('firsttime', False)
+        if options.get('fullcycle', None):
+            run_thru_full_cycle(args)
+        
+        if options.get('directload', None):
+            refresh_sqoot_data(indirectload=True, firsttime=firsttime)
 
+        if options.get('cleanout', None):
+            clean_out_sqoot_data(firsttime=firsttime)
+
+        if options.get('indirectload', None):
+            refresh_sqoot_data(indirectload=True, firsttime=firsttime)
+            
+        if options.get('validate', None):
+            pulseonly = args.get('pulseonly', False)
+            validate_sqoot_data(firsttime=firsttime, pulseonly=pulseonly)
+        
+        if options.get('deduphard', None):
+            dedup_sqoot_data_hard(firsttime=firsttime)
+
+
+@handle_exceptions
 def run_thru_full_cycle(args):
     '''
     Summary: A wrapper function to run daily refresh, validate, dedup and clean functions consecutively.
 
     Note: Takes 'firsttime' argument.
     '''
-    firsttime = True if 'firsttime' in args else False
 
+    firsttime = args.get('firsttime', False)
     describe_section("FULLCYCLE STARTING..", show_time())
     refresh_sqoot_data(firsttime=firsttime)
     clean_out_sqoot_data(firsttime=firsttime)
     validate_sqoot_data(firsttime=firsttime)
     dedup_sqoot_data_hard(firsttime=firsttime)
     describe_section("ALL DONE!! :)", show_time())
+    
 
+@handle_exceptions
 def refresh_sqoot_data(indirectload=False, firsttime=False):
     '''
     Summary: Iterate through Sqoot's entire coupon payload and download and update accordingly.
@@ -228,83 +192,24 @@ def refresh_sqoot_data(indirectload=False, firsttime=False):
             if (not firsttime) and last_refresh_start_time and (deal_last_updated < last_refresh_start_time):
                 continue
 
-            try:
-                is_online_bool = deal_data['deal']['online']
-                merchant_data_dict = deal_data['deal']['merchant']
+            is_online_bool = deal_data['deal']['online']
+            merchant_data_dict = deal_data['deal']['merchant']
+            update_coupon_data(deal_data, categories_dict, merchant_data_dict, is_online_bool, dealtype_model, country_model)
+            print '-' * 60
 
-                # Note: Only retrieve if already exists: 'couponnetwork_model', 'category_model', 'merchantlocation_model'
-                # Note: Update with the latest data from sqoot even if exists: 'merchant_model', 'coupon_model'
-                # 'shortcut=True' is given for get_or_create_category() since all categories were 'get_or_create'd above.
-                couponnetwork_model      = get_or_create_couponnetwork(deal_data['deal'])
-                category_model           = get_or_create_category(deal_data['deal'], categories_dict, shortcut=True)
-                merchant_model, merchant_created = get_or_create_merchant(merchant_data_dict)
-                merchantlocation_model   = get_or_create_merchantlocation(merchant_data_dict, merchant_model, is_online_bool)
-                coupon_model             = get_or_create_coupon(deal_data['deal'], merchant_model, category_model, dealtype_model,
-                                                                country_model, couponnetwork_model, merchantlocation_model)
-
-                if merchant_created:
-                    print 'DEDUP-SOFT: ...newly created merchant for this coupon, so moving on...', show_time() # DEBUG!!!
-                    pass
-                else:
-                    try:
-                        print 'DEDUP-SOFT: coupon %s' % coupon_model.embedly_title, show_time()
-                    except:
-                        pass
-                    dedup_scoot_data_soft(coupon_model)
-
-
-                print '-' * 60
-            except:
-                print_stack_trace()
+            reset_db_queries()
+            
         Coupon.all_objects.filter(ref_id_source='sqoot', ref_id__in=active_coupon_ids).update(last_modified=datetime.now(pytz.utc))
-    refresh_end_time = datetime.now(pytz.utc)
+        refresh_end_time = datetime.now(pytz.utc)
+    
     write_sqoot_log('refresh', refresh_start_time, refresh_end_time)
     print '\n'
     print "GOOD NEWS! refresh_sqoot_data IS ALL DONE AND LOGGING IT", show_time()
+    reset_db_queries()
+    return refresh_start_time, refresh_end_time
 
-def dedup_scoot_data_soft(coupon_model):
-    '''
-    Check all deals under the same merchant, mark duplicate deals, and fold them under the best deal
-    '''
-    if coupon_model.online == True:
-        return
 
-    other_coupons_from_this_merchant = Coupon.all_objects.filter(merchant__ref_id=coupon_model.merchant.ref_id, is_deleted=False)\
-                                                         .exclude(ref_id=coupon_model.ref_id)
-    if other_coupons_from_this_merchant.filter(is_duplicate=False).count() == 0:
-        # This is the case where coupon_model already exists in db as a 'representative' i.e. is_duplicate=False
-        return
-
-    for c in other_coupons_from_this_merchant:
-        info_match_count = 0
-        info_match_count += 1 if coupon_model.description == c.description else 0
-        info_match_count += 1 if coupon_model.embedly_title == c.embedly_title else 0
-        info_match_count += 1 if coupon_model.embedly_description == c.embedly_description else 0
-        info_match_count += 1 if coupon_model.price == c.price else 0
-        info_match_count += 1 if coupon_model.listprice == c.listprice else 0
-        if info_match_count == 5:
-            coupon_model.is_duplicate = True
-            Coupon.all_objects.filter(related_deal=coupon_model).update(related_deal=None)
-            coupon_model.save()
-            break
-
-        if c.is_duplicate == True:
-            continue
-
-        if coupon_model.percent > c.percent:
-            c.is_duplicate = True
-            coupons_folded_under_c = Coupon.all_objects.filter(related_deal=c)
-            for coupon_obj in coupons_folded_under_c:
-                coupon_obj.related_deal = coupon_model
-                coupon_obj.save()
-            Coupon.all_objects.filter(related_deal=c).update(related_deal=None)
-            c.related_deal = coupon_model
-            c.save()
-        else:
-            coupon_model.is_duplicate = True
-            coupon_model.related_deal = c
-            coupon_model.save()
-
+@handle_exceptions
 def clean_out_sqoot_data(firsttime=False):
     '''
     Summary: Internal garbage collection cycle that finds and soft-delete all
@@ -372,11 +277,15 @@ def clean_out_sqoot_data(firsttime=False):
     write_sqoot_log('cleanout', cleanout_start_time, cleanout_end_time)
     print '\n'
     print "GOOD NEWS! cleanout_sqoot_data IS ALL DONE AND LOGGING IT", show_time()
+    reset_db_queries()
 
+
+@handle_exceptions
 def validate_sqoot_data(firsttime=False, pulseonly=False):
     '''
     Summary: Fetch a deal page and validate deal information and availabilty.
     '''
+
     last_validate_end_time = read_sqoot_log('validate')
     validate_start_time = datetime.now(pytz.utc)
     describe_section("validate_sqoot_data IS BEGINNING..", show_time())
@@ -389,49 +298,52 @@ def validate_sqoot_data(firsttime=False, pulseonly=False):
     validators.map(go_validate, zip(list(all_active_deals_on_display), repeat(last_validate_end_time), repeat(firsttime), repeat(pulseonly)))
 
     print "FINISHED VALIDATING....", show_time()
+    
     validate_end_time = datetime.now(pytz.utc)
     write_sqoot_log('validate', validate_start_time, validate_end_time)
     print '\n'
     print "GOOD NEWS! validate_sqoot_data IS ALL DONE AND LOGGING IT", show_time()
+    reset_db_queries()
 
+@handle_exceptions
 def go_validate((coupon_model, last_validate_end_time, firsttime, pulseonly)):
-    try:
-        print show_time(), coupon_model.directlink
+    print show_time(), coupon_model.directlink
 
-        sqoot_url = coupon_model.directlink
-        is_bad_link, response = fetch_page(sqoot_url)
-        if is_bad_link:
-            # confirmed_inactive_list.append(coupon_model.pk)
-            Coupon.all_objects.filter(pk=coupon_model.pk).update(status='confirmed-inactive')
+    sqoot_url = coupon_model.directlink
+    is_bad_link, response = fetch_page(sqoot_url)
+    if is_bad_link:
+        # confirmed_inactive_list.append(coupon_model.pk)
+        Coupon.all_objects.filter(pk=coupon_model.pk).update(status='confirmed-inactive')
+        return
+
+    is_deal_dead = check_if_deal_dead(coupon_model, response, sqoot_url)
+    if is_deal_dead:
+        # confirmed_inactive_list.append(coupon_model.pk)
+        Coupon.all_objects.filter(pk=coupon_model.pk).update(status='confirmed-inactive')
+    else:
+        # considered_active_list.append(coupon_model.pk)
+        Coupon.all_objects.filter(pk=coupon_model.pk).update(status='considered-active')
+
+    if firsttime:
+        confirm_or_correct_deal_data(coupon_model, response)
+    else:
+        if pulseonly:
             return
 
-        is_deal_dead = check_if_deal_dead(coupon_model, response, sqoot_url)
-        if is_deal_dead:
-            # confirmed_inactive_list.append(coupon_model.pk)
-            Coupon.all_objects.filter(pk=coupon_model.pk).update(status='confirmed-inactive')
-        else:
-            # considered_active_list.append(coupon_model.pk)
-            Coupon.all_objects.filter(pk=coupon_model.pk).update(status='considered-active')
+        if last_validate_end_time and (last_validate_end_time > coupon_model.date_added):
+            return # Data check only the newly added deals.
 
-        if firsttime:
-            confirm_or_correct_deal_data(coupon_model, response)
-        else:
-            if pulseonly:
-                return
+        confirm_or_correct_deal_data(coupon_model, response)
+    reset_db_queries()
 
-            if last_validate_end_time and (last_validate_end_time > coupon_model.date_added):
-                return # Data check only the newly added deals.
-
-            confirm_or_correct_deal_data(coupon_model, response)
-    except:
-        print_stack_trace()
-
+@handle_exceptions
 def dedup_sqoot_data_hard(firsttime=False):
     '''
     Summary: Further dedup coupons by checking deals under common fields vs. their locations.
     '''
     last_deduphard_end_time = read_sqoot_log('deduphard')
     deduphard_start_time = datetime.now(pytz.utc)
+
     describe_section("dedup_sqoot_data_hard IS BEGINNING..", show_time())
 
     # Grab all active deals on display to users for deduping.
@@ -449,4 +361,4 @@ def dedup_sqoot_data_hard(firsttime=False):
     write_sqoot_log('deduphard', deduphard_start_time, deduphard_end_time)
     print '\n'
     print "GOOD NEWS! dedup_sqoot_data_hard IS ALL DONE AND LOGGING IT", show_time()
-
+    reset_db_queries()

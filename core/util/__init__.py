@@ -66,4 +66,14 @@ def get_description_tag_from_url(url):
         pass
 
     return description if description else title if title else url
-    
+
+
+def handle_exceptions(f):
+    def wrapper(*args, **kwargs):
+        try:
+            return f(*args, **kwargs)
+        except KeyboardInterrupt as e:
+            raise e
+        except:
+            print_stack_trace()
+    return wrapper
