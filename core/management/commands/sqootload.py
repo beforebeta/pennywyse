@@ -69,12 +69,12 @@ class Command(BaseCommand):
     )
 
     def handle(self, *args, **options):
-        firsttime = args.get('firsttime', False)
+        firsttime = True if 'firsttime' in args else False
         if options.get('fullcycle', None):
             run_thru_full_cycle(args)
         
         if options.get('directload', None):
-            refresh_sqoot_data(indirectload=True, firsttime=firsttime)
+            refresh_sqoot_data(firsttime=firsttime)
 
         if options.get('cleanout', None):
             clean_out_sqoot_data(firsttime=firsttime)
@@ -83,7 +83,7 @@ class Command(BaseCommand):
             refresh_sqoot_data(indirectload=True, firsttime=firsttime)
             
         if options.get('validate', None):
-            pulseonly = args.get('pulseonly', False)
+            pulseonly = True if 'pulseonly' in args else False
             validate_sqoot_data(firsttime=firsttime, pulseonly=pulseonly)
         
         if options.get('deduphard', None):
