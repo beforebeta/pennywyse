@@ -15,7 +15,8 @@ from django.core.management.base import BaseCommand
 from django.conf import settings
 from django.db.models import Q
 
-from core.models import Coupon, Merchant, update_object
+from core.models import Coupon, Merchant
+from core.signals import update_object, delete_object
 from core.util import print_stack_trace, handle_exceptions
 from core.util.sqootutils import (reorganize_categories_list, establish_categories_dict, get_or_create_merchant,
                                   get_or_create_category, get_or_create_dealtype, get_or_create_country,
@@ -231,15 +232,27 @@ def clean_out_sqoot_data(firsttime=False):
                                                      is_duplicate=True, related_deal__isnull=True)
     affected_merchant_list += [c.merchant.pk for c in true_duplicate_deals]
     true_duplicate_deals.update(is_deleted=True)
-
+    # triggering deletion of duplicated coupons from search index
+    for coupon in true_duplicate_deals:
+        delete_object.send(sender=Coupon, instance=coupon)
+        
     # Second
     folded_deals = Coupon.all_objects.filter(ref_id_source='sqoot', is_deleted=False,
                                              is_duplicate=True, related_deal__isnull=False)
     affected_merchant_list += [c.merchant.pk for c in folded_deals]
+    
     folded_deals.filter(status='confirmed-inactive').update(is_deleted=True)
     folded_deals.filter(end__lt=datetime.now(pytz.utc)).update(is_deleted=True)
+    # triggering deletion of expired and inactive coupons from search index
+    for coupon in folded_deals.filter(Q(status='confirmed-inactive') 
+                                      | Q(end__lt=datetime.now(pytz.utc))):
+        delete_object.send(sender=Coupon, instance=coupon)
+    
     if last_refresh_start_time:
         folded_deals.filter(last_modified__lt=last_refresh_start_time).update(status='implied-inactive', is_deleted=True)
+        # triggering deletion of outdated coupons from search index
+        for coupon in folded_deals.filter(last_modified__lt=last_refresh_start_time):
+            delete_object.send(sender=Coupon, instance=coupon)
 
     # Third (Second -> Third; the order matters)
     if last_refresh_start_time:
@@ -251,14 +264,24 @@ def clean_out_sqoot_data(firsttime=False):
         non_dup_deals = Coupon.all_objects.filter(ref_id_source='sqoot', is_deleted=False, is_duplicate=False)\
                                           .filter(Q(status='confirmed-inactive')\
                                                 | Q(end__lt=datetime.now(pytz.utc)))
+    
     affected_merchant_list += [c.merchant.pk for c in non_dup_deals]
     deals_with_folded_deals = [c.pk for c in non_dup_deals if Coupon.all_objects.filter(related_deal=c, is_deleted=False).count() != 0]
     for i in deals_with_folded_deals:
         reassign_representative_deal(Coupon.all_objects.get(pk=i))
+    
     non_dup_deals.filter(status='confirmed-inactive').update(is_deleted=True)
     non_dup_deals.filter(end__lt=datetime.now(pytz.utc)).update(is_deleted=True)
+    # triggering deletion of expired and inactive coupons from search index
+    for coupon in non_dup_deals.filter(Q(status='confirmed-inactive') 
+                                      | Q(end__lt=datetime.now(pytz.utc))):
+        delete_object.send(sender=Coupon, instance=coupon)
+    
     if last_refresh_start_time:
         non_dup_deals.filter(last_modified__lt=last_refresh_start_time).update(status='implied-inactive', is_deleted=True)
+        # triggering deletion of outdated coupons from search index
+        for coupon in non_dup_deals.filter(last_modified__lt=last_refresh_start_time):
+            delete_object.send(sender=Coupon, instance=coupon)
 
     # Fourth
     affected_merchant_list = list(set(affected_merchant_list))
@@ -335,6 +358,7 @@ def go_validate((coupon_model, last_validate_end_time, firsttime, pulseonly)):
     coupon_model.save()
     update_object.send(sender=Coupon, instance=coupon_model)
     reset_db_queries()
+
 
 @handle_exceptions
 def dedup_sqoot_data_hard(firsttime=False):

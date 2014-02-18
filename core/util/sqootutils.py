@@ -17,9 +17,18 @@ from django.conf import settings
 from django.utils.html import strip_tags
 
 from core.models import DealType, Category, Coupon, Merchant, Country, CouponNetwork, MerchantLocation
+from core.signals import update_object
 from core.util import print_stack_trace, handle_exceptions
 
 EASTERN_TZ = pytz.timezone('US/Eastern')
+
+SQOOT_LOG_PATH = os.path.join(settings.BASE_DIR, 'misc','logonly', 'sqootload_running_log.txt')
+
+# Which stage: ['row to look for', 'column to look for']
+LOOKUP_PER_STAGE = {'refresh':   ['refresh', 1],
+                    'cleanout':   ['refresh', 1],
+                    'validate':  ['validate', 2],
+                    'deduphard': ['deduphard', 2]}
 
 ########## Table of Contents #########
 # 1. Helper Methods - Data Gathering
@@ -530,6 +539,7 @@ def dedup_scoot_data_soft(coupon_model):
             coupon_model.is_duplicate = True
             Coupon.all_objects.filter(related_deal=coupon_model).update(related_deal=None)
             coupon_model.save()
+            update_object.send(sender=Coupon, instance=coupon_model)
             break
 
         if c.is_duplicate == True:
@@ -544,10 +554,12 @@ def dedup_scoot_data_soft(coupon_model):
             Coupon.all_objects.filter(related_deal=c).update(related_deal=None)
             c.related_deal = coupon_model
             c.save()
+            update_object.send(sender=Coupon, instance=c)
         else:
             coupon_model.is_duplicate = True
             coupon_model.related_deal = c
             coupon_model.save()
+            update_object.send(sender=Coupon, instance=coupon_model)
     reset_db_queries()
 
 #############################################################################################################
@@ -587,13 +599,7 @@ def cleanse_address_text(address_string):
 #
 #############################################################################################################
 
-SQOOT_LOG_PATH = os.path.join(settings.BASE_DIR, 'misc','logonly', 'sqootload_running_log.txt')
 
-# Which stage: ['row to look for', 'column to look for']
-LOOKUP_PER_STAGE     = {'refresh':   ['refresh', 1],
-                        'cleanout':   ['refresh', 1],
-                        'validate':  ['validate', 2],
-                        'deduphard': ['deduphard', 2],}
 
 def read_sqoot_log(current_stage):
     row_to_lookup, column_to_lookup = LOOKUP_PER_STAGE[current_stage]

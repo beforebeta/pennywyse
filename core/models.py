@@ -7,20 +7,15 @@ import urllib
 import urlparse
 
 from django.conf import settings
-from django.core.cache import cache
 from django.core.paginator import Paginator
 from django.core.urlresolvers import reverse
-from django.contrib.gis.db import models as models  # Switching to GeoDjango models
-from django.contrib.sites.models import Site
+from django.contrib.gis.db import models as models
 from django.db.models.query_utils import Q
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from django.dispatch.dispatcher import Signal
 from django.template.defaultfilters import slugify
 from django.contrib.gis.geos import Point
 
 
-from core.util import print_stack_trace, get_first_google_image_result, get_description_tag_from_url
+from core.util import print_stack_trace, get_first_google_image_result
 from tracking.commission.skimlinks import get_merchant_description
 from web.models import CategorySection, TopCouponSection
 
@@ -43,11 +38,6 @@ def get_description(model):
 
 base_description = "PushPenny | Hand Verified Coupon Codes"
 
-#######################################################################################################################
-#
-# Category
-#
-#######################################################################################################################
 
 class Category(models.Model):
     ref_id          = models.CharField(max_length=255, db_index=True, blank=True, null=True, default='refid')
@@ -120,11 +110,6 @@ class Category(models.Model):
     def __unicode__(self):  # Python 3: def __str__(self):
         return "%s %s" % (self.code, self.name)
 
-#######################################################################################################################
-#
-# DealType
-#
-#######################################################################################################################
 
 class DealType(models.Model):
     code            = models.CharField(max_length=255,blank=True, null=True, db_index=True)
@@ -137,11 +122,7 @@ class DealType(models.Model):
     def __unicode__(self):  # Python 3: def __str__(self):
         return "%s %s" % (self.code, self.name)
 
-#######################################################################################################################
-#
-# Merchant
-#
-#######################################################################################################################
+
 class MerchantManager(models.Manager):
     """Custom model manager, which excludes local merchants."""
 
@@ -319,12 +300,6 @@ class MerchantAffiliateData(models.Model):
     primary = models.BooleanField(default=False)
 
 
-#######################################################################################################################
-#
-# CouponNetwork
-#
-#######################################################################################################################
-
 class CouponNetwork(models.Model):
     name            = models.CharField(max_length=255, db_index=True, blank=True, null=True, default='')
     code            = models.CharField(max_length=255, db_index=True, blank=True, null=True)
@@ -335,11 +310,6 @@ class CouponNetwork(models.Model):
     def __unicode__(self):  # Python 3: def __str__(self):
         return "%s" % (self.code)
 
-#######################################################################################################################
-#
-# Country
-#
-#######################################################################################################################
 
 class Country(models.Model):
     code            = models.CharField(max_length=255, db_index=True)
@@ -351,12 +321,6 @@ class Country(models.Model):
     def __unicode__(self):  # Python 3: def __str__(self):
         return "%s %s" % (self.code, self.name)
 
-
-#######################################################################################################################
-#
-# MerchantLocation
-#
-#######################################################################################################################
 
 class MerchantLocation(models.Model):
     """GEO data about merchants, related to local coupons"""
@@ -382,11 +346,6 @@ class MerchantLocation(models.Model):
         return Point(self.geometry.x, self.geometry.y)
 
 
-#######################################################################################################################
-#
-# Coupon
-#
-#######################################################################################################################
 def _get_popular_coupons(how_many):
     merchants = list(Merchant.objects.exclude(coupon__isnull=True)[:10])
     coupons_by_merchant = {}
@@ -429,6 +388,7 @@ class ActiveCouponManager(CouponManager):
     def get_query_set(self):
         return super(ActiveCouponManager, self).get_query_set()\
                                                 .filter(Q(end__gt=datetime.datetime.now()) | Q(end__isnull=True))
+
 
 class Coupon(models.Model):
     """
@@ -678,19 +638,6 @@ class Coupon(models.Model):
                   'url': self.full_success_path()}
         return 'https://twitter.com/intent/tweet?' + urllib.urlencode(params)
 
-@receiver(post_save, sender=Category)
-@receiver(post_save, sender=Coupon)
-@receiver(post_save, sender=Merchant)
-@receiver(post_save, sender=MerchantAffiliateData)
-def invalidate_cache(sender, instance, **kwargs):
-    cache.clear()
-
-
-#######################################################################################################################
-#
-# CityPicture
-#
-#######################################################################################################################
 
 class CityPicture(models.Model):
     """GEO data with a link to a picture"""
@@ -708,6 +655,3 @@ class CityPicture(models.Model):
 
     def __unicode__(self):
         return self.name
-
-
-update_object = Signal(providing_args=["instance", "sender"])
