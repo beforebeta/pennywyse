@@ -324,3 +324,5 @@ CACHES = {
 ########################################################################
 
 TASTYPIE_DEFAULT_FORMATS = ['json',]
+
+HAYSTACK_SIGNAL_PROCESSOR = 'core.signals.CouponSignalProcessor'
