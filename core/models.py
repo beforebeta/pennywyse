@@ -15,8 +15,10 @@ from django.contrib.sites.models import Site
 from django.db.models.query_utils import Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.dispatch.dispatcher import Signal
 from django.template.defaultfilters import slugify
 from django.contrib.gis.geos import Point
+
 
 from core.util import print_stack_trace, get_first_google_image_result, get_description_tag_from_url
 from tracking.commission.skimlinks import get_merchant_description
@@ -707,3 +709,5 @@ class CityPicture(models.Model):
     def __unicode__(self):
         return self.name
 
+
+update_object = Signal(providing_args=["instance", "sender"])

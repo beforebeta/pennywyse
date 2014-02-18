@@ -15,7 +15,7 @@ from django.core.management.base import BaseCommand
 from django.conf import settings
 from django.db.models import Q
 
-from core.models import Coupon, Merchant
+from core.models import Coupon, Merchant, update_object
 from core.util import print_stack_trace, handle_exceptions
 from core.util.sqootutils import (reorganize_categories_list, establish_categories_dict, get_or_create_merchant,
                                   get_or_create_category, get_or_create_dealtype, get_or_create_country,
@@ -304,25 +304,23 @@ def validate_sqoot_data(firsttime=False, pulseonly=False):
     print "GOOD NEWS! validate_sqoot_data IS ALL DONE AND LOGGING IT", show_time()
     reset_db_queries()
 
-@handle_exceptions
+
 def go_validate((coupon_model, last_validate_end_time, firsttime, pulseonly)):
     print show_time(), coupon_model.directlink
 
     sqoot_url = coupon_model.directlink
     is_bad_link, response = fetch_page(sqoot_url)
     if is_bad_link:
-        # confirmed_inactive_list.append(coupon_model.pk)
-        Coupon.all_objects.filter(pk=coupon_model.pk).update(status='confirmed-inactive')
+        coupon_model.status='confirmed-inactive'
+        coupon_model.save()
+        update_object.send(sender=Coupon, instance=coupon_model)
         return
 
     is_deal_dead = check_if_deal_dead(coupon_model, response, sqoot_url)
     if is_deal_dead:
-        # confirmed_inactive_list.append(coupon_model.pk)
-        Coupon.all_objects.filter(pk=coupon_model.pk).update(status='confirmed-inactive')
+        coupon_model.status='confirmed-inactive'
     else:
-        # considered_active_list.append(coupon_model.pk)
-        Coupon.all_objects.filter(pk=coupon_model.pk).update(status='considered-active')
-
+        coupon_model.status='considered-active'
     if firsttime:
         confirm_or_correct_deal_data(coupon_model, response)
     else:
@@ -333,6 +331,9 @@ def go_validate((coupon_model, last_validate_end_time, firsttime, pulseonly)):
             return # Data check only the newly added deals.
 
         confirm_or_correct_deal_data(coupon_model, response)
+    
+    coupon_model.save()
+    update_object.send(sender=Coupon, instance=coupon_model)
     reset_db_queries()
 
 @handle_exceptions
