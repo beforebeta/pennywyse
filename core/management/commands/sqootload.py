@@ -16,7 +16,6 @@ from django.conf import settings
 from django.db.models import Q
 
 from core.models import Coupon, Merchant
-from core.signals import update_object, delete_object
 from core.util import print_stack_trace, handle_exceptions
 from core.util.sqootutils import (reorganize_categories_list, establish_categories_dict, get_or_create_merchant,
                                   get_or_create_category, get_or_create_dealtype, get_or_create_country,
@@ -222,6 +221,8 @@ def clean_out_sqoot_data(firsttime=False):
       and soft-delete them.
     * Fourth, find all inactive merchants (no active deals), and soft-delete them.
     '''
+    from core.signals import delete_object
+    
     last_refresh_start_time = read_sqoot_log('refresh') if firsttime == False else None
     cleanout_start_time = datetime.now(pytz.utc)
     describe_section("clean_out_sqoot_data IS BEGINNING..", show_time())
@@ -329,6 +330,7 @@ def validate_sqoot_data(firsttime=False, pulseonly=False):
 
 
 def go_validate((coupon_model, last_validate_end_time, firsttime, pulseonly)):
+    from core.signals import update_object
     print show_time(), coupon_model.directlink
 
     sqoot_url = coupon_model.directlink

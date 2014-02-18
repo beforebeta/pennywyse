@@ -17,7 +17,6 @@ from django.conf import settings
 from django.utils.html import strip_tags
 
 from core.models import DealType, Category, Coupon, Merchant, Country, CouponNetwork, MerchantLocation
-from core.signals import update_object
 from core.util import print_stack_trace, handle_exceptions
 
 EASTERN_TZ = pytz.timezone('US/Eastern')
@@ -518,7 +517,7 @@ def dedup_scoot_data_soft(coupon_model):
     '''
     Check all deals under the same merchant, mark duplicate deals, and fold them under the best deal
     '''
-    
+    from core.signals import update_object
     if coupon_model.online == True:
         return
 
