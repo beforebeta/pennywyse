@@ -42,6 +42,13 @@ $(function() {
 		}
 	}
 	
+	if (window.location.hash == '#subscribe') {
+		$('.subscription-popup').show();
+		$('.overlay').show();
+		$('.prescroll-header').waypoint('disable');
+		$('.more-coupons').waypoint('disable');
+	}
+	
 	if ('ontouchstart' in window || window.DocumentTouch && document instanceof DocumentTouch) {
 		is_touch = true;
 	}
@@ -392,8 +399,6 @@ $(function() {
 	$('.facebook-share-url').live('click', function() {
 		return !window.open(this.href, 'Share on Facebook', 'width=600,height=300');
 	});
-	
-	prepend_promo_container();
 });
 
 function select_categories(criteria) {
@@ -518,7 +523,6 @@ function render_coupons(data, reset_items) {
 	else {
 		$('.coupons').append(html);
 	}
-	prepend_promo_container();
 	$('.coupon-description:not(.truncated)').dotdotdot({
 		ellipsis: '... ',
  		wrap: 'letter',
