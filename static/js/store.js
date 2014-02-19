@@ -225,8 +225,8 @@ $(function() {
 			$('.coupon-types').find('li').removeClass('selected');
 			$('.coupon-types').find('li:first').addClass('selected');
 			$('.coupon-types').closest('.coupon-types').removeClass('expanded');
-			$('.coupon-types').find('.expanded-choices li').off('click');
-			$('.coupon-types').closest('.expandable').on('click', expandable_select_callback);
+			$(this).find('.expanded-choices li').off('click');
+			$(this).find('.expanded-choices li').closest('.expandable').on('click', expandable_select_callback);
 		}
 		
 		var filter_type = $(this).attr('id');
