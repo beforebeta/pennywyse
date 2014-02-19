@@ -221,12 +221,18 @@ $(function() {
 	// switching between "most popular", "featured" and "stores" sections on "top coupons" mobile page
 	$('.mobile-index-labels a').click(function() {
 		$('.mobile-index-labels a').removeClass('active');
+		if ($('.coupon-types').hasClass('expanded')) {
+			$('.coupon-types').find('li').removeClass('selected');
+			$('.coupon-types').find('li:first').addClass('selected');
+			$('.coupon-types').closest('.coupon-types').removeClass('expanded');
+			$(this).find('.expanded-choices li').off('click');
+			$(this).find('.expanded-choices li').closest('.expandable').on('click', expandable_select_callback);
+		}
+		
 		var filter_type = $(this).attr('id');
 		if (filter_type != 'coupon_type') {
 			$(this).addClass('active');
 		}
-		var expand_label = $('.mobile-coupon-type li:first').text();
-		$('.mobile-coupon-type').parent().find('span:first').html(expand_label);
 		$('.coupon-container').hide();
 		$('.top-menu-store').hide();
 		if (filter_type == 'most-popular') {
@@ -777,7 +783,12 @@ function render_coupon_popup(data, coupon_id) {
 						{{# code }} \
 						<div class="coupon-popup-code"> \
 							<input type="text" value="{{ code }}" placeholder="coupon" readonly> \
-							<input type="button" id="coupon-code-{{ id }}" value="Click to copy"> \
+							{{^is_mobile}} \
+								<input type="button" id="coupon-code-{{ id }}" value="Click to copy"> \
+							{{/is_mobile}} \
+							{{#is_mobile}} \
+								<input type="button" value="Shop at {{ merchant_name }}" class="merchant-button" data-href="{{ url }}"> \
+							{{/is_mobile}} \
 						</div> \
 						{{/ code }} \
 						{{^ code }} \
