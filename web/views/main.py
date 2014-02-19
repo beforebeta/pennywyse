@@ -190,7 +190,11 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
 def redirect_to_open_coupon(request, company_name, coupon_label, coupon_id):
     """Fallback for old coupon URLs for redirection to new ones."""
     
-    coupon = get_object_or_404(Coupon, id=coupon_id)
+    coupons = Coupon.objects.filter(id=coupon_id)
+    if len(coupons) > 0:
+        coupon = coupons[0]
+    else:
+        coupon = get_object_or_404(Coupon, desc_slug=coupon_label)     
     return HttpResponsePermanentRedirect(coupon.local_path())
 
 
