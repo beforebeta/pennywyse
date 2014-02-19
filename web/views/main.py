@@ -194,7 +194,11 @@ def redirect_to_open_coupon(request, company_name, coupon_label, coupon_id):
     if len(coupons) > 0:
         coupon = coupons[0]
     else:
-        coupon = get_object_or_404(Coupon, desc_slug=coupon_label)     
+        coupons = Coupon.objects.filter(desc_slug=coupon_label)
+        if len(coupons) > 0:
+            coupon = coupons[0]
+        else:
+            raise Http404     
     return HttpResponsePermanentRedirect(coupon.local_path())
 
 
