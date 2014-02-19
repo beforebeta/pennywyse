@@ -1,10 +1,6 @@
 import json
-import datetime
 from uuid import uuid4
 from django.conf import settings
-from django.contrib.flatpages.views import flatpage
-from django.contrib.sites.models import get_current_site
-from django.core.cache import cache
 from django.core.paginator import Paginator
 from django.core.urlresolvers import reverse
 from django.db.models.query_utils import Q
@@ -14,10 +10,9 @@ from django.template.context import RequestContext
 from django.template.defaultfilters import slugify
 from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import ensure_csrf_cookie
-from django.views.decorators.vary import vary_on_headers
 from constance import config
-from core.models import Category, Coupon, DealType, Merchant, base_description
-from core.util import encode_uri_component, print_stack_trace
+from core.models import Category, Coupon, Merchant
+from core.util import adaptive_cache_page, CustomPaginator
 from core.util.pagination import AlphabeticalPagination
 from tracking.views import log_click_track
 from tracking.utils import get_visitor_tag
@@ -45,22 +40,12 @@ def set_meta_tags(subject, context):
                    og_url=subject.og_url(),
                    canonical_url=subject.og_url())
 
-def adaptive_cache_page(f):
-    def wrapper(request, *args, **kwargs):
-        if request.is_ajax():
-            return f(request, *args, **kwargs)
-        cache_key = '_'.join(['%s:%s' % (k, w) for k,w in kwargs.items()])
-        cached_response = cache.get(cache_key, None)
-        if cached_response:
-            return HttpResponse(cached_response)
-        r = f(request, *args, **kwargs)
-        cache.set(cache_key, r, 60 * 60 * 24)
-        return r
-    return wrapper
 
 @ensure_csrf_cookie
 @adaptive_cache_page
 def index(request, current_page=None):
+    """Landing page controller."""
+    
     parameters = {'is_featured': True, 'is_active': True}
     page = int(current_page or 1)
     sorting = request.GET.get('sorting', None)
@@ -92,31 +77,16 @@ def index(request, current_page=None):
         return HttpResponse(json.dumps({'items': data,
                                         'total_pages': pages.num_pages}), content_type="application/json")
     
+    # permanently redirecting from first pagination page to URL without page
     if current_page and int(current_page) == 1:
         return HttpResponsePermanentRedirect(reverse('web.views.main.index'))
     
-    coupons = Coupon.objects.filter(Q(end__gt=datetime.datetime.now()) | Q(end__isnull=True),
-                                    **parameters).order_by("-date_added")
-    pages = Paginator(coupons, 20)
-    
-    if int(page) > pages.num_pages:
-        page = pages.num_pages
-    ppages = range(1, pages.num_pages+1)
-    separators = 0
-    if pages.num_pages > 12:
-        if page <= 5 or page >= pages.num_pages - 3:
-            ppages = ppages[:8] + ppages[-3:]
-            separators = 1
-        else:
-            page_next = page + 2
-            page_prev = page - 2
-            ppages = ppages[:3] + ppages[page_prev:page_next] + ppages[-3:]
-            separators = 2
-
-    context = {"pages": ppages,
+    coupons = Coupon.objects.filter(**parameters).order_by("-date_added")
+    pages = CustomPaginator(coupons, 20, current_page=page)
+    context = {"pages": pages.separated_pages,
                "num_pages": pages.num_pages,
                "current_page": pages.page(page),
-               "separators": separators,
+               "separators": pages.separators,
                "coupons": pages.page(page).object_list}
 
     return render_response("index.html", request, context)
@@ -124,6 +94,10 @@ def index(request, current_page=None):
 
 @ensure_csrf_cookie
 def top_coupons(request, current_page=1):
+    """
+    Dedicated page with same content as corresponding navigation menu section "Top Coupons".
+    Available from mobile site layout only.
+    """
     return render_response("top_coupons.html", request, {})
 
 
@@ -142,7 +116,7 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
     except Merchant.DoesNotExist:
         raise Http404
     
-    
+    # if company ID provided, permanently redirecting to URL without ID
     if company_id:
         kwargs={'company_name': merchant.name_slug}
         merchant_url = reverse('web.views.main.coupons_for_company', kwargs=kwargs)
@@ -163,12 +137,10 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
     if request.is_ajax():
         coupons_list = Coupon.objects.filter(**filters)\
                                     .only('id', 'short_desc', 'description', 'end', 'coupon_type', 'merchant', 'image')
-        ordering = SORTING_MAPPING.get(sorting, 'popularity')
         coupons = coupons_list.order_by(ordering)
     
         # preparing pagination
         pages = Paginator(coupons, 20)
-    
         data = []
         for c in pages.page(page).object_list:
             item = {'id': c.id,
@@ -185,29 +157,16 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
                                         'total_pages': pages.num_pages,
                                         'total_items': pages.count}), content_type="application/json")
 
+    # fetching coupons only if coupon ID provided
     coupon = None
     if coupon_id:
         coupon = Coupon.objects.get(id=coupon_id)
     
     all_categories = merchant.get_coupon_categories()
     coupons = Coupon.objects.filter(**filters).order_by(ordering)
-
-    # preparing pagination
-    pages = Paginator(coupons, 20)
-    if int(page) > pages.num_pages:
-        page = pages.num_pages
-    ppages = range(1, pages.num_pages+1)
-    separators = 0
-    if pages.num_pages > 12:
-        if page <= 5 or page >= pages.num_pages - 3:
-            ppages = ppages[:8] + ppages[-3:]
-            separators = 1
-        else:
-            page_next = page + 2
-            page_prev = page - 2
-            ppages = ppages[:3] + ppages[page_prev:page_next] + ppages[-3:]
-            separators = 2
+    pages = CustomPaginator(coupons, 20, current_page=page)
     
+    # permanently redirecting from first pagination page to URL without page
     if current_page and int(current_page) == 1:
         return HttpResponsePermanentRedirect(reverse('web.views.main.coupons_for_company', 
                                                      kwargs={'company_name': merchant.name_slug,
@@ -216,28 +175,29 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
     context = {"coupons": pages.page(page).object_list,
                "merchant": merchant,
                "num_pages": pages.num_pages,
-               "pages": ppages,
+               "pages": pages.separated_pages,
                "current_page": pages.page(page),
                "num_coupons": pages.count,
-               "separators": separators,
+               "separators": pages.separators,
                "coupon_categories": all_categories,
                "coupon": coupon}
     
     set_meta_tags(merchant, context)
-    if current_page > 1:
-        context['canonical_url'] = "{0}pages/{1}/".format(merchant.og_url(), current_page)
-
     return render_response("company.html", request, context)
 
 
 @ensure_csrf_cookie
 def redirect_to_open_coupon(request, company_name, coupon_label, coupon_id):
+    """Fallback for old coupon URLs for redirection to new ones."""
+    
     coupon = get_object_or_404(Coupon, id=coupon_id)
     return HttpResponsePermanentRedirect(coupon.local_path())
 
 
 @ensure_csrf_cookie
 def open_coupon(request, coupon_id):
+    """Fetching coupon by given coupon ID and logging it if successful."""
+    
     try:
         coupon = Coupon.objects.get(id=coupon_id)
         log_click_track(request, coupon)
@@ -260,22 +220,24 @@ def open_coupon(request, coupon_id):
 @ensure_csrf_cookie
 @cache_page(60 * 60 * 24)
 def categories(request):
-    context={
-             "categories": Category.objects.filter(is_featured=False, parent__isnull=True).order_by('name'),
-             "featured_categories": Category.objects.filter(is_featured=True).order_by('name'),
-             "CATEGORIES_PAGE_TEXT": getattr(config, 'CATEGORIES_PAGE_TEXT', None),
-    }
+    """Lists of parent and featured categories."""
+    
+    context = {"categories": Category.objects.filter(is_featured=False, parent__isnull=True).order_by('name'),
+               "featured_categories": Category.objects.filter(is_featured=True).order_by('name'),
+               "CATEGORIES_PAGE_TEXT": getattr(config, 'CATEGORIES_PAGE_TEXT', None)}
     return render_response("categories.html", request, context)
+
 
 @ensure_csrf_cookie
 @cache_page(60 * 60 * 24)
 def groceries(request):
+    """Dedicated controller with list of grocery categories."""
+    
     root_category = get_object_or_404(Category, code='grocery')
     categories = [root_category] + list(Category.objects.filter(parent=root_category))
     context = {'categories': categories,
                'is_grocery': True,
-               'GROCERIS_PAGE_TEXT': getattr(config, 'GROCERIS_PAGE_TEXT', None),
-               }
+               'GROCERIS_PAGE_TEXT': getattr(config, 'GROCERIS_PAGE_TEXT', None)}
     return render_response("categories.html", request, context)
 
 
@@ -283,6 +245,8 @@ def groceries(request):
 @ensure_csrf_cookie
 @adaptive_cache_page
 def category(request, category_code, current_page=None, category_ids=-1):
+    """List of coupons for given category."""
+    
     sorting = request.GET.get('sorting', None)
     coupon_types = request.GET.getlist('coupon_type', [])
     category = Category.objects.get(code=category_code, ref_id_source__isnull=True)
@@ -322,22 +286,7 @@ def category(request, category_code, current_page=None, category_ids=-1):
                                         'total_items': pages.count}), content_type="application/json")
     
     coupons = Coupon.objects.filter(**filters).order_by(ordering)
-
-    # preparing pagination
-    pages = Paginator(coupons, 20)
-    if int(page) > pages.num_pages:
-        page = pages.num_pages
-    ppages = range(1, pages.num_pages+1)
-    separators = 0
-    if pages.num_pages > 12:
-        if page <= 5 or page >= pages.num_pages - 3:
-            ppages = ppages[:8] + ppages[-3:]
-            separators = 1
-        else:
-            page_next = page + 2
-            page_prev = page - 2
-            ppages = ppages[:3] + ppages[page_prev:page_next] + ppages[-3:]
-            separators = 2
+    pages = CustomPaginator(coupons, 20, current_page=page)
     
     if current_page and int(current_page) == 1:
         return HttpResponsePermanentRedirect(reverse('web.views.main.category', 
@@ -348,14 +297,10 @@ def category(request, category_code, current_page=None, category_ids=-1):
                "num_coupons": pages.count,
                "coupon_categories": coupon_categories,
                "coupons": pages.page(page).object_list,
-               "pages": ppages,
+               "pages": pages.separated_pages,
                "current_page": pages.page(page),
                "num_coupons": pages.count,
-               "separators": separators}
-
-    if current_page > 1:
-        context['canonical_url'] = "{0}pages/{1}/".format(category.og_url(), current_page)
-
+               "separators": pages.separators}
     return render_response("category.html", request, context)
 
 
@@ -377,19 +322,19 @@ def stores(request, page='popular'):
         merchant_ids = [c['merchant__id'] for c in Coupon.objects.filter(categories=category).values('merchant__id').annotate()]
         filters['id__in'] = merchant_ids
     stores = Merchant.objects.filter(**filters).order_by(ordering)
-    context={
-        "stores": stores,
-        "categories": Category.objects.filter(parent__isnull=True, ref_id_source__isnull=True).order_by('name'),
-        "category": int(category) if category else None,
-        "pagination": AlphabeticalPagination(page),
-        "featured_merchants": Merchant.objects.filter(is_featured=True),
-        "page": page,
-        "MERCHANTS_PAGE_TEXT": getattr(config, 'MERCHANTS_PAGE_TEXT', None),
-    }
+    context = {"stores": stores,
+                "categories": Category.objects.filter(parent__isnull=True, ref_id_source__isnull=True).order_by('name'),
+                "category": int(category) if category else None,
+                "pagination": AlphabeticalPagination(page),
+                "featured_merchants": Merchant.objects.filter(is_featured=True),
+                "page": page,
+                "MERCHANTS_PAGE_TEXT": getattr(config, 'MERCHANTS_PAGE_TEXT', None)}
     return render_response("companies.html", request, context)
 
 
 def email_subscribe(request):
+    """Controller for handling email subscription via AJAX request."""
+    
     data = {'success': False}
     if request.method == 'POST':
         instance = EmailSubscription(session_key=request.session.get('key', str(uuid4())), 
@@ -402,8 +347,11 @@ def email_subscribe(request):
             data['errors'] = form.errors
     return HttpResponse(json.dumps(data), content_type="application/json")
 
+
 @cache_page(60 * 60 * 24)
 def not_found(request):
+    """404 page handler."""
+    
     response = render_response("not_found.html", request, {})
     response.status_code = 404
     return response

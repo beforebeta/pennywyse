@@ -6,9 +6,13 @@ import traceback
 import urllib
 from urlparse import urlparse, parse_qs
 
-from BeautifulSoup import BeautifulSoup
 from django.conf import settings
+from django.core.cache import cache
+from django.core.paginator import Paginator
+from django.http import HttpResponse
+from BeautifulSoup import BeautifulSoup
 import requests
+
 
 def extract_url_from_skimlinks(url):
     parsed_link = urlparse(url)
@@ -37,16 +41,6 @@ def print_stack_trace():
     print '-'*60
 
 def get_first_google_image_result(query_string):
-#    print "$"*10, "Google Search for ", query_string
-#    try:
-#        #specific mappings
-#        if query_string.lower() == "apparel":
-#            return "http://apparelcyclopedia.com/wp-content/uploads/2013/04/american-apparel-clothing-fashion-store-sweaters-Favim.com-64206.jpg"
-#        url = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=" + encode_uri_component(query_string.replace("-"," "))
-#        j = json.loads(requests.get(url, headers={'User-agent': 'Mozilla/5.0'}).content)
-#        return j["responseData"]["results"][0]["unescapedUrl"]
-#    except:
-#        print_stack_trace()
     return settings.DEFAULT_IMAGE
 
 def get_description_tag_from_url(url):
@@ -66,4 +60,43 @@ def get_description_tag_from_url(url):
         pass
 
     return description if description else title if title else url
+
+def adaptive_cache_page(f):
+    def wrapper(request, *args, **kwargs):
+        if request.is_ajax():
+            return f(request, *args, **kwargs)
+        cache_key = '_'.join(['%s:%s' % (k, w) for k,w in kwargs.items()])
+        cached_response = cache.get(cache_key, None)
+        if cached_response:
+            return HttpResponse(cached_response)
+        r = f(request, *args, **kwargs)
+        cache.set(cache_key, r, 60 * 60 * 24)
+        return r
+    return wrapper
+
+class CustomPaginator(Paginator):
     
+    def __init__(self, *args, **kwargs):
+        self.current_page = kwargs.pop('current_page', 1)
+        return super(CustomPaginator, self).__init__(*args, **kwargs)
+    
+    @property
+    def separators(self):
+        separators = 0
+        if self.num_pages > 12:
+            if self.page <= 5 or self.current_page >= self.num_pages - 3:
+                separators = 1
+            separators = 2
+        return separators
+    
+    @property
+    def separated_pages(self):
+        ppages = range(1, self.num_pages+1)
+        if self.num_pages > 12:
+            if self.page <= 5 or self.current_page >= self.num_pages - 3:
+                ppages = ppages[:8] + ppages[-3:]
+            else:
+                page_next = self.current_page + 2
+            page_prev = self.current_page - 2
+            ppages = ppages[:3] + ppages[page_prev:page_next] + ppages[-3:]
+        return ppages
