@@ -106,42 +106,44 @@
 						{% for coupon in coupons %}
 							<div class="coupon-container">
 								<div class="coupon-body">
-									<div class="coupon-header">
-										{% if coupon.coupon_type == 'free_shipping' %}
-											<div class="coupon-left-label">
-												<img src="/static/img/free_shipping_icon.png">Free Shipping
-											</div>
-										{% elif coupon.coupon_type == 'onsale' %}
-											<div class="coupon-left-label">
-												<img src="/static/img/on_sale_icon.png">On Sale
-											</div>
-										{% elif coupon.coupon_type == 'groceries' %}
-											<div class="coupon-left-label">
-												<img src="/static/img/groceries_icon.png">Groceries
-											</div>
-										{% elif coupon.coupon_type == 'coupon_code' %}
-											<div class="coupon-left-label">
-												<img src="/static/img/coupon_code_icon.png">Coupon
-											</div>
-										{% elif coupon.coupon_type == 'printable' %}
-											<div class="coupon-left-label">
-												<img src="/static/img/printable_icon.png">Printables
-											</div>
-										{% elif coupon.coupon_type == 'freebies' %}
-											<div class="coupon-left-label">
-												<img src="/static/img/freebies_icon.png">Freebies
-											</div>
-										{% endif %}
+									<div class="coupon-top-body" id="{{ coupon.id }}">
+										<div class="coupon-header">
+											{% if coupon.coupon_type == 'free_shipping' %}
+												<div class="coupon-left-label">
+													<img src="/static/img/free_shipping_icon.png">Free Shipping
+												</div>
+											{% elif coupon.coupon_type == 'onsale' %}
+												<div class="coupon-left-label">
+													<img src="/static/img/on_sale_icon.png">On Sale
+												</div>
+											{% elif coupon.coupon_type == 'groceries' %}
+												<div class="coupon-left-label">
+													<img src="/static/img/groceries_icon.png">Groceries
+												</div>
+											{% elif coupon.coupon_type == 'coupon_code' %}
+												<div class="coupon-left-label">
+													<img src="/static/img/coupon_code_icon.png">Coupon
+												</div>
+											{% elif coupon.coupon_type == 'printable' %}
+												<div class="coupon-left-label">
+													<img src="/static/img/printable_icon.png">Printables
+												</div>
+											{% elif coupon.coupon_type == 'freebies' %}
+												<div class="coupon-left-label">
+													<img src="/static/img/freebies_icon.png">Freebies
+												</div>
+											{% endif %}
+										</div>
+										<hr>
+										<h1 class="short-description">{{ coupon.short_desc }}</h1>
+										<div class="coupon-description">
+											{{ coupon.text }}
+										</div>
+										<span class="ends">Ends {{ coupon.end|date:"m/d/y" }}</span>
 									</div>
-									<hr>
-									<h1 class="short-description">{{ coupon.short_desc }}</h1>
-									<div class="coupon-description">
-										{{ coupon.text }}
-									</div>
-									<span class="ends">Ends {{ coupon.end|date:"m/d/y" }}</span>
-										<a href="{{ coupon.merchant_local_path }}" target="_blank" class="merchant-link">
-											<img src="{{ coupon.merchant_image }}">
-										</a>
+									<a href="{{ coupon.merchant_local_path }}" target="_blank" class="merchant-link">
+										<img src="{{ coupon.merchant_image }}">
+									</a>
 								</div>
 								<div class="use-coupon" id="{{ coupon.pk }}">
 									<a href="javascript:void(null);" >Use Coupon</a>

@@ -373,6 +373,10 @@ hr {
 	height: 290px;
 	position: relative;
 }
+.coupon-top-body {
+	height: 200px;
+	cursor: pointer;
+}
 .coupon-container {
 	width: 220px;
 	height: 320px;
