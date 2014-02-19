@@ -221,18 +221,12 @@ $(function() {
 	// switching between "most popular", "featured" and "stores" sections on "top coupons" mobile page
 	$('.mobile-index-labels a').click(function() {
 		$('.mobile-index-labels a').removeClass('active');
-		if ($('.coupon-types').hasClass('expanded')) {
-			$('.coupon-types').find('li').removeClass('selected');
-			$('.coupon-types').find('li:first').addClass('selected');
-			$('.coupon-types').closest('.coupon-types').removeClass('expanded');
-			$('.coupon-types').find('.expanded-choices li').off('click');
-			$('.coupon-types').closest('.expandable').on('click', expandable_select_callback);
-		}
-		
 		var filter_type = $(this).attr('id');
 		if (filter_type != 'coupon_type') {
 			$(this).addClass('active');
 		}
+		var expand_label = $('.mobile-coupon-type li:first').text();
+		$('.mobile-coupon-type').parent().find('span:first').html(expand_label);
 		$('.coupon-container').hide();
 		$('.top-menu-store').hide();
 		if (filter_type == 'most-popular') {
@@ -334,7 +328,7 @@ $(function() {
 		return false;
 	});
 	
-	$('.use-coupon').live('click', function(e) {
+	$('.use-coupon, .coupon-top-body').live('click', function(e) {
 		var coupon_id = $(this).attr('id');
 		load_coupon(coupon_id);
 		return false;
@@ -451,44 +445,46 @@ function render_coupons(data, reset_items) {
 	var template = '{{#items}} \
 					<div class="coupon-container {{# is_mobile}}mobile-coupon-container{{/is_mobile}}"> \
 						<div class="coupon-body"> \
-							<div class="coupon-header"> \
-								<div class="coupon-left-label"> \
-									{{& coupon_type_container }} \
+							<div class="coupon-top-body" id="{{ id }}"> \
+								<div class="coupon-header"> \
+									<div class="coupon-left-label"> \
+										{{& coupon_type_container }} \
+									</div> \
+								</div> \
+								<hr> \
+								<h2 class="short-description">{{ short_desc }}</h2> \
+								<div class="coupon-description"> \
+									{{ description }} \
+								</div> \
+								{{# end }} \
+									<span class="ends">Ends {{ end }}</span> \
+								{{/end}} \
+							</div> \
+							{{# is_company_coupon }} \
+								<span class="merchant-link"> \
+									<img src="{{ image }}"> \
+								</span> \
+							{{/is_company_coupon }} \
+							{{^ is_company_coupon }} \
+								<a href="{{ merchant_link }}" target="_blank" class="merchant-link"> \
+									<img src="{{ image }}"> \
+								</a> \
+							{{/is_company_coupon }} \
+						</div> \
+						<div class="use-coupon" id="{{ id }}"> \
+							Use Coupon \
+						</div> \
+						{{^ is_mobile }} \
+							<div class="coupon-bottom"> \
+								<div class="coupon-right-bottom"> \
+									Share \
+									<a href="{{ facebook_share_url }}" class="facebook-share-url"><img src="/static/img/facebook_share_icon.png"></a> \
+									<a href="{{ twitter_share_url }}""><img src="/static/img/twitter_share_icon.png"></a> \
+									<a href="mailto:?body={{ email_share_url }}"><img src="/static/img/email_share_icon.png"></a> \
 								</div> \
 							</div> \
-							<hr> \
-							<h2 class="short-description">{{ short_desc }}</h2> \
-									<div class="coupon-description"> \
-										{{ description }} \
-									</div> \
-										{{# end }} \
-											<span class="ends">Ends {{ end }}</span> \
-										{{/end}} \
-										{{# is_company_coupon }} \
-											<span class="merchant-link"> \
-												<img src="{{ image }}"> \
-											</span> \
-										{{/is_company_coupon }} \
-										{{^ is_company_coupon }} \
-											<a href="{{ merchant_link }}" target="_blank" class="merchant-link"> \
-												<img src="{{ image }}"> \
-											</a> \
-										{{/is_company_coupon }} \
-									</div> \
-									<div class="use-coupon" id="{{ id }}"> \
-										Use Coupon \
-									</div> \
-									{{^ is_mobile }} \
-										<div class="coupon-bottom"> \
-											<div class="coupon-right-bottom"> \
-												Share \
-												<a href="{{ facebook_share_url }}" class="facebook-share-url"><img src="/static/img/facebook_share_icon.png"></a> \
-												<a href="{{ twitter_share_url }}""><img src="/static/img/twitter_share_icon.png"></a> \
-												<a href="mailto:?body={{ email_share_url }}"><img src="/static/img/email_share_icon.png"></a> \
-											</div> \
-										</div> \
-									{{/is_mobile}} \
-								</div> \
+						{{/is_mobile}} \
+					</div> \
 				{{/items}}<br clear="both">';
    	data.is_mobile = is_mobile;
    	data.is_company_coupon = $('.coupons').hasClass('company-coupons');
@@ -781,12 +777,7 @@ function render_coupon_popup(data, coupon_id) {
 						{{# code }} \
 						<div class="coupon-popup-code"> \
 							<input type="text" value="{{ code }}" placeholder="coupon" readonly> \
-							{{^is_mobile}} \
-								<input type="button" id="coupon-code-{{ id }}" value="Click to copy"> \
-							{{/is_mobile}} \
-							{{#is_mobile}} \
-								<input type="button" value="Shop at {{ merchant_name }}" class="merchant-button" data-href="{{ url }}"> \
-							{{/is_mobile}} \
+							<input type="button" id="coupon-code-{{ id }}" value="Click to copy"> \
 						</div> \
 						{{/ code }} \
 						{{^ code }} \
