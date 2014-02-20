@@ -25,17 +25,9 @@ SIMILAR_MERCHANTS_LIMIT = 10
 
 class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
-        make_option('--load',
-            action='store_true',
-            dest='load',
-            default=False,
-            help='load'),
-        make_option('--embedly',
-            action='store_true',
-            dest='embedly',
-            default=False,
-            help='embedly'),
-        )
+        make_option('--load', action='store_true', dest='load', default=False, help='load'),
+        make_option('--embedly', action='store_true', dest='embedly', default=False, help='embedly'),
+    )
 
     def handle(self, *args, **options):
         err = self.stderr
@@ -89,12 +81,12 @@ def refresh_categories():
         name = unescape_html(cat.find("name").text)
         parent = cat.find("parent").text
         if parent:
-            parent = Category.objects.get(code=parent)
+            parent = Category.objects.get(code=parent, ref_id_source__isnull=True)
         else:
             parent = None
         if Category.objects.filter(code=code).count() > 1:
             print "WARNING: Multiple categories with the same code: ", code
-        existing_category, created = Category.objects.get_or_create(code=code)
+        existing_category, created = Category.objects.get_or_create(code=code, ref_id_source__isnull=True)
         existing_category.ref_id = ref_id
         existing_category.name=name
         existing_category.parent=parent
@@ -157,7 +149,7 @@ def refresh_deals():
 
             coupon.categories.clear()
             for category in deal.find("categories"):
-                coupon.categories.add(Category.objects.get(code=category.text))
+                coupon.categories.add(Category.objects.get(code=category.text, ref_id_source__isnull=True))
             coupon.dealtypes.clear()
             dealtypes = deal.find('dealtypes')
             for dealtype in dealtypes.findall("type"):
@@ -247,10 +239,10 @@ def refresh_calculated_fields():
     tracks = ClickTrack.objects.exclude(merchant__isnull=True).values('merchant_id')\
                                                             .annotate(popularity=Count('merchant__id'))
     for track in tracks:
-        print 'Processing click track %s' % track.id
+        print 'Processing click track %s' % track['merchant_id']
         Merchant.objects.filter(id=track['merchant_id']).update(popularity=track['popularity'])
     
-    for c in Coupon.objects.filter(coupon_type__isnull=True).only('categories', 'dealtypes'):
+    for c in Coupon.objects.filter(coupon_type__isnull=True).only('id', 'categories', 'dealtypes'):
         print 'Calculating coupon type for coupon %s' % c.id
         c.coupon_type = c.get_coupon_type()
         c.save()
