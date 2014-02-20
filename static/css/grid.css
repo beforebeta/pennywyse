@@ -1729,12 +1729,15 @@ hr {
 	position: relative;
 	margin-bottom: 10px;
 }
+.center-mobile-rail .merchant-right {
+	width: 75px;
+}
 .center-mobile-label {
 	text-transform: uppercase;
 	font-size: 10pt !important;
 }
 .left-mobile-rail {
-	width: 190px;
+	width: 205px;
 	float:left;
 	text-transform: uppercase;
 	font-size: 10pt !important;
