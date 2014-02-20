@@ -32,7 +32,7 @@ class Command(BaseCommand):
         for category in Category.objects.filter(ref_id_source__isnull=True):
             file.write('http://pushpenny.com/categories/%s/ changefreq=weekly priority=0.7\n' % category.code)
 
-            page_count = int((category.get_active_coupons().count() / 10.0) + 0.5)
+            page_count = int((category.get_active_coupons().count() / 20.0) + 0.5)
             for i in range(1, page_count):
                 file.write('http://pushpenny.com/categories/{0}/page/{1}/ changefreq=weekly priority=0.3\n'.format(category.code, i))
         file.close()
@@ -43,7 +43,7 @@ class Command(BaseCommand):
         for merchant in Merchant.objects.all():
             file.write('http://pushpenny.com/coupons/{0}/ changefreq=weekly priority=0.7\n'.format(merchant.name_slug))
 
-            page_count = int((merchant.get_active_coupons().count() / 10.0) + 0.5)
+            page_count = int((merchant.get_active_coupons().count() / 20.0) + 0.5)
             for i in range(1, page_count):
                 file.write('http://pushpenny.com/coupons/{0}/page/{1}/ changefreq=weekly priority=0.3\n'.format(merchant.name_slug, i))
         file.close()

@@ -1,7 +1,7 @@
 import json
 from uuid import uuid4
 from django.conf import settings
-from django.core.paginator import Paginator
+from django.core.paginator import EmptyPage, Paginator
 from django.core.urlresolvers import reverse
 from django.db.models.query_utils import Q
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect, Http404
@@ -63,31 +63,43 @@ def index(request, current_page=None):
         ordering = SORTING_MAPPING.get(sorting, 'popularity')
         coupons = coupons.order_by(ordering)
         pages = Paginator(coupons, 20)
-        for c in pages.page(page).object_list:
-            item = {'id': c.id,
-                    'short_desc': c.short_desc,
-                    'description': c.description,
-                    'end': c.end.strftime('%m/%d/%y') if c.end else '',
-                    'coupon_type': c.coupon_type,
-                    'full_success_path': c.full_success_path(),
-                    'image': c.merchant.image,
-                    'twitter_share_url': c.twitter_share_url,
-                    'merchant_link': c.merchant.local_path()}
-            data.append(item)
+        try:
+            for c in pages.page(page).object_list:
+                item = {'id': c.id,
+                        'short_desc': c.short_desc,
+                        'description': c.description,
+                        'end': c.end.strftime('%m/%d/%y') if c.end else '',
+                        'coupon_type': c.coupon_type,
+                        'full_success_path': c.full_success_path(),
+                        'image': c.merchant.image,
+                        'twitter_share_url': c.twitter_share_url,
+                        'merchant_link': c.merchant.local_path()}
+                data.append(item)
+        except EmptyPage:
+            raise Http404
         return HttpResponse(json.dumps({'items': data,
                                         'total_pages': pages.num_pages}), content_type="application/json")
     
-    # permanently redirecting from first pagination page to URL without page
-    if current_page and int(current_page) == 1:
-        return HttpResponsePermanentRedirect(reverse('web.views.main.index'))
+    
     
     coupons = Coupon.objects.filter(**parameters).order_by("-date_added")
     pages = CustomPaginator(coupons, 20, current_page=page)
+    
+    try:
+        items = pages.page(page).object_list
+    except EmptyPage:
+        items = None
+    
+    # permanently redirecting from first pagination page to canonical URL
+    # or if current pagination page does not exist any more
+    if not items or (current_page and int(current_page) == 1):
+        return HttpResponsePermanentRedirect(reverse('web.views.main.index'))
+    
     context = {"pages": pages.separated_pages,
                "num_pages": pages.num_pages,
                "current_page": pages.page(page),
                "separators": pages.separators,
-               "coupons": pages.page(page).object_list}
+               "coupons": items}
 
     return render_response("index.html", request, context)
 
@@ -142,17 +154,20 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
         # preparing pagination
         pages = Paginator(coupons, 20)
         data = []
-        for c in pages.page(page).object_list:
-            item = {'id': c.id,
-                    'merchant_name': merchant.name,
-                    'short_desc': c.short_desc,
-                    'description': c.description,
-                    'end': c.end.strftime('%m/%d/%y') if c.end else '',
-                    'full_success_path': c.full_success_path(),
-                    'coupon_type': c.coupon_type,
-                    'image': c.image,
-                    'twitter_share_url': c.twitter_share_url}
-            data.append(item)
+        try:
+            for c in pages.page(page).object_list:
+                item = {'id': c.id,
+                        'merchant_name': merchant.name,
+                        'short_desc': c.short_desc,
+                        'description': c.description,
+                        'end': c.end.strftime('%m/%d/%y') if c.end else '',
+                        'full_success_path': c.full_success_path(),
+                        'coupon_type': c.coupon_type,
+                        'image': c.image,
+                        'twitter_share_url': c.twitter_share_url}
+                data.append(item)
+        except EmptyPage:
+            raise Http404
         return HttpResponse(json.dumps({'items': data,
                                         'total_pages': pages.num_pages,
                                         'total_items': pages.count}), content_type="application/json")
@@ -165,14 +180,19 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
     all_categories = merchant.get_coupon_categories()
     coupons = Coupon.objects.filter(**filters).order_by(ordering)
     pages = CustomPaginator(coupons, 20, current_page=page)
+    try:
+        items = pages.page(page).object_list
+    except EmptyPage:
+        items = None
     
-    # permanently redirecting from first pagination page to URL without page
-    if current_page and int(current_page) == 1:
+    # permanently redirecting from first pagination page to canonical URL
+    # or if current pagination page does not exist any more
+    if not items or (current_page and int(current_page) == 1):
         return HttpResponsePermanentRedirect(reverse('web.views.main.coupons_for_company', 
                                                      kwargs={'company_name': merchant.name_slug,
                                                              'company_id': merchant.id}))
     
-    context = {"coupons": pages.page(page).object_list,
+    context = {"coupons": items,
                "merchant": merchant,
                "num_pages": pages.num_pages,
                "pages": pages.separated_pages,
@@ -277,26 +297,35 @@ def category(request, category_code, current_page=None, category_ids=-1):
         coupons = Coupon.objects.filter(**filters).order_by(ordering)\
                                  .only('id', 'short_desc', 'description', 'end', 'coupon_type', 'merchant')
         pages = Paginator(coupons, 20)
-        for c in pages.page(page).object_list:
-            item = {'id': c.id,
-                    'merchant_name': c.merchant.name,
-                    'short_desc': c.short_desc,
-                    'description': c.get_description(),
-                    'end': c.end.strftime('%m/%d/%y') if c.end else '',
-                    'coupon_type': c.coupon_type,
-                    'full_success_path': c.full_success_path(),
-                    'image': c.merchant.image,
-                    'twitter_share_url': c.twitter_share_url,
-                    'merchant_link': c.merchant.local_path()}
-            data.append(item)
+        try:
+            for c in pages.page(page).object_list:
+                item = {'id': c.id,
+                        'merchant_name': c.merchant.name,
+                        'short_desc': c.short_desc,
+                        'description': c.get_description(),
+                        'end': c.end.strftime('%m/%d/%y') if c.end else '',
+                        'coupon_type': c.coupon_type,
+                        'full_success_path': c.full_success_path(),
+                        'image': c.merchant.image,
+                        'twitter_share_url': c.twitter_share_url,
+                        'merchant_link': c.merchant.local_path()}
+                data.append(item)
+        except EmptyPage:
+            raise Http404
         return HttpResponse(json.dumps({'items': data,
                                         'total_pages': pages.num_pages,
                                         'total_items': pages.count}), content_type="application/json")
     
     coupons = Coupon.objects.filter(**filters).order_by(ordering)
     pages = CustomPaginator(coupons, 20, current_page=page)
+    try:
+        items = pages.page(page).object_list
+    except EmptyPage:
+        items = None
     
-    if current_page and int(current_page) == 1:
+    # permanently redirecting from first pagination page to canonical URL
+    # or if current pagination page does not exist any more
+    if not items or (current_page and int(current_page) == 1):
         return HttpResponsePermanentRedirect(reverse('web.views.main.category', 
                                                      kwargs={'category_code': category.code}))
 
@@ -304,7 +333,7 @@ def category(request, category_code, current_page=None, category_ids=-1):
                "category": category,
                "num_coupons": pages.count,
                "coupon_categories": coupon_categories,
-               "coupons": pages.page(page).object_list,
+               "coupons": items,
                "pages": pages.separated_pages,
                "current_page": pages.page(page),
                "num_coupons": pages.count,
