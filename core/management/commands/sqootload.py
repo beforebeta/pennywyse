@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from copy import copy
 import math
 import time
 import json
@@ -17,9 +18,8 @@ from django.db.models import Q
 
 from core.models import Coupon, Merchant
 from core.util import print_stack_trace, handle_exceptions
-from core.util.sqootutils import (reorganize_categories_list, establish_categories_dict, get_or_create_merchant,
+from core.util.sqootutils import (reorganize_categories_list, establish_categories_dict,
                                   get_or_create_category, get_or_create_dealtype, get_or_create_country,
-                                  get_or_create_couponnetwork, get_or_create_merchantlocation, get_or_create_coupon,
                                   fetch_page, confirm_or_correct_deal_data, check_if_deal_dead, reassign_representative_deal,
                                   describe_section, show_time, crosscheck_by_field,
                                   read_sqoot_log, write_sqoot_log, reset_db_queries, update_coupon_data)
@@ -231,29 +231,34 @@ def clean_out_sqoot_data(firsttime=False):
     # First
     true_duplicate_deals = Coupon.all_objects.filter(ref_id_source='sqoot', is_deleted=False,
                                                      is_duplicate=True, related_deal__isnull=True)
+    deals_for_update = copy(true_duplicate_deals)
     affected_merchant_list += [c.merchant.pk for c in true_duplicate_deals]
     true_duplicate_deals.update(is_deleted=True)
     # triggering deletion of duplicated coupons from search index
-    for coupon in true_duplicate_deals:
+    for coupon in deals_for_update:
+	print 'Deleted %s' % coupon.id
         delete_object.send(sender=Coupon, instance=coupon)
+    print 'First finished'
         
     # Second
     folded_deals = Coupon.all_objects.filter(ref_id_source='sqoot', is_deleted=False,
                                              is_duplicate=True, related_deal__isnull=False)
     affected_merchant_list += [c.merchant.pk for c in folded_deals]
-    
-    folded_deals.filter(status='confirmed-inactive').update(is_deleted=True)
-    folded_deals.filter(end__lt=datetime.now(pytz.utc)).update(is_deleted=True)
-    # triggering deletion of expired and inactive coupons from search index
-    for coupon in folded_deals.filter(Q(status='confirmed-inactive') 
-                                      | Q(end__lt=datetime.now(pytz.utc))):
-        delete_object.send(sender=Coupon, instance=coupon)
-    
+
+    deals_to_signal = []
+    deals_to_signal += [c.pk for c in folded_deals.filter(Q(status='confirmed-inactive')
+                                                        | Q(end__lt=datetime.now(pytz.utc)))]
     if last_refresh_start_time:
+        deals_to_signal += [c.pk for c in folded_deals.filter(last_modified__lt=last_refresh_start_time)]
         folded_deals.filter(last_modified__lt=last_refresh_start_time).update(status='implied-inactive', is_deleted=True)
-        # triggering deletion of outdated coupons from search index
-        for coupon in folded_deals.filter(last_modified__lt=last_refresh_start_time):
-            delete_object.send(sender=Coupon, instance=coupon)
+    folded_deals.filter(status='confirmed-inactive').update(is_deleted=True)
+    folded_deals.filter(end__lt=datetime.now(pytz.utc)).update(is_deleted=True)    
+
+    deals_to_signal = list(set(deals_to_signal))
+    for coupon in Coupon.all_objects.filter(pk__in=deals_to_signal):
+        print 'Deleted %s' % coupon.id
+        delete_object.send(sender=Coupon, instance=coupon)
+    print 'Second finished'
 
     # Third (Second -> Third; the order matters)
     if last_refresh_start_time:
@@ -265,24 +270,25 @@ def clean_out_sqoot_data(firsttime=False):
         non_dup_deals = Coupon.all_objects.filter(ref_id_source='sqoot', is_deleted=False, is_duplicate=False)\
                                           .filter(Q(status='confirmed-inactive')\
                                                 | Q(end__lt=datetime.now(pytz.utc)))
-    
     affected_merchant_list += [c.merchant.pk for c in non_dup_deals]
     deals_with_folded_deals = [c.pk for c in non_dup_deals if Coupon.all_objects.filter(related_deal=c, is_deleted=False).count() != 0]
     for i in deals_with_folded_deals:
         reassign_representative_deal(Coupon.all_objects.get(pk=i))
     
+    deals_to_signal = []
+    deals_to_signal += [c.pk for c in non_dup_deals.filter(Q(status='confirmed-inactive')
+                                                         | Q(end__lt=datetime.now(pytz.utc)))]
+    if last_refresh_start_time:
+        deals_to_signal += [c.pk for c in non_dup_deals.filter(last_modified__lt=last_refresh_start_time)]
+        non_dup_deals.filter(last_modified__lt=last_refresh_start_time).update(status='implied-inactive', is_deleted=True)
     non_dup_deals.filter(status='confirmed-inactive').update(is_deleted=True)
     non_dup_deals.filter(end__lt=datetime.now(pytz.utc)).update(is_deleted=True)
-    # triggering deletion of expired and inactive coupons from search index
-    for coupon in non_dup_deals.filter(Q(status='confirmed-inactive') 
-                                      | Q(end__lt=datetime.now(pytz.utc))):
+
+    deals_to_signal = list(set(deals_to_signal))
+    for coupon in Coupon.all_objects.filter(pk__in=deals_to_signal):
+        print 'Deleted %s' % coupon.id
         delete_object.send(sender=Coupon, instance=coupon)
-    
-    if last_refresh_start_time:
-        non_dup_deals.filter(last_modified__lt=last_refresh_start_time).update(status='implied-inactive', is_deleted=True)
-        # triggering deletion of outdated coupons from search index
-        for coupon in non_dup_deals.filter(last_modified__lt=last_refresh_start_time):
-            delete_object.send(sender=Coupon, instance=coupon)
+    print 'Third finished'
 
     # Fourth
     affected_merchant_list = list(set(affected_merchant_list))
@@ -331,36 +337,38 @@ def validate_sqoot_data(firsttime=False, pulseonly=False):
 
 def go_validate((coupon_model, last_validate_end_time, firsttime, pulseonly)):
     from core.signals import update_object
-    print show_time(), coupon_model.directlink
+    try:
+        print show_time(), coupon_model.directlink
 
-    sqoot_url = coupon_model.directlink
-    is_bad_link, response = fetch_page(sqoot_url)
-    if is_bad_link:
-        coupon_model.status='confirmed-inactive'
-        coupon_model.save()
-        update_object.send(sender=Coupon, instance=coupon_model)
-        return
-
-    is_deal_dead = check_if_deal_dead(coupon_model, response, sqoot_url)
-    if is_deal_dead:
-        coupon_model.status='confirmed-inactive'
-    else:
-        coupon_model.status='considered-active'
-    if firsttime:
-        confirm_or_correct_deal_data(coupon_model, response)
-    else:
-        if pulseonly:
+        sqoot_url = coupon_model.directlink
+        is_bad_link, response = fetch_page(sqoot_url)
+        if is_bad_link:
+            coupon_model.status='confirmed-inactive'
+            coupon_model.save()
+            handle_exceptions(update_object.send(sender=Coupon, instance=coupon_model))
             return
 
-        if last_validate_end_time and (last_validate_end_time > coupon_model.date_added):
-            return # Data check only the newly added deals.
+        is_deal_dead = check_if_deal_dead(coupon_model, response, sqoot_url)
+        if is_deal_dead:
+            coupon_model.status='confirmed-inactive'
+        else:
+            coupon_model.status='considered-active'
+        if firsttime:
+            confirm_or_correct_deal_data(coupon_model, response)
+        else:
+            if pulseonly:
+                return
 
-        confirm_or_correct_deal_data(coupon_model, response)
+            if last_validate_end_time and (last_validate_end_time > coupon_model.date_added):
+                return # Data check only the newly added deals.
+
+            confirm_or_correct_deal_data(coupon_model, response)
     
-    coupon_model.save()
-    update_object.send(sender=Coupon, instance=coupon_model)
-    reset_db_queries()
-
+        coupon_model.save()
+        handle_exceptions(update_object.send(sender=Coupon, instance=coupon_model))
+        reset_db_queries()
+    except:
+        print_stack_trace()
 
 @handle_exceptions
 def dedup_sqoot_data_hard(firsttime=False):
