@@ -17,6 +17,16 @@ import pytz
 
 log = logging.getLogger('tracking.middleware')
 
+VISITOR_PARAMS_MAPPING = {'acquisition_source': 'utm_source',
+                          'acquisition_medium': 'utm_medium',
+                          'acquisition_term': 'utm_term',
+                          'acquisition_content': 'utm_content',
+                          'acquisition_campaign': 'utm_campaign'}
+
+GA_PARAMS_MAP = {'(direct)': 'direct',
+                '(none)': None,
+                '(notset)': None}
+
 class VisitorTrackingMiddleware(object):
     """
     Keeps track of your active users.  Anytime a visitor accesses a valid URL,
@@ -165,12 +175,22 @@ class VisitorTrackingMiddleware(object):
 
     def _assign_acquisition_source(self, visitor, request):
         try:
-            utm_source      = request.GET.get("utm_source", "unknown")
-            utm_medium      = request.GET.get("utm_medium", "unknown")
-            utm_campaign    = request.GET.get("utm_campaign", "unknown")
-            utm_term        = request.GET.get("utm_term", "unknown")
-            utm_content     = request.GET.get("utm_content", "unknown")
-
+            # Extracting visitor data from GA cookie
+            cookie = request.COOKIES.get('__utmz')
+            if cookie:
+                try:
+                    data = cookie.split('.', 4)[-1]
+                    data = dict(match.groups() for match in re.finditer(
+                        r'(utm(?:csr|cnn|cmd|ctr))=([^\|]*)', data))
+                except (ValueError, IndexError):
+                    log.error('Malformed GA cookie: {0!r}'.format(cookie))
+                else:
+                    visitor.source = normalize_ga_value(data.get('utmcsr'))
+                    visitor.medium = normalize_ga_value(data.get('utmcmd'))
+                    visitor.campaign = normalize_ga_value(data.get('utmccn'))
+                    visitor.keywords = normalize_ga_value(data.get('utm.ctr'))
+            
+            utm_source = request.GET.get("utm_source", "unknown")
             request.session['acquisition_source_name'] = utm_source
 
             if utm_source != "unknown":
@@ -182,16 +202,19 @@ class VisitorTrackingMiddleware(object):
 
                 #update the tracking info with the latest and bump the old one to be stored in the history
                 visitor.bump_past_acquisition_info()
-                visitor.acquisition_source   = utm_source[:255]
-                visitor.acquisition_medium   = utm_medium[:255]
-                visitor.acquisition_term     = utm_term[:255]
-                visitor.acquisition_content  = utm_content[:255]
-                visitor.acquisition_campaign = utm_campaign[:255]
+                for k,v in VISITOR_PARAMS_MAPPING.items():
+                    value = request.GET.get(v, 'unknown')[:255]
+                    setattr(visitor, k, value)
                 try:
                     acq_src = AcquisitionSource.objects.get(tag=visitor.acquisition_source)
                 except AcquisitionSource.DoesNotExist:
                     pass
                 else:
                     request.session['acquisition_source_logo_url'] = acq_src.logo_url
+            
+
         except:
             print_stack_trace()
+
+def normalize_ga_value(value):
+    return GA_PARAMS_MAP.get(value, value)
