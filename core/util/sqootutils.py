@@ -13,7 +13,6 @@ from BeautifulSoup import BeautifulSoup
 from django.conf import settings
 from django.db import reset_queries
 from django.db.models import Max
-from django.conf import settings
 from django.utils.html import strip_tags
 
 from core.models import DealType, Category, Coupon, Merchant, Country, CouponNetwork, MerchantLocation
@@ -291,6 +290,7 @@ def update_coupon_data(deal_data, categories_dict, merchant_data_dict, is_online
 #############################################################################################################
 
 def crosscheck_by_field(deals_to_dedup, field_name):
+    from core.signals import update_object
     duplicate_deals_list = [] # List of duplicate coupon pks.
 
     if field_name == 'coupon_directlink':
@@ -354,6 +354,9 @@ def crosscheck_by_field(deals_to_dedup, field_name):
             if clear_cache_timer >= 100:
                 duplicate_deals_list = list(set(duplicate_deals_list))
                 Coupon.all_objects.filter(pk__in=duplicate_deals_list).update(is_duplicate=True)
+		for coupon in Coupon.all_objects.filter(pk__in=duplicate_deals_list):
+                    handle_exceptions(update_object.send(sender=Coupon, instance=coupon))
+		    print 'Updated %s' % coupon.id
                 duplicate_deals_list = []
                 clear_cache_timer = 1
         except:
@@ -417,7 +420,7 @@ def reassign_representative_deal(coupon_model):
     new_rep_deal.save()
     candidates.exclude(pk=new_rep_deal.pk).update(related_deal=new_rep_deal)
 
-
+@handle_exceptions
 def check_if_deal_dead(coupon_obj, response, sqoot_url):
     '''
     Summary: Check if deal is unavilable and return a boolean.
@@ -517,7 +520,6 @@ def dedup_scoot_data_soft(coupon_model):
     '''
     Check all deals under the same merchant, mark duplicate deals, and fold them under the best deal
     '''
-    from core.signals import update_object
     if coupon_model.online == True:
         return
 
@@ -538,7 +540,6 @@ def dedup_scoot_data_soft(coupon_model):
             coupon_model.is_duplicate = True
             Coupon.all_objects.filter(related_deal=coupon_model).update(related_deal=None)
             coupon_model.save()
-            update_object.send(sender=Coupon, instance=coupon_model)
             break
 
         if c.is_duplicate == True:
@@ -553,12 +554,10 @@ def dedup_scoot_data_soft(coupon_model):
             Coupon.all_objects.filter(related_deal=c).update(related_deal=None)
             c.related_deal = coupon_model
             c.save()
-            update_object.send(sender=Coupon, instance=c)
         else:
             coupon_model.is_duplicate = True
             coupon_model.related_deal = c
             coupon_model.save()
-            update_object.send(sender=Coupon, instance=coupon_model)
     reset_db_queries()
 
 #############################################################################################################

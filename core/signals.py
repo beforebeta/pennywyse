@@ -5,6 +5,7 @@ from django.dispatch import receiver
 from django.dispatch.dispatcher import Signal
 
 from haystack.signals import BaseSignalProcessor
+from haystack.exceptions import NotHandled
 from models import Coupon, Category, Merchant, MerchantAffiliateData
 
 
@@ -33,3 +34,24 @@ class CouponSignalProcessor(BaseSignalProcessor):
         update_object.disconnect(self.handle_save, sender=Coupon)
         delete_object.disconnect(self.handle_delete, sender=Coupon)
         models.signals.post_delete.disconnect(self.handle_delete, sender=Coupon)
+
+    def handle_save(self, sender, instance, **kwargs):
+	using_backends = ['mobile_api']
+        for using in using_backends:
+            try:
+                index = self.connections[using].get_unified_index().get_index(sender)
+                index.update_object(instance, using=using)
+            except NotHandled:
+                # TODO: Maybe log it or let the exception bubble?
+                pass
+
+    def handle_delete(self, sender, instance, **kwargs):
+	using_backends = ['mobile_api']
+
+        for using in using_backends:
+            try:
+                index = self.connections[using].get_unified_index().get_index(sender)
+                index.remove_object(instance, using=using)
+            except NotHandled:
+                # TODO: Maybe log it or let the exception bubble?
+                pass
