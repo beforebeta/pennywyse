@@ -7,9 +7,6 @@ ALLOWED_HOSTS = ["pushpenny.com","www.pushpenny.com", "api.pushpenny.com"]
 BASE_URL_NO_APPENDED_SLASH = "http://pushpenny.com"
 SVCS_HOST = "http://pushpenny.com"
 
-#MEDIA_ROOT = '%sstatic/'% BASE_DIR
-#MEDIA_URL = '/static/'
-
 TEMPLATE_DIRS = (
     abs_path('templates/'),
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -79,4 +76,3 @@ DATABASES = {
         'OPTIONS': { 'init_command': 'SET storage_engine=MYISAM' },
     }
 }
-

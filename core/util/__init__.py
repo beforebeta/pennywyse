@@ -61,6 +61,7 @@ def get_description_tag_from_url(url):
 
     return description if description else title if title else url
 
+
 def adaptive_cache_page(f):
     def wrapper(request, *args, **kwargs):
         if request.is_ajax():
@@ -100,3 +101,14 @@ class CustomPaginator(Paginator):
                 page_prev = self.current_page - 2
                 ppages = ppages[:3] + ppages[page_prev:page_next] + ppages[-3:]
         return ppages
+
+
+def handle_exceptions(f):
+    def wrapper(*args, **kwargs):
+        try:
+            return f(*args, **kwargs)
+        except KeyboardInterrupt as e:
+            raise e
+        except:
+            print_stack_trace()
+    return wrapper
