@@ -97,6 +97,6 @@ class CustomPaginator(Paginator):
                 ppages = ppages[:8] + ppages[-3:]
             else:
                 page_next = self.current_page + 2
-            page_prev = self.current_page - 2
-            ppages = ppages[:3] + ppages[page_prev:page_next] + ppages[-3:]
+                page_prev = self.current_page - 2
+                ppages = ppages[:3] + ppages[page_prev:page_next] + ppages[-3:]
         return ppages
