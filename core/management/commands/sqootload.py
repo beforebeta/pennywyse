@@ -20,7 +20,7 @@ from core.models import Coupon, Merchant
 from core.util import print_stack_trace, handle_exceptions
 from core.util.sqootutils import (reorganize_categories_list, establish_categories_dict,
                                   get_or_create_category, get_or_create_dealtype, get_or_create_country,
-                                  fetch_page, confirm_or_correct_deal_data, check_if_deal_dead, reassign_representative_deal,
+                                  fetch_page, check_if_deal_dead, reassign_representative_deal,
                                   describe_section, show_time, crosscheck_by_field,
                                   read_sqoot_log, write_sqoot_log, reset_db_queries, update_coupon_data)
 
@@ -58,7 +58,7 @@ class Command(BaseCommand):
             * To run:
                 * (e.g. ./manage.py sqootload pulseonly --validate)
     '''
-    
+
     option_list = BaseCommand.option_list + (
         make_option('--cleanout', action='store_true', dest='cleanout', default=False, help='cleanout'),
         make_option('--fullcycle', action='store_true', dest='fullcycle', default=False, help='fullcycle'),
@@ -72,7 +72,7 @@ class Command(BaseCommand):
         firsttime = True if 'firsttime' in args else False
         if options.get('fullcycle', None):
             run_thru_full_cycle(args)
-        
+
         if options.get('directload', None):
             refresh_sqoot_data(firsttime=firsttime)
 
@@ -81,11 +81,11 @@ class Command(BaseCommand):
 
         if options.get('indirectload', None):
             refresh_sqoot_data(indirectload=True, firsttime=firsttime)
-            
+
         if options.get('validate', None):
             pulseonly = True if 'pulseonly' in args else False
             validate_sqoot_data(firsttime=firsttime, pulseonly=pulseonly)
-        
+
         if options.get('deduphard', None):
             dedup_sqoot_data_hard(firsttime=firsttime)
 
@@ -105,7 +105,7 @@ def run_thru_full_cycle(args):
     validate_sqoot_data(firsttime=firsttime)
     dedup_sqoot_data_hard(firsttime=firsttime)
     describe_section("ALL DONE!! :)", show_time())
-    
+
 
 @handle_exceptions
 def refresh_sqoot_data(indirectload=False, firsttime=False):
@@ -197,10 +197,10 @@ def refresh_sqoot_data(indirectload=False, firsttime=False):
             print '-' * 60
 
             reset_db_queries()
-            
+
         Coupon.all_objects.filter(ref_id_source='sqoot', ref_id__in=active_coupon_ids).update(last_modified=datetime.now(pytz.utc))
         refresh_end_time = datetime.now(pytz.utc)
-    
+
     write_sqoot_log('refresh', refresh_start_time, refresh_end_time)
     print '\n'
     print "GOOD NEWS! refresh_sqoot_data IS ALL DONE AND LOGGING IT", show_time()
@@ -222,7 +222,7 @@ def clean_out_sqoot_data(firsttime=False):
     * Fourth, find all inactive merchants (no active deals), and soft-delete them.
     '''
     from core.signals import delete_object
-    
+
     last_refresh_start_time = read_sqoot_log('refresh') if firsttime == False else None
     cleanout_start_time = datetime.now(pytz.utc)
     describe_section("clean_out_sqoot_data IS BEGINNING..", show_time())
@@ -239,7 +239,7 @@ def clean_out_sqoot_data(firsttime=False):
 	print 'Deleted %s' % coupon.id
         delete_object.send(sender=Coupon, instance=coupon)
     print 'First finished'
-        
+
     # Second
     folded_deals = Coupon.all_objects.filter(ref_id_source='sqoot', is_deleted=False,
                                              is_duplicate=True, related_deal__isnull=False)
@@ -252,7 +252,7 @@ def clean_out_sqoot_data(firsttime=False):
         deals_to_signal += [c.pk for c in folded_deals.filter(last_modified__lt=last_refresh_start_time)]
         folded_deals.filter(last_modified__lt=last_refresh_start_time).update(status='implied-inactive', is_deleted=True)
     folded_deals.filter(status='confirmed-inactive').update(is_deleted=True)
-    folded_deals.filter(end__lt=datetime.now(pytz.utc)).update(is_deleted=True)    
+    folded_deals.filter(end__lt=datetime.now(pytz.utc)).update(is_deleted=True)
 
     deals_to_signal = list(set(deals_to_signal))
     for coupon in Coupon.all_objects.filter(pk__in=deals_to_signal):
@@ -274,7 +274,7 @@ def clean_out_sqoot_data(firsttime=False):
     deals_with_folded_deals = [c.pk for c in non_dup_deals if Coupon.all_objects.filter(related_deal=c, is_deleted=False).count() != 0]
     for i in deals_with_folded_deals:
         reassign_representative_deal(Coupon.all_objects.get(pk=i))
-    
+
     deals_to_signal = []
     deals_to_signal += [c.pk for c in non_dup_deals.filter(Q(status='confirmed-inactive')
                                                          | Q(end__lt=datetime.now(pytz.utc)))]
@@ -327,7 +327,7 @@ def validate_sqoot_data(firsttime=False, pulseonly=False):
     validators.map(go_validate, zip(list(all_active_deals_on_display), repeat(last_validate_end_time), repeat(firsttime), repeat(pulseonly)))
 
     print "FINISHED VALIDATING....", show_time()
-    
+
     validate_end_time = datetime.now(pytz.utc)
     write_sqoot_log('validate', validate_start_time, validate_end_time)
     print '\n'
@@ -353,20 +353,20 @@ def go_validate((coupon_model, last_validate_end_time, firsttime, pulseonly)):
             coupon_model.status='confirmed-inactive'
         else:
             coupon_model.status='considered-active'
-        if firsttime:
-            confirm_or_correct_deal_data(coupon_model, response)
-        else:
-            if pulseonly:
-                return
 
-            if last_validate_end_time and (last_validate_end_time > coupon_model.date_added):
-                return # Data check only the newly added deals.
-
-            confirm_or_correct_deal_data(coupon_model, response)
-    
         coupon_model.save()
         handle_exceptions(update_object.send(sender=Coupon, instance=coupon_model))
         reset_db_queries()
+
+        # Note: Commenting out address/category correction logic (not implemented yet)
+        # if firsttime:
+        #     confirm_or_correct_deal_data(coupon_model, response)
+        # else:
+        #     if pulseonly:
+        #         return
+        #     if last_validate_end_time and (last_validate_end_time > coupon_model.date_added):
+        #         return # Data check only the newly added deals.
+        #     confirm_or_correct_deal_data(coupon_model, response)
     except:
         print_stack_trace()
 

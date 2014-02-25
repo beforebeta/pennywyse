@@ -280,7 +280,10 @@ def update_coupon_data(deal_data, categories_dict, merchant_data_dict, is_online
         print 'DEDUP-SOFT: ...newly created merchant for this coupon, so moving on...', show_time() # DEBUG!!!
         pass
     else:
-        print 'DEDUP-SOFT: coupon %s' % coupon_model.embedly_title, show_time()
+        try:
+            print 'DEDUP-SOFT: coupon %s' % coupon_model.embedly_title, show_time()
+        except:
+            pass
         dedup_scoot_data_soft(coupon_model)
 
 #############################################################################################################
@@ -588,6 +591,7 @@ def cleanse_address_text(address_string):
     for c in caught_crufts:
         address_broken_down.remove(c)
     clean_address = (' ').join(address_broken_down)
+    clean_address = re.sub(r"(?<=\d)(st|nd|rd|th)\b", '', clean_address)
     return clean_address
 
 
