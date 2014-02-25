@@ -563,7 +563,7 @@ hr {
 	height: 34px;
 	line-height: 34px;
 	text-transform: uppercase;
-	width: 700px;
+	width: 820px;
 	list-style-type: none;
 }
 .menu-item {
@@ -654,9 +654,18 @@ hr {
 	color: #000 !important;
 	font-size: 10pt !important;
 	text-decoration: none !important;
+	display: block;
+	height: 78px;
+	width: 388px;
+	margin-left: 50px;
 }
 .search-container a:hover {
 	text-decoration: underline !important;
+}
+.top-row {
+	background-image: url('/static/img/Pushpenny_logo-Blackshadow.png');
+	background-repeat: no-repeat;
+	background-position: 50% -75px;
 }
 .footer {
 	height: 75px;
@@ -1020,7 +1029,7 @@ hr {
 	margin-right: 0px !important;
 }
 .prescroll-header {
-	background-image: url('../img/wood_heart_cropped.png');
+	background-image: url('../img/winter-forest.jpg');
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: cover;
@@ -2060,26 +2069,41 @@ hr {
 	cursor: pointer;
 }
 .top-left-container {
-	background: url('/static/img/green_container.png');
-	width: 221px;
+	width: 250px;
 	height: 264px;
 	color: #fff;
 	line-height: 20px;
-	padding: 10px;
-	font-size: 9pt;
 	margin-left: 30px;
 }
-.top-left-container ul {
-	margin-top: 10px;
+.top-left-container .advantages-list {
+	background: rgba(60, 181, 181, 0.7);
+	padding-top: 10px;
+	height: 200px;
+	font-size: 13px;
+}
+.advantages-list ul {
 	padding: 0 !important;
+	margin: 0 !important;
+	margin-top: 10px;
 }
 .top-left-container li {
 	list-style: none;
-	background-image: url('/static/img/pin_icon.png');
+	background-image: url('/static/img/checkmark.png');
 	background-repeat:no-repeat;
-	background-position:0px 5px; 
+	background-position: 0px 0px; 
 	padding-left: 25px;
-	margin-top: 5px;
+	margin-left: 10px;
+	line-height: 20px;
+	margin-bottom:10px;
+}
+.top-left-container .advantages-header {
+	height: 64px;
+	background: #3cb5b5;
+	opacity: 1;
+	font-size: 16px;
+	font-family: 'Montserrat', sans-serif;
+	text-shadow: 1px 1px #9B9898;
+	padding: 12.5px 20px 12.5px 20px;
 }
 .left-not-found, .right-not-found {
 	float: left;
