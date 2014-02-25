@@ -563,7 +563,7 @@ hr {
 	height: 34px;
 	line-height: 34px;
 	text-transform: uppercase;
-	width: 700px;
+	width: 820px;
 	list-style-type: none;
 }
 .menu-item {
@@ -654,9 +654,18 @@ hr {
 	color: #000 !important;
 	font-size: 10pt !important;
 	text-decoration: none !important;
+	display: block;
+	height: 78px;
+	width: 388px;
+	margin-left: 50px;
 }
 .search-container a:hover {
 	text-decoration: underline !important;
+}
+.top-row {
+	background-image: url('/static/img/Pushpenny_logo-Blackshadow.png');
+	background-repeat: no-repeat;
+	background-position: 50% -75px;
 }
 .footer {
 	height: 75px;
@@ -2075,7 +2084,7 @@ hr {
 }
 .top-left-container li {
 	list-style: none;
-	background-image: url('/static/img/pin_icon.png');
+	background-image: url('/static/img/checkmark.png');
 	background-repeat:no-repeat;
 	background-position:0px 5px; 
 	padding-left: 25px;
