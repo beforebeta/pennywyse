@@ -21,9 +21,12 @@ class CategoryAdmin(admin.ModelAdmin):
 class CityPictureAdmin(admin.ModelAdmin):
     pass
 
+class MerchantLocationAdmin(admin.GeoModelAdmin):
+    readonly_fields = ['merchant',]
+
 admin.site.register(Coupon, CouponAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Merchant, MerchantAdmin)
-admin.site.register(MerchantLocation, admin.GeoModelAdmin)
+admin.site.register(MerchantLocation, MerchantLocationAdmin)
 admin.site.register(CouponNetwork, CouponNetworkAdmin)
 admin.site.register(CityPicture, CityPictureAdmin)
