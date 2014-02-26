@@ -12,15 +12,6 @@ var current_url = window.location.href;
 var is_mobile = false;
 var base_url = window.location.pathname;
 
-// Google Analytics Conversion settings
-var google_conversion_id = 977847738;
-var google_conversion_language = "en";
-var google_conversion_format = "3";
-var google_conversion_color = "ffffff";
-var google_conversion_label = "35TZCO67ygcQuouj0gM";
-var google_conversion_value = 0;
-var google_remarketing_only = false;
-
 $(function() {
 	// removing pagination block, to be displayed with disabled JS only 
 	$('.pagination').remove();
@@ -886,6 +877,14 @@ function render_coupon_popup(data, coupon_id) {
 		},
 	});
 	init_clipboard($('#coupon-code-' + coupon_id));
+	// Google Analytics Conversion settings
+	window.google_conversion_id = 977847738;
+	window.google_conversion_language = "en";
+	window.google_conversion_format = "3";
+	window.google_conversion_color = "ffffff";
+	window.google_conversion_label = "35TZCO67ygcQuouj0gM";
+	window.google_conversion_value = 0;
+	window.google_remarketing_only = false;
 	// triggering GA conversion goal
 	$.getScript('https://www.googleadservices.com/pagead/conversion.js');
 	$('.merchant-button').on('click', merchant_button_callback);
