@@ -2151,14 +2151,14 @@ hr {
 	border-bottom: 1px solid #3e9895;
 }
 .top-left-container .advantages-header {
-	height: 64px;
+	height: 61px;
 	font-size: 16px;
 	font-family: 'Montserrat', sans-serif;
 	text-shadow: 1px 1px #9B9898;
-	padding: 13px 6px 9px 7px;
+	padding: 12px 6px 9px 7px;
 }
 .al1 {
-	padding: 9px 10px 9px 29px;
+	padding: 8px 10px 7px 29px;
 	height: 52px;
 }
 .al2 {
@@ -2167,12 +2167,12 @@ hr {
 }
 .al3 {
 	height: 52px;
-	padding: 11px 9px 7px 29px;
+	padding: 8px 9px 7px 29px;
 }
 .al4 {
-	padding: 11px 9px 12px 29px;
+	padding: 8px 9px 7px 29px;
 	border-bottom: none !important;
-	height: 49;
+	height: 49px;
 }
 .left-not-found, .right-not-found {
 	float: left;
