@@ -2121,36 +2121,50 @@ hr {
 	color: #fff;
 	line-height: 20px;
 	margin-left: 30px;
+	padding-left: 17px;
+	padding-right: 17px;
+	background: rgba(60, 181, 181, 0.9);
 }
 .top-left-container .advantages-list {
-	background: rgba(60, 181, 181, 0.7);
-	padding-top: 10px;
 	height: 200px;
 	font-size: 13px;
+}
+.advantages-header {
+	border-bottom: 1px solid #3e9895;
 }
 .advantages-list ul {
 	padding: 0 !important;
 	margin: 0 !important;
-	margin-top: 10px;
+	font-size: 13px !important;
+	font-family: 'Open Sans', sans-serif;
+	line-height: 16px !important;
 }
 .top-left-container li {
 	list-style: none;
 	background-image: url('/static/img/checkmark.png');
 	background-repeat:no-repeat;
-	background-position: 0px 0px; 
-	padding-left: 25px;
-	margin-left: 10px;
-	line-height: 20px;
-	margin-bottom:10px;
+	background-position: 0px 16px; 
+	border-bottom: 1px solid #3e9895;
 }
 .top-left-container .advantages-header {
 	height: 64px;
-	background: #3cb5b5;
-	opacity: 1;
 	font-size: 16px;
 	font-family: 'Montserrat', sans-serif;
 	text-shadow: 1px 1px #9B9898;
-	padding: 12.5px 20px 12.5px 20px;
+	padding: 13px 17px 6px 7px;
+}
+.al1 {
+	padding: 9px 10px 9px 29px;
+}
+.al2 {
+	padding: 8px 30px 7px 29px;
+}
+.al3 {
+	padding: 11px 9px 7px 29px;
+}
+.al4 {
+	padding: 11px 9px 18px 29px;
+	border-bottom: none !important;
 }
 .left-not-found, .right-not-found {
 	float: left;
