@@ -236,13 +236,22 @@ def clean_out_sqoot_data(firsttime=False):
     true_duplicate_deals.update(is_deleted=True)
     # triggering deletion of duplicated coupons from search index
     for coupon in deals_for_update:
-	print 'Deleted %s' % coupon.id
+        print 'Deleted %s' % coupon.id
         delete_object.send(sender=Coupon, instance=coupon)
-    print 'First finished'
+    print '~*~*~*~*~*~*~*~*~* First finished ~*~*~*~*~*~*~*~*~*'
 
     # Second
-    folded_deals = Coupon.all_objects.filter(ref_id_source='sqoot', is_deleted=False,
-                                             is_duplicate=True, related_deal__isnull=False)
+    if last_refresh_start_time:
+        folded_deals = Coupon.all_objects.filter(ref_id_source='sqoot', is_deleted=False,
+                                                 is_duplicate=True, related_deal__isnull=False)\
+                                         .filter(Q(last_modified__lt=last_refresh_start_time)\
+                                               | Q(status='confirmed-inactive')\
+                                               | Q(end__lt=datetime.now(pytz.utc)))
+    else:
+        folded_deals = Coupon.all_objects.filter(ref_id_source='sqoot', is_deleted=False,
+                                                 is_duplicate=True, related_deal__isnull=False)\
+                                         .filter(Q(status='confirmed-inactive')\
+                                               | Q(end__lt=datetime.now(pytz.utc)))
     affected_merchant_list += [c.merchant.pk for c in folded_deals]
 
     deals_to_signal = []
@@ -258,7 +267,7 @@ def clean_out_sqoot_data(firsttime=False):
     for coupon in Coupon.all_objects.filter(pk__in=deals_to_signal):
         print 'Deleted %s' % coupon.id
         delete_object.send(sender=Coupon, instance=coupon)
-    print 'Second finished'
+    print '~*~*~*~*~*~*~*~*~* Second finished ~*~*~*~*~*~*~*~*~*'
 
     # Third (Second -> Third; the order matters)
     if last_refresh_start_time:
@@ -288,7 +297,7 @@ def clean_out_sqoot_data(firsttime=False):
     for coupon in Coupon.all_objects.filter(pk__in=deals_to_signal):
         print 'Deleted %s' % coupon.id
         delete_object.send(sender=Coupon, instance=coupon)
-    print 'Third finished'
+    print '~*~*~*~*~*~*~*~*~* Third finished ~*~*~*~*~*~*~*~*~*'
 
     # Fourth
     affected_merchant_list = list(set(affected_merchant_list))

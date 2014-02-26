@@ -616,7 +616,7 @@ def read_sqoot_log(current_stage):
         f.close()
         return None
     else:
-        last_ten_rows = all_rows[:10]
+        last_ten_rows = all_rows[-10:]
         latest_runs_of_this_step = [r for r in last_ten_rows if r.replace('\r\n', '').split(',')[0] == row_to_lookup]
         if len(latest_runs_of_this_step) == 0:
             f.close()
