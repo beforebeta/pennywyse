@@ -1444,8 +1444,11 @@ hr {
 .coupon-popup-description h2 {
 	text-align: left;
 }
-.coupon-subscribe-form {
-	font-family: 'Montserrat', sans-serif;
+.coupon-subscribe-form, .mobile-subscription {
+	font-family: 'Montserrat', sans-serif !important;
+}
+.mobile-subscribe-form input[type=text] {
+	border: none !important;
 }
 .mobile-share-bottom {
 	text-transform: uppercase;
@@ -1590,6 +1593,9 @@ hr {
 	width: 280px !important;
 	margin-left: 5px !important;
 	padding: 10px 0px 10px 20px !important;
+}
+.mobile-index-rail .top-pagination a, .mobile-merchants-label{
+	font-family: 'Montserrat', sans-serif !important;
 }
 .navbar-toggle {
 	float: left !important;
@@ -1952,6 +1958,8 @@ hr {
 }
 .mobile-category a{
 	display: block;
+}
+.mobile-category a, .mobile-grocery a{
 	font-family: 'Montserrat', sans-serif;
 }
 .mobile-merchants {
@@ -2026,7 +2034,7 @@ hr {
 }
 @media (max-width: 321px) {
 	.items-list-container {
-		width: 320px;
+		width: 320px !important;
 	}
 }
 .index-container {

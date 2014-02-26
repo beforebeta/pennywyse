@@ -49,7 +49,7 @@
 						</div>
 				</div>
 				<div class="main-rail merchants merchants-list">
-					<h4 class="hidden-md hidden-lg">All Merchants</h4>
+					<h4 class="hidden-md hidden-lg mobile-merchants-label">All Merchants</h4>
 					{% for store in stores %}
 	               		<a href="{% url 'web.views.main.coupons_for_company' company_name=store.name_slug %}">{{store.name}}</a>
                        	{% if forloop.counter|divisibleby:"4" %}
