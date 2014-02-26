@@ -383,7 +383,7 @@ def compare_location_between(deal_obj_one, deal_obj_two):
     if not location_two.address:
         return True, deal_obj_two
 
-    if location_one.postal_code == location_two.postal_code:
+    if int(location_one.postal_code) == int(location_two.postal_code):
         address_one = cleanse_address_text(location_one.address)
         address_two = cleanse_address_text(location_two.address)
         match_ratio = fuzz.ratio(address_one.lower(), address_two.lower())
