@@ -877,17 +877,6 @@ function render_coupon_popup(data, coupon_id) {
 		},
 	});
 	init_clipboard($('#coupon-code-' + coupon_id));
-	// Google Analytics Conversion settings
-	window.google_conversion_id = 977847738;
-	window.google_conversion_language = "en";
-	window.google_conversion_format = "3";
-	window.google_conversion_color = "ffffff";
-	window.google_conversion_label = "35TZCO67ygcQuouj0gM";
-	window.google_conversion_value = 0;
-	window.google_remarketing_only = false;
-	// triggering GA conversion goal
-	$.getScript('https://www.googleadservices.com/pagead/conversion.js');
-	$('.merchant-button').on('click', merchant_button_callback);
 }
 
 function close_coupon_popup() {
@@ -985,6 +974,15 @@ function merchant_button_callback() {
 	redirect_to(merchant_url);
 }
 function redirect_to(url) {
+	var view_url = window.location.pathname;
+	var coupon_id = $.url().param('c');
+	if (coupon_id) {
+		view_url += '?coupon_open=' + coupon_id;
+	}
+	else {
+		view_url += '?coupon_open=00000';
+	}
+	_gaq.push(['_trackPageview', view_url]);
 	window.open(url, '_blank');
 }
 
