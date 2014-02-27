@@ -258,7 +258,7 @@ hr {
 	text-decoration: none	
 }
 .sorting-item:hover {
-	background-color: #f5f5f4 !important;
+	background-color: #f5f5f4;
 }
 .current-category {
 	height: 30px;
