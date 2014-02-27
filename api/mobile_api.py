@@ -236,7 +236,7 @@ class MobileResource(ModelResource):
 
         # Always show parent categories as 'popular categories' (minus Special Interest and Product )
         for c in self.parent_categories_list:
-            popular_category = self.return_popular_something_insert(c)
+            popular_category = self.return_popular_something_insert(user_pnt, c)
             popular_category_sub_structure['list'].append(popular_category)
         base_response['search_categories'].append(popular_category_sub_structure)
 
@@ -269,7 +269,7 @@ class MobileResource(ModelResource):
             closest_lat_lng = closest_pnt_to_user.keys()[0]
             cached_popular_nearbys = cached_data['pop_nearbys'][closest_lat_lng]
             for n in cached_popular_nearbys:
-                popular_nearby = self.return_popular_something_insert(n)
+                popular_nearby = self.return_popular_something_insert(user_pnt, n)
                 popular_nearby_sub_structure['list'].append(popular_nearby)
             base_response['search_categories'].append(popular_nearby_sub_structure)
         else:
@@ -278,7 +278,7 @@ class MobileResource(ModelResource):
                 if kw['count'] < 100:
                     break
                 else:
-                    popular_nearby = self.return_popular_something_insert(kw['term'])
+                    popular_nearby = self.return_popular_something_insert(user_pnt, kw['term'])
                     popular_nearby_sub_structure['list'].append(popular_nearby)
 
             categories_to_sample_from = copy.copy(self.sanitized_categories_list)
@@ -302,7 +302,7 @@ class MobileResource(ModelResource):
                     categories_to_sample_from.remove(random_pick)
                     continue
                 else:
-                    popular_nearby = self.return_popular_something_insert(random_pick)
+                    popular_nearby = self.return_popular_something_insert(user_pnt, random_pick)
                     popular_nearby_sub_structure['list'].append(popular_nearby)
                     categories_to_sample_from.remove(random_pick)
             popular_nearbys_so_far = [n['name'] for n in popular_nearby_sub_structure['list']]
@@ -359,9 +359,16 @@ class MobileResource(ModelResource):
             return False
         return True
 
-    def return_popular_something_insert(self, category_or_keyword):
+    def return_popular_something_insert(self, user_pnt, category_or_keyword):
+        picture_url = None
+        cities = SearchQuerySet().using('mobile_api').filter(django_ct='core.citypicture')\
+                                 .distance('geometry', user_pnt).order_by('distance')
+        closest_city = cities[0]
+        if (category_or_keyword == 'Health & Beauty') and (closest_city.text == 'Albuquerque, NM'):
+            picture_url = 'https://s3.amazonaws.com/pushpennyapp/health-beauty.jpg'
+
         popular_something = {
-            "image": None,
+            "image": picture_url,
             "name": category_or_keyword
         }
         return popular_something
