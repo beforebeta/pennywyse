@@ -45,6 +45,9 @@ h4 {
 	.row {
 		width: 1156px !important;
 	}
+	.row .search {
+		width: 485px !important;
+	}
 }
 .mobile-row {
 	margin-bottom: 20px;
@@ -655,7 +658,7 @@ hr {
 	font-weight: 500;
 }
 .search {
-	width: 485px !important;
+	width: 380px !important;
 	height: 39px !important;
 	line-height: 33px !important;
 	color: #858585;
