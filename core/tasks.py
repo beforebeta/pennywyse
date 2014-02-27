@@ -3,6 +3,8 @@ import os.path
 from django.core.mail import send_mail
 from celery import task
 from core.management.commands.fmtcload import load
+from core.management.commands.sqootload import (refresh_sqoot_data, clean_out_sqoot_data,
+                                                validate_sqoot_data, dedup_sqoot_data_hard, )
 from tracking.management.commands.skimlinks import load_commissions
 from tracking.utils import ADWORDS_EXPORT_FILE, FB_ADS_EXPORT_FILE, fetch_ad_costs, aggregate_visitor_data
 
@@ -12,14 +14,14 @@ def load_coupons():
         load()
     except Exception as e:
         load_coupons.retry(exc=e)
-        
+
 @task(max_retries=1)
 def load_skimlinks_commissions():
     try:
         load_commissions()
     except Exception as e:
         load_skimlinks_commissions.retry(exc=e)
-        
+
 
 @task(max_retries=1)
 def load_ad_costs():
@@ -36,10 +38,17 @@ def load_ad_costs():
         fb_ads_changed = False
     if adwords_changed or fb_ads_changed:
         fetch_ad_costs()
-        
+
+@task(max_retries=0)
+def run_sqootload_shortcycle():
+    refresh_sqoot_data()
+    clean_out_sqoot_data()
+    validate_sqoot_data()
+    dedup_sqoot_data_hard()
+
 def process_visitor_data():
     try:
         aggregate_visitor_data()
     except Exception as e:
         process_visitor_data.retry(exc=e)
-        
+
