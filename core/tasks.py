@@ -39,7 +39,7 @@ def load_ad_costs():
     if adwords_changed or fb_ads_changed:
         fetch_ad_costs()
 
-@task
+@task(max_retries=0)
 def run_sqootload_shortcycle():
     refresh_sqoot_data()
     clean_out_sqoot_data()
