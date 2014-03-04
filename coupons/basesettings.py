@@ -279,7 +279,7 @@ CELERYBEAT_SCHEDULE = {
         'schedule': crontab(hour=01),
     },
     'periodic-fetch-ad-costs': {
-        'task': 'core.tasks.fetch_ad_costs',
+        'task': 'core.tasks.load_ad_costs',
         'schedule': crontab()
     }
 }
