@@ -114,7 +114,6 @@ def top_coupons(request, current_page=1):
 
 
 @ensure_csrf_cookie
-@adaptive_cache_page
 def coupons_for_company(request, company_name, company_id=None, current_page=None, category_ids=None):
     """List of coupons for given merchant."""
     

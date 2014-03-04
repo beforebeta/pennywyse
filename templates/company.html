@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% load cache %}
+{% load coupon_extras %}
 			
 			{% block title %}{{ merchant.name }} Coupons | Hand Verified Discounts @ PushPenny{% endblock %}
 			
@@ -38,7 +40,9 @@
 				<div class="left-rail visible-md visible-lg">
 					<div class="top-labels">
 						<h1>{{ merchant.name }}	Coupons</h1>
-						<a href="{{ merchant.link }}" target="_blank">{{ merchant.link }}</a>
+						{% if merchant.skimlinks %}
+							<a href="{% assign_visitor_tag merchant.skimlinks %}" target="_blank">{{ merchant.link }}</a>
+						{% endif %}
 					</div>
 					{% comment %}
 						<button type="button" class="btn-follow"><img src="/static/img/follow_icon.png">Follow</button>
@@ -218,9 +222,11 @@
 						</div>
 					{% endif %}
 					<div class="coupons company-coupons {% if num_pages > 1 %}more-coupons{% endif %}">
-						{% with company_coupons=True %}
-							{% include 'coupons_list.html' %}
-						{% endwith %}
+						{% cache 86400 merchant_coupons merchant.id %}
+							{% with company_coupons=True %}
+								{% include 'coupons_list.html' %}
+							{% endwith %}
+						{% endcache %}
 					</div>
 					<ul class="pagination">
 		          		{% for page in pages %}
