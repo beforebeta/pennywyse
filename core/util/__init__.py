@@ -74,12 +74,13 @@ def adaptive_cache_page(*dargs, **dkargs):
             if cached_response:
                 if dkargs.get('assign_visitor_tag', True):
                     cached_response = replace_visitor_tag(cached_response, request.visitor.id)
+                    print cached_response
                 return HttpResponse(cached_response, content_type='text/html; charset=utf-8')
             r = f(request, *args, **kwargs).content
             if dkargs.get('assign_visitor_tag', True):
                 r = replace_visitor_tag(r, request.visitor.id)
             cache.set(cache_key, r, 60 * 60 * 24)
-            return r
+            return HttpResponse(r, content_type='text/html; charset=utf-8')
         return wrapper
     if len(dargs) == 1 and callable(dargs[0]):
         return _decorator(dargs[0])
@@ -131,3 +132,4 @@ def replace_visitor_tag(response, visitor_id):
         skimlinks_url = skimlinks.group(1)
         updated_skimlinks_url = get_visitor_tag(skimlinks_url, visitor_id)
         return response.replace(skimlinks.group(0), updated_skimlinks_url)
+    return response
