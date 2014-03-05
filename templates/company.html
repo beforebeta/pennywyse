@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load coupon_extras %}
 			
 			{% block title %}{{ merchant.name }} Coupons | Hand Verified Discounts @ PushPenny{% endblock %}
 			
@@ -38,7 +39,9 @@
 				<div class="left-rail visible-md visible-lg">
 					<div class="top-labels">
 						<h1>{{ merchant.name }}	Coupons</h1>
-						<a href="{{ merchant.link }}" target="_blank">{{ merchant.link }}</a>
+						{% if merchant.skimlinks %}
+							<a href="#skimlinks.{{ merchant.skimlinks }}" target="_blank">{{ merchant.link }}</a>
+						{% endif %}
 					</div>
 					{% comment %}
 						<button type="button" class="btn-follow"><img src="/static/img/follow_icon.png">Follow</button>

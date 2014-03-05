@@ -114,7 +114,7 @@ def top_coupons(request, current_page=1):
 
 
 @ensure_csrf_cookie
-@adaptive_cache_page
+@adaptive_cache_page(assign_visitor_tag=True)
 def coupons_for_company(request, company_name, company_id=None, current_page=None, category_ids=None):
     """List of coupons for given merchant."""
     
@@ -187,7 +187,7 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
     
     # permanently redirecting from first pagination page to canonical URL
     # or if current pagination page does not exist any more
-    if not items or (current_page and int(current_page) == 1):
+    if (not items and coupons.count() > 0) or (current_page and int(current_page) == 1):
         return HttpResponsePermanentRedirect(reverse('web.views.main.coupons_for_company', 
                                                      kwargs={'company_name': merchant.name_slug,
                                                              'company_id': merchant.id}))
@@ -277,7 +277,11 @@ def category(request, category_code, current_page=None, category_ids=-1):
     
     sorting = request.GET.get('sorting', None)
     coupon_types = request.GET.getlist('coupon_type', [])
-    category = Category.objects.get(code=category_code, ref_id_source__isnull=True)
+
+    try:
+        category = Category.objects.get(code=category_code, ref_id_source__isnull=True)
+    except Category.DoesNotExist:
+        raise Http404
 
     coupon_category_ids = Coupon.objects.filter(categories=category.id).values('categories').annotate()
     category_ids = [c['categories'] for c in coupon_category_ids]
@@ -325,7 +329,7 @@ def category(request, category_code, current_page=None, category_ids=-1):
     
     # permanently redirecting from first pagination page to canonical URL
     # or if current pagination page does not exist any more
-    if not items or (current_page and int(current_page) == 1):
+    if (not items and coupons.count() > 0) or (current_page and int(current_page) == 1):
         return HttpResponsePermanentRedirect(reverse('web.views.main.category', 
                                                      kwargs={'category_code': category.code}))
 

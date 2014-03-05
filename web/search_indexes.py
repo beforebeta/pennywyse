@@ -25,7 +25,7 @@ class CouponIndex(indexes.SearchIndex, indexes.Indexable):
         return Coupon
 
     def index_queryset(self, using=None):
-        return self.get_model().active_objects
+        return self.get_model().active_objects.exclude(merchant__isnull=True)
 
 
 

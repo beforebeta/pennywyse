@@ -56,14 +56,27 @@ LOGGING = {
 }
 
 HAYSTACK_CONNECTIONS = {
+     'default': {
+         'ENGINE': 'web.utils.CustomSolrEngine',
+         'URL': 'http://192.241.162.96:8080/solr',
+         'EXCLUDED_INDEXES': ['web.search_indexes.LocalCouponIndex', 'web.search_indexes.CityPictureIndex']
+     },
+     'mobile_api': {
+         'ENGINE': 'web.utils.CustomSolrEngine',
+         'URL': 'http://192.241.162.96:8080/solr/mobile_api',
+         'EXCLUDED_INDEXES': ['web.search_indexes.CouponIndex', 'web.search_indexes.MerchantIndex']
+     },
+}
+
+DATABASES = {
     'default': {
-        'ENGINE': 'web.utils.CustomSolrEngine',
-        'URL': 'http://127.0.0.1:8080/solr',
-        'EXCLUDED_INDEXES': ['web.search_indexes.LocalCouponIndex', 'web.search_indexes.CityPictureIndex']
-    },
-    'mobile_api': {
-        'ENGINE': 'web.utils.CustomSolrEngine',
-        'URL': 'http://127.0.0.1:8080/solr/mobile_api',
-        'EXCLUDED_INDEXES': ['web.search_indexes.CouponIndex', 'web.search_indexes.MerchantIndex']
-    },
+        'ENGINE': 'django.contrib.gis.db.backends.mysql',
+        'NAME': 'coupons',
+        'USER': 'pushpenny_web',
+        'PASSWORD': '!REN$-zrMtiW0Tw:A3Q5uT9J',
+        'HOST': '192.241.162.96',
+        'PORT': '',
+        'DEFAULT_STORAGE_ENGINE': 'MyISAM',
+        'OPTIONS': { 'init_command': 'SET storage_engine=MYISAM' },
+    }
 }

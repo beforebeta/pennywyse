@@ -1,5 +1,6 @@
 import base64
 import json
+import re
 import sys
 import time
 import traceback
@@ -13,6 +14,7 @@ from django.http import HttpResponse
 from BeautifulSoup import BeautifulSoup
 import requests
 
+from tracking.utils import get_visitor_tag
 
 def extract_url_from_skimlinks(url):
     parsed_link = urlparse(url)
@@ -62,18 +64,28 @@ def get_description_tag_from_url(url):
     return description if description else title if title else url
 
 
-def adaptive_cache_page(f):
-    def wrapper(request, *args, **kwargs):
-        if request.is_ajax():
-            return f(request, *args, **kwargs)
-        cache_key = '_'.join(['%s:%s' % (k, w) for k,w in kwargs.items()])
-        cached_response = cache.get(cache_key, None)
-        if cached_response:
-            return HttpResponse(cached_response)
-        r = f(request, *args, **kwargs)
-        cache.set(cache_key, r, 60 * 60 * 24)
-        return r
-    return wrapper
+def adaptive_cache_page(*dargs, **dkargs):
+    def _decorator(f):
+        def wrapper(request, *args, **kwargs):
+            if request.is_ajax():
+                return f(request, *args, **kwargs)
+            cache_key = '_'.join(['%s:%s' % (k, w) for k,w in kwargs.items()])
+            cached_response = unicode(cache.get(cache_key, ''))
+            if cached_response:
+                if dkargs.get('assign_visitor_tag', True):
+                    cached_response = replace_visitor_tag(cached_response, request.visitor.id)
+                return HttpResponse(cached_response, content_type='text/html; charset=utf-8')
+            r = f(request, *args, **kwargs).content
+            if dkargs.get('assign_visitor_tag', True):
+                r = replace_visitor_tag(r, request.visitor.id)
+            cache.set(cache_key, r, 60 * 60 * 24)
+            return r
+        return wrapper
+    if len(dargs) == 1 and callable(dargs[0]):
+        return _decorator(dargs[0])
+    else:
+        return _decorator
+
 
 class CustomPaginator(Paginator):
     
@@ -112,3 +124,10 @@ def handle_exceptions(f):
         except:
             print_stack_trace()
     return wrapper
+
+def replace_visitor_tag(response, visitor_id):
+    skimlinks = re.search('"#skimlinks.([.*]*[^"]+)"', response)
+    if skimlinks:
+        skimlinks_url = skimlinks.group(1)
+        updated_skimlinks_url = get_visitor_tag(skimlinks_url, visitor_id)
+        return response.replace(skimlinks.group(0), updated_skimlinks_url)
