@@ -77,8 +77,8 @@ def adaptive_cache_page(*dargs, **dkargs):
                     print cached_response
                 return HttpResponse(cached_response, content_type='text/html; charset=utf-8')
             r = f(request, *args, **kwargs).content
-            #if dkargs.get('assign_visitor_tag', True):
-            #    r = replace_visitor_tag(r, request.visitor.id)
+            if dkargs.get('assign_visitor_tag', True):
+                r = replace_visitor_tag(r, request.visitor.id)
             cache.set(cache_key, r, 60 * 60 * 24)
             return HttpResponse(r, content_type='text/html; charset=utf-8')
         return wrapper
