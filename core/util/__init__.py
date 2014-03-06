@@ -70,11 +70,10 @@ def adaptive_cache_page(*dargs, **dkargs):
             if request.is_ajax():
                 return f(request, *args, **kwargs)
             cache_key = '_'.join(['%s:%s' % (k, w) for k,w in kwargs.items()])
-            cached_response = unicode(cache.get(cache_key, ''))
+            cached_response = cache.get(cache_key, '')
             if cached_response:
                 if dkargs.get('assign_visitor_tag', True):
                     cached_response = replace_visitor_tag(cached_response, request.visitor.id)
-                    print cached_response
                 return HttpResponse(cached_response, content_type='text/html; charset=utf-8')
             r = f(request, *args, **kwargs).content
             if dkargs.get('assign_visitor_tag', True):
