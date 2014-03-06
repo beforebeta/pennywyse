@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 import logging
 import re
 import traceback
+import simplejson as json
 
 from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
@@ -14,6 +15,8 @@ from core.util import print_stack_trace
 from tracking import utils
 from tracking.models import Visitor, UntrackedUserAgent, BannedIP, AcquisitionSource
 import pytz
+from redis import Redis
+import time
 
 log = logging.getLogger('tracking.middleware')
 
@@ -26,6 +29,8 @@ VISITOR_PARAMS_MAPPING = {'acquisition_source': 'utm_source',
 GA_PARAMS_MAP = {'(direct)': 'direct',
                 '(none)': None,
                 '(notset)': None}
+
+redis = Redis()
 
 class VisitorTrackingMiddleware(object):
     """
@@ -112,68 +117,65 @@ class VisitorTrackingMiddleware(object):
             'session_key': session_key,
             'ip_address': ip_address
         }
+        
+        visitor_id = request.session.get('visitor_id', None)
+        if not visitor_id:
+            # for some reason, Visitor.objects.get_or_create was not working here
+            try:
+                visitor = Visitor.objects.get(**attrs)
+            except Visitor.DoesNotExist:
+                # see if there's a visitor with the same IP and user agent
+                # within the last 5 minutes
+                cutoff = now - timedelta(minutes=5)
+                visitors = Visitor.objects.filter(
+                    ip_address=ip_address,
+                    user_agent=user_agent,
+                    last_update__gte=cutoff
+                )
+    
+                if len(visitors):
+                    visitor = visitors[0]
+                    visitor.session_key = session_key
+                    log.debug('Using existing visitor for IP %s / UA %s: %s' % (ip_address, user_agent, visitor.id))
+                else:
+                    # it's probably safe to assume that the visitor is brand new
+                    visitor = Visitor(**attrs)
+                    log.debug('Created a new visitor: %s' % attrs)
+            except:
+                return
+            
+            try:
+                visitor.save()
+            except DatabaseError:
+                print_stack_trace()
+                log.error('There was a problem saving visitor information:\n%s\n\n%s' % (traceback.format_exc(), locals()))
+            
+            request.session['visitor_id'] = visitor_id = visitor.id
 
-        # for some reason, Visitor.objects.get_or_create was not working here
-        try:
-            visitor = Visitor.objects.get(**attrs)
-        except Visitor.DoesNotExist:
-            # see if there's a visitor with the same IP and user agent
-            # within the last 5 minutes
-            cutoff = now - timedelta(minutes=5)
-            visitors = Visitor.objects.filter(
-                ip_address=ip_address,
-                user_agent=user_agent,
-                last_update__gte=cutoff
-            )
-
-            if len(visitors):
-                visitor = visitors[0]
-                visitor.session_key = session_key
-                log.debug('Using existing visitor for IP %s / UA %s: %s' % (ip_address, user_agent, visitor.id))
-            else:
-                # it's probably safe to assume that the visitor is brand new
-                visitor = Visitor(**attrs)
-                log.debug('Created a new visitor: %s' % attrs)
-        except:
-            return
-
-        # determine whether or not the user is logged in
-        user = request.user
-        if isinstance(user, AnonymousUser):
-            user = None
+        redis_data = redis.get('visitor_data_%s' % visitor_id) or '{}'
+        visitor_data = json.loads(redis_data)
 
         # update the tracking information
-        #visitor.user = user
-        visitor.user_agent = user_agent
+        visitor_data['user_agent'] = user_agent
 
         # if the visitor record is new, or the visitor hasn't been here for
         # at least an hour, update their referrer URL
         one_hour_ago = pytz.UTC.localize(now - timedelta(hours=1))
-        #TODO: ensure that we are on the same time zone - I just put UTC for now
+        # TODO: ensure that we are on the same time zone - I just put UTC for now
         # to get it working
-        if not visitor.last_update or visitor.last_update <= one_hour_ago:
-            visitor.referrer = utils.u_clean(request.META.get('HTTP_REFERER', 'unknown')[:255])
+        last_update = visitor_data.get('last_update', None)
+        if not last_update or last_update <= time.mktime(one_hour_ago.timetuple()):
+            visitor_data['referrer'] = utils.u_clean(request.META.get('HTTP_REFERER', 'unknown')[:255])
 
             # reset the number of pages they've been to
-            visitor.page_views = 0
-            visitor.session_start = now
+            visitor_data['page_views'] = 0
+            visitor_data['session_start'] = time.mktime(now.timetuple())
 
-        visitor.url = request.path
-        visitor.page_views += 1
-        visitor.last_update = now
+        visitor_data['url'] = request.path
+        page_views = visitor_data.get('page_views', 0) + 1
+        visitor_data['page_views'] = page_views
+        visitor_data['last_update'] = time.mktime(now.timetuple())
 
-        self._assign_acquisition_source(visitor, request)
-
-        try:
-            visitor.save()
-        except DatabaseError:
-            print_stack_trace()
-            log.error('There was a problem saving visitor information:\n%s\n\n%s' % (traceback.format_exc(), locals()))
-
-        # make the visitor available to others
-        request.visitor = visitor
-
-    def _assign_acquisition_source(self, visitor, request):
         try:
             # Extracting visitor data from GA cookie
             cookie = request.COOKIES.get('__utmz')
@@ -185,10 +187,10 @@ class VisitorTrackingMiddleware(object):
                 except (ValueError, IndexError):
                     log.error('Malformed GA cookie: {0!r}'.format(cookie))
                 else:
-                    visitor.source = normalize_ga_value(data.get('utmcsr'))
-                    visitor.medium = normalize_ga_value(data.get('utmcmd'))
-                    visitor.campaign = normalize_ga_value(data.get('utmccn'))
-                    visitor.keywords = normalize_ga_value(data.get('utm.ctr'))
+                    visitor_data['source'] = normalize_ga_value(data.get('utmcsr'))
+                    visitor_data['medium'] = normalize_ga_value(data.get('utmcmd'))
+                    visitor_data['campaign'] = normalize_ga_value(data.get('utmccn'))
+                    visitor_data['keywords'] = normalize_ga_value(data.get('utm.ctr'))
             
             utm_source = request.GET.get("utm_source", "unknown")
             request.session['acquisition_source_name'] = utm_source
@@ -201,20 +203,23 @@ class VisitorTrackingMiddleware(object):
                 # utm_content: Used to differentiate similar content, or links within the same ad. For example, if you have two call-to-action links within the same email message, you can use utm_content and set different values for each so you can tell which version is more effective.
 
                 #update the tracking info with the latest and bump the old one to be stored in the history
-                visitor.bump_past_acquisition_info()
+                
+                #visitor.bump_past_acquisition_info()
+                past_acquisition_info = visitor_data.get('past_acquisition_info', [])
+                if visitor_data.get('source', None):
+                    old_visitor_data = {'date_valid_until': time.time()}
+                    for k in VISITOR_PARAMS_MAPPING.keys():
+                        old_visitor_data[k] = visitor_data.get(k, None)
+                    past_acquisition_info.append(old_visitor_data)
+                    visitor_data['past_acqusition_info'] = past_acquisition_info
                 for k,v in VISITOR_PARAMS_MAPPING.items():
                     value = request.GET.get(v, 'unknown')[:255]
-                    setattr(visitor, k, value)
-                try:
-                    acq_src = AcquisitionSource.objects.get(tag=visitor.acquisition_source)
-                except AcquisitionSource.DoesNotExist:
-                    pass
-                else:
-                    request.session['acquisition_source_logo_url'] = acq_src.logo_url
-            
+                    visitor_data.get(k, value)
 
         except:
             print_stack_trace()
+        redis.set('visitor_data_%s' % visitor_id, json.dumps(visitor_data))
+        
 
 def normalize_ga_value(value):
     return GA_PARAMS_MAP.get(value, value)

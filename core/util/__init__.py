@@ -73,13 +73,13 @@ def adaptive_cache_page(*dargs, **dkargs):
             cached_response = cache.get(cache_key, '')
             if cached_response:
                 if dkargs.get('assign_visitor_tag', True):
-                    cached_response = replace_visitor_tag(cached_response, request.visitor.id)
+                    cached_response = replace_visitor_tag(cached_response, request.session['visitor_id'])
                 return HttpResponse(cached_response, content_type='text/html; charset=utf-8')
             r = f(request, *args, **kwargs)
             if r.status_code == 200:
                 data = r.content
                 if dkargs.get('assign_visitor_tag', True):
-                    data = replace_visitor_tag(data, request.visitor.id)
+                    data = replace_visitor_tag(data, request.session['visitor_id'])
                 cache.set(cache_key, data, 60 * 60 * 24)
                 return HttpResponse(data, content_type='text/html; charset=utf-8')
             return r
