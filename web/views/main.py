@@ -46,7 +46,7 @@ def set_meta_tags(subject, context):
 def index(request, current_page=None):
     """Landing page controller."""
     
-    parameters = {'is_featured': True, 'is_active': True}
+    parameters = {'is_active': True}
     page = int(current_page or 1)
     sorting = request.GET.get('sorting', None)
 
@@ -61,7 +61,11 @@ def index(request, current_page=None):
         coupons = Coupon.objects.filter(**parameters)\
                                 .only('id', 'short_desc', 'description', 'end', 'coupon_type', 'merchant')
         ordering = SORTING_MAPPING.get(sorting, 'popularity')
+        if ordering != 'popularity':
+            parameters['is_featured'] = True 
         coupons = coupons.order_by(ordering)
+        if ordering == 'popularity':
+            coupons = coupons[:200]
         pages = Paginator(coupons, 20)
         try:
             for c in pages.page(page).object_list:
