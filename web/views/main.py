@@ -42,7 +42,7 @@ def set_meta_tags(subject, context):
 
 
 @ensure_csrf_cookie
-@adaptive_cache_page
+#@adaptive_cache_page
 def index(request, current_page=None):
     """Landing page controller."""
     
@@ -237,13 +237,13 @@ def open_coupon(request, coupon_id):
         raise Http404
 
     item = {'merchant_name': coupon.merchant.name,
-            'merchant_link': get_visitor_tag(coupon.merchant.skimlinks, request.visitor.id),
+            'merchant_link': get_visitor_tag(coupon.merchant.skimlinks, request.session['visitor_id']),
             'code': coupon.code,
             'short_desc': coupon.short_desc,
             'description': coupon.get_description(),
             'image': coupon.merchant.image,
             'local_path': coupon.local_path(),
-            'url': get_visitor_tag(coupon.skimlinks, request.visitor.id),
+            'url': get_visitor_tag(coupon.skimlinks, request.session['visitor_id']),
             'twitter_share_url': coupon.twitter_share_url,
             'full_success_path': coupon.full_success_path()}
     return HttpResponse(json.dumps(item), content_type="application/json")
