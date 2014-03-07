@@ -8,7 +8,7 @@ from common.url.tldextract import shorten_to_domain
 from core.models import Coupon, Merchant
 from core.util import print_stack_trace
 from tracking import utils
-from tracking.models import ClickTrack
+from tracking.models import ClickTrack, Visitor
 
 
 def success():
@@ -71,9 +71,10 @@ def log_click_track(request, coupon=None):
 
         merchant_domain = shorten_to_domain(target_url)
 
+        visitor = Visitor.objects.get(pk=request.session['visitor_id'])
         click_track                 = ClickTrack()
-        click_track.visitor         = request.visitor
-        click_track.user_agent      = request.visitor.user_agent[:255]
+        click_track.visitor         = visitor
+        click_track.user_agent      = visitor.user_agent[:255]
         click_track.referer         = referer[:255]
         click_track.target_url      = target_url[:255]
         click_track.source_url_type = source_url_type[:255]
@@ -83,12 +84,12 @@ def log_click_track(request, coupon=None):
         click_track.merchant_domain = merchant_domain[:255]
 
         try:
-            click_track.acquisition_source      = request.visitor.acquisition_source
-            click_track.acquisition_medium      = request.visitor.acquisition_medium
-            click_track.acquisition_term        = request.visitor.acquisition_term
-            click_track.acquisition_content     = request.visitor.acquisition_content
-            click_track.acquisition_campaign    = request.visitor.acquisition_campaign
-            click_track.acquisition_gclid       = request.visitor.acquisition_gclid
+            click_track.acquisition_source      = visitor.acquisition_source
+            click_track.acquisition_medium      = visitor.acquisition_medium
+            click_track.acquisition_term        = visitor.acquisition_term
+            click_track.acquisition_content     = visitor.acquisition_content
+            click_track.acquisition_campaign    = visitor.acquisition_campaign
+            click_track.acquisition_gclid       = visitor.acquisition_gclid
         except:
             print_stack_trace()
 
@@ -155,10 +156,10 @@ def click_track(request, clicked_link_path=None):
             target_url = _remove_skimlinks(target_url)
 
         merchant_domain = shorten_to_domain(target_url)
-
+        visitor = Visitor.objects.get(pk=request.session['visitor_id'])
         click_track                 = ClickTrack()
-        click_track.visitor         = request.visitor
-        click_track.user_agent      = request.visitor.user_agent[:255]
+        click_track.visitor         = visitor
+        click_track.user_agent      = visitor.user_agent[:255]
         click_track.referer         = referer[:255]
         click_track.target_url      = target_url[:255]
         click_track.source_url_type = source_url_type[:255]
@@ -168,12 +169,12 @@ def click_track(request, clicked_link_path=None):
         click_track.merchant_domain = merchant_domain[:255]
 
         try:
-            click_track.acquisition_source      = request.visitor.acquisition_source
-            click_track.acquisition_medium      = request.visitor.acquisition_medium
-            click_track.acquisition_term        = request.visitor.acquisition_term
-            click_track.acquisition_content     = request.visitor.acquisition_content
-            click_track.acquisition_campaign    = request.visitor.acquisition_campaign
-            click_track.acquisition_gclid       = request.visitor.acquisition_gclid
+            click_track.acquisition_source      = visitor.acquisition_source
+            click_track.acquisition_medium      = visitor.acquisition_medium
+            click_track.acquisition_term        = visitor.acquisition_term
+            click_track.acquisition_content     = visitor.acquisition_content
+            click_track.acquisition_campaign    = visitor.acquisition_campaign
+            click_track.acquisition_gclid       = visitor.acquisition_gclid
         except:
             print_stack_trace()
 
