@@ -2,13 +2,14 @@ import csv
 import datetime
 import os
 import re
+import simplejson as json
 import shutil
 import unicodedata
 import urllib
 from urlparse import urlparse, parse_qs
 
 from django.conf import settings
-
+from redis import Redis
 
 # this is not intended to be an all-knowing IP address regex
 IP_RE = re.compile('\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}')
@@ -129,6 +130,37 @@ def fetch_ad_costs():
         
 def aggregate_visitor_data():
     from tracking.models import Visitor
+    redis = Redis()
+    for key in redis.keys('visitor_data_*'):
+        redis_data = redis.get(key)
+        if redis_data:
+            visitor_data = json.loads(redis_data)
+            visitor_id = visitor_data.get('visitor_id', None)
+            if visitor_id:
+                visitor = Visitor.objects.get(pk=visitor_id)
+                visitor.bump_past_acquisition_info()
+                for k in ['url', 'referrer', 'user_agent', 
+                          'acquisition_source', 'acquisition_medium', 
+                          'acquisition_term', 'acquisition_content',
+                          'acquisition_campaign']:
+                        v = visitor_data.get(k, None)
+                        if v:
+                            setattr(visitor, k, v)
+                past_acquisition_info = visitor_data.get('past_acquisition_info', [])
+                if past_acquisition_info:
+                    visitor.past_acquisition_info += past_acquisition_info
+                if not visitor.session_start:
+                    session_start = int(visitor_data['session_start'])
+                    visitor.session_start = datetime.datetime.utcfromtimestamp(session_start)
+                visitor.page_views += visitor_data.get('page_views', 0)
+                last_update = int(visitor_data['last_update'])
+                visitor.last_update = datetime.datetime.utcfromtimestamp(last_update)
+                visitor.save()
+                redis.delete(key)
+            print 'Processed visitor %s' % visitor_id
+        else:
+            print 'Error with key %s' % key
+
     for visitor in Visitor.objects.filter(acquisition_source__in=['unknown','direct']):
         parsed_url = urlparse(visitor.referrer)
         params = parse_qs(parsed_url.query)
