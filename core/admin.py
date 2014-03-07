@@ -1,20 +1,20 @@
-# from django.contrib import admin
 from django.contrib.gis import admin
 from core.models import Coupon, Category, Merchant, MerchantLocation, CouponNetwork, CityPicture
+from core.util import CustomModelAdmin
 
-class CouponAdmin(admin.ModelAdmin):
+class CouponAdmin(CustomModelAdmin):
     search_fields = ['description',"short_desc", "merchant__name"]
     readonly_fields = ['ref_id', 'ref_id_source', 'merchant', 'merchant_location']
     exclude = ['related_deal']
 
-class MerchantAdmin(admin.ModelAdmin):
+class MerchantAdmin(CustomModelAdmin):
     search_fields = ['name', 'description']
     readonly_fields = ['ref_id', 'ref_id_source']
 
 class CouponNetworkAdmin(admin.ModelAdmin):
     search_fields = ['name', 'code']
 
-class CategoryAdmin(admin.ModelAdmin):
+class CategoryAdmin(CustomModelAdmin):
     readonly_fields = ['ref_id', 'ref_id_source']
     search_fields = ('name', )
 

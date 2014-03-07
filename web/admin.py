@@ -1,6 +1,7 @@
 from django.contrib import admin
 from core.models import Coupon, Merchant
 from web.models import ShortenedURLComponent, CategorySection, TopCouponSection
+from core.util import CustomModelAdmin
 
 class CouponInline(admin.TabularInline):
     model = Coupon
@@ -33,9 +34,12 @@ class StoreInline(admin.TabularInline):
         return False
 
 
-class TopCouponSectionAdmin(admin.ModelAdmin):
+class TopCouponSectionAdmin(CustomModelAdmin):
     inlines = [FeaturedCouponInline, PopularCouponInline, StoreInline]
 
+class CategorySectionAdmin(CustomModelAdmin):
+    pass
+
 admin.site.register(ShortenedURLComponent)
-admin.site.register(CategorySection)
+admin.site.register(CategorySection, CategorySectionAdmin)
 admin.site.register(TopCouponSection, TopCouponSectionAdmin)

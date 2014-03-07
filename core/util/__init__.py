@@ -10,6 +10,7 @@ from urlparse import urlparse, parse_qs
 from django.conf import settings
 from django.core.cache import cache
 from django.core.paginator import Paginator
+from django.contrib.gis import admin
 from django.http import HttpResponse
 from BeautifulSoup import BeautifulSoup
 import requests
@@ -135,3 +136,14 @@ def replace_visitor_tag(response, visitor_id):
         updated_skimlinks_url = get_visitor_tag(skimlinks_url, visitor_id)
         return response.replace(skimlinks.group(0), updated_skimlinks_url)
     return response
+
+
+class CustomModelAdmin(admin.ModelAdmin):
+
+    def save_model(self, *args, **kwargs):
+        super(CustomModelAdmin, self).save_model(*args, **kwargs)
+        cache.clear()
+    
+    def delete_model(self, *args, **kwargs):
+        super(CustomModelAdmin, self).delete_model(*args, **kwargs)
+        cache.clear()
