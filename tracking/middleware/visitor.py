@@ -5,15 +5,13 @@ import traceback
 import simplejson as json
 
 from django.conf import settings
-from django.contrib.auth.models import AnonymousUser
 from django.core.cache import cache
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.db.utils import DatabaseError
-from django.http import Http404, HttpResponseRedirect
 from core.util import print_stack_trace
 
 from tracking import utils
-from tracking.models import Visitor, UntrackedUserAgent, BannedIP, AcquisitionSource
+from tracking.models import Visitor, UntrackedUserAgent
 import pytz
 from redis import Redis
 import time
@@ -154,6 +152,7 @@ class VisitorTrackingMiddleware(object):
 
         redis_data = redis.get('visitor_data_%s' % visitor_id) or '{}'
         visitor_data = json.loads(redis_data)
+        visitor_data['visitor_id'] = visitor_id
 
         # update the tracking information
         visitor_data['user_agent'] = user_agent
@@ -206,15 +205,15 @@ class VisitorTrackingMiddleware(object):
                 
                 #visitor.bump_past_acquisition_info()
                 past_acquisition_info = visitor_data.get('past_acquisition_info', [])
-                if visitor_data.get('source', None):
+                if visitor_data.get('acquisition_source', None):
                     old_visitor_data = {'date_valid_until': time.time()}
                     for k in VISITOR_PARAMS_MAPPING.keys():
                         old_visitor_data[k] = visitor_data.get(k, None)
                     past_acquisition_info.append(old_visitor_data)
-                    visitor_data['past_acqusition_info'] = past_acquisition_info
+                    visitor_data['past_acquisition_info'] = past_acquisition_info
                 for k,v in VISITOR_PARAMS_MAPPING.items():
                     value = request.GET.get(v, 'unknown')[:255]
-                    visitor_data.get(k, value)
+                    visitor_data[k] = value
 
         except:
             print_stack_trace()
