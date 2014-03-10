@@ -1,4 +1,5 @@
 {% load cache %}
+{% load compress %}
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -8,26 +9,30 @@
 			<meta name="viewport" content="width=device-width, initial-scale=1.0">
 			<link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
             <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-			<link href="/static/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
-			<link href="/static/css/tipsy.css" rel="stylesheet">
-			<link href="/static/css/grid.css?r=27022014" rel="stylesheet">
-			<link href="/static/css/nprogress.css" rel="stylesheet">
+			{% compress css %}
+				<link href="/static/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+				<link href="/static/css/tipsy.css" rel="stylesheet">
+				<link href="/static/css/grid.css?r=27022014" rel="stylesheet">
+				<link href="/static/css/nprogress.css" rel="stylesheet">
+			{% endcompress %}
 			<link rel="shortcut icon" type="image/png" href="/static/img/pushpenny-favicon.png">
     		<link rel="apple-touch-icon" href="/static/img/pushpenny-favicon.png" />
     		<script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
     		<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 			<script type="text/javascript" src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 			<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-			<script type="text/javascript" src="/static/js/waypoints.min.js"></script>
-			<script type="text/javascript" src="/static/js/store.js?r=27022014"></script>
-			<script type="text/javascript" src="/static/js/mustache.js"></script>
-			<script type="text/javascript" src="/static/js/jquery.jcarousel-core.min.js"></script>
-			<script type="text/javascript" src="/static/js/jquery.form.js"></script>
-			<script type="text/javascript" src="/static/js/jquery.clipboard.js"></script>
-			<script type="text/javascript" src="/static/js/jquery.tipsy.js"></script>
-			<script type="text/javascript" src="/static/js/jquery.purl.js"></script>
-			<script type="text/javascript" src="/static/js/jquery.dotdotdot.min.js"></script>
-			<script type="text/javascript" src="/static/js/nprogress.js"></script>
+			{% compress js %}
+				<script type="text/javascript" src="/static/js/waypoints.min.js"></script>
+				<script type="text/javascript" src="/static/js/store.js?r=27022014"></script>
+				<script type="text/javascript" src="/static/js/mustache.js"></script>
+				<script type="text/javascript" src="/static/js/jquery.jcarousel-core.min.js"></script>
+				<script type="text/javascript" src="/static/js/jquery.form.js"></script>
+				<script type="text/javascript" src="/static/js/jquery.clipboard.js"></script>
+				<script type="text/javascript" src="/static/js/jquery.tipsy.js"></script>
+				<script type="text/javascript" src="/static/js/jquery.purl.js"></script>
+				<script type="text/javascript" src="/static/js/jquery.dotdotdot.min.js"></script>
+				<script type="text/javascript" src="/static/js/nprogress.js"></script>
+			{% endcompress %}
 		{% endblock %}
 	</head>
 	<body>
@@ -230,6 +235,7 @@
 										<a href="{% url 'web.views.main.categories' %}">See all categories &#187;</a>
 									</div>
 								</div>
+<<<<<<< Updated upstream
 							</li></ul>
 						</li>
 						<li class="menu-item">
@@ -253,6 +259,19 @@
 									<div class="more-categories clearfix">
 										<a href="{% url 'web.views.main.category' category_code=top_groceries.code %}">See all groceries &#187;</a>
 									</div>
+=======
+							</div>
+						</li></ul>
+					</li>
+					<li class="menu-item">
+						<a href="#">Local</a>
+						<ul class="row main-row dropdown-row local-row"><li>
+							<div class="main-dropdown-row">
+								<div class="local-search-container">
+									<form>
+									<input type="text" placeholder="Search by city, state or zip code" class="search">
+									</form>
+>>>>>>> Stashed changes
 								</div>
 							</li></ul>
 						</li>
@@ -270,6 +289,7 @@
 										<a href="#">See all cities &#187;</a>
 									</div>
 								</div>
+<<<<<<< Updated upstream
 							</li></ul>
 						</li>
 						{% endcomment %}
@@ -281,6 +301,18 @@
 						</li>
 					</ul>
 				</div>
+=======
+							</div>
+						</li></ul>
+					</li>
+					<li class="menu-item">
+						<a href="/magazine" class="menu-link">Magazine</a>
+					</li>
+					<li class="menu-item menu-item-latest">
+						<a href="javascript:void(null);" id="subscribe-link" class="menu-link">Subscribe</a>
+					</li>
+				</ul>
+>>>>>>> Stashed changes
 			</div>
 		{% endcache %}
 		<div class="header-container header prescroll-header bottom-shadow">
