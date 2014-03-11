@@ -48,7 +48,7 @@
 					{% endcomment %}
 					<div class="merchant clearfix">
 						<div class="merchant-left">
-							<img src="{{ merchant.image }}" class="merchant-logo">
+							<img src="{{ merchant.s3_image }}" class="merchant-logo">
 						</div>
 						<div class="merchant-right">
 							<span>{{ num_coupons }}</span>
@@ -116,7 +116,7 @@
 							{% for store in merchant.similar.all %}
 								<div class="similar-store">
 									<a href="{% url 'web.views.main.coupons_for_company' company_name=store.name_slug %}">
-										<img src="{{ store.image }}" class="merchant-logo">
+										<img src="{{ store.s3_image }}" class="merchant-logo">
 									</a>
 								</div>
 							{% endfor %}
@@ -128,7 +128,7 @@
 					<div class="left-mobile-rail">
 						<div class="merchant">
 							<div class="merchant-left">
-								<img src="{{ merchant.image }}" class="merchant-logo">
+								<img src="{{ merchant.s3_image }}" class="merchant-logo">
 							</div>
 							<div class="merchant-right">
 								<span>{{ num_coupons }}</span>

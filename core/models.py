@@ -142,6 +142,7 @@ class Merchant(models.Model):
     name            = models.CharField(max_length=255, db_index=True, blank=True, null=True)
     name_slug       = models.CharField(max_length=255, db_index=True, blank=True, null=True)
     image           = models.TextField(blank=True, null=True)
+    s3_image        = models.TextField(blank=True, null=True)
 
     description     = models.TextField(blank=True, null=True)   #loaded from the target link
     coupon_count    = models.IntegerField(default=0)
@@ -446,6 +447,7 @@ class Coupon(models.Model):
     discount        = models.FloatField(default=0)
     percent         = models.IntegerField(default=0)
     image           = models.TextField(blank=True, null=True)
+    s3_image        = models.TextField(blank=True, null=True)
     short_desc      = models.CharField(max_length=50, default="COUPON")
     desc_slug       = models.CharField(max_length=175, default="COUPON")
     is_featured     = models.BooleanField('Featured', blank=True, default=False)

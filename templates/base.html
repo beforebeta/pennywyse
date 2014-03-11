@@ -165,7 +165,7 @@
 														<span class="ends">Ends {{ top_coupon.popular.all.0.end|date:"m/d/y" }}</span>
 														<div class="description">
 															<a href="{{ top_coupon.popular.all.0.merchant.local_path }}">
-																<img src="{{ top_coupon.popular.all.0.merchant.image }}">
+																<img src="{{ top_coupon.popular.all.0.merchant.s3_image }}">
 															</a>
 														</div>
 													</div>
@@ -180,7 +180,7 @@
 													<div class="top-featured-coupon {% if foorloop.first %}first-coupon{% elif forloop.last %}last-coupon{% endif %}">
 														<div class="featured-image">
 															<a href="{{ featured_coupon.merchant.local_path }}">
-																<img src="{{ featured_coupon.merchant.image }}">
+																<img src="{{ featured_coupon.merchant.s3_image }}">
 															</a>
 														</div>
 														<div class="featured-description">
@@ -199,7 +199,7 @@
 											<ul class="top-store{% if not forloop.first %} hidden{% endif %}" id="st-{{ top_coupon.id }}">
 												{% for merchant in top_coupon.stores.all %}
 													<li>
-														<a href="{{ merchant.local_path }}"><img src="{{ merchant.image }}"></a>
+														<a href="{{ merchant.local_path }}"><img src="{{ merchant.s3_image }}"></a>
 													</li>
 												{% endfor %}
 											</ul>
@@ -259,19 +259,6 @@
 									<div class="more-categories clearfix">
 										<a href="{% url 'web.views.main.category' category_code=top_groceries.code %}">See all groceries &#187;</a>
 									</div>
-=======
-							</div>
-						</li></ul>
-					</li>
-					<li class="menu-item">
-						<a href="#">Local</a>
-						<ul class="row main-row dropdown-row local-row"><li>
-							<div class="main-dropdown-row">
-								<div class="local-search-container">
-									<form>
-									<input type="text" placeholder="Search by city, state or zip code" class="search">
-									</form>
->>>>>>> Stashed changes
 								</div>
 							</li></ul>
 						</li>
@@ -289,7 +276,6 @@
 										<a href="#">See all cities &#187;</a>
 									</div>
 								</div>
-<<<<<<< Updated upstream
 							</li></ul>
 						</li>
 						{% endcomment %}
@@ -301,18 +287,6 @@
 						</li>
 					</ul>
 				</div>
-=======
-							</div>
-						</li></ul>
-					</li>
-					<li class="menu-item">
-						<a href="/magazine" class="menu-link">Magazine</a>
-					</li>
-					<li class="menu-item menu-item-latest">
-						<a href="javascript:void(null);" id="subscribe-link" class="menu-link">Subscribe</a>
-					</li>
-				</ul>
->>>>>>> Stashed changes
 			</div>
 		{% endcache %}
 		<div class="header-container header prescroll-header bottom-shadow">

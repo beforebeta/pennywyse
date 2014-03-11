@@ -28,7 +28,7 @@
 						<div class="featured-merchants-list">
 							{% for merchant in featured_merchants %}
 								<div class="featured-merchant">
-									<a href="{{ merchant.local_path }}"><img src="{{ merchant.image }}"></a>
+									<a href="{{ merchant.local_path }}"><img src="{{ merchant.s3_image }}"></a>
 								</div>
 								{% if forloop.counter == 6 %}
 		                       		<hr>

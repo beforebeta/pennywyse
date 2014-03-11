@@ -42,7 +42,7 @@ def set_meta_tags(subject, context):
 
 
 @ensure_csrf_cookie
-#@adaptive_cache_page
+@adaptive_cache_page
 def index(request, current_page=None):
     """Landing page controller."""
     
@@ -75,7 +75,7 @@ def index(request, current_page=None):
                         'end': c.end.strftime('%m/%d/%y') if c.end else '',
                         'coupon_type': c.coupon_type,
                         'full_success_path': c.full_success_path(),
-                        'image': c.merchant.image,
+                        'image': c.merchant.s3_image,
                         'twitter_share_url': c.twitter_share_url,
                         'merchant_link': c.merchant.local_path()}
                 data.append(item)
@@ -167,7 +167,7 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
                         'end': c.end.strftime('%m/%d/%y') if c.end else '',
                         'full_success_path': c.full_success_path(),
                         'coupon_type': c.coupon_type,
-                        'image': c.image,
+                        'image': c.s3_image,
                         'twitter_share_url': c.twitter_share_url}
                 data.append(item)
         except EmptyPage:
@@ -241,7 +241,7 @@ def open_coupon(request, coupon_id):
             'code': coupon.code,
             'short_desc': coupon.short_desc,
             'description': coupon.get_description(),
-            'image': coupon.merchant.image,
+            'image': coupon.merchant.s3_image,
             'local_path': coupon.local_path(),
             'url': get_visitor_tag(coupon.skimlinks, request.session['visitor_id']),
             'twitter_share_url': coupon.twitter_share_url,
@@ -314,7 +314,7 @@ def category(request, category_code, current_page=None, category_ids=-1):
                         'end': c.end.strftime('%m/%d/%y') if c.end else '',
                         'coupon_type': c.coupon_type,
                         'full_success_path': c.full_success_path(),
-                        'image': c.merchant.image,
+                        'image': c.merchant.s3_image,
                         'twitter_share_url': c.twitter_share_url,
                         'merchant_link': c.merchant.local_path()}
                 data.append(item)
