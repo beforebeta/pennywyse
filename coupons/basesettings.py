@@ -215,7 +215,7 @@ AWS_S3_SECURE_URLS = False
 AWS_REDUCED_REDUNDANCY = True
 AWS_STORAGE_BUCKET_NAME = 'pushpenny'
 AWS_HEADERS = {
-    'Cache-Control': 'max-age=31556926',
+    'Cache-Control': 'public, max-age=31536000',
     'Expires': (datetime.datetime.today() + datetime.timedelta(days=365)).strftime('%a, %d %b %Y %H:%M:%S GMT')
 }
 AWS_ACCESS_KEY_ID = 'AKIAI22SZIJA336XJZIQ'

@@ -61,8 +61,8 @@ class Visitor(models.Model):
     referrer            = models.CharField(max_length=255)
     url                 = models.CharField(max_length=255)
     page_views          = models.PositiveIntegerField(default=0)
-    session_start       = models.DateTimeField()
-    last_update         = models.DateTimeField()
+    session_start       = models.DateTimeField(null=True, blank=True)
+    last_update         = models.DateTimeField(null=True, blank=True)
 
     """
     There are a total of five parameters. We recommend you always use utm_source, utm_medium, and utm_campaign for every link you own to keep track of your referral traffic. utm_term and utm_content can be used for tracking additional information:

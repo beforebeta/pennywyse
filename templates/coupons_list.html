@@ -30,11 +30,11 @@
 			</div>
 			{% if company_coupons %}
 				<span class="merchant-link">
-					<img src="{{ coupon.image }}">
+					<img src="{{ coupon.s3_image }}">
 				</span>
 			{% else %}
 				<a href="{% url 'web.views.main.coupons_for_company' company_name=coupon.merchant.name_slug %}" target="_blank" class="merchant-link">
-					<img src="{{ coupon.merchant.image }}">
+					<img src="{{ coupon.merchant.s3_image }}">
 				</a>
 			{% endif %}
 		</div>

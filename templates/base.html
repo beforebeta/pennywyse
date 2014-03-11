@@ -1,4 +1,5 @@
 {% load cache %}
+{% load compress %}
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -8,26 +9,30 @@
 			<meta name="viewport" content="width=device-width, initial-scale=1.0">
 			<link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
             <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-			<link href="/static/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
-			<link href="/static/css/tipsy.css" rel="stylesheet">
-			<link href="/static/css/grid.css?r=27022014" rel="stylesheet">
-			<link href="/static/css/nprogress.css" rel="stylesheet">
+			{% compress css %}
+				<link href="/static/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+				<link href="/static/css/tipsy.css" rel="stylesheet">
+				<link href="/static/css/grid.css?r=27022014" rel="stylesheet">
+				<link href="/static/css/nprogress.css" rel="stylesheet">
+			{% endcompress %}
 			<link rel="shortcut icon" type="image/png" href="/static/img/pushpenny-favicon.png">
     		<link rel="apple-touch-icon" href="/static/img/pushpenny-favicon.png" />
     		<script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
     		<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 			<script type="text/javascript" src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 			<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-			<script type="text/javascript" src="/static/js/waypoints.min.js"></script>
-			<script type="text/javascript" src="/static/js/store.js?r=27022014"></script>
-			<script type="text/javascript" src="/static/js/mustache.js"></script>
-			<script type="text/javascript" src="/static/js/jquery.jcarousel-core.min.js"></script>
-			<script type="text/javascript" src="/static/js/jquery.form.js"></script>
-			<script type="text/javascript" src="/static/js/jquery.clipboard.js"></script>
-			<script type="text/javascript" src="/static/js/jquery.tipsy.js"></script>
-			<script type="text/javascript" src="/static/js/jquery.purl.js"></script>
-			<script type="text/javascript" src="/static/js/jquery.dotdotdot.min.js"></script>
-			<script type="text/javascript" src="/static/js/nprogress.js"></script>
+			{% compress js %}
+				<script type="text/javascript" src="/static/js/waypoints.min.js"></script>
+				<script type="text/javascript" src="/static/js/store.js?r=27022014"></script>
+				<script type="text/javascript" src="/static/js/mustache.js"></script>
+				<script type="text/javascript" src="/static/js/jquery.jcarousel-core.min.js"></script>
+				<script type="text/javascript" src="/static/js/jquery.form.js"></script>
+				<script type="text/javascript" src="/static/js/jquery.clipboard.js"></script>
+				<script type="text/javascript" src="/static/js/jquery.tipsy.js"></script>
+				<script type="text/javascript" src="/static/js/jquery.purl.js"></script>
+				<script type="text/javascript" src="/static/js/jquery.dotdotdot.min.js"></script>
+				<script type="text/javascript" src="/static/js/nprogress.js"></script>
+			{% endcompress %}
 		{% endblock %}
 	</head>
 	<body>
@@ -160,7 +165,7 @@
 														<span class="ends">Ends {{ top_coupon.popular.all.0.end|date:"m/d/y" }}</span>
 														<div class="description">
 															<a href="{{ top_coupon.popular.all.0.merchant.local_path }}">
-																<img src="{{ top_coupon.popular.all.0.merchant.image }}">
+																<img src="{{ top_coupon.popular.all.0.merchant.s3_image }}">
 															</a>
 														</div>
 													</div>
@@ -175,7 +180,7 @@
 													<div class="top-featured-coupon {% if foorloop.first %}first-coupon{% elif forloop.last %}last-coupon{% endif %}">
 														<div class="featured-image">
 															<a href="{{ featured_coupon.merchant.local_path }}">
-																<img src="{{ featured_coupon.merchant.image }}">
+																<img src="{{ featured_coupon.merchant.s3_image }}">
 															</a>
 														</div>
 														<div class="featured-description">
@@ -194,7 +199,7 @@
 											<ul class="top-store{% if not forloop.first %} hidden{% endif %}" id="st-{{ top_coupon.id }}">
 												{% for merchant in top_coupon.stores.all %}
 													<li>
-														<a href="{{ merchant.local_path }}"><img src="{{ merchant.image }}"></a>
+														<a href="{{ merchant.local_path }}"><img src="{{ merchant.s3_image }}"></a>
 													</li>
 												{% endfor %}
 											</ul>
@@ -230,6 +235,7 @@
 										<a href="{% url 'web.views.main.categories' %}">See all categories &#187;</a>
 									</div>
 								</div>
+<<<<<<< Updated upstream
 							</li></ul>
 						</li>
 						<li class="menu-item">
