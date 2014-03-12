@@ -46,6 +46,7 @@ def run_sqootload_shortcycle():
     validate_sqoot_data()
     dedup_sqoot_data_hard()
 
+@task(max_retries=1)
 def process_visitor_data():
     try:
         aggregate_visitor_data()

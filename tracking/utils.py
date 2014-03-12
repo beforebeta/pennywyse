@@ -196,7 +196,10 @@ def get_visitor_tag(url, visitor_id):
             if not 'xcust' in query_dict.keys():
                 query_dict['xcust'] = ''
             query_dict['xcust'] = visitor_id
-            return 'http://go.redirectingat.com/?%s' % urllib.urlencode(query_dict)
+            url = query_dict['url']
+            del query_dict['url']
+            return 'http://go.redirectingat.com/?%s&%s' % (urllib.urlencode(query_dict),
+                                                           urllib.urlencode({'url':url}))
         else:
             return url
     except:

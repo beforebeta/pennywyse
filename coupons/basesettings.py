@@ -254,6 +254,10 @@ CELERYBEAT_SCHEDULE = {
     'periodic-fetch-ad-costs': {
         'task': 'core.tasks.load_ad_costs',
         'schedule': crontab()
+    },
+    'daily-aggregate-visitor-data': {
+        'task': 'core.tasks.process_visitor_data',
+        'schedule': crontab(hour=23),
     }
 }
 
