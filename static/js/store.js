@@ -877,6 +877,7 @@ function render_coupon_popup(data, coupon_id) {
 		},
 	});
 	init_clipboard($('#coupon-code-' + coupon_id));
+	$('.merchant-button').on('click', merchant_button_callback);
 }
 
 function close_coupon_popup() {
