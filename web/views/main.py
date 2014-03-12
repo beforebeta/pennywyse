@@ -184,7 +184,8 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
     if coupon_id:
         coupon = Coupon.objects.get(id=coupon_id)
     
-    all_categories = merchant.get_coupon_categories()
+    all_categories_ids = [c['categories'] for c in Coupon.objects.filter(merchant=merchant.id).values('categories').annotate()]
+    all_categories = Category.objects.filter(id__in=all_categories_ids)
     coupons = Coupon.objects.filter(**filters)\
                             .only('id', 'short_desc', 'description', 'end', 'coupon_type', 's3_image',
                                   'merchant__name_slug', 'merchant__s3_image', 'merchant__name')\
