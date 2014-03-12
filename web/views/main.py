@@ -54,18 +54,12 @@ def index(request, current_page=None):
     if request.is_ajax():
         data = []
         coupon_types = request.GET.getlist('coupon_type', [])
-
         if coupon_types:
             parameters['coupon_type__in'] = coupon_types
-        
+        ordering = SORTING_MAPPING.get(sorting, '-date_added')        
         coupons = Coupon.objects.filter(**parameters)\
-                                .only('id', 'short_desc', 'description', 'end', 'coupon_type', 'merchant')
-        ordering = SORTING_MAPPING.get(sorting, 'popularity')
-        if ordering != 'popularity':
-            parameters['is_featured'] = True 
-        coupons = coupons.order_by(ordering)
-        if ordering == 'popularity':
-            coupons = coupons[:200]
+                                .only('id', 'short_desc', 'description', 'end', 'coupon_type', 'merchant')\
+                                .order_by(ordering)[:400]
         pages = Paginator(coupons, 20)
         try:
             for c in pages.page(page).object_list:
