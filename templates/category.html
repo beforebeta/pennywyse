@@ -4,7 +4,7 @@
 			
 			{% block head %}
 			    {{ block.super }}
-				<meta name="description" content="{{ category.name }} Coupons | Hand Verified Discounts @ PushPenny">
+				<meta name="description" content="{{ category.name }} Coupons | Verified Discounts @ PushPenny">
 				{% if current_page.has_previous %}
 	            	{% if current_page.previous_page_number == 1 %}
 	            		<link rel="prev" href="http://{{ request.get_host }}{% url 'web.views.main.category' category_code=category.code %}" />
