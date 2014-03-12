@@ -139,14 +139,13 @@ class VisitorTrackingMiddleware(object):
                     # it's probably safe to assume that the visitor is brand new
                     visitor = Visitor(**attrs)
                     log.debug('Created a new visitor: %s' % attrs)
+                try:
+                    visitor.save()
+                except DatabaseError:
+                    print_stack_trace()
+                    log.error('There was a problem saving visitor information:\n%s\n\n%s' % (traceback.format_exc(), locals()))
             except:
                 return
-            
-            try:
-                visitor.save()
-            except DatabaseError:
-                print_stack_trace()
-                log.error('There was a problem saving visitor information:\n%s\n\n%s' % (traceback.format_exc(), locals()))
             
             request.session['visitor_id'] = visitor_id = visitor.id
 
