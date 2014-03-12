@@ -86,7 +86,10 @@ def index(request, current_page=None):
     
     
     
-    coupons = Coupon.objects.filter(**parameters).order_by("-date_added")
+    coupons = Coupon.objects.filter(**parameters)\
+                            .only('id', 'short_desc', 'description', 'end', 'coupon_type', 'merchant__name_slug',
+                                  'merchant__s3_image', 'merchant__name')\
+                            .order_by("-date_added")
     pages = CustomPaginator(coupons, 20, current_page=page)
     
     try:
@@ -182,7 +185,10 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
         coupon = Coupon.objects.get(id=coupon_id)
     
     all_categories = merchant.get_coupon_categories()
-    coupons = Coupon.objects.filter(**filters).order_by(ordering)
+    coupons = Coupon.objects.filter(**filters)\
+                            .only('id', 'short_desc', 'description', 'end', 'coupon_type', 's3_image',
+                                  'merchant__name_slug', 'merchant__s3_image', 'merchant__name')\
+                            .order_by(ordering)
     pages = CustomPaginator(coupons, 20, current_page=page)
     try:
         items = pages.page(page).object_list
@@ -324,7 +330,10 @@ def category(request, category_code, current_page=None, category_ids=-1):
                                         'total_pages': pages.num_pages,
                                         'total_items': pages.count}), content_type="application/json")
     
-    coupons = Coupon.objects.filter(**filters).order_by(ordering)
+    coupons = Coupon.objects.filter(**filters)\
+                            .only('id', 'short_desc', 'description', 'end', 'coupon_type', 's3_image',
+                                  'merchant__name_slug', 'merchant__s3_image', 'merchant__name')\
+                            .order_by(ordering)
     pages = CustomPaginator(coupons, 20, current_page=page)
     try:
         items = pages.page(page).object_list
