@@ -25,12 +25,14 @@
 		{% block content %}
 			<div class="row middle-container landing-container">
 				<div class="main-rail index-rail landing-rail">
-					<div class="top-labels-container top-labels-index">
-						<div class="main-labels index-labels">
-							<a href="javascript:void(null);" class="active" id="new">New</a>
-							<a href="javascript:void(null);" id="trending">Trending</a>
+					{% comment %}
+						<div class="top-labels-container top-labels-index">
+							<div class="main-labels index-labels">
+								<a href="javascript:void(null);" class="active" id="new">New</a>
+								<a href="javascript:void(null);" id="trending">Trending</a>
+							</div>
 						</div>
-					</div>
+					{% endcomment %}
 					<div class="coupons more-coupons">
 						{% include 'coupons_list.html' %}
 					</div>
