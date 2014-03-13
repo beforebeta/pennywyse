@@ -70,7 +70,6 @@ class VisitorTrackingMiddleware(object):
 
     def process_request(self, request):
         # don't process AJAX requests
-        # if request.is_ajax(): return
         if request.path.startswith("/s/") or request.path.startswith("/static/") or request.path.startswith("/admin/")\
              or request.path.startswith("/favicon.ico") or (request.is_ajax() and not request.path.startswith('/o/')):
             return
@@ -120,12 +119,13 @@ class VisitorTrackingMiddleware(object):
         if not visitor_id:
             # for some reason, Visitor.objects.get_or_create was not working here
             try:
-                visitor = Visitor.objects.get(**attrs)
+                visitor = Visitor.objects.only('id').get(**attrs)
             except Visitor.DoesNotExist:
+                request.session.set_test_cookie()
                 # see if there's a visitor with the same IP and user agent
                 # within the last 5 minutes
                 cutoff = now - timedelta(minutes=5)
-                visitors = Visitor.objects.filter(
+                visitors = Visitor.objects.only('id').filter(
                     ip_address=ip_address,
                     user_agent=user_agent,
                     last_update__gte=cutoff

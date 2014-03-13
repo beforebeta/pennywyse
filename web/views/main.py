@@ -125,7 +125,8 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
     sorting = request.GET.get('sorting', None)
 
     try:
-        merchant = Merchant.objects.get(name_slug=slugify(company_name))
+        merchant = Merchant.objects.only('id', 'name', 'name_slug', 'skimlinks',
+                                         'link', 's3_image', 'similar').get(name_slug=slugify(company_name))
     except Merchant.DoesNotExist:
         raise Http404
     
@@ -284,7 +285,8 @@ def category(request, category_code, current_page=None, category_ids=-1):
     coupon_types = request.GET.getlist('coupon_type', [])
 
     try:
-        category = Category.objects.get(code=category_code, ref_id_source__isnull=True)
+        category = Category.objects.only('id', 'name', 'code', 'icon')\
+                            .get(code=category_code, ref_id_source__isnull=True)
     except Category.DoesNotExist:
         raise Http404
 
