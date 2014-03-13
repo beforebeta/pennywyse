@@ -326,12 +326,14 @@ $(function() {
 	});
 	
 	$('.subscribe-form').submit(function() {
-		$(this).ajaxSubmit({'success': subscribe_form_callback, 'dataType': 'json'});
+		data = {csrfmiddlewaretoken: $.cookie('csrftoken')};
+		$(this).ajaxSubmit({'success': subscribe_form_callback, 'dataType': 'json', 'data': data});
 		return false;
 	});
 	
 	$('.coupon-subscribe-form').live('submit', function() {
-		$(this).ajaxSubmit({'success': coupon_subscribe_form_callback, 'dataType': 'json'});
+		data = {csrfmiddlewaretoken: $.cookie('csrftoken')};
+		$(this).ajaxSubmit({'success': coupon_subscribe_form_callback, 'dataType': 'json', 'data': data});
 		return false;
 	});
 	
@@ -761,7 +763,7 @@ function load_coupon(coupon_id) {
 }
 
 function render_coupon_popup(data, coupon_id) {
-	data.csrf = $('input[name=csrfmiddlewaretoken]').val();
+	data.csrf = $.cookie('csrftoken');
 	data.id = coupon_id;
 	data.is_mobile = is_mobile;
 	data.facebook_share_url = function() {
