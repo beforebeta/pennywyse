@@ -59,7 +59,8 @@ def index(request, current_page=None):
         ordering = SORTING_MAPPING.get(sorting, '-date_added')        
         coupons = Coupon.objects.filter(**parameters)\
                                 .only('id', 'short_desc', 'description', 'end', 'coupon_type', 'merchant')\
-                                .order_by(ordering)[:400]
+                                .order_by(ordering)\
+                                .exclude(merchant__s3_image='http://pushpenny.s3.amazonaws.com/static/img/favicon.png')[:400]
         pages = Paginator(coupons, 20)
         try:
             for c in pages.page(page).object_list:
@@ -83,7 +84,8 @@ def index(request, current_page=None):
     coupons = Coupon.objects.filter(**parameters)\
                             .only('id', 'short_desc', 'description', 'end', 'coupon_type', 'merchant__name_slug',
                                   'merchant__s3_image', 'merchant__name')\
-                            .order_by("-date_added")
+                            .exclude(merchant__s3_image='http://pushpenny.s3.amazonaws.com/static/img/favicon.png')\
+                            .order_by("-date_added")[:400]
     pages = CustomPaginator(coupons, 20, current_page=page)
     
     try:
@@ -180,7 +182,8 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
         coupon = Coupon.objects.get(id=coupon_id)
     
     all_categories_ids = [c['categories'] for c in Coupon.objects.filter(merchant=merchant.id).values('categories').annotate()]
-    all_categories = Category.objects.filter(id__in=all_categories_ids)
+    all_categories = Category.objects.only('id', 'name')\
+                                        .filter(id__in=all_categories_ids)
     coupons = Coupon.objects.filter(**filters)\
                             .only('id', 'short_desc', 'description', 'end', 'coupon_type', 's3_image',
                                   'merchant__name_slug', 'merchant__s3_image', 'merchant__name')\
@@ -256,8 +259,12 @@ def open_coupon(request, coupon_id):
 def categories(request):
     """Lists of parent and featured categories."""
     
-    context = {"categories": Category.objects.filter(is_featured=False, parent__isnull=True).order_by('name'),
-               "featured_categories": Category.objects.filter(is_featured=True).order_by('name'),
+    context = {"categories": Category.objects.filter(is_featured=False, parent__isnull=True, ref_id_source__isnull=True)\
+                                                .only('name', 'icon', 'code')\
+                                                .order_by('name'),
+               "featured_categories": Category.objects.filter(is_featured=True, ref_id_source__isnull=True)\
+                                                       .only('name', 'icon', 'code')\
+                                                       .order_by('name'),
                "CATEGORIES_PAGE_TEXT": getattr(config, 'CATEGORIES_PAGE_TEXT', None)}
     return render_response("categories.html", request, context)
 
@@ -268,7 +275,9 @@ def groceries(request):
     """Dedicated controller with list of grocery categories."""
     
     root_category = get_object_or_404(Category, code='grocery')
-    categories = [root_category] + list(Category.objects.filter(parent=root_category))
+    grocery_categories = Category.objects.filter(parent=root_category, ref_id_source__isnull=True)\
+                                            .only('name', 'icon', 'code')
+    categories = [root_category] + list(grocery_categories)
     context = {'categories': categories,
                'is_grocery': True,
                'GROCERIS_PAGE_TEXT': getattr(config, 'GROCERIS_PAGE_TEXT', None)}
@@ -372,12 +381,12 @@ def stores(request, page='popular'):
     if category:
         merchant_ids = [c['merchant__id'] for c in Coupon.objects.filter(categories=category).values('merchant__id').annotate()]
         filters['id__in'] = merchant_ids
-    stores = Merchant.objects.filter(**filters).order_by(ordering)
+    stores = Merchant.objects.only('name', 'name_slug')\
+                                .filter(**filters).order_by(ordering)
     context = {"stores": stores,
-                "categories": Category.objects.filter(parent__isnull=True, ref_id_source__isnull=True).order_by('name'),
-                "category": int(category) if category else None,
                 "pagination": AlphabeticalPagination(page),
-                "featured_merchants": Merchant.objects.filter(is_featured=True),
+                "featured_merchants": Merchant.objects.only('name', 'name_slug', 's3_image')\
+                                                        .filter(is_featured=True),
                 "page": page,
                 "MERCHANTS_PAGE_TEXT": getattr(config, 'MERCHANTS_PAGE_TEXT', None)}
     return render_response("companies.html", request, context)
