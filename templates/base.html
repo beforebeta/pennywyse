@@ -30,6 +30,7 @@
 				<script type="text/javascript" src="/static/js/jquery.clipboard.js"></script>
 				<script type="text/javascript" src="/static/js/jquery.tipsy.js"></script>
 				<script type="text/javascript" src="/static/js/jquery.purl.js"></script>
+				<script type="text/javascript" src="/static/js/jquery.cookie.js"></script>
 				<script type="text/javascript" src="/static/js/jquery.dotdotdot.min.js"></script>
 				<script type="text/javascript" src="/static/js/nprogress.js"></script>
 			{% endcompress %}
@@ -113,7 +114,7 @@
 								<li class="mobile-subscription">
 									<div>
 										<div class="email-subscribe">
-											<form action="/e/subscribe/" method="post" class="subscribe-form mobile-subscribe-form">{% csrf_token %}
+											<form action="/e/subscribe/" method="post" class="subscribe-form mobile-subscribe-form">
 											{{ subscription_form.email }}
 										</div>
 										<button>let me<br>know</button>
@@ -330,7 +331,7 @@
 							<div class="subscribe-delimiter"><hr><span>or</span><hr></div>
 						{% endcomment %}
 						<div class="email-subscribe">
-							<form action="/e/subscribe/" method="post" class="subscribe-form">{% csrf_token %}
+							<form action="/e/subscribe/" method="post" class="subscribe-form">
 							{{ subscription_form.email }}
 						</div>
 						<input type="submit" value="start saving">
