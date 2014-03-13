@@ -60,7 +60,7 @@ def index(request, current_page=None):
         coupons = Coupon.objects.filter(**parameters)\
                                 .only('id', 'short_desc', 'description', 'end', 'coupon_type', 'merchant')\
                                 .order_by(ordering)\
-                                .exclude(s3_image='static/img/favicon.png')[:400]
+                                .exclude(merchant__s3_image='http://pushpenny.s3.amazonaws.com/static/img/favicon.png')[:400]
         pages = Paginator(coupons, 20)
         try:
             for c in pages.page(page).object_list:
@@ -84,8 +84,8 @@ def index(request, current_page=None):
     coupons = Coupon.objects.filter(**parameters)\
                             .only('id', 'short_desc', 'description', 'end', 'coupon_type', 'merchant__name_slug',
                                   'merchant__s3_image', 'merchant__name')\
-                            .exclude(s3_image='static/img/favicon.png')\
-                            .order_by("-date_added")
+                            .exclude(merchant__s3_image='http://pushpenny.s3.amazonaws.com/static/img/favicon.png')\
+                            .order_by("-date_added")[:400]
     pages = CustomPaginator(coupons, 20, current_page=page)
     
     try:
