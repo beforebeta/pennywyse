@@ -167,6 +167,91 @@ class MobileResource(ModelResource):
         return self.create_response(request, response)
 
 
+    def single_deal_return_response(self, request, **kwargs):
+        self.method_check(request, allowed=['get'])
+
+        params_dict = request.GET
+        ref_id_param = params_dict.get('ref_id', None)
+        if not ref_id_param:
+            response = {
+                'deal': {},
+                'res_status': {
+                    'error': True,
+                    'message': 'You must supply a reference id of a coupon you are looking for.',
+                }
+            }
+            return self.create_response(request, response)
+
+        sqs = SearchQuerySet().using('mobile_api').filter(django_ct='core.coupon', coupon_ref_id=ref_id_param)
+
+        if not sqs.count():
+            deal_data     = {}
+            error_boolean = True
+            res_message   = "Unable to retrieve a deal with this ref_id: {}".format(ref_id_param)
+        else:
+            sqs_obj = sqs[0]
+            merchant_pnt = sqs_obj.merchant_location
+            if not merchant_pnt:
+                deal_data = {}
+                error_boolean = True
+                res_message   = "Requested deal has no redeemable location(s) available."
+            else:
+                deal_description = sqs_obj.text
+                if sqs_obj.related_deals_count != 0:
+                    deal_description = deal_description if deal_description else ""
+                    deal_description += "\n\nFind {} more similar deal(s) from this vendor on {}!".format(sqs_obj.related_deals_count,
+                                                                                                          sqs_obj.provider)
+                deal_data     = {
+                    'id':                   sqs_obj.coupon_ref_id,
+                    'title':                sqs_obj.embedly_title,
+                    'short_title':          sqs_obj.embedly_description,
+                    'description':          deal_description,
+                    'fine_print':           sqs_obj.restrictions,
+                    'number_sold':          None,
+                    'url':                  sqs_obj.link,
+                    'untracked_url':        sqs_obj.directlink,
+                    'price':                sqs_obj.price,
+                    'value':                sqs_obj.listprice,
+                    'discount_amount':      sqs_obj.discount,
+                    'discount_percentage':  float(sqs_obj.percent) / 100,
+                    'commission':           None,
+                    'provider_name':        sqs_obj.provider,
+                    'provider_slug':        sqs_obj.provider_slug,
+                    'category_name':        ', '.join(sqs_obj.categories) if sqs_obj.categories else None,
+                    'category_slug':        ', '.join(sqs_obj.category_slugs) if sqs_obj.category_slugs else None,
+                    'image_url':            sqs_obj.image,
+                    'online':               sqs_obj.online,
+                    'expires_at':           sqs_obj.end,
+                    'created_at':           sqs_obj.start,
+                    'updated_at':           sqs_obj.lastupdated,
+                    'is_duplicate':         sqs_obj.is_duplicate,
+                    'merchant': {
+                        'id':               sqs_obj.merchant_ref_id,
+                        'name':             sqs_obj.merchant_name,
+                        'address':          sqs_obj.merchant_address,
+                        'locality':         sqs_obj.merchant_locality,
+                        'region':           sqs_obj.merchant_region,
+                        'postal_code':      sqs_obj.merchant_postal_code,
+                        'country':          "United States",
+                        'country_code':     "US",
+                        'latitude':         merchant_pnt.y,
+                        'longitude':        merchant_pnt.x,
+                        'url':              sqs_obj.merchant_link,
+                    }
+                }
+                error_boolean = False
+                res_message   = "Successfully retrieved the requested deal."
+
+        response = {
+            'deal': deal_data,
+            'res_status': {
+                'error': error_boolean,
+                'message': res_message,
+            }
+        }
+        return self.create_response(request, response)
+
+
     def localinfo_return_response(self, request, **kwargs):
         self.method_check(request, allowed=['get'])
         self.create_localinfo_index_if_doesnt_exist()
@@ -361,11 +446,11 @@ class MobileResource(ModelResource):
 
     def return_popular_something_insert(self, user_pnt, category_or_keyword):
         picture_url = None
-        cities = SearchQuerySet().using('mobile_api').filter(django_ct='core.citypicture')\
-                                 .distance('geometry', user_pnt).order_by('distance')
-        closest_city = cities[0]
-        if (category_or_keyword == 'Health & Beauty') and (closest_city.text == 'Albuquerque, NM'):
-            picture_url = 'https://s3.amazonaws.com/pushpennyapp/health-beauty.jpg'
+        # cities = SearchQuerySet().using('mobile_api').filter(django_ct='core.citypicture')\
+        #                          .distance('geometry', user_pnt).order_by('distance')
+        # closest_city = cities[0]
+        # if (category_or_keyword == 'Health & Beauty') and (closest_city.text == 'Albuquerque, NM'):
+        #     picture_url = 'https://s3.amazonaws.com/pushpennyapp/health-beauty.jpg'
 
         popular_something = {
             "image": picture_url,

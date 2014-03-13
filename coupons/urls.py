@@ -38,7 +38,7 @@ urlpatterns += patterns('web.views.main',
 )
 
 urlpatterns += patterns('django.contrib.flatpages.views',
-   url(r'^p/(?P<url>[a-zA-Z0-9-_]+)/', 'flatpage'),                 
+   url(r'^p/(?P<url>[a-zA-Z0-9-_]+)/', 'flatpage'),
 )
 
 urlpatterns += patterns('tracking.views',
@@ -64,6 +64,7 @@ urlpatterns += patterns('api.views',
 
 urlpatterns += patterns('',
     url(r'^v3/deals', mobile_resource.deals_return_response),
+    url(r'^v3/deal', mobile_resource.single_deal_return_response),
     url(r'^v3/localinfo', mobile_resource.localinfo_return_response),
 )
 
