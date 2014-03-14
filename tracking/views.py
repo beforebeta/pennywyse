@@ -51,15 +51,11 @@ def log_click_track(request, coupon=None):
         elif re.search('/categories/[A-z0-9-]+/', referer):
             source_url_type = 'category'
 
-        coupon=None
         merchant=None
 
-        if "/coupon/" in clicked_link:
+        if "/o/" in clicked_link:
             source_url = clicked_link
-            try:
-                merchant = Merchant.objects.get(id=coupon.merchant_id)
-            except:
-                merchant = None
+            merchant = coupon.merchant
             target_url = coupon.get_retailer_link()
         else:
             source_url = referer
@@ -70,18 +66,11 @@ def log_click_track(request, coupon=None):
             target_url = _remove_skimlinks(target_url)
 
         merchant_domain = shorten_to_domain(target_url)
-
         visitor = Visitor.objects.get(pk=request.session['visitor_id'])
-        click_track                 = ClickTrack()
-        click_track.visitor         = visitor
-        click_track.user_agent      = visitor.user_agent[:255]
-        click_track.referer         = referer[:255]
-        click_track.target_url      = target_url[:255]
-        click_track.source_url_type = source_url_type[:255]
-        click_track.source_url      = source_url[:255]
-        click_track.merchant        = merchant
-        click_track.coupon          = coupon
-        click_track.merchant_domain = merchant_domain[:255]
+        click_track = ClickTrack(visitor=visitor, user_agent=visitor.user_agent[:255], referer=referer[:255],
+                                 target_url=target_url[:255], source_url_type=source_url_type[:255],
+                                 source_url=source_url[:255], merchant=merchant, coupon=coupon, 
+                                 merchant_domain=merchant_domain[:255])
 
         try:
             click_track.acquisition_source      = visitor.acquisition_source
