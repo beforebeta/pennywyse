@@ -214,13 +214,13 @@ def refresh_calculated_fields():
             print "Error with: ", m.name, m.id
             print_stack_trace()
     
-    regex = r'coupons/(?P<company_name>[a-zA-Z0-9-_]+)/(?P<coupon_label>[a-z0-9-_]+)/(?P<coupon_id>[\d]+)/$'
+    regex = r'/o/(?P<coupon_id>[\d]+)/$'
     for ct in ClickTrack.objects.filter(coupon__isnull=True):
         print 'Processing click track %s' % ct.id
         r = re.search(regex, ct.target_url)
         if r:
             try:
-                coupon = Coupon.objects.get(pk=r.groups()[2])
+                coupon = Coupon.objects.get(pk=r.groups()[0])
                 ct.coupon = coupon
             except Coupon.DoesNotExist:
                 ct.coupon = None
@@ -278,7 +278,6 @@ def load():
     refresh_deals()
     setup_web_coupons()
     refresh_calculated_fields()
-    refresh_merchant_redirects()
 
 def embedly(args):
     _from = 0
