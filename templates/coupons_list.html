@@ -1,7 +1,7 @@
 {% for coupon in coupons %}
 	<div class="coupon-container">
 		<div class="coupon-body">
-			<div class="coupon-top-body" id="{{ coupon.id }}">
+			<a href="{{ coupon.full_success_path }}" class="coupon-top-body" id="{{ coupon.id }}">
 				<div class="coupon-header">
 					<div class="coupon-left-label">
 						{% if coupon.coupon_type == 'free_shipping' %}
@@ -27,7 +27,7 @@
 				{% if coupon.end %}
 					<span class="ends">Ends {{ coupon.end|date:"m/d/y" }}</span>
 				{% endif %}
-			</div>
+			</a>
 			{% if company_coupons %}
 				<span class="merchant-link">
 					<img src="{{ coupon.s3_image }}">

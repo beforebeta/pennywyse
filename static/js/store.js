@@ -337,15 +337,9 @@ $(function() {
 		return false;
 	});
 	
-	$('.use-coupon').live('click', function(e) {
+	$('.use-coupon, .coupon-top-body').live('click', function(e) {
 		var coupon_id = $(this).attr('id');
 		window.location = '/s/' + coupon_id + '/';
-	});
-	
-	$('.coupon-top-body').live('click', function(e) {
-		var coupon_id = $(this).attr('id');
-		load_coupon(coupon_id);
-		return false;
 	});
 	
 	$('.top-coupon-types a').mouseover(function() {
@@ -459,7 +453,7 @@ function render_coupons(data, reset_items) {
 	var template = '{{#items}} \
 					<div class="coupon-container {{# is_mobile}}mobile-coupon-container{{/is_mobile}}"> \
 						<div class="coupon-body"> \
-							<div class="coupon-top-body" id="{{ id }}"> \
+							<a class="coupon-top-body" id="{{ id }}" href="{{ full_success_path}}" target="_blank"> \
 								<div class="coupon-header"> \
 									<div class="coupon-left-label"> \
 										{{& coupon_type_container }} \
@@ -473,7 +467,7 @@ function render_coupons(data, reset_items) {
 								{{# end }} \
 									<span class="ends">Ends {{ end }}</span> \
 								{{/end}} \
-							</div> \
+							</a> \
 							{{# is_company_coupon }} \
 								<span class="merchant-link"> \
 									<img src="{{ image }}"> \

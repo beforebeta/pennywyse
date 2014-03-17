@@ -398,7 +398,13 @@ hr {
 }
 .coupon-top-body {
 	height: 200px;
-	cursor: pointer;
+	display: block !important;
+	text-decoration: none !important;
+	color: #000;
+}
+.coupon-top-body:hover {
+	text-decoration: none !important;
+	color: #000;
 }
 .coupon-container {
 	width: 220px;
