@@ -809,7 +809,7 @@ function render_coupon_popup(data, coupon_id) {
 								<a href="#"><h2 class="short-description">{{ short_desc }}</h2></a> \
 								<span class="coupon-description">{{& description }}</span> \
 								{{# code }} \
-									<br><a href="{{ url }}" target="_blank">Shop at {{ merchant_name }} &raquo;</a> \
+									<br clear="both"><a href="{{ url }}" target="_blank">Shop at {{ merchant_name }} &raquo;</a> \
 								{{/ code }} \
 								\
 							{{/is_mobile}} \
@@ -818,7 +818,7 @@ function render_coupon_popup(data, coupon_id) {
 									<h2 class="short-description">{{ short_desc }}</h2> \
 									<div class="coupon-description">{{& description }}</div> \
 									{{# code }} \
-										<br><a href="{{ url }}" target="_blank">Shop at {{ merchant_name }} &raquo;</a> \
+										<br clear="both""><a href="{{ url }}" target="_blank">Shop at {{ merchant_name }} &raquo;</a> \
 									{{/ code }} \
 								</div> \
 							{{/is_mobile}} \

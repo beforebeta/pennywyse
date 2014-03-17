@@ -1417,7 +1417,7 @@ hr {
 	border: 2px solid #3cb5b5;
 	margin-top: 10px;
 }
-.coupon-popup-code a {
+.coupon-popup-code a, .coupon-popup-code input[type=button] {
 	color: #fff;
 	background-color: #3cb5b5;
 	width: auto;
