@@ -17,12 +17,12 @@ $(function() {
 	$('.pagination').remove();
 	
 	// enabling sticky header only on landing page and only for desktop pages
-	if ($('.landing-container').length > 0 && $(window).width() > 768) {
+	if ($('.landing-container').length > 0 && $(window).width() >= 992) {
 		is_sticky = true;
 		init_sticky_header();
 	}
 	else {
-		if ($('.index-container').length > 0 && $(window).width() > 768) {
+		if ($('.index-container').length > 0 && $(window).width() >= 992) {
 			$('.header').removeClass('hidden');
 			$('.header').addClass('top-search sticky');
 			$('.menu-row').addClass('top-menu');
@@ -55,7 +55,7 @@ $(function() {
 	}
 		
 	// applying styles for mobile layout, if necessary width has been detected
-	if ($(window).width() < 768) {
+	if ($(window).width() < 992) {
 		is_mobile = true;
 		$('.main-container').addClass('mobile-container');
 		$('.middle-container').addClass('mobile-middle-container');

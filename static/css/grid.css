@@ -390,6 +390,11 @@ hr {
 	clear: both;
 	position: relative;
 }
+@media (max-width: 992px) {
+	.coupons {
+		margin-right: 0 !important;
+	}	
+}
 .coupon-body {
 	background-color: #ffffff;
 	padding: 10px;
@@ -1619,9 +1624,10 @@ hr {
 	width: auto !important;
 }
 .mobile-index-rail {
-	width: 280px !important;
+	width: auto !important;
 	margin-left: 5px !important;
 	padding: 10px 0px 10px 20px !important;
+	
 }
 .mobile-index-rail .top-pagination a, .mobile-merchants-label{
 	font-family: 'Montserrat', sans-serif !important;
@@ -1880,6 +1886,7 @@ hr {
 	margin: 0 auto;
 	margin-bottom: 10px;
 	width: 260px;
+	margin-right: 14px;
 }
 .mobile-coupon-container .use-coupon, .fixed-use-coupon {
 	display: block !important;
