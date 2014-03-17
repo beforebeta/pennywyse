@@ -157,13 +157,13 @@ $(function() {
 		
 	$('.coupon-container').live('mouseover', function() {
 		if (!$(this).hasClass('coupon-banner')) {
-			$(this).find('.use-coupon').show();
+			$(this).find('.use-coupon').addClass('use-coupon-visible');
 		}
 	});
 	
 	$('.coupon-container').live('mouseout', function() {
 		if (!$(this).hasClass('coupon-banner')) {
-			$(this).find('.use-coupon').hide();
+			$(this).find('.use-coupon').removeClass('use-coupon-visible');
 		}
 	});
 	
@@ -337,7 +337,12 @@ $(function() {
 		return false;
 	});
 	
-	$('.use-coupon, .coupon-top-body').live('click', function(e) {
+	$('.use-coupon').live('click', function(e) {
+		var coupon_id = $(this).attr('id');
+		window.location = '/s/' + coupon_id + '/';
+	});
+	
+	$('.coupon-top-body').live('click', function(e) {
 		var coupon_id = $(this).attr('id');
 		load_coupon(coupon_id);
 		return false;
@@ -480,9 +485,9 @@ function render_coupons(data, reset_items) {
 								</a> \
 							{{/is_company_coupon }} \
 						</div> \
-						<div class="use-coupon" id="{{ id }}"> \
+						<a class="use-coupon" id="{{ id }}" href="{{ full_success_path}}" target="_blank"> \
 							Use Coupon \
-						</div> \
+						</a> \
 						{{^ is_mobile }} \
 							<div class="coupon-bottom"> \
 								<div class="coupon-right-bottom"> \
@@ -790,14 +795,14 @@ function render_coupon_popup(data, coupon_id) {
 								<input type="button" id="coupon-code-{{ id }}" value="Click to copy"> \
 							{{/is_mobile}} \
 							{{#is_mobile}} \
-								<input type="button" value="Shop at {{ merchant_name }}" class="merchant-button" data-href="{{ url }}"> \
+								<a href="{{ url }}" target="_blank"  class="merchant-button">Shop at {{ merchant_name }}"</a> \
 							{{/is_mobile}} \
 						</div> \
 						{{/ code }} \
 						{{^ code }} \
 							<div class="coupon-popup-code"> \
 								<span>No coupon code required.</span> \
-								<input type="button" value="Shop at {{ merchant_name }}" class="merchant-button" data-href="{{ url }}"> \
+								<a href="{{ url }}" target="_blank"  class="merchant-button">Shop at {{ merchant_name }}</a> \
 							</div> \
 						{{/ code}} \
 						<div class="coupon-popup-body"> \
@@ -917,7 +922,7 @@ function init_clipboard(element) {
         },
         afterCopy: function() {
         	var coupon_url = $('.coupon-popup').attr('data-href');
-        	redirect_to(coupon_url);
+        	track_click(coupon_url, redirect=true);
         	setTimeout(function (){
 	        	$('.tipsy').remove();
 	        }, 1000);
@@ -974,9 +979,9 @@ function expandable_select_callback() {
 
 function merchant_button_callback() {
 	var merchant_url = $(this).attr('data-href');
-	redirect_to(merchant_url);
+	track_click(merchant_url, redirect=false);
 }
-function redirect_to(url) {
+function track_click(url, redirect) {
 	var view_url = window.location.pathname;
 	var coupon_id = $.url().param('c');
 	if (coupon_id) {
@@ -986,7 +991,9 @@ function redirect_to(url) {
 		view_url += '?coupon_open=00000';
 	}
 	_gaq.push(['_trackPageview', view_url]);
-	window.open(url, '_blank');
+	if (redirect) {
+		window.open(url, '_blank');
+	}
 }
 
 function prepend_promo_container() {
