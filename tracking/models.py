@@ -378,3 +378,9 @@ class AdCost(models.Model):
     acquisition_term = models.CharField(max_length=255, default="direct")
     acquisition_campaign = models.CharField(max_length=255, default="direct")
     synchronized = models.BooleanField(default=False)
+
+class RedirectionTrack(models.Model):
+    visitor = models.ForeignKey(Visitor, null=True, blank=True)
+    merchant = models.ForeignKey(Merchant, null=True, blank=True)
+    date_added = models.DateTimeField(default=datetime.now(), auto_now_add=True)
+    

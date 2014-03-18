@@ -5,7 +5,7 @@ from django.core.paginator import EmptyPage, Paginator
 from django.core.urlresolvers import reverse
 from django.db.models.query_utils import Q
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect, Http404
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render_to_response, redirect, get_object_or_404
 from django.template.context import RequestContext
 from django.template.defaultfilters import slugify
 from django.views.decorators.cache import cache_page
@@ -253,6 +253,14 @@ def open_coupon(request, coupon_id):
             'full_success_path': coupon.full_success_path()}
     return HttpResponse(json.dumps(item), content_type="application/json")
 
+def redirect_to_affiliate_url(request, coupon_id):
+    try:
+        coupon = Coupon.objects.get(id=coupon_id)
+        log_click_track(request, coupon)
+    except Coupon.DoesNotExist:
+        raise Http404
+    affiliate_url = get_visitor_tag(coupon.skimlinks, request.session['visitor_id'])
+    return redirect(affiliate_url)
 
 @ensure_csrf_cookie
 @cache_page(60 * 60 * 24)

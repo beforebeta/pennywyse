@@ -9,7 +9,7 @@ class CouponAdmin(CustomModelAdmin):
 
 class MerchantAdmin(CustomModelAdmin):
     search_fields = ['name', 'description']
-    readonly_fields = ['ref_id', 'ref_id_source']
+    readonly_fields = ['ref_id', 'ref_id_source', 'similar']
 
 class CouponNetworkAdmin(admin.ModelAdmin):
     search_fields = ['name', 'code']

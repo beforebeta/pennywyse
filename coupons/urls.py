@@ -35,6 +35,7 @@ urlpatterns += patterns('web.views.main',
     url(r'^stores/$', 'stores'),
     url(r'^e/subscribe/$', 'email_subscribe'),
     url(r'^o/(?P<coupon_id>[\d]+)/$', 'open_coupon'),
+    url(r'^s/(?P<coupon_id>[\d]+)/$', 'redirect_to_affiliate_url'),
 )
 
 urlpatterns += patterns('django.contrib.flatpages.views',
