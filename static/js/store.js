@@ -905,23 +905,38 @@ function close_popups() {
 }
 
 function init_clipboard(element) {
-    element.clipboard({
-        path: '/static/js/jquery.clipboard.swf',
-        copy: function() {
-        	var text_input = element.parent().find('input[type=text]');
-        	text_input.attr('title', 'Copied!');
+    if ($.browser.msie) {
+    	element.click(function(){
+    		text_input.attr('title', 'Copied!');
 			text_input.tipsy({trigger: 'manual', gravity: 'sw', opacity: 1});
 			text_input.tipsy('show');
-            return text_input.val();
-        },
-        afterCopy: function() {
-        	var coupon_url = $('.coupon-popup').attr('data-href');
-        	track_click(coupon_url, redirect=true);
-        	setTimeout(function (){
-	        	$('.tipsy').remove();
-	        }, 1000);
-        }
-    });
+    		window.clipboardData.setData('Text', text_input.val());
+    		var coupon_url = $('.coupon-popup').attr('data-href');
+	        track_click(coupon_url, redirect=true);
+	        setTimeout(function (){
+		    	$('.tipsy').remove();
+		    }, 1000);
+    	});
+    }
+    else {
+	    element.clipboard({
+	        path: '/static/js/jquery.clipboard.swf',
+	        copy: function() {
+	        	var text_input = element.parent().find('input[type=text]');
+	        	text_input.attr('title', 'Copied!');
+				text_input.tipsy({trigger: 'manual', gravity: 'sw', opacity: 1});
+				text_input.tipsy('show');
+	            return text_input.val();
+	        },
+	        afterCopy: function() {
+	        	var coupon_url = $('.coupon-popup').attr('data-href');
+	        	track_click(coupon_url, redirect=true);
+	        	setTimeout(function (){
+		        	$('.tipsy').remove();
+		        }, 1000);
+	        }
+	    });
+    }
 }
 
 function expandable_callback(event) {
