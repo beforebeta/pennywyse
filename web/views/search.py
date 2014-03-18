@@ -1,8 +1,10 @@
 import json
+import time
 from django.core.paginator import Paginator
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from haystack.query import SearchQuerySet
+from redis import Redis
 from core.models import Merchant
 from web.views.main import render_response, SORTING_MAPPING
 from web.utils import FuzzySearchQuerySet
@@ -17,6 +19,11 @@ def search(request, current_page=1):
     if query:
         merchant = Merchant.objects.filter(name=query).only('name_slug')
         if merchant.count() == 1:
+            redis = Redis()
+            redirection_data = {'visitor_id': request.session.get('visitor_id', None),
+                                'merchant_id': merchant[0].id,
+                                'date_added': time.time()}
+            redis.set('redirection_data_%s' % request.session.get('visitor_id', None), json.dumps(redirection_data))
             merchant_url = reverse('web.views.main.coupons_for_company', kwargs={'company_name': merchant[0].name_slug})
             return HttpResponseRedirect(merchant_url)
         parameters = {'django_ct':'core.coupon', 'content':query}

@@ -129,15 +129,20 @@ def fetch_ad_costs():
         print '%s cannot be opened' % FB_ADS_EXPORT_FILE
         
 def aggregate_visitor_data():
-    from tracking.models import Visitor
+    from core.models import Merchant
+    from tracking.models import RedirectionTrack, Visitor
     redis = Redis()
+    print 'Processing visitor data'
     for key in redis.keys('visitor_data_*'):
         redis_data = redis.get(key)
         if redis_data:
             visitor_data = json.loads(redis_data)
             visitor_id = visitor_data.get('visitor_id', None)
             if visitor_id:
-                visitor = Visitor.objects.get(pk=visitor_id)
+                try:
+                    visitor = Visitor.objects.get(pk=visitor_id)
+                except Visitor.DoesNotExist:
+                    continue
                 visitor.bump_past_acquisition_info()
                 for k in ['url', 'referrer', 'user_agent', 
                           'acquisition_source', 'acquisition_medium', 
@@ -161,6 +166,30 @@ def aggregate_visitor_data():
         else:
             print 'Error with key %s' % key
 
+    print 'Processing redirection data'
+    for key in redis.keys('redirection_data_*'):
+        redis_data = redis.get(key)
+        if redis_data:
+            redirection_data = json.loads(redis_data)
+            visitor_id = redirection_data.get('visitor_id', None)
+            merchant_id = redirection_data.get('merchant_id', None)
+            date_added = redirection_data.get('date_added', None)
+            try:
+                visitor = Visitor.objects.get(pk=visitor_id)
+            except Visitor.DoesNotExist:
+                visitor = None
+            try:
+                merchant = Merchant.objects.get(pk=merchant_id)
+            except Merchant.DoesNotExist:
+                merchant = None
+            redirection_track = RedirectionTrack.objects.create(visitor=visitor, merchant=merchant)
+            redirection_track.date_added = datetime.datetime.utcfromtimestamp(date_added)
+            redirection_track.save()
+            print 'Processed redirection data %s' % visitor_id
+        else:
+            print 'Error with key %s' % key 
+                
+    print 'Processing acqusition sources'
     for visitor in Visitor.objects.filter(acquisition_source__in=['unknown','direct']):
         parsed_url = urlparse(visitor.referrer)
         params = parse_qs(parsed_url.query)
