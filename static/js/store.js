@@ -905,8 +905,8 @@ function close_popups() {
 }
 
 function init_clipboard(element) {
-    if ($.browser.msie) {
-    	element.click(function(){
+    if (navigator.userAgent.indexOf('MSIE') !== -1 || navigator.appVersion.indexOf('Trident/') > 0) {
+    	   	element.click(function(){
     		var text_input = element.parent().find('input[type=text]');
     		text_input.attr('title', 'Copied!');
 			text_input.tipsy({trigger: 'manual', gravity: 'sw', opacity: 1});
