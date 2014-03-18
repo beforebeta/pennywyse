@@ -1,7 +1,7 @@
 {% for coupon in coupons %}
 	<div class="coupon-container">
 		<div class="coupon-body">
-			<a href="{{ coupon.full_success_path }}" class="coupon-top-body" id="{{ coupon.id }}">
+			<a href="{{ coupon.full_success_path }}" class="coupon-top-body" id="{{ coupon.id }}" target="_blank">
 				<div class="coupon-header">
 					<div class="coupon-left-label">
 						{% if coupon.coupon_type == 'free_shipping' %}
