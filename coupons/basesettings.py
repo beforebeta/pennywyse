@@ -258,6 +258,10 @@ CELERYBEAT_SCHEDULE = {
     'daily-aggregate-visitor-data': {
         'task': 'core.tasks.process_visitor_data',
         'schedule': crontab(hour=23),
+    },
+    'daily-build-sitemap': {
+        'task': 'core.tasks.build_sitemap',
+        'schedule': crontab(hour=03),
     }
 }
 
