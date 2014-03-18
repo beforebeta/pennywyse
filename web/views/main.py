@@ -90,17 +90,18 @@ def index(request, current_page=None):
     
     try:
         items = pages.page(page).object_list
+        cpage = pages.page(page)
     except EmptyPage:
-        items = None
-    
+        items = cpage = None
     # permanently redirecting from first pagination page to canonical URL
     # or if current pagination page does not exist any more
-    if not items or (current_page and int(current_page) == 1):
+    if (not items and coupons.count() > 0) or (current_page and int(current_page) == 1) or\
+        (not items and coupons.count() == 0 and page != 1):
         return HttpResponsePermanentRedirect(reverse('web.views.main.index'))
     
     context = {"pages": pages.separated_pages,
                "num_pages": pages.num_pages,
-               "current_page": pages.page(page),
+               "current_page": cpage,
                "separators": pages.separators,
                "coupons": items}
 
@@ -191,12 +192,14 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
     pages = CustomPaginator(coupons, 20, current_page=page)
     try:
         items = pages.page(page).object_list
+        cpage = pages.page(page)
     except EmptyPage:
-        items = None
+        items = cpage = None
     
     # permanently redirecting from first pagination page to canonical URL
     # or if current pagination page does not exist any more
-    if (not items and coupons.count() > 0) or (current_page and int(current_page) == 1):
+    if (not items and coupons.count() > 0) or (current_page and int(current_page) == 1) or\
+        (not items and coupons.count() == 0 and page != 1):
         return HttpResponsePermanentRedirect(reverse('web.views.main.coupons_for_company', 
                                                      kwargs={'company_name': merchant.name_slug,
                                                              'company_id': merchant.id}))
@@ -205,7 +208,7 @@ def coupons_for_company(request, company_name, company_id=None, current_page=Non
                "merchant": merchant,
                "num_pages": pages.num_pages,
                "pages": pages.separated_pages,
-               "current_page": pages.page(page),
+               "current_page": cpage,
                "num_coupons": pages.count,
                "separators": pages.separators,
                "coupon_categories": all_categories,
@@ -351,12 +354,13 @@ def category(request, category_code, current_page=None, category_ids=-1):
     pages = CustomPaginator(coupons, 20, current_page=page)
     try:
         items = pages.page(page).object_list
+        cpage = pages.page(page)
     except EmptyPage:
-        items = None
-    
+        items = cpage = None 
     # permanently redirecting from first pagination page to canonical URL
     # or if current pagination page does not exist any more
-    if (not items and coupons.count() > 0) or (current_page and int(current_page) == 1):
+    if (not items and coupons.count() > 0) or (current_page and int(current_page) == 1) or\
+        (not items and coupons.count() == 0 and page != 1):
         return HttpResponsePermanentRedirect(reverse('web.views.main.category', 
                                                      kwargs={'category_code': category.code}))
 
@@ -366,7 +370,7 @@ def category(request, category_code, current_page=None, category_ids=-1):
                "coupon_categories": coupon_categories,
                "coupons": items,
                "pages": pages.separated_pages,
-               "current_page": pages.page(page),
+               "current_page": cpage,
                "num_coupons": pages.count,
                "separators": pages.separators}
     return render_response("category.html", request, context)
