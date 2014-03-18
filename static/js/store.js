@@ -789,7 +789,7 @@ function render_coupon_popup(data, coupon_id) {
 								<input type="button" id="coupon-code-{{ id }}" value="Click to copy"> \
 							{{/is_mobile}} \
 							{{#is_mobile}} \
-								<a href="{{ url }}" target="_blank"  class="merchant-button">Shop at {{ merchant_name }}"</a> \
+								<a href="{{ url }}" target="_blank"  class="merchant-button">Shop at {{ merchant_name }}</a> \
 							{{/is_mobile}} \
 						</div> \
 						{{/ code }} \
