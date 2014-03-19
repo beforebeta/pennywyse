@@ -1,21 +1,29 @@
 import base64
 import json
+from multiprocessing import Pool
+import os.path
 import re
 import sys
+from tempfile import NamedTemporaryFile
 import time
 import traceback
 import urllib
 from urlparse import urlparse, parse_qs
 
-from django.conf import settings
-from django.core.cache import cache
-from django.core.paginator import Paginator
-from django.contrib.gis import admin
-from django.http import HttpResponse
 from BeautifulSoup import BeautifulSoup
 import requests
 
+from django.conf import settings
+from django.core.cache import cache
+from django.core.files.base import File
+from django.core.files.storage import default_storage
+from django.core.paginator import Paginator
+from django.contrib.gis import admin
+from django.http import HttpResponse
+
 from tracking.utils import get_visitor_tag
+
+S3_BASE_URL = 'http://pushpenny.s3.amazonaws.com'
 
 def extract_url_from_skimlinks(url):
     parsed_link = urlparse(url)
@@ -147,3 +155,39 @@ class CustomModelAdmin(admin.ModelAdmin):
     def delete_model(self, *args, **kwargs):
         super(CustomModelAdmin, self).delete_model(*args, **kwargs)
         cache.clear()
+
+
+def _upload_file(*args):
+    from core.models import Coupon, Merchant
+    try:
+        model = args[0][0]
+        ext = os.path.splitext(model.image)[1]
+        dirname = 'coupons' if isinstance(model, Coupon) else 'merchants'
+        filename = os.path.join('static/img/', dirname, str(model.id) + ext)
+        r = requests.get(model.image, stream=True)
+        if r.status_code in [200, 301, 302]:
+            f = NamedTemporaryFile(delete=False)
+            for c in r.iter_content(chunk_size=2048):
+                if c:
+                    f.write(c)
+                    f.flush()
+            f.close()
+            with open(f.name) as img:
+                print 'Uploading %s' % filename
+                default_storage.save(filename, File(img))
+            os.unlink(f.name)
+            model.s3_image = os.path.join(S3_BASE_URL, filename)
+        else:
+            model.s3_image = os.path.join(S3_BASE_URL, 'static/img/favicon.png')
+        model.save()
+    except Exception as e:
+        print e
+
+def upload_images_to_s3():
+    from core.models import Coupon, Merchant
+    for m in [Coupon, Merchant]:
+        images =  list(m.objects.filter(s3_image__isnull=True)\
+                                    .exclude(image__isnull=True)\
+                                    .only('id', 'image', 's3_image'))
+        tasks = Pool(50)
+        tasks.map(_upload_file, zip(images))
