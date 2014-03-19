@@ -8,7 +8,7 @@
 				{% if coupon_id %}
 				 	<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
 				{% endif %}
-				<meta name="description" content="Verified {{ merchant.name|lower }} coupons at PushPenny. Save on everything, everyday at {{ merchant.name }}.">
+				<meta name="description" content="Verified {{ merchant.name }} coupons at PushPenny. Save on everything, everyday at {{ merchant.name }}.">
 				{% if current_page.has_previous %}
 	            	{% if current_page.previous_page_number == 1 %}
 	            		<link rel="prev" href="http://{{ request.get_host }}{% url 'web.views.main.coupons_for_company' company_name=merchant.name_slug %}" />
