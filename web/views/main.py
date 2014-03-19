@@ -46,7 +46,7 @@ def set_meta_tags(subject, context):
 def index(request, current_page=None):
     """Landing page controller."""
     
-    parameters = {'is_active': True}
+    parameters = {'is_active': True, 'is_featured': True}
     page = int(current_page or 1)
     sorting = request.GET.get('sorting', None)
 
@@ -78,7 +78,6 @@ def index(request, current_page=None):
             raise Http404
         return HttpResponse(json.dumps({'items': data,
                                         'total_pages': pages.num_pages}), content_type="application/json")
-    
     
     
     coupons = Coupon.objects.filter(**parameters)\
