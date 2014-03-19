@@ -159,7 +159,12 @@ def image(request, image_url):
             image_url = image_url[:-1]
     except:
         pass
-    return HttpResponseRedirect(_get_image(request.user, image_url).local_url)
+    try:
+        destination_url = _get_image(request.user, image_url).local_url
+    except:
+        destination_url = image_url
+    return HttpResponseRedirect(destination_url)
+
 
 def image_resize(request, image_url, height, width):
     """
@@ -180,5 +185,9 @@ def image_resize(request, image_url, height, width):
             image_url = image_url[:-1]
     except:
         pass
-    return HttpResponseRedirect(_get_image(request.user, image_url, int(height), int(width)).local_url)
+    try:
+        destination_url = _get_image(request.user, image_url, int(height), int(width)).local_url
+    except:
+        destination_url = image_url
+    return HttpResponseRedirect(destination_url)
 

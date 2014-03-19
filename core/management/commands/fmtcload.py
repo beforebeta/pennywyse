@@ -1,9 +1,7 @@
-from BeautifulSoup import BeautifulStoneSoup
 import datetime
 from lxml import etree
 from optparse import make_option
 import re
-from urlparse import urlparse, parse_qs
 
 from django.core.cache import cache
 from django.core.management.base import BaseCommand
@@ -11,7 +9,7 @@ from django.conf import settings
 from django.db.models import Count
 from django.db.models.query_utils import Q
 from core.models import Category, Country, Coupon, DealType, Merchant, MerchantAffiliateData
-from core.util import print_stack_trace, extract_url_from_skimlinks
+from core.util import print_stack_trace, extract_url_from_skimlinks, upload_images_to_s3
 from tracking.models import ClickTrack
 from websvcs.models import EmbedlyMerchant
 
@@ -141,7 +139,7 @@ def refresh_deals():
         try:
             id = deal.find('couponid').text
             coupon, created = Coupon.active_objects.get_or_create(ref_id=id)
-
+            if not created: continue
             merchant_name = deal.find('merchantname').text
             merchantid = deal.find('merchantid').text
             merchant, created = Merchant.objects.get_or_create(name=merchant_name)
@@ -249,7 +247,7 @@ def refresh_calculated_fields():
     
     Coupon.objects.exclude(Q(end__gt=datetime.datetime.now()) | Q(end__isnull=True)).update(is_active=False)
     
-    cache.clear()
+
     
 def refresh_merchant_redirects():
     for coupon in Coupon.objects.all():
@@ -278,6 +276,8 @@ def load():
     refresh_deals()
     setup_web_coupons()
     refresh_calculated_fields()
+    upload_images_to_s3()
+    cache.clear()
 
 def embedly(args):
     _from = 0
