@@ -17,13 +17,14 @@ def search(request, current_page=1):
     context = {}
     
     if query:
+        search_query_data = {'query': query, 
+                             'visitor_id': request.session.get('visitor_id', None),
+                             'date_added': time.time()}
         merchant = Merchant.objects.filter(name=query).only('name_slug')
         if merchant.count() == 1:
             redis = Redis()
-            redirection_data = {'visitor_id': request.session.get('visitor_id', None),
-                                'merchant_id': merchant[0].id,
-                                'date_added': time.time()}
-            redis.set('redirection_data_%s' % request.session.get('visitor_id', None), json.dumps(redirection_data))
+            search_query_data['redirected'] = True
+            redis.set('search_query_data_%s' % request.session.get('visitor_id', None), json.dumps(search_query_data))
             merchant_url = reverse('web.views.main.coupons_for_company', kwargs={'company_name': merchant[0].name_slug})
             return HttpResponseRedirect(merchant_url)
         parameters = {'django_ct':'core.coupon', 'content':query}
@@ -66,6 +67,10 @@ def search(request, current_page=1):
                     
             return HttpResponse(json.dumps({'items': data,
                                         'total_pages': pages.num_pages}), content_type="application/json")
+        search_query_data['found_coupons'] = len(coupons_list)
+        search_query_data['found_merchants'] = len(merchants_list)
+        redis = Redis()
+        redis.set('search_query_data_%s' % request.session.get('visitor_id', None), json.dumps(search_query_data))
         merchants = merchant_pages.page(current_page).object_list
         context['coupons'] = pages.page(current_page).object_list
     else:

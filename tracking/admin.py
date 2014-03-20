@@ -1,5 +1,5 @@
 from django.contrib import admin
-from tracking.models import BannedIP, UntrackedUserAgent, Visitor, ClickTrack, RevenueVisitor, Commission,AcquisitionSource, AdCost, RedirectionTrack
+from tracking.models import BannedIP, UntrackedUserAgent, Visitor, ClickTrack, RevenueVisitor, Commission,AcquisitionSource, AdCost, SearchQueryLog
 
 
 class ClickTrackAdmin(admin.ModelAdmin):
@@ -14,18 +14,14 @@ class AdCostAdmin(admin.ModelAdmin):
     list_display = ('start_date', 'campaign', 'ad', 'keyword', 'impression', 'social_impression', 'clicks', 'social_clicks', 
                     'costs', 'average_cpc', 'frequency', 'actions', 'unique_clicks', 'acquisition_source', 'acquisition_medium')
 
-class RedirectionTrackAdmin(admin.ModelAdmin):
-    list_display = ('merchant_link', 'visitor_link', 'date_added',)
-    readonly_fields = ('visitor', 'merchant',)
+class SearchQueryLogAdmin(admin.ModelAdmin):
+    list_display = ('query', 'found_coupons', 'found_merchants', 'visitor_link', 'redirected', 'date_added',)
+    readonly_fields = ('visitor',)
     
     def visitor_link(self, obj):
         return '<a href="/admin/tracking/visitor/%s/" target="_blank">Visitor</a>' % obj.visitor_id
     
-    def merchant_link(self, obj):
-        return '<a href="/admin/core/merchant/%s/" target="_blank">Merchant</a>' % obj.merchant_id
-    
     visitor_link.allow_tags = True
-    merchant_link.allow_tags = True
 
 admin.site.register(BannedIP)
 admin.site.register(UntrackedUserAgent)
@@ -35,4 +31,4 @@ admin.site.register(ClickTrack, ClickTrackAdmin)
 admin.site.register(AcquisitionSource)
 admin.site.register(Commission)
 admin.site.register(AdCost, AdCostAdmin)
-admin.site.register(RedirectionTrack, RedirectionTrackAdmin)
+admin.site.register(SearchQueryLog, SearchQueryLogAdmin)

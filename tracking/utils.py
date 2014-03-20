@@ -129,8 +129,7 @@ def fetch_ad_costs():
         print '%s cannot be opened' % FB_ADS_EXPORT_FILE
         
 def aggregate_visitor_data():
-    from core.models import Merchant
-    from tracking.models import RedirectionTrack, Visitor
+    from tracking.models import SearchQueryLog, Visitor
     redis = Redis()
     print 'Processing visitor data'
     for key in redis.keys('visitor_data_*'):
@@ -166,26 +165,27 @@ def aggregate_visitor_data():
         else:
             print 'Error with key %s' % key
 
-    print 'Processing redirection data'
-    for key in redis.keys('redirection_data_*'):
+    print 'Processing search query data'
+    for key in redis.keys('search_query_data_*'):
         redis_data = redis.get(key)
         if redis_data:
-            redirection_data = json.loads(redis_data)
-            visitor_id = redirection_data.get('visitor_id', None)
-            merchant_id = redirection_data.get('merchant_id', None)
-            date_added = redirection_data.get('date_added', None)
+            search_query_data = json.loads(redis_data)
+            visitor_id = search_query_data.get('visitor_id', None)
+            found_coupons = search_query_data.get('found_coupons', 0)
+            found_merchants = search_query_data.get('found_merchants', 0)
+            redirected = search_query_data.get('redirected', False)
+            query = search_query_data.get('query', None)
+            date_added = search_query_data.get('date_added', None)
             try:
                 visitor = Visitor.objects.get(pk=visitor_id)
             except Visitor.DoesNotExist:
                 visitor = None
-            try:
-                merchant = Merchant.objects.get(pk=merchant_id)
-            except Merchant.DoesNotExist:
-                merchant = None
-            redirection_track = RedirectionTrack.objects.create(visitor=visitor, merchant=merchant)
+            redirection_track = SearchQueryLog.objects.create(query=query, visitor=visitor,
+                                                              found_coupons=found_coupons, found_merchants=found_merchants,
+                                                              redirected=redirected)
             redirection_track.date_added = datetime.datetime.utcfromtimestamp(date_added)
             redirection_track.save()
-            print 'Processed redirection data %s' % visitor_id
+            print 'Processed search query data %s' % visitor_id
         else:
             print 'Error with key %s' % key 
                 

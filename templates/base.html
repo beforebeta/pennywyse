@@ -244,7 +244,7 @@
 							</li></ul>
 						</li>
 						<li class="menu-item">
-							<a href="{% url 'web.views.main.groceries' %}" class="menu-link">Groceries</a>
+							<a href="{% url 'web.views.main.category' category_code=top_groceries.code %}" class="menu-link">Groceries</a>
 							<ul class="row main-row dropdown-row groceries-row"><li>
 								<div class="main-dropdown-row">
 									<div class="clearfix">
@@ -262,7 +262,7 @@
 										{% endfor %}
 									</div>
 									<div class="more-categories clearfix">
-										<a href="{% url 'web.views.main.category' category_code=top_groceries.code %}">See all groceries &#187;</a>
+										<a href="{% url 'web.views.main.groceries' %}">See all groceries &#187;</a>
 									</div>
 								</div>
 							</li></ul>
