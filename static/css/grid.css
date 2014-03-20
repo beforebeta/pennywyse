@@ -693,6 +693,7 @@ hr {
 	background-color: #46b9b9;
 	color: #fff;
 	font-weight: bold;
+	border-radius: 0 2px 2px 0;
 }
 .search-container {
 	float: left !important;
