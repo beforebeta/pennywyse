@@ -379,8 +379,11 @@ class AdCost(models.Model):
     acquisition_campaign = models.CharField(max_length=255, default="direct")
     synchronized = models.BooleanField(default=False)
 
-class RedirectionTrack(models.Model):
+class SearchQueryLog(models.Model):
+    query = models.CharField(max_length=255, null=True, blank=True)
     visitor = models.ForeignKey(Visitor, null=True, blank=True)
-    merchant = models.ForeignKey(Merchant, null=True, blank=True)
+    redirected = models.BooleanField(default=False)
+    found_merchants = models.IntegerField(null=True, blank=True)
+    found_coupons = models.IntegerField(null=True, blank=True)
     date_added = models.DateTimeField(default=datetime.now(), auto_now_add=True)
     
