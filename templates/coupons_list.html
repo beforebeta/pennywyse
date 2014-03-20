@@ -22,7 +22,7 @@
 				<hr>
 				<h2 class="short-description">{{ coupon.short_desc }}</h2>
 				<div class="coupon-description">
-					{{ coupon.get_description }}
+					{{ coupon.description }}
 				</div>
 				{% if coupon.end %}
 					<span class="ends">Ends {{ coupon.end|date:"m/d/y" }}</span>
