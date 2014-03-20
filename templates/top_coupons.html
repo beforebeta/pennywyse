@@ -59,7 +59,7 @@
 												<hr>
 												<h2 class="short-description">{{ coupon.short_desc }}</h2>
 												<div class="coupon-description">
-													{{ coupon.description }}
+													{{ coupon.description|safe }}
 												</div>
 												<span class="ends">Ends {{ coupon.end|date:"m/d/y" }}</span>
 											</div>
@@ -110,7 +110,7 @@
 													<hr>
 													<h2 class="short-description">{{ coupon.short_desc }}</h2>
 													<div class="coupon-description">
-														{{ coupon.description }}
+														{{ coupon.description|safe }}
 													</div>
 													<span class="ends">Ends {{ coupon.end|date:"m/d/y" }}</span>
 												</div>	
