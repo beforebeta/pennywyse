@@ -131,7 +131,7 @@
 						</div>
 						<div class="search-container">
 							<form action="/search/" id="search_form">
-							<input name="q" type="text" placeholder="Search over 50,000+ coupons from 6,000+ stores" class="search" value="{{ query }}">
+							<input name="q" type="text" placeholder="Search over 50,000+ coupons from 6,000+ stores" class="search" value="{{ query }}"><input type="submit" value="search">
 							</form>
 							{% comment %}
 								<a href="#">Sign Up</a> |
@@ -310,7 +310,7 @@
 					<div class="search-container top-container">
 						<a href="{% url 'web.views.main.index' %}"></a>
 						<form action="/search/" id="search_form">
-						<input name="q" type="text" placeholder="Search over 50,000+ coupons from 6,000+ stores" class="search" value="{{ query }}">
+						<input name="q" type="text" placeholder="Search over 50,000+ coupons from 6,000+ stores" class="search" value="{{ query }}"><input type="submit" value="search">
 						</form>
 					</div>
 				</div>

@@ -679,16 +679,25 @@ hr {
 	padding-left: 30px;
 	outline: none !important;
 	border: 1px solid #d5d5d5;
+	border-right: 0;
 	background-image: url('../img/search_icon.png');
 	background-repeat: no-repeat;
 	background-position: 8px 8px;
-	border-radius: 2px;
+	border-radius: 2px 0 0 2px;
 	font-family: 'Open Sans', sans-serif;
+}
+#search_form input[type=submit] {
+	width: 93px;
+	height: 39px;
+	border: 1px solid #46b9b9;
+	background-color: #46b9b9;
+	color: #fff;
+	font-weight: bold;
 }
 .search-container {
 	float: left !important;
 	left: 50%;
-	width: 485px;
+	width: 585px;
 	position: absolute;
 	margin-left: -242.5px;
 }
@@ -1111,7 +1120,7 @@ hr {
 	margin-top: -60px;
 	margin-left: -242.5px;
 	height: 120px !important;
-	width: 485px !important;
+	width: 585px !important;
 }
 .top-container h1 {
 	margin-top: 0 !important;
