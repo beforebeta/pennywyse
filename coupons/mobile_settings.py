@@ -2,22 +2,12 @@ from basesettings import *
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
-ALLOWED_HOSTS = ["pushpenny.com","www.pushpenny.com", "api.pushpenny.com"]
+ALLOWED_HOSTS = ["pushpenny.com","www.pushpenny.com", "api.pushpenny.com", "pushpennyapi.dfvops.com"]
 
 BASE_URL_NO_APPENDED_SLASH = "http://pushpenny.com"
 SVCS_HOST = "http://pushpenny.com"
 
-TEMPLATE_DIRS = (
-    abs_path('templates/'),
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-    )
-
-IMAGE_LOCAL_COPY_DIR = abs_path('static/img/local/')
-
-try: os.makedirs(IMAGE_LOCAL_COPY_DIR)
-except: pass
+ROOT_URLCONF = 'coupons.api_urls'
 
 LOGGING = {
     'version': 1,
@@ -76,3 +66,20 @@ DATABASES = {
         'OPTIONS': { 'init_command': 'SET storage_engine=MYISAM' },
     }
 }
+
+INSTALLED_APPS = (
+    'django.contrib.sites',
+    'django.contrib.gis',
+    'compress',
+    'djcelery',
+    'haystack',
+    'south',
+    'api',
+    'tastypie',
+    'core',
+    'web',
+)
+
+TEMPLATE_CONTEXT_PROCESSORS = ()
+
+MIDDLEWARE_CLASSES = ()
