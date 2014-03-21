@@ -694,6 +694,11 @@ hr {
 	color: #fff;
 	font-weight: bold;
 	border-radius: 0 2px 2px 0;
+	text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2470588);
+	text-transform: uppercase;
+}
+#search_form input[type=submit]:hover {
+	background-color: #6cd2d2;
 }
 .search-container {
 	float: left !important;
