@@ -97,8 +97,7 @@ def run_thru_full_cycle(args):
 
     Note: Takes 'firsttime' argument.
     '''
-
-    firsttime = args.get('firsttime', False)
+    firsttime = True if 'firsttime' in args else False
     describe_section("FULLCYCLE STARTING..", show_time())
     refresh_sqoot_data(firsttime=firsttime)
     clean_out_sqoot_data(firsttime=firsttime)
