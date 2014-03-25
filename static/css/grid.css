@@ -581,8 +581,10 @@ hr {
 .coupon-right-bottom {
 	float: right;
 }
-.coupon-right-bottom span, .coupon-left-bottom span {
+.coupon-right-bottom span {
 	margin-right: 5px;
+}
+.coupon-right-bottom span, .coupon-left-bottom span {
 	font-family: 'Montserrat', sans-serif;
 }
 .coupon-right-bottom img {
@@ -592,13 +594,13 @@ hr {
 	height: 30px;
 	background-color: #3cafaf !important;
 	line-height: 30px;
-	font-size: 11px;
+	font-size: 12px;
 	font-weight: lighter;
 	color: #fff !important;
 	text-transform: uppercase;
 	text-align: center;
 	opacity: 0.95;
-	width: 89px;
+	width: 96px;
 	cursor: pointer;
 	font-family: 'Montserrat', sans-serif;
 	float: right;
