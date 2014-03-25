@@ -581,12 +581,29 @@ hr {
 .coupon-right-bottom {
 	float: right;
 }
-.coupon-right-bottom span {
+.coupon-right-bottom span, .coupon-left-bottom span {
 	margin-right: 5px;
 	font-family: 'Montserrat', sans-serif;
 }
 .coupon-right-bottom img {
 	margin-top: -3px !important;
+}
+.coupon-use-coupon-bottom {
+	height: 30px;
+	background-color: #3cafaf !important;
+	line-height: 30px;
+	font-size: 11px;
+	font-weight: lighter;
+	color: #fff !important;
+	text-transform: uppercase;
+	text-align: center;
+	opacity: 0.95;
+	width: 89px;
+	cursor: pointer;
+	font-family: 'Montserrat', sans-serif;
+	float: right;
+	margin-right: -5px;
+	border-radius: 0 0 2px 0;
 }
 .menu-row {
 	top: 25px;
@@ -778,7 +795,7 @@ hr {
 	cursor: pointer;
 	font-family: 'Montserrat', sans-serif;
 }
-.use-coupon a {
+.use-coupon a, .coupon-use-coupon-bottom a {
 	text-decoration: none !important;
 	color: #fff !important;
 }

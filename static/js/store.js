@@ -154,7 +154,8 @@ $(function() {
 		$(this).find('.close-category').remove();
 		fetch_items(reset_items=true);
 	});
-		
+	
+	/*	
 	$('.coupon-container').live('mouseover', function() {
 		if (!$(this).hasClass('coupon-banner')) {
 			$(this).find('.use-coupon').addClass('use-coupon-visible');
@@ -166,7 +167,7 @@ $(function() {
 			$(this).find('.use-coupon').removeClass('use-coupon-visible');
 		}
 	});
-	
+	*/
 	$('#mobile-categories').click(function() {
 		if ($('.mobile-category :visible').length > 0) {
 			$('.mobile-category').hide();
@@ -484,11 +485,22 @@ function render_coupons(data, reset_items) {
 						</a> \
 						{{^ is_mobile }} \
 							<div class="coupon-bottom"> \
-								<div class="coupon-right-bottom"> \
+								<!--<div class="coupon-right-bottom"> \
 									Share \
 									<a href="{{ facebook_share_url }}" class="facebook-share-url"><img src="/static/img/facebook_share_icon.png"></a> \
 									<a href="{{ twitter_share_url }}""><img src="/static/img/twitter_share_icon.png"></a> \
 									<a href="mailto:?body={{ email_share_url }}"><img src="/static/img/email_share_icon.png"></a> \
+								</div>--> \
+								<div class="coupon-left-bottom"> \
+									<span>Share</span> \
+									<a href="{{ facebook_share_url }}" class="facebook-share-url"><img src="/static/img/facebook_share_icon.png"></a> \
+									<a href="{{ twitter_share_url }}""><img src="/static/img/twitter_share_icon.png"></a> \
+									<a href="mailto:?body={{ email_share_url }}"><img src="/static/img/email_share_icon.png"></a> \
+								</div> \
+								<div class="coupon-use-coupon-bottom"> \
+									<a id="{{ id }}" href="{{ full_success_path}}" target="_blank"> \
+										Use Coupon \
+									</a>\
 								</div> \
 							</div> \
 						{{/is_mobile}} \
