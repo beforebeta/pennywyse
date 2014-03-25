@@ -339,7 +339,9 @@ $(function() {
 	
 	$('.use-coupon, .coupon-top-body').live('click', function(e) {
 		var coupon_id = $(this).attr('id');
-		window.location = '/s/' + coupon_id + '/';
+        setTimeout(function() {
+        	window.location = '/s/' + coupon_id + '/';
+        }, 1);
 	});
 	
 	$('.top-coupon-types a').mouseover(function() {
