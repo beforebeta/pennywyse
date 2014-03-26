@@ -75,5 +75,6 @@ def search(request, current_page=1):
         context['coupons'] = pages.page(current_page).object_list
     else:
         merchants = None
+        context['suggested_merchants'] = Merchant.objects.filter(is_featured=True)[:5]
     context.update(query=query, merchants=merchants)
     return render_response(template_file="search.html", request=request, context=context)
