@@ -164,19 +164,22 @@ def _upload_file(*args):
         ext = os.path.splitext(model.image)[1]
         dirname = 'coupons' if isinstance(model, Coupon) else 'merchants'
         filename = os.path.join('static/img/', dirname, str(model.id) + ext)
-        r = requests.get(model.image, stream=True)
-        if r.status_code in [200, 301, 302]:
-            f = NamedTemporaryFile(delete=False)
-            for c in r.iter_content(chunk_size=2048):
-                if c:
-                    f.write(c)
-                    f.flush()
-            f.close()
-            with open(f.name) as img:
-                print 'Uploading %s' % filename
-                default_storage.save(filename, File(img))
-            os.unlink(f.name)
-            model.s3_image = os.path.join(S3_BASE_URL, filename)
+        if model.image:
+            r = requests.get(model.image, stream=True)
+            if r.status_code in [200, 301, 302]:
+                f = NamedTemporaryFile(delete=False)
+                for c in r.iter_content(chunk_size=2048):
+                    if c:
+                        f.write(c)
+                        f.flush()
+                f.close()
+                with open(f.name) as img:
+                    print 'Uploading %s' % filename
+                    default_storage.save(filename, File(img))
+                os.unlink(f.name)
+                model.s3_image = os.path.join(S3_BASE_URL, filename)
+            else:
+                model.s3_image = os.path.join(S3_BASE_URL, 'static/img/favicon.png')
         else:
             model.s3_image = os.path.join(S3_BASE_URL, 'static/img/favicon.png')
         model.save()
@@ -187,7 +190,6 @@ def upload_images_to_s3():
     from core.models import Coupon, Merchant
     for m in [Coupon, Merchant]:
         images =  list(m.objects.filter(s3_image__isnull=True)\
-                                    .exclude(image__isnull=True)\
                                     .only('id', 'image', 's3_image'))
         tasks = Pool(50)
         tasks.map(_upload_file, zip(images))
