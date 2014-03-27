@@ -594,13 +594,13 @@ hr {
 	height: 30px;
 	background-color: #3cafaf !important;
 	line-height: 30px;
-	font-size: 12px;
+	font-size: 14px;
 	font-weight: lighter;
 	color: #fff !important;
 	text-transform: uppercase;
 	text-align: center;
 	opacity: 0.95;
-	width: 96px;
+	width: 146px;
 	cursor: pointer;
 	font-family: 'Montserrat', sans-serif;
 	float: right;
@@ -717,11 +717,11 @@ hr {
 	text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
 	text-transform: uppercase;
 }
-#search_form input[type=submit]:hover {
+#search_form input[type=submit]:hover, .coupon-use-coupon-bottom:hover {
 	background-color: #6cd2d2;
 	text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
-#search_form input[type=submit]:active {
+#search_form input[type=submit]:active, .coupon-use-coupon-bottom:active {
 	box-shadow: 2px 5px 5px 0px #5db7b7 inset;
 	text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
 	background-color: #6cd2d2;

@@ -492,7 +492,6 @@ function render_coupons(data, reset_items) {
 									<a href="mailto:?body={{ email_share_url }}"><img src="/static/img/email_share_icon.png"></a> \
 								</div>--> \
 								<div class="coupon-left-bottom"> \
-									<span>Share</span> \
 									<a href="{{ facebook_share_url }}" class="facebook-share-url"><img src="/static/img/facebook_share_icon.png"></a> \
 									<a href="{{ twitter_share_url }}""><img src="/static/img/twitter_share_icon.png"></a> \
 									<a href="mailto:?body={{ email_share_url }}"><img src="/static/img/email_share_icon.png"></a> \
