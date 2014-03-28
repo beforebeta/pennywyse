@@ -583,10 +583,29 @@ hr {
 }
 .coupon-right-bottom span {
 	margin-right: 5px;
+}
+.coupon-right-bottom span, .coupon-left-bottom span {
 	font-family: 'Montserrat', sans-serif;
 }
 .coupon-right-bottom img {
 	margin-top: -3px !important;
+}
+.coupon-use-coupon-bottom {
+	height: 30px;
+	background-color: #3cafaf !important;
+	line-height: 30px;
+	font-size: 14px;
+	font-weight: lighter;
+	color: #fff !important;
+	text-transform: uppercase;
+	text-align: center;
+	opacity: 0.95;
+	width: 146px;
+	cursor: pointer;
+	font-family: 'Montserrat', sans-serif;
+	float: right;
+	margin-right: -5px;
+	border-radius: 0 0 2px 0;
 }
 .menu-row {
 	top: 25px;
@@ -679,16 +698,38 @@ hr {
 	padding-left: 30px;
 	outline: none !important;
 	border: 1px solid #d5d5d5;
+	border-right: 0;
 	background-image: url('../img/search_icon.png');
 	background-repeat: no-repeat;
 	background-position: 8px 8px;
-	border-radius: 2px;
+	border-radius: 2px 0 0 2px;
 	font-family: 'Open Sans', sans-serif;
+}
+#search_form input[type=submit] {
+	width: 93px;
+	height: 39px;
+	border: 1px solid #46b9b9;
+	background-color: #46b9b9;
+	color: #fff;
+	font-weight: bold;
+	font-family: 'Montserrat', sans-serif !important;
+	border-radius: 0 2px 2px 0;
+	text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+	text-transform: uppercase;
+}
+#search_form input[type=submit]:hover, .coupon-use-coupon-bottom:hover {
+	background-color: #6cd2d2;
+	text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+#search_form input[type=submit]:active, .coupon-use-coupon-bottom:active {
+	box-shadow: 2px 5px 5px 0px #5db7b7 inset;
+	text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+	background-color: #6cd2d2;
 }
 .search-container {
 	float: left !important;
 	left: 50%;
-	width: 485px;
+	width: 585px;
 	position: absolute;
 	margin-left: -242.5px;
 }
@@ -756,7 +797,7 @@ hr {
 	cursor: pointer;
 	font-family: 'Montserrat', sans-serif;
 }
-.use-coupon a {
+.use-coupon a, .coupon-use-coupon-bottom a {
 	text-decoration: none !important;
 	color: #fff !important;
 }
@@ -1111,7 +1152,7 @@ hr {
 	margin-top: -60px;
 	margin-left: -242.5px;
 	height: 120px !important;
-	width: 485px !important;
+	width: 585px !important;
 }
 .top-container h1 {
 	margin-top: 0 !important;
@@ -2251,4 +2292,7 @@ hr {
 	width: 800px !important;
 	margin: 0 auto;
 	padding-top: 30px;
+}
+.new-use-coupon {
+	display: none;
 }

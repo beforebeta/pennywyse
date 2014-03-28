@@ -11,8 +11,15 @@ var deal_type_filters_active = false;
 var current_url = window.location.href;
 var is_mobile = false;
 var base_url = window.location.pathname;
+var new_use_button = false;
 
 $(function() {
+	if ($('.top-header').hasClass('new-use-button')) {
+		new_use_button = true;
+		$('.old-use-coupon').hide();
+		$('.new-use-coupon').show();
+	}
+	
 	// removing pagination block, to be displayed with disabled JS only 
 	$('.pagination').remove();
 	
@@ -154,19 +161,19 @@ $(function() {
 		$(this).find('.close-category').remove();
 		fetch_items(reset_items=true);
 	});
+	if (!new_use_button) {
+		$('.coupon-container').live('mouseover', function() {
+			if (!$(this).hasClass('coupon-banner')) {
+				$(this).find('.use-coupon').addClass('use-coupon-visible');
+			}
+		});
 		
-	$('.coupon-container').live('mouseover', function() {
-		if (!$(this).hasClass('coupon-banner')) {
-			$(this).find('.use-coupon').addClass('use-coupon-visible');
-		}
-	});
-	
-	$('.coupon-container').live('mouseout', function() {
-		if (!$(this).hasClass('coupon-banner')) {
-			$(this).find('.use-coupon').removeClass('use-coupon-visible');
-		}
-	});
-	
+		$('.coupon-container').live('mouseout', function() {
+			if (!$(this).hasClass('coupon-banner')) {
+				$(this).find('.use-coupon').removeClass('use-coupon-visible');
+			}
+		});
+	}
 	$('#mobile-categories').click(function() {
 		if ($('.mobile-category :visible').length > 0) {
 			$('.mobile-category').hide();
@@ -337,7 +344,7 @@ $(function() {
 		return false;
 	});
 	
-	$('.use-coupon, .coupon-top-body').live('click', function(e) {
+	$('.use-coupon, .coupon-top-body, .new-use-link').live('click', function(e) {
 		var coupon_id = $(this).attr('id');
         setTimeout(function() {
         	window.location = '/s/' + coupon_id + '/';
@@ -486,18 +493,33 @@ function render_coupons(data, reset_items) {
 						</a> \
 						{{^ is_mobile }} \
 							<div class="coupon-bottom"> \
-								<div class="coupon-right-bottom"> \
-									Share \
-									<a href="{{ facebook_share_url }}" class="facebook-share-url"><img src="/static/img/facebook_share_icon.png"></a> \
-									<a href="{{ twitter_share_url }}""><img src="/static/img/twitter_share_icon.png"></a> \
-									<a href="mailto:?body={{ email_share_url }}"><img src="/static/img/email_share_icon.png"></a> \
-								</div> \
+								{{^ new_use_button }} \
+									<div class="coupon-right-bottom"> \
+										<span>Share</span> \
+										<a href="{{ facebook_share_url }}" class="facebook-share-url"><img src="/static/img/facebook_share_icon.png"></a> \
+										<a href="{{ twitter_share_url }}""><img src="/static/img/twitter_share_icon.png"></a> \
+										<a href="mailto:?body={{ email_share_url }}"><img src="/static/img/email_share_icon.png"></a> \
+									</div> \
+								{{/new_use_button}} \
+								{{# new_use_button }} \
+									<div class="coupon-left-bottom"> \
+										<a href="{{ facebook_share_url }}" class="facebook-share-url"><img src="/static/img/facebook_share_icon.png"></a> \
+										<a href="{{ twitter_share_url }}""><img src="/static/img/twitter_share_icon.png"></a> \
+										<a href="mailto:?body={{ email_share_url }}"><img src="/static/img/email_share_icon.png"></a> \
+									</div> \
+									<div class="coupon-use-coupon-bottom"> \
+										<a class="new-use-link" id="{{ id }}" href="{{ full_success_path}}" target="_blank"> \
+											Use Coupon \
+										</a>\
+									</div> \
+								{{/new_use_button}} \
 							</div> \
 						{{/is_mobile}} \
 					</div> \
 				{{/items}}<br clear="both">';
    	data.is_mobile = is_mobile;
    	data.is_company_coupon = $('.coupons').hasClass('company-coupons');
+   	data.new_use_button = new_use_button;
    	data.facebook_share_url = function() {
    		return 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(this.full_success_path);
    	};
