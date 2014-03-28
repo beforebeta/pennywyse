@@ -49,22 +49,26 @@
 						Save
 					</a>
 				</div>
+			{% endcomment %}
+			<div class="old-use-coupon">
 				<div class="coupon-right-bottom">
 					<span>Share</span>
 					<a href="https://www.facebook.com/sharer/sharer.php?u={{ coupon.full_success_path|urlencode:"" }}" class="facebook-share-url"><img src="/static/img/facebook_share_icon.png" target="_blank"></a>
 					<a href="{{ coupon.twitter_share_url }}" target="_blank"><img src="/static/img/twitter_share_icon.png"></a>
 					<a href="mailto:?body={{ coupon.full_success_path|urlencode }}"><img src="/static/img/email_share_icon.png"></a>
 				</div>
-			{% endcomment %}
-			<div class="coupon-left-bottom">
-				<a href="https://www.facebook.com/sharer/sharer.php?u={{ coupon.full_success_path|urlencode:"" }}" class="facebook-share-url"><img src="/static/img/facebook_share_icon.png" target="_blank"></a>
-				<a href="{{ coupon.twitter_share_url }}" target="_blank"><img src="/static/img/twitter_share_icon.png"></a>
-				<a href="mailto:?body={{ coupon.full_success_path|urlencode }}"><img src="/static/img/email_share_icon.png"></a>
 			</div>
-			<div class="coupon-use-coupon-bottom">
-				<a id="{{ coupon.id }}" href="{{ coupon.full_success_path }}" target="_blank">
-					Use Coupon
-				</a>
+			<div class="new-use-coupon">
+				<div class="coupon-left-bottom">
+					<a href="https://www.facebook.com/sharer/sharer.php?u={{ coupon.full_success_path|urlencode:"" }}" class="facebook-share-url"><img src="/static/img/facebook_share_icon.png" target="_blank"></a>
+					<a href="{{ coupon.twitter_share_url }}" target="_blank"><img src="/static/img/twitter_share_icon.png"></a>
+					<a href="mailto:?body={{ coupon.full_success_path|urlencode }}"><img src="/static/img/email_share_icon.png"></a>
+				</div>
+				<div class="coupon-use-coupon-bottom">
+					<a class="new-use-link" id="{{ coupon.id }}" href="{{ coupon.full_success_path }}" target="_blank">
+						Use Coupon
+					</a>
+				</div>
 			</div>
 		</div>
 	</div>
