@@ -717,11 +717,11 @@ hr {
 	text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
 	text-transform: uppercase;
 }
-#search_form input[type=submit]:hover, .coupon-use-coupon-bottom:hover {
+#search_form input[type=submit]:hover, .coupon-use-coupon-bottom:hover, .top-right-bottom:hover, .featured-right-bottom:hover {
 	background-color: #6cd2d2;
 	text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
-#search_form input[type=submit]:active, .coupon-use-coupon-bottom:active {
+#search_form input[type=submit]:active, .coupon-use-coupon-bottom:active, .top-right-bottom:active, .featured-right-bottom:active {
 	box-shadow: 2px 5px 5px 0px #5db7b7 inset;
 	text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
 	background-color: #6cd2d2;
@@ -797,7 +797,7 @@ hr {
 	cursor: pointer;
 	font-family: 'Montserrat', sans-serif;
 }
-.use-coupon a, .coupon-use-coupon-bottom a {
+.use-coupon a, .coupon-use-coupon-bottom a, .top-right-bottom a, .featured-right-bottom a {
 	text-decoration: none !important;
 	color: #fff !important;
 }
@@ -905,7 +905,7 @@ hr {
 	display: none;
 	font-family: 'Montserrat', sans-serif;
 }
-.merchant-logo, .coupon-container, .featured-category-container {
+.merchant-logo, .coupon-container, .featured-category-container, .top-popular-container, .top-featured-container, .top-store li {
 	-webkit-box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.15);
 	-moz-box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.15);
 	box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.15);
@@ -2164,9 +2164,6 @@ hr {
 	-moz-box-shadow: 0px 2px 2px 0px rgba(97,94,94,0.15);
 	box-shadow: 0px 2px 2px 0px rgba(97, 94, 94, 0.15);
 }
-.tc-link {
-	cursor: default;
-}
 .no-merchants {
 	background-color: #f7f7f6;
 	padding: 20px;
@@ -2295,4 +2292,211 @@ hr {
 }
 .new-use-coupon {
 	display: none;
+}
+.top-filters {
+	margin-top: 67px;
+}
+.top-filter {
+	width: 156px;
+	height: 32px;
+	line-height: 32px;
+	text-transform: uppercase;
+	color: #fff;
+	border-radius: 2px;
+	font-family: 'Montserrat', sans-serif;
+	font-size: 12px;
+	padding-left:40px;
+	background-repeat: no-repeat;
+	background-position: 10px 50%;
+	float: left;
+	opacity: 0.5;
+	cursor: pointer;
+	margin-right: 4.8px;
+}
+.top-filter-active {
+	opacity: 1;
+}
+.coupon-code-filter {
+	background-color: #e96151;
+	background-image: url('/static/img/top_coupon_code_icon.png');
+}
+.free-shipping-filter {
+	background-color: #f3793b;
+	background-image: url('/static/img/top_free_shipping_icon.png');
+}
+.on-sale-filter {
+	background-color: #35ae79;
+	background-image: url('/static/img/top_on_sale_icon.png');
+}
+.groceries-filter {
+	background-color: #3cb5b5;
+	background-image: url('/static/img/top_groceries_icon.png');
+}
+.printables-filter {
+	background-color: #e8b146;
+	background-image: url('/static/img/top_printables_icon.png');
+}
+.freebies-filter {
+	background-color: #5757a2;
+	background-image: url('/static/img/top_freebies_icon.png');
+	margin-right: 0px !important;
+}
+@media (min-width: 1180px) {
+	.top-filter {
+		margin-right: 48.8px;
+	}
+}
+.top-popular-containers {
+	margin-top: 120px;
+}
+.top-popular-containers h4, .top-featured-containers h4, .top-stores h4 {
+	margin: 0;
+	padding: 0;
+	margin-bottom: 10px;
+	text-transform: uppercase;
+	font-family: 'Montserrat', sans-serif;
+	font-size: 14px;
+}
+.top-popular-container {
+	width: 354px;
+	height: 250px;
+	border-radius: 2px;
+	background-image: url('/static/img/top-popular-bg.png');
+	float: left;
+	margin-right: 59px;
+}
+.top-coupon-bottom {
+	height: 37px;
+	line-height: 37px;
+	background-color: #f2f2f0;
+	color: #787b76;
+	text-transform: uppercase;
+	font-weight: 300;
+	font-size: 10pt;
+	padding-left: 5px;
+	padding-right: 5px;
+	margin-top: 95px;
+}
+.top-coupon-bottom a {
+	color: #787b76;
+	text-decoration: none;
+}
+.top-coupon-body {
+	background-color: rgba(255, 255, 255, 0.7);
+	padding: 10px;
+	height: 118px;
+	position: relative;
+}
+.top-left-bottom {
+	width: 168px;
+	float:left;
+	padding-left: 28px;
+}
+.top-right-bottom {
+	height: 37px;
+	background-color: #3cafaf !important;
+	line-height: 37px;
+	font-size: 16px;
+	font-weight: lighter;
+	color: #fff !important;
+	text-transform: uppercase;
+	text-align: center;
+	opacity: 0.95;
+	width: 181px;
+	cursor: pointer;
+	font-family: 'Montserrat', sans-serif;
+	float: right;
+	margin-right: -5px;
+	border-radius: 0 0 2px 0;
+}
+.top-short-description, .top-short-description h2, .top-short-description a {
+	font-size: 18px;
+	font-weight: 300 !important;
+	font-family: 'Montserrat', sans-serif;
+}
+.top-short-description h2, .top-short-description h2 a {
+	color: #e74c3c;
+	font-size: 22px !important;
+	text-transform: uppercase;
+	padding: 0;
+	margin: 0;
+}
+.top-short-description h2 {
+	display: inline;
+}
+.top-short-description a{
+	color: #000;
+	text-decoration: none;
+}
+.top-short-description a:hover {
+	text-decoration: none;
+}
+.top-featured-containers, .top-stores {
+	margin-top: 20px;
+}
+.top-featured-container {
+	width: 238px;
+	height: 154px;
+	float: left;
+}
+.featured-left-bottom {
+	width: 119px;
+	float:left;
+}
+.featured-right-bottom {
+	height: 37px;
+	background-color: #3cafaf !important;
+	line-height: 37px;
+	font-size: 14px;
+	font-weight: lighter;
+	color: #fff !important;
+	text-transform: uppercase;
+	text-align: center;
+	opacity: 0.95;
+	width: 114px;
+	cursor: pointer;
+	font-family: 'Montserrat', sans-serif;
+	float: right;
+	margin-right: -5px;
+	border-radius: 0 0 2px 0;
+}
+.top-featured-container .top-coupon-bottom {
+	margin-top: 0 !important;
+}
+.top-featured-container {
+	margin-right: 15px;
+}
+.featured-left-body, .featured-right-body {
+	float: left;
+	margin-top: 15px;
+}
+.featured-left-body {
+	width: 112px;
+	text-align: center;
+}
+.featured-left-body img {
+	max-width: 110px;
+	max-height: 42px;
+}
+
+.top-store {
+	padding: 0px !important;
+	margin-top: 10px;
+	margin-right: -35px !important;
+}
+.top-store li{
+	background-color: #fff;
+	width: 158px;
+	height: 100px;
+	line-height: 100px;
+	margin-bottom: 10px !important;
+	list-style: none;
+	overflow: hidden;
+	float: left;
+	margin-right: 10px;
+	text-align: center;
+}
+.top-store img{
+	max-width: 160px;
+	max-height: 80px;
 }

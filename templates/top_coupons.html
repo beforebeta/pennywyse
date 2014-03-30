@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 		{% block content %}
-			<div class="row middle-container index-container">
+			<div class="row middle-container index-container hidden-md hidden-lg">
 				<div class="main-rail index-rail landing-rail">
 					<div class="top-labels-container">
 						<div class="main-labels mobile-index-labels">
@@ -150,6 +150,107 @@
 						
 					</div>
 			
+				</div>
+			</div>
+			
+			<div class="row middle-container index-container top-filters visible-md visible-lg clearfix">
+				<div class="top-filters">
+					<div class="coupon-code-filter top-filter top-filter-active">Coupon Codes</div>
+					<div class="free-shipping-filter top-filter">Free Shipping</div>
+					<div class="on-sale-filter top-filter">On Sale</div>
+					<div class="groceries-filter top-filter">Groceries</div>
+					<div class="printables-filter top-filter">Printables</div>
+					<div class="freebies-filter top-filter">Freebies</div>
+				</div>
+				<div class="top-popular-containers clearfix">
+					{% for top_coupon in top_coupons %}
+						<div class="tpc {% if not forloop.first %}hidden{% endif %}">
+							<h4>Most popular coupon codes</h4>
+							{% for coupon in top_coupon.popular.all %}
+								<div class="top-popular-container">
+									<div class="top-coupon-body">
+											<div class="top-short-description"><h2>{{ coupon.short_desc }} </h2>at 
+												<a href="{% url 'web.views.main.coupons_for_company' company_name=coupon.merchant.name_slug company_id=coupon.merchant.id %}">{{ coupon.merchant.name }}</a></div>
+											<div class="coupon-description">
+												{{ coupon.description }}
+											</div>
+											<span class="ends">Ends {{ coupon.end|date:"m/d/y" }}</span>
+									</div>
+									<div class="top-coupon-bottom">
+										<div class="new-use-coupon">
+											<div class="top-left-bottom">
+												<div class="coupon-left-bottom">
+													<span>Share</span>
+													<a href="https://www.facebook.com/sharer/sharer.php?u={{ coupon.full_success_path|urlencode:"" }}" class="facebook-share-url"><img src="/static/img/facebook_share_icon.png" target="_blank"></a>
+													<a href="{{ coupon.twitter_share_url }}" target="_blank"><img src="/static/img/twitter_share_icon.png"></a>
+													<a href="mailto:?body={{ coupon.full_success_path|urlencode }}"><img src="/static/img/email_share_icon.png"></a>
+												</div>
+											</div>
+											<div class="top-right-bottom">
+												<a class="new-use-link" id="{{ coupon.id }}" href="{{ coupon.full_success_path }}" target="_blank">
+													Use Coupon
+												</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							{% endfor %}
+						</div>
+					{% endfor %}
+				</div>
+				<div class="top-featured-containers clearfix">
+					{% for top_coupon in top_coupons %}
+						<div class="tfc {% if not forloop.first %}hidden{% endif %}">
+							<h4>Featured coupon codes</h4>
+							{% for coupon in top_coupon.featured.all %}
+								<div class="top-featured-container">
+									<div class="top-coupon-body">
+										<div class="featured-left-body">
+											<div class="top-short-description"><h2>{{ coupon.short_desc }}</h2></div>
+											<a href="{% url 'web.views.main.coupons_for_company' company_name=coupon.merchant.name_slug company_id=coupon.merchant.id %}" target="_blank">
+												<img src="{{ coupon.merchant.s3_image }}">
+											</a>
+										</div>
+										<div class="featured-right-body">
+											<div class="coupon-description">
+												123
+											</div>
+											<span class="ends">Ends {{ coupon.end|date:"m/d/y" }}</span>
+										</div>
+									</div>
+									<div class="top-coupon-bottom">
+										<div class="new-use-coupon">
+											<div class="featured-left-bottom">
+												<div class="coupon-left-bottom">
+													<span>Share</span>
+													<a href="https://www.facebook.com/sharer/sharer.php?u={{ coupon.full_success_path|urlencode:"" }}" class="facebook-share-url"><img src="/static/img/facebook_share_icon.png" target="_blank"></a>
+													<a href="{{ coupon.twitter_share_url }}" target="_blank"><img src="/static/img/twitter_share_icon.png"></a>
+													<a href="mailto:?body={{ coupon.full_success_path|urlencode }}"><img src="/static/img/email_share_icon.png"></a>
+												</div>
+											</div>
+											<div class="featured-right-bottom">
+												<a class="new-use-link" id="{{ coupon.id }}" href="{{ coupon.full_success_path }}" target="_blank">
+													Use Coupon
+												</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							{% endfor %}
+						</div>
+					{% endfor %}
+				</div>
+				<div class="top-stores">
+					<h4>Stores</h4>
+					{% for top_coupon in top_coupons %}
+						<ul class="top-store {% if not forloop.first %}hidden{% endif %}" id="mst-{{ top_coupon.id }}">
+							{% for merchant in top_coupon.stores.all %}
+								<li>
+									<a href="{{ merchant.local_path }}"><img src="{{ merchant.s3_image }}"></a>
+								</li>
+							{% endfor %}
+						</ul>
+					{% endfor %}
 				</div>
 			</div>
 			{% endblock %}
