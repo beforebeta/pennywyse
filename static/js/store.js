@@ -414,6 +414,22 @@ $(function() {
 	$('.facebook-share-url').live('click', function() {
 		return !window.open(this.href, 'Share on Facebook', 'width=600,height=300');
 	});
+	
+	$('.top-filter').click(function() {
+		var top_filter_id = $(this).attr('id').substr(3, $(this).attr('id').length);
+		$('.top-filter').removeClass('top-filter-active');
+		$(this).addClass('top-filter-active');
+		$('.tpc').hide();
+		$('#tpc-'+top_filter_id).removeClass('hidden');
+		$('#tpc-'+top_filter_id).show();
+		$('.tfc').hide();
+		$('#tfc-'+top_filter_id).removeClass('hidden');
+		$('#tfc-'+top_filter_id).show();
+		$('.top-store').hide();
+		$('#ts-'+top_filter_id).removeClass('hidden');
+		$('#ts-'+top_filter_id).show();
+	});
+	
 });
 
 function select_categories(criteria) {

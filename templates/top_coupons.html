@@ -155,17 +155,17 @@
 			
 			<div class="row middle-container index-container top-filters visible-md visible-lg clearfix">
 				<div class="top-filters">
-					<div class="coupon-code-filter top-filter top-filter-active">Coupon Codes</div>
-					<div class="free-shipping-filter top-filter">Free Shipping</div>
-					<div class="on-sale-filter top-filter">On Sale</div>
-					<div class="groceries-filter top-filter">Groceries</div>
-					<div class="printables-filter top-filter">Printables</div>
-					<div class="freebies-filter top-filter">Freebies</div>
+					<div class="coupon-code-filter top-filter top-filter-active" id="tf-1">Coupon Codes</div>
+					<div class="free-shipping-filter top-filter" id="tf-2">Free Shipping</div>
+					<div class="on-sale-filter top-filter" id="tf-3">On Sale</div>
+					<div class="groceries-filter top-filter" id="tf-4">Groceries</div>
+					<div class="printables-filter top-filter" id="tf-5">Printables</div>
+					<div class="freebies-filter top-filter" id="tf-6">Freebies</div>
 				</div>
 				<div class="top-popular-containers clearfix">
 					{% for top_coupon in top_coupons %}
-						<div class="tpc {% if not forloop.first %}hidden{% endif %}">
-							<h4>Most popular coupon codes</h4>
+						<div class="tpc {% if not forloop.first %}hidden{% endif %}" id="tpc-{{ top_coupon.id }}">
+							<h4>Most popular {{ top_coupon.name }}</h4>
 							{% for coupon in top_coupon.popular.all %}
 								<div class="top-popular-container">
 									<div class="top-coupon-body">
@@ -200,8 +200,8 @@
 				</div>
 				<div class="top-featured-containers clearfix">
 					{% for top_coupon in top_coupons %}
-						<div class="tfc {% if not forloop.first %}hidden{% endif %}">
-							<h4>Featured coupon codes</h4>
+						<div class="tfc {% if not forloop.first %}hidden{% endif %}" id="tfc-{{ top_coupon.id }}">
+							<h4>Featured {{ top_coupon.name }}</h4>
 							{% for coupon in top_coupon.featured.all %}
 								<div class="top-featured-container">
 									<div class="top-coupon-body">
@@ -213,7 +213,7 @@
 										</div>
 										<div class="featured-right-body">
 											<div class="coupon-description">
-												123
+												{{ coupon.description }}
 											</div>
 											<span class="ends">Ends {{ coupon.end|date:"m/d/y" }}</span>
 										</div>
@@ -243,7 +243,7 @@
 				<div class="top-stores">
 					<h4>Stores</h4>
 					{% for top_coupon in top_coupons %}
-						<ul class="top-store {% if not forloop.first %}hidden{% endif %}" id="mst-{{ top_coupon.id }}">
+						<ul class="top-store {% if not forloop.first %}hidden{% endif %}" id="ts-{{ top_coupon.id }}">
 							{% for merchant in top_coupon.stores.all %}
 								<li>
 									<a href="{{ merchant.local_path }}"><img src="{{ merchant.s3_image }}"></a>
