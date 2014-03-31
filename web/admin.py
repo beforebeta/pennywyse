@@ -6,12 +6,16 @@ from core.util import CustomModelAdmin
 class CouponInline(admin.TabularInline):
     model = Coupon
     extra = 0
-    fields = ('short_desc', 'merchant')
-    readonly_fields = ('short_desc', 'merchant')
+    fields = ('short_desc', 'merchant', 'coupon_link')
+    readonly_fields = ('short_desc', 'merchant', 'coupon_link')
 
     def has_add_permission(self, request):
         return False
 
+    def coupon_link(self, obj):
+        return '<a href="/admin/core/coupon/%s/" target="_blank">Coupon</a>' % obj.id
+    
+    coupon_link.allow_tags = True
 
 class FeaturedCouponInline(CouponInline):
     fk_name = 'featured_in'
