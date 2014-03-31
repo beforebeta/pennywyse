@@ -434,6 +434,18 @@ $(function() {
 		window.location = merchant_url;
 		return false;
 	});
+	$(".top-coupon-description").dotdotdot({
+		ellipsis: '... ',
+ 		wrap: 'letter',
+ 		fallbackToLetter: true,
+ 		after: null,
+ 		watch: false,
+		height: null,
+		tolerance: 0,
+		callback: function( isTruncated, orgContent ) {
+			$(this).addClass('truncated');
+		},
+	});
 });
 
 function select_categories(criteria) {

@@ -167,7 +167,7 @@
 						<div class="tpc {% if not forloop.first %}hidden{% endif %}" id="tpc-{{ top_coupon.id }}">
 							<h4>Most popular {{ top_coupon.name }}</h4>
 							{% for coupon in top_coupon.popular.all %}
-								<div class="top-popular-container">
+								<div class="top-popular-container {% if forloop.counter|divisibleby:"3" %}no-right-margin{% endif %}">
 									<a class="new-use-link" id="{{ coupon.id }}" href="{{ coupon.full_success_path }}" target="_blank">
 										<div class="top-coupon-middle">
 											<div class="top-coupon-body">
@@ -210,7 +210,7 @@
 						<div class="tfc {% if not forloop.first %}hidden{% endif %}" id="tfc-{{ top_coupon.id }}">
 							<h4>Featured {{ top_coupon.name }}</h4>
 							{% for coupon in top_coupon.featured.all %}
-								<div class="top-featured-container">
+								<div class="top-featured-container {% if forloop.counter|divisibleby:"4" %}no-right-margin{% endif %}">
 									<a class="new-use-link" id="{{ coupon.id }}" href="{{ coupon.full_success_path }}" target="_blank">
 										<div class="top-coupon-body">
 											<div class="featured-left-body">
@@ -220,7 +220,7 @@
 												</span>
 											</div>
 											<div class="featured-right-body">
-												<div class="coupon-description">
+												<div class="top-coupon-description">
 													{{ coupon.description }}
 												</div>
 												<span class="ends">Ends {{ coupon.end|date:"m/d/y" }}</span>
@@ -260,6 +260,9 @@
 							{% endfor %}
 						</ul>
 					{% endfor %}
+					<br clear="both">
+					<a href="{% url 'web.views.main.stores' %}" class="all-stores">See all stores &#187;</a>
+					<br clear="both">
 				</div>
 			</div>
 			{% endblock %}

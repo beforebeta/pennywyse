@@ -2364,6 +2364,7 @@ hr {
 	background-image: url('/static/img/top-popular-bg.png');
 	float: left;
 	margin-right: 59px;
+	margin-bottom: 15px;
 }
 .top-coupon-bottom {
 	height: 37px;
@@ -2440,6 +2441,9 @@ hr {
 .top-featured-containers, .top-stores {
 	margin-top: 20px;
 }
+.top-stores {
+	margin-bottom: 20px;
+}
 .top-featured-container {
 	width: 238px;
 	height: 154px;
@@ -2471,6 +2475,15 @@ hr {
 }
 .top-featured-container {
 	margin-right: 15px;
+	margin-bottom: 15px;
+}
+@media (min-width: 1170px) {
+	.top-featured-container {
+		margin-right: 76px !important;
+	}
+}
+.no-right-margin {
+	margin-right: 0px !important;
 }
 .featured-left-body, .featured-right-body {
 	float: left;
@@ -2508,4 +2521,14 @@ hr {
 .top-store img{
 	max-width: 160px;
 	max-height: 80px;
+}
+.top-coupon-description {
+	max-width: 105px;
+	max-height: 75px;
+	line-height: 21px;
+	text-overflow: ellipsis;
+	font-family: 'Open Sans', sans-serif;
+}
+.all-stores {
+	float: right;
 }
