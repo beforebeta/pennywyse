@@ -448,6 +448,7 @@ class Coupon(models.Model):
     percent         = models.IntegerField(default=0)
     image           = models.TextField(blank=True, null=True)
     s3_image        = models.TextField(blank=True, null=True)
+    background_image = models.ImageField(upload_to='/static/img/top_coupons/', blank=True, null=True, max_length=255)
     short_desc      = models.CharField(max_length=50, default="COUPON")
     desc_slug       = models.CharField(max_length=175, default="COUPON")
     is_featured     = models.BooleanField('Featured', blank=True, default=False)

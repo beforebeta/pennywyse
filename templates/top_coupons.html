@@ -167,7 +167,7 @@
 						<div class="tpc {% if not forloop.first %}hidden{% endif %}" id="tpc-{{ top_coupon.id }}">
 							<h4>Most popular {{ top_coupon.name }}</h4>
 							{% for coupon in top_coupon.popular.all %}
-								<div class="top-popular-container {% if forloop.counter|divisibleby:"3" %}no-right-margin{% endif %}">
+								<div class="top-popular-container {% if forloop.counter|divisibleby:"3" %}no-right-margin{% endif %}" {% if coupon.background_image %}style="background-image: url('{{ coupon.background_image.url }}');"{% endif %}>
 									<a class="new-use-link" id="{{ coupon.id }}" href="{{ coupon.full_success_path }}" target="_blank">
 										<div class="top-coupon-middle">
 											<div class="top-coupon-body">

@@ -2361,8 +2361,8 @@ hr {
 	width: 354px;
 	height: 250px;
 	border-radius: 2px;
-	background-image: url('/static/img/top-popular-bg.png');
 	float: left;
+	background-color: #fff;
 	margin-right: 59px;
 	margin-bottom: 15px;
 }
