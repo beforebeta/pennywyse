@@ -32,7 +32,7 @@
 						</div>
 					
 					<br clear="both">
-					<div class="coupons more-coupons">
+					<div class="coupons">
 						{% for top_coupon in top_coupons %}
 							{% with top_coupon.popular.all.0 as coupon %}
 								{% if coupon %}
@@ -168,14 +168,21 @@
 							<h4>Most popular {{ top_coupon.name }}</h4>
 							{% for coupon in top_coupon.popular.all %}
 								<div class="top-popular-container">
-									<div class="top-coupon-body">
-											<div class="top-short-description"><h2>{{ coupon.short_desc }} </h2>at 
-												<a href="{% url 'web.views.main.coupons_for_company' company_name=coupon.merchant.name_slug company_id=coupon.merchant.id %}">{{ coupon.merchant.name }}</a></div>
-											<div class="coupon-description">
-												{{ coupon.description }}
+									<a class="new-use-link" id="{{ coupon.id }}" href="{{ coupon.full_success_path }}" target="_blank">
+										<div class="top-coupon-middle">
+											<div class="top-coupon-body">
+												<div class="top-short-description"><h2>{{ coupon.short_desc }} </h2>at 
+													<span class="mlink" data-href="{% url 'web.views.main.coupons_for_company' company_name=coupon.merchant.name_slug company_id=coupon.merchant.id %}">
+														{{ coupon.merchant.name }}
+													</span>
+												</div>
+												<div class="coupon-description">
+													{{ coupon.description }}
+												</div>
+												<span class="ends">Ends {{ coupon.end|date:"m/d/y" }}</span>
 											</div>
-											<span class="ends">Ends {{ coupon.end|date:"m/d/y" }}</span>
-									</div>
+										</div>
+									</a>
 									<div class="top-coupon-bottom">
 										<div class="new-use-coupon">
 											<div class="top-left-bottom">
@@ -204,20 +211,22 @@
 							<h4>Featured {{ top_coupon.name }}</h4>
 							{% for coupon in top_coupon.featured.all %}
 								<div class="top-featured-container">
-									<div class="top-coupon-body">
-										<div class="featured-left-body">
-											<div class="top-short-description"><h2>{{ coupon.short_desc }}</h2></div>
-											<a href="{% url 'web.views.main.coupons_for_company' company_name=coupon.merchant.name_slug company_id=coupon.merchant.id %}" target="_blank">
-												<img src="{{ coupon.merchant.s3_image }}">
-											</a>
-										</div>
-										<div class="featured-right-body">
-											<div class="coupon-description">
-												{{ coupon.description }}
+									<a class="new-use-link" id="{{ coupon.id }}" href="{{ coupon.full_success_path }}" target="_blank">
+										<div class="top-coupon-body">
+											<div class="featured-left-body">
+												<div class="top-short-description"><h2>{{ coupon.short_desc }}</h2></div>
+												<span class="mlink" data-href="{% url 'web.views.main.coupons_for_company' company_name=coupon.merchant.name_slug company_id=coupon.merchant.id %}">
+													<img src="{{ coupon.merchant.s3_image }}">
+												</span>
 											</div>
-											<span class="ends">Ends {{ coupon.end|date:"m/d/y" }}</span>
+											<div class="featured-right-body">
+												<div class="coupon-description">
+													{{ coupon.description }}
+												</div>
+												<span class="ends">Ends {{ coupon.end|date:"m/d/y" }}</span>
+											</div>
 										</div>
-									</div>
+									</a>
 									<div class="top-coupon-bottom">
 										<div class="new-use-coupon">
 											<div class="featured-left-bottom">
@@ -246,7 +255,7 @@
 						<ul class="top-store {% if not forloop.first %}hidden{% endif %}" id="ts-{{ top_coupon.id }}">
 							{% for merchant in top_coupon.stores.all %}
 								<li>
-									<a href="{{ merchant.local_path }}"><img src="{{ merchant.s3_image }}"></a>
+									<a href="{{ merchant.local_path }}" target="_blank"><img src="{{ merchant.s3_image }}"></a>
 								</li>
 							{% endfor %}
 						</ul>

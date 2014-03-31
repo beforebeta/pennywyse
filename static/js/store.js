@@ -429,7 +429,11 @@ $(function() {
 		$('#ts-'+top_filter_id).removeClass('hidden');
 		$('#ts-'+top_filter_id).show();
 	});
-	
+	$('.mlink').click(function() {
+		merchant_url = $(this).attr('data-href');
+		window.location = merchant_url;
+		return false;
+	});
 });
 
 function select_categories(criteria) {
