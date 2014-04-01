@@ -12,10 +12,13 @@ var current_url = window.location.href;
 var is_mobile = false;
 var base_url = window.location.pathname;
 var new_use_button = false;
+var optimizely_event = 'old_use_coupon_click';
+window['optimizely'] = window['optimizely'] || [];
 
 $(function() {
 	if ($('.top-header').hasClass('new-use-button')) {
 		new_use_button = true;
+		optimizely_event = 'new_use_coupon_click';
 		$('.old-use-coupon').hide();
 		$('.new-use-coupon').show();
 	}
@@ -345,6 +348,7 @@ $(function() {
 	});
 	
 	$('.use-coupon, .coupon-top-body, .new-use-link').live('click', function(e) {
+		window['optimizely'].push(["trackEvent", optimizely_event]);
 		var coupon_id = $(this).attr('id');
         setTimeout(function() {
         	window.location = '/s/' + coupon_id + '/';
