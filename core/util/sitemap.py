@@ -9,6 +9,9 @@ import os
 from lxml import etree
 from core.management.commands.fmtcload import _download_content
 
+MODULE_DIR = os.path.dirname(__file__)
+ROOT_DIR = os.path.abspath(os.path.join(MODULE_DIR, '../..'))
+
 def generate_sitemap():
     _cleanup()
     settings.AWS_DEFAULT_ACL = 'public-read'
@@ -62,6 +65,7 @@ def _chunks(l, n):
 
 
 def _build_sitemaps():
+    os.chdir(ROOT_DIR)
     for sitemap in ['base', 'category', 'merchant', 'blog']:
         print 'Building %s sitemap...\n\n' % sitemap
         call(['./vendor/sitemap_gen/sitemap_gen.py', '--config=sitemap/configs/%s.xml' % sitemap])
@@ -76,6 +80,7 @@ def _gzip_sitemaps():
 
 def _build_sitemap_index():
     print 'Uploading sitemaps to S3...\n\n'
+    os.chdir(ROOT_DIR)
     base_url = default_storage.save('base_sitemap.xml', ContentFile(open('sitemap/base_sitemap.xml').read()))
     category_url = default_storage.save('category_sitemap.xml', ContentFile(open('sitemap/category_sitemap.xml').read()))
     merchant_url = default_storage.save('merchant_sitemap.xml', ContentFile(open('sitemap/merchant_sitemap.xml').read()))
