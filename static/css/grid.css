@@ -2602,5 +2602,11 @@ hr {
 	.top-popular-container {
 		max-width: 280px !important;
 		margin-right: 0px !important;
-	}	
+	}
+	.top-coupon-body .coupon-description {
+		max-width: 280px !important;
+	}
+	.top-store li {
+		max-width: 145px !important;
+	}
 }
