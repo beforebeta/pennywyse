@@ -109,7 +109,7 @@
 						<div class="top-stores">
 							<h4>Stores</h4>
 							{% for top_coupon in top_coupons %}
-								<ul class="mts{% if not forloop.first %} hidden{% endif %}" id="mts-{{ top_coupon.id }}">
+								<ul class="top-store mts{% if not forloop.first %} hidden{% endif %}" id="mts-{{ top_coupon.id }}">
 									{% for merchant in top_coupon.stores.all %}
 										<li>
 											<a href="{{ merchant.local_path }}" target="_blank"><img src="{{ merchant.s3_image }}"></a>
