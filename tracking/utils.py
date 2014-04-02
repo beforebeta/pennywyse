@@ -185,6 +185,7 @@ def aggregate_visitor_data():
                                                               redirected=redirected)
             redirection_track.date_added = datetime.datetime.utcfromtimestamp(date_added)
             redirection_track.save()
+            redis.delete(key)
             print 'Processed search query data %s' % visitor_id
         else:
             print 'Error with key %s' % key 
