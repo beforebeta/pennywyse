@@ -1666,8 +1666,8 @@ hr {
 }
 .mobile-index-rail {
 	width: auto !important;
-	margin-left: 5px !important;
-	padding: 10px 0px 10px 20px !important;
+	margin: 0px !important;
+	padding: 10px 0px 10px 10px !important;
 	
 }
 .mobile-index-rail .top-pagination a, .mobile-merchants-label{
@@ -1926,7 +1926,7 @@ hr {
 	height: 340px !important;
 	margin: 0 auto;
 	margin-bottom: 10px;
-	width: 260px;
+	width: 280px;
 	margin-right: 14px;
 }
 .mobile-coupon-container .use-coupon, .fixed-use-coupon {
@@ -2604,9 +2604,9 @@ hr {
 		margin-right: 0px !important;
 	}
 	.top-coupon-body .coupon-description {
-		max-width: 280px !important;
+		max-width: 260px !important;
 	}
 	.top-store li {
-		max-width: 145px !important;
+		max-width: 135px !important;
 	}
 }
