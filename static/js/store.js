@@ -226,37 +226,6 @@ $(function() {
 		fetch_items(reset_items=true);
 	}
 	
-	// switching between "most popular", "featured" and "stores" sections on "top coupons" mobile page
-	$('.mobile-index-labels a').click(function() {
-		$('.mobile-index-labels a').removeClass('active');
-		if ($('.coupon-types').hasClass('expanded')) {
-			$('.coupon-types').find('li').removeClass('selected');
-			$('.coupon-types').find('li:first').addClass('selected');
-			$('.coupon-types').closest('.coupon-types').removeClass('expanded');
-			$(this).find('.expanded-choices li').off('click');
-			$(this).find('.expanded-choices li').closest('.expandable').on('click', expandable_select_callback);
-		}
-		
-		var filter_type = $(this).attr('id');
-		if (filter_type != 'coupon_type') {
-			$(this).addClass('active');
-		}
-		$('.coupon-container').hide();
-		$('.top-menu-store').hide();
-		if (filter_type == 'most-popular') {
-			$('.menu-popular-coupon:first').show();
-		}
-		else if (filter_type == 'featured-coupons') {
-			$('.menu-featured-coupon:first').removeClass('hidden');
-			$('.menu-featured-coupon:first').show();
-			$('.menu-featured-coupon:first').find('.coupon-container').show();
-		}
-		else if (filter_type == 'stores') {
-			$('.top-menu-store:first').removeClass('hidden');
-			$('.top-menu-store:first').show();
-		}
-	});
-	
 	$('.coupon-type li').click(function() {
 		coupon_type = $(this).attr('id');
 		$('.coupon-type li').removeClass('active');
@@ -1004,29 +973,18 @@ function expandable_callback(event) {
 	if ($(this).parent().hasClass('ordering-select')) {
 		sorting = $(this).attr('id');
 	}
-	if ($(this).parent().hasClass('coupon-type-select') || $(this).parent().hasClass('ordering-select')) {
-		fetch_items(reset_items=true);
-	}
-		
-	if ($('.mobile-index-labels').length > 0) {
+	
+	if ($('.mobile-popular-labels').length > 0) {
 		var top_coupon_type = $(this).attr('id');
-		var coupon_type = $('.mobile-index-labels').find('.active').attr('id');
-		if (coupon_type == 'most-popular') {
-			$('.menu-popular-coupon').hide();
-			$('#mpc-'+top_coupon_type).show();
-			$('#mpc-'+top_coupon_type).removeClass('hidden');
-		}
-		else if (coupon_type == 'featured-coupons') {
-			$('.menu-featured-coupon').hide();
-			$('#mfc-'+top_coupon_type).show();
-			$('#mfc-'+top_coupon_type).removeClass('hidden');
-			$('#mfc-'+top_coupon_type).find('.coupon-container').show();
-		}
-		else if (coupon_type == 'stores') {
-			$('.top-menu-store').hide();
-			$('#mst-'+top_coupon_type).show();
-			$('#mst-'+top_coupon_type).removeClass('hidden');
-		}
+		$('.mtc').hide();
+		$('#mtc-'+top_filter_id).removeClass('hidden');
+		$('#mtc-'+top_filter_id).show();
+		$('.mfc').hide();
+		$('#mfc-'+top_filter_id).removeClass('hidden');
+		$('#mfc-'+top_filter_id).show();
+		$('.mts').hide();
+		$('#mts-'+top_filter_id).removeClass('hidden');
+		$('#mts-'+top_filter_id).show();
 	}
 	$(this).parent().find('li:not(.selected)').hide();
 	event.stopPropagation();

@@ -2349,7 +2349,7 @@ hr {
 .top-popular-containers {
 	margin-top: 120px;
 }
-.top-popular-containers h4, .top-featured-containers h4, .top-stores h4 {
+.top-popular-containers h4, .top-featured-containers h4, .top-stores h4, .top-mobile-coupons h4 {
 	margin: 0;
 	padding: 0;
 	margin-bottom: 10px;
@@ -2590,4 +2590,17 @@ hr {
 	height: auto;
 	line-height: 19.047618865966797px;
 	width: auto;
+}
+.top-use-coupon {
+	display: block !important;
+	margin-top: -13px !important;
+}
+.top-mobile-coupons h4 {
+	text-align: center;
+}
+@media (max-width: 767px) {
+	.top-popular-container {
+		max-width: 280px !important;
+		margin-right: 0px !important;
+	}	
 }
