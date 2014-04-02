@@ -1667,7 +1667,7 @@ hr {
 .mobile-index-rail {
 	width: auto !important;
 	margin: 0px !important;
-	padding: 10px 0px 10px 10px !important;
+	padding: 5px !important;
 	
 }
 .mobile-index-rail .top-pagination a, .mobile-merchants-label{
@@ -2195,6 +2195,9 @@ hr {
 	float:left;
 	width: 110px;
 }
+.coupon-type-select {
+	width: 130px !important;
+}
 .mobile-index-labels #featured-coupons, .mobile-index-labels #trending {
 	text-align: center;
 }
@@ -2595,13 +2598,19 @@ hr {
 	display: block !important;
 	margin-top: -13px !important;
 }
+.top-mobile-coupons {
+	margin-top: 0 !important;
+}
 .top-mobile-coupons h4 {
 	text-align: center;
 }
 @media (max-width: 767px) {
-	.top-popular-container {
+	.top-popular-container, .mobile-coupon-container {
 		max-width: 280px !important;
 		margin-right: 0px !important;
+		margin: 0 auto !important;
+		float: none !important;
+		margin-bottom: 10px !important;
 	}
 	.top-coupon-body .coupon-description {
 		max-width: 260px !important;

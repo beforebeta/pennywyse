@@ -14,6 +14,7 @@ var base_url = window.location.pathname;
 var new_use_button = false;
 
 $(function() {
+	// determining whether to display new version of "use coupon" button, or old one
 	if ($('.top-header').hasClass('new-use-button')) {
 		new_use_button = true;
 		$('.old-use-coupon').hide();
@@ -50,6 +51,7 @@ $(function() {
 		}
 	}
 	
+	// automatically displaying subscription popup if #subscribe hash provided
 	if (window.location.hash == '#subscribe') {
 		$('.subscription-popup').show();
 		$('.overlay').show();
@@ -57,6 +59,7 @@ $(function() {
 		$('.more-coupons').waypoint('disable');
 	}
 	
+	// detecting smartphone browsers
 	if ('ontouchstart' in window || window.DocumentTouch && document instanceof DocumentTouch) {
 		is_touch = true;
 	}
@@ -78,6 +81,7 @@ $(function() {
 	
 	$('.expandable').on('click', expandable_select_callback);
 	
+	// binding for sliding mobile hamburger menu
 	$('#mobile-menu').click(function() {
 		if ($('.mobile-menu').is(':visible')) {
 			$('.mobile-menu').hide('slide', { direction: 'left' }, 250);
@@ -291,12 +295,14 @@ $(function() {
 		$('.more-coupons').waypoint('enable');
 	});
 	
+	// closing popups when ESC button pressed
 	$(window).keyup(function(e){
 	    if(e.keyCode === 27) {
     	    close_popups();
 		}
 	});
 	
+	// closing popups when user clicked outside of popup
 	$('.overlay').click(function() {
 		close_popups();
 	});
@@ -341,6 +347,7 @@ $(function() {
 		}
 	});
 
+	// truncating coupon description to given number of lines
 	$(".coupon-description").dotdotdot({
 		ellipsis: '... ',
  		wrap: 'letter',
@@ -380,10 +387,12 @@ $(function() {
 		$('.menu-item').find('.menu-link').removeClass('active-dropdown-link');
 	});
 	
+	// popup for sharing content via facebook
 	$('.facebook-share-url').live('click', function() {
 		return !window.open(this.href, 'Share on Facebook', 'width=600,height=300');
 	});
 	
+	// switching between different coupon types on "top coupons" page
 	$('.top-filter').click(function() {
 		var top_filter_id = $(this).attr('id').substr(3, $(this).attr('id').length);
 		$('.top-filter').removeClass('top-filter-active');
@@ -398,11 +407,15 @@ $(function() {
 		$('#ts-'+top_filter_id).removeClass('hidden');
 		$('#ts-'+top_filter_id).show();
 	});
+	
+	// redirecting to merchant page when user clicks on merchant logo on "top coupons" page
 	$('.mlink').click(function() {
 		merchant_url = $(this).attr('data-href');
 		window.location = merchant_url;
 		return false;
 	});
+	
+	// truncating coupon description for "top coupons" page coupons
 	$(".top-coupon-description").dotdotdot({
 		ellipsis: '... ',
  		wrap: 'letter',
@@ -975,7 +988,7 @@ function expandable_callback(event) {
 	}
 	
 	if ($('.mobile-popular-labels').length > 0) {
-		var top_coupon_type = $(this).attr('id');
+		var top_filter_id = $(this).attr('id');
 		$('.mtc').hide();
 		$('#mtc-'+top_filter_id).removeClass('hidden');
 		$('#mtc-'+top_filter_id).show();
@@ -986,6 +999,7 @@ function expandable_callback(event) {
 		$('#mts-'+top_filter_id).removeClass('hidden');
 		$('#mts-'+top_filter_id).show();
 	}
+	
 	$(this).parent().find('li:not(.selected)').hide();
 	event.stopPropagation();
 	$(this).off('click');
@@ -1003,6 +1017,7 @@ function merchant_button_callback() {
 	var merchant_url = $(this).attr('data-href');
 	track_click(merchant_url, redirect=false);
 }
+
 function track_click(url, redirect) {
 	var view_url = window.location.pathname;
 	var coupon_id = $.url().param('c');
