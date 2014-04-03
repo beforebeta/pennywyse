@@ -2361,12 +2361,12 @@ hr {
 	font-size: 14px;
 }
 .top-popular-container {
-	width: 354px;
+	width: 385px;
+	margin-right: 20px;
 	height: 250px;
 	border-radius: 2px;
 	float: left;
 	background-color: #fff;
-	margin-right: 59px;
 	margin-bottom: 15px;
 }
 .top-coupon-bottom {
@@ -2392,15 +2392,19 @@ hr {
 }
 .top-coupon-middle {
 	height: 213px;
+	width: 365px;
+}
+.top-popular-container .top-coupon-body {
+	width: 385px;
 }
 .top-popular-container a, .top-featured-container a{
 	text-decoration: none;
 	color: inherit;
 }
 .top-left-bottom {
-	width: 168px;
 	float:left;
-	padding-left: 28px;
+	width: 158px;
+	padding-left: 15px;
 }
 .top-right-bottom {
 	height: 37px;
@@ -2412,12 +2416,12 @@ hr {
 	text-transform: uppercase;
 	text-align: center;
 	opacity: 0.95;
-	width: 181px;
 	cursor: pointer;
 	font-family: 'Montserrat', sans-serif;
 	float: right;
 	margin-right: -5px;
 	border-radius: 0 0 2px 0;
+	width: 220px;
 }
 .top-short-description {
 	box-sizing: border-box;
