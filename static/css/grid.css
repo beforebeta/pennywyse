@@ -2449,10 +2449,15 @@ hr {
 }
 .top-short-description h2, .top-short-description h2 a {
 	color: rgb(231, 76, 60);
-	font-size: 27px !important;
 	text-transform: uppercase;
 	padding: 0;
 	margin: 0;
+}
+.pdescription {
+	font-size: 27px !important;
+}
+.fdescription {
+	font-size: 22px !important;
 }
 .top-left-bottom .coupon-left-bottom {
 	width: 128px;
@@ -2527,6 +2532,9 @@ hr {
 .featured-left-body img {
 	max-width: 110px;
 	max-height: 42px;
+}
+.featured-left-body .top-short-description h2 a{
+	font-size: 18px !important;
 }
 .featured-right-body {
 	width: 105px;

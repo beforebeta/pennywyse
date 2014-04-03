@@ -145,7 +145,7 @@
 									<a class="new-use-link" id="{{ coupon.id }}" href="{{ coupon.full_success_path }}" target="_blank">
 										<div class="top-coupon-middle">
 											<div class="top-coupon-body">
-												<div class="top-short-description"><h2>{{ coupon.short_desc }} </h2>at 
+												<div class="top-short-description"><h2 class="pdescription">{{ coupon.short_desc }} </h2>at 
 													<span class="mlink" data-href="{% url 'web.views.main.coupons_for_company' company_name=coupon.merchant.name_slug company_id=coupon.merchant.id %}">
 														{{ coupon.merchant.name }}
 													</span>
@@ -188,7 +188,7 @@
 									<a class="new-use-link" id="{{ coupon.id }}" href="{{ coupon.full_success_path }}" target="_blank">
 										<div class="top-coupon-body">
 											<div class="featured-left-body">
-												<div class="top-short-description"><h2>{{ coupon.short_desc }}</h2></div>
+												<div class="top-short-description"><h2 class="fdescription">{{ coupon.short_desc }}</h2></div>
 												<span class="mlink" data-href="{% url 'web.views.main.coupons_for_company' company_name=coupon.merchant.name_slug company_id=coupon.merchant.id %}">
 													<img src="{{ coupon.merchant.s3_image }}">
 												</span>
