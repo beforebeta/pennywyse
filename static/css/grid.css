@@ -2411,7 +2411,7 @@ hr {
 	height: 37px;
 	background-color: #3cafaf !important;
 	line-height: 37px;
-	font-size: 16px;
+	font-size: 18px;
 	font-weight: lighter;
 	color: #fff !important;
 	text-transform: uppercase;
@@ -2429,7 +2429,7 @@ hr {
 	cursor: auto;
 	display: inline;
 	font-family: Montserrat, sans-serif;
-	font-size: 29px;
+	font-size: 27px !important;
 	font-weight: 300;
 	height: auto;
 	line-height: 31.899999618530273px;
@@ -2455,6 +2455,9 @@ hr {
 	text-transform: uppercase;
 	padding: 0;
 	margin: 0;
+}
+.top-left-bottom .coupon-left-bottom {
+	width: 128px;
 }
 .top-short-description h2 {
 	display: inline;
