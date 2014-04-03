@@ -2429,7 +2429,6 @@ hr {
 	cursor: auto;
 	display: inline;
 	font-family: Montserrat, sans-serif;
-	font-size: 27px !important;
 	font-weight: 300;
 	height: auto;
 	line-height: 31.899999618530273px;
@@ -2441,7 +2440,6 @@ hr {
 	padding-left: 0px;
 	padding-right: 0px;
 	padding-top: 0px;
-	text-transform: uppercase;
 	width: auto;
 }
 .top-short-description, .top-short-description h2, .top-short-description a {
@@ -2451,7 +2449,7 @@ hr {
 }
 .top-short-description h2, .top-short-description h2 a {
 	color: rgb(231, 76, 60);
-	font-size: 22px !important;
+	font-size: 27px !important;
 	text-transform: uppercase;
 	padding: 0;
 	margin: 0;
@@ -2523,6 +2521,8 @@ hr {
 .featured-left-body {
 	width: 112px;
 	text-align: center;
+	padding-right: 15px !important;
+	margin-top: 8px !important;
 }
 .featured-left-body img {
 	max-width: 110px;
