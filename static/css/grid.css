@@ -2425,7 +2425,6 @@ hr {
 }
 .top-short-description {
 	box-sizing: border-box;
-	color: rgb(231, 76, 60);
 	cursor: auto;
 	display: inline;
 	font-family: Montserrat, sans-serif;
@@ -2450,7 +2449,7 @@ hr {
 	font-family: 'Montserrat', sans-serif;
 }
 .top-short-description h2, .top-short-description h2 a {
-	color: #e74c3c !important;
+	color: rgb(231, 76, 60);
 	font-size: 22px !important;
 	text-transform: uppercase;
 	padding: 0;
@@ -2586,6 +2585,7 @@ hr {
 	height: auto;
 	line-height: 28.571430206298828px;
 	width: auto;
+	text-transform: initial !important;
 }
 .top-coupon-body .ends {
 	box-sizing: border-box;
