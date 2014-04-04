@@ -2531,13 +2531,14 @@ hr {
 }
 .featured-left-body img {
 	max-width: 110px;
-	max-height: 42px;
+	max-height: 38px;
 }
 .featured-left-body .top-short-description h2 a{
 	font-size: 18px !important;
 }
 .featured-right-body {
-	width: 105px;
+	width: 145px !important; 
+	line-height: 20px !important;
 	margin-top: 10px !important;
 }
 .top-store {
