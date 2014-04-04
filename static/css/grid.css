@@ -905,7 +905,7 @@ hr {
 	display: none;
 	font-family: 'Montserrat', sans-serif;
 }
-.merchant-logo, .coupon-container, .featured-category-container, .top-popular-container, .top-featured-container, .top-store li {
+.merchant-logo, .coupon-container, .featured-category-container, .top-popular-container, .top-featured-container, .top-popular-store li {
 	-webkit-box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.15);
 	-moz-box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.15);
 	box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.15);
@@ -1835,7 +1835,7 @@ hr {
 	margin-top: 10px;
 	margin-right: -35px !important;
 }
-.top-menu-store li{
+/*.top-menu-store li{
 	width: 120px;
 	height: 60px;
 	line-height: 60px;
@@ -1849,7 +1849,7 @@ hr {
 .top-menu-store img{
 	max-width: 160px;
 	max-height: 80px;
-}
+}*/
 .top-menu-store .more-items {
 	width: 280px !important;
 	font-weight: normal !important;
@@ -2544,12 +2544,12 @@ hr {
 	line-height: 20px !important;
 	margin-top: 10px !important;
 }
-.top-store {
+.top-popular-store {
 	padding: 0px !important;
 	margin-top: 10px;
 	margin-right: -35px !important;
 }
-.top-store li{
+.top-popular-store li{
 	background-color: #fff;
 	width: 158px;
 	height: 100px;
@@ -2561,7 +2561,7 @@ hr {
 	margin-right: 10px;
 	text-align: center;
 }
-.top-store img{
+.top-popular-store img{
 	max-width: 160px;
 	max-height: 80px;
 }
@@ -2635,7 +2635,7 @@ hr {
 	.top-coupon-body .coupon-description {
 		max-width: 260px !important;
 	}
-	.top-store li {
+	.top-popular-store li {
 		max-width: 135px !important;
 	}
 	.top-coupon-middle, .top-popular-container .top-coupon-body {

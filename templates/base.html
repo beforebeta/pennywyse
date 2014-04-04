@@ -204,9 +204,9 @@
 										</div>
 										<div class="top-coupons popular-merchants">
 											<b>Stores</b>
-											{% for top_coupon in top_coupons|slice:":6" %}
+											{% for top_coupon in top_coupons %}
 											<ul class="top-menu-store{% if not forloop.first %} hidden{% endif %}" id="st-{{ top_coupon.id }}">
-												{% for merchant in top_coupon.stores.all %}
+												{% for merchant in top_coupon.stores.all|slice:":8" %}
 													<li>
 														<a href="{{ merchant.local_path }}"><img src="{{ merchant.s3_image }}"></a>
 													</li>
