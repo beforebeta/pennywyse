@@ -428,6 +428,13 @@ $(function() {
 			$(this).addClass('truncated');
 		},
 	});
+	
+	$('.fdescription').each(function() {
+		if ($(this).text().length > 7) {
+			$(this).removeClass('fdescription');
+			$(this).addClass('fdescription-mid');
+		}
+	});
 });
 
 function select_categories(criteria) {
