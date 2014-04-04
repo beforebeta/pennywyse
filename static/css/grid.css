@@ -2635,4 +2635,7 @@ hr {
 	.top-store li {
 		max-width: 135px !important;
 	}
+	.top-coupon-middle, .top-popular-container .top-coupon-body {
+		max-width: 280px !important
+	}
 }
