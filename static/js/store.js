@@ -406,7 +406,7 @@ $(function() {
 		$('.top-store').hide();
 		$('#ts-'+top_filter_id).removeClass('hidden');
 		$('#ts-'+top_filter_id).show();
-		$(".top-coupon-description:not(.truncated), .popular-coupon-description:not(.truncated)").dotdotdot({
+		$(".top-coupon-description:visible, .popular-coupon-description:visible").dotdotdot({
 			ellipsis: '... ',
 	 		wrap: 'letter',
 	 		fallbackToLetter: true,
