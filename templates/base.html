@@ -162,11 +162,11 @@
 												{% if top_coupon.popular.all.0 %}
 													<div class="coupon-body top-popular-coupon {% if not forloop.first %}hidden{% endif %}" id="pc-{{ top_coupon.id }}">
 														<h2 class="short-description">
-															<a href="{{ top_coupon.popular.all.0.full_success_path }}">
+															<a href="{{ top_coupon.popular.all.0.full_success_path }}" id="{{ top_coupon.popular.all.0.id }}" class="top-use-coupon" target="_blank">
 																{{ top_coupon.popular.all.0.short_desc }}
 															</a>
 														</h2>
-														<a href="{{ top_coupon.popular.all.0.full_success_path }}" class="top-coupon-link">
+														<a href="{{ top_coupon.popular.all.0.full_success_path }}" class="top-coupon-link top-use-coupon" id="{{ top_coupon.popular.all.0.id }}" target="_blank">
 															{{ top_coupon.popular.all.0.description|safe }}<br>
 														</a>
 														<span class="ends">Ends {{ top_coupon.popular.all.0.end|date:"m/d/y" }}</span>
@@ -191,7 +191,7 @@
 															</a>
 														</div>
 														<div class="featured-description">
-															<a href="{{ featured_coupon.full_success_path }}">
+															<a href="{{ featured_coupon.full_success_path }}" class="top-use-coupon" id="{{ featured_coupon.id }}" target="_blank">
 																{{ featured_coupon.description|safe }}
 															</a>
 														</div><br clear="both">
