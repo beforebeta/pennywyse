@@ -406,6 +406,18 @@ $(function() {
 		$('.top-store').hide();
 		$('#ts-'+top_filter_id).removeClass('hidden');
 		$('#ts-'+top_filter_id).show();
+		$(".top-coupon-description:not(.truncated), .popular-coupon-description:not(.truncated)").dotdotdot({
+			ellipsis: '... ',
+	 		wrap: 'letter',
+	 		fallbackToLetter: true,
+	 		after: null,
+	 		watch: false,
+			height: null,
+			tolerance: 0,
+			callback: function( isTruncated, orgContent ) {
+				$(this).addClass('truncated');
+			},
+		});
 	});
 	
 	// redirecting to merchant page when user clicks on merchant logo on "top coupons" page
@@ -416,7 +428,7 @@ $(function() {
 	});
 	
 	// truncating coupon description for "top coupons" page coupons
-	$(".top-coupon-description").dotdotdot({
+	$(".top-coupon-description:visible, .popular-coupon-description:visible").dotdotdot({
 		ellipsis: '... ',
  		wrap: 'letter',
  		fallbackToLetter: true,

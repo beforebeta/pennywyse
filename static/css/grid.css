@@ -2566,12 +2566,12 @@ hr {
 	max-height: 80px;
 }
 .top-coupon-description {
-	max-width: 105px;
-	max-height: 75px;
+	width: 105px;
+	height: 65px;
 	line-height: 21px;
 	text-overflow: ellipsis;
 }
-.top-coupon-body .coupon-description {
+.popular-coupon-description {
 	box-sizing: border-box;
 	color: rgb(51, 51, 51);
 	cursor: auto;
