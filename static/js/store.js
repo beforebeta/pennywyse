@@ -330,7 +330,7 @@ $(function() {
 		$('#pc-' + coupon_type_id).removeClass('hidden');
 		$('.top-featured-section').addClass('hidden');
 		$('#fc-' + coupon_type_id).removeClass('hidden');
-		$('.top-store').addClass('hidden');
+		$('.top-menu-store').addClass('hidden');
 		$('#st-' + coupon_type_id).removeClass('hidden');
 	});
 

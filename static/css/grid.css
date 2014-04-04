@@ -2641,4 +2641,7 @@ hr {
 	.top-coupon-middle, .top-popular-container .top-coupon-body {
 		max-width: 280px !important
 	}
+	.top-stores {
+		width: 280px;
+	}
 }
