@@ -6,7 +6,7 @@ from core.util import CustomModelAdmin, CouponModelAdmin
 
 class CouponModelForm(ModelForm):
     class Meta:
-        model = Merchant
+        model = Coupon
     
     def __init__(self, *args, **kwargs):
         super(CouponModelForm, self).__init__(*args, **kwargs)
@@ -18,6 +18,7 @@ class CouponAdmin(CustomModelAdmin, CouponModelAdmin):
     readonly_fields = ['ref_id', 'ref_id_source', 'merchant_location']
     exclude = ['related_deal']
     raw_id_fields = ['merchant']
+    form = CouponModelForm
     
 
 class MerchantAdmin(CustomModelAdmin):
