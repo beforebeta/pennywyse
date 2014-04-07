@@ -1,6 +1,17 @@
+from django.forms import ModelForm
 from django.contrib.gis import admin
 from core.models import Coupon, Category, Merchant, MerchantLocation, CouponNetwork, CityPicture
 from core.util import CustomModelAdmin, CouponModelAdmin
+
+
+class CouponModelForm(ModelForm):
+    class Meta:
+        model = Merchant
+    
+    def __init__(self, *args, **kwargs):
+        super(CouponModelForm, self).__init__(*args, **kwargs)
+        self.fields['merchant'].required = True
+
 
 class CouponAdmin(CustomModelAdmin, CouponModelAdmin):
     search_fields = ['description',"short_desc", "merchant__name"]
