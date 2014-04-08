@@ -128,7 +128,7 @@
 					</div>
 			</div>
 			<!-- end of mobile hamburger menu -->
-			<div class="header-container header hidden visible-md visible-lg">
+			<div class="header-container header visible-md visible-lg">
 					<div class="row">
 						<div class="logo"><a href="{% url 'web.views.main.index' %}"><img src="/static/img/logo.png"></a>
 						</div>
@@ -297,27 +297,6 @@
 				</div>
 			</div>
 		{% endcache %}
-		<div class="header-container header prescroll-header bottom-shadow">
-				<div class="row top-row">
-					<div class="top-left-container">
-						<div class="advantages-header">What Makes PushPenny<br>So Great?</div>
-						<div class="advantages-list">
-							<ul>
-								<li class="al1">One of the largest sources of verified coupon codes</li>
-								<li class="al2">Backed by the PushPenny promise</li>
-								<li class="al3">PushPenny Magazine is the ultimate guide to frugal living</li>
-								<li class="al4">Huge Database of local deals and offers</li>
-							</ul>
-						</div>
-					</div>
-					<div class="search-container top-container">
-						<a href="{% url 'web.views.main.index' %}"></a>
-						<form action="/search/" id="search_form">
-						<input name="q" type="text" placeholder="Search over 50,000+ coupons from 6,000+ stores" class="search" value="{{ query }}"><input type="submit" value="search">
-						</form>
-					</div>
-				</div>
-		</div>
 		<div class="subscription-popup">
 			<div class="main-row">
 				<div class="subscription-row">

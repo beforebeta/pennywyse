@@ -2355,7 +2355,7 @@ hr {
 .top-popular-containers {
 	margin-top: 120px;
 }
-.top-popular-containers h4, .top-featured-containers h4, .top-stores h4, .top-mobile-coupons h4, .new-coupons h4 {
+.top-popular-containers h4, .top-featured-containers h4, .top-stores h4, .top-mobile-coupons h4, .new-coupons h4, .landing-rail h4 {
 	margin: 0;
 	padding: 0;
 	margin-bottom: 10px;
@@ -2654,4 +2654,23 @@ hr {
 }
 .top-landing-container {
 	margin-top: 10px;
+}
+.top-landing-container .top-popular-container {
+	height: 264px !important;
+}
+.top-landing-container .top-coupon-middle {
+	height: 228px !important;
+}
+.landing-container {
+	margin-left: 20px !important;
+}
+.landing-container .top-featured-container {
+	width: 275px !important;
+	margin-right: 20px !important;
+}
+.landing-container .featured-right-body {
+	width: 135px !important;
+}
+.landing-container .featured-left-bottom {
+	width: 109px !important;
 }
