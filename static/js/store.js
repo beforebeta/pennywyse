@@ -366,7 +366,7 @@ $(function() {
 		$(this).addClass('top-coupon-active');
 	});
 	
-	if ($('.no-search-results').length > 0 || $('.no-results').length > 0) {
+	if ($('.no-search-results').length > 0 || $('.no-results').length > 0 || $('.load-coupons').length > 0) {
 		base_url = '/';
 		fetch_items(reset_items=true);
 	}

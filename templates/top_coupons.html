@@ -24,7 +24,7 @@
 						</div>
 					
 					<br clear="both">
-					<div class="coupons top-mobile-coupons">
+					<div class="top-mobile-coupons">
 						<div class="clearfix">
 						{% for top_coupon in top_coupons %}
 							<div class="mtc{% if not forloop.first %} hidden{% endif %}" id="mtc-{{ top_coupon.id }}">
@@ -237,5 +237,6 @@
 					<a href="{% url 'web.views.main.stores' %}" class="all-stores">See all stores &#187;</a>
 					<br clear="both">
 				</div>
+				<div class="load-coupons coupons more-coupons"></div>
 			</div>
 			{% endblock %}
