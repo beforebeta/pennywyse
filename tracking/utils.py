@@ -235,3 +235,8 @@ def get_visitor_tag(url, visitor_id):
     except:
         print_stack_trace()
         return url
+
+def generate_skimlinks_url(url):
+    params = {'xs': 1, 'id': settings.SKIMLINKS_SITE_ID}
+    return 'http://go.redirectingat.com/?%s&%s' % (urllib.urlencode(params),
+                                                   urllib.urlencode({'url':url}))

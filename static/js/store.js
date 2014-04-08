@@ -16,6 +16,7 @@ var optimizely_event = 'old_use_coupon_click';
 window['optimizely'] = window['optimizely'] || [];
 
 $(function() {
+	// determining whether to display new version of "use coupon" button, or old one
 	if ($('.top-header').hasClass('new-use-button')) {
 		new_use_button = true;
 		optimizely_event = 'new_use_coupon_click';
@@ -53,6 +54,7 @@ $(function() {
 		}
 	}
 	
+	// automatically displaying subscription popup if #subscribe hash provided
 	if (window.location.hash == '#subscribe') {
 		$('.subscription-popup').show();
 		$('.overlay').show();
@@ -60,6 +62,7 @@ $(function() {
 		$('.more-coupons').waypoint('disable');
 	}
 	
+	// detecting smartphone browsers
 	if ('ontouchstart' in window || window.DocumentTouch && document instanceof DocumentTouch) {
 		is_touch = true;
 	}
@@ -81,6 +84,7 @@ $(function() {
 	
 	$('.expandable').on('click', expandable_select_callback);
 	
+	// binding for sliding mobile hamburger menu
 	$('#mobile-menu').click(function() {
 		if ($('.mobile-menu').is(':visible')) {
 			$('.mobile-menu').hide('slide', { direction: 'left' }, 250);
@@ -229,37 +233,6 @@ $(function() {
 		fetch_items(reset_items=true);
 	}
 	
-	// switching between "most popular", "featured" and "stores" sections on "top coupons" mobile page
-	$('.mobile-index-labels a').click(function() {
-		$('.mobile-index-labels a').removeClass('active');
-		if ($('.coupon-types').hasClass('expanded')) {
-			$('.coupon-types').find('li').removeClass('selected');
-			$('.coupon-types').find('li:first').addClass('selected');
-			$('.coupon-types').closest('.coupon-types').removeClass('expanded');
-			$(this).find('.expanded-choices li').off('click');
-			$(this).find('.expanded-choices li').closest('.expandable').on('click', expandable_select_callback);
-		}
-		
-		var filter_type = $(this).attr('id');
-		if (filter_type != 'coupon_type') {
-			$(this).addClass('active');
-		}
-		$('.coupon-container').hide();
-		$('.top-menu-store').hide();
-		if (filter_type == 'most-popular') {
-			$('.menu-popular-coupon:first').show();
-		}
-		else if (filter_type == 'featured-coupons') {
-			$('.menu-featured-coupon:first').removeClass('hidden');
-			$('.menu-featured-coupon:first').show();
-			$('.menu-featured-coupon:first').find('.coupon-container').show();
-		}
-		else if (filter_type == 'stores') {
-			$('.top-menu-store:first').removeClass('hidden');
-			$('.top-menu-store:first').show();
-		}
-	});
-	
 	$('.coupon-type li').click(function() {
 		coupon_type = $(this).attr('id');
 		$('.coupon-type li').removeClass('active');
@@ -325,12 +298,14 @@ $(function() {
 		$('.more-coupons').waypoint('enable');
 	});
 	
+	// closing popups when ESC button pressed
 	$(window).keyup(function(e){
 	    if(e.keyCode === 27) {
     	    close_popups();
 		}
 	});
 	
+	// closing popups when user clicked outside of popup
 	$('.overlay').click(function() {
 		close_popups();
 	});
@@ -361,7 +336,7 @@ $(function() {
 		$('#pc-' + coupon_type_id).removeClass('hidden');
 		$('.top-featured-section').addClass('hidden');
 		$('#fc-' + coupon_type_id).removeClass('hidden');
-		$('.top-store').addClass('hidden');
+		$('.top-menu-store').addClass('hidden');
 		$('#st-' + coupon_type_id).removeClass('hidden');
 	});
 
@@ -378,6 +353,7 @@ $(function() {
 		}
 	});
 
+	// truncating coupon description to given number of lines
 	$(".coupon-description").dotdotdot({
 		ellipsis: '... ',
  		wrap: 'letter',
@@ -396,7 +372,7 @@ $(function() {
 		$(this).addClass('top-coupon-active');
 	});
 	
-	if ($('.no-search-results').length > 0 || $('.no-results').length > 0) {
+	if ($('.no-search-results').length > 0 || $('.no-results').length > 0 || $('.load-coupons').length > 0) {
 		base_url = '/';
 		fetch_items(reset_items=true);
 	}
@@ -417,8 +393,65 @@ $(function() {
 		$('.menu-item').find('.menu-link').removeClass('active-dropdown-link');
 	});
 	
+	// popup for sharing content via facebook
 	$('.facebook-share-url').live('click', function() {
 		return !window.open(this.href, 'Share on Facebook', 'width=600,height=300');
+	});
+	
+	// switching between different coupon types on "top coupons" page
+	$('.top-filter').click(function() {
+		var top_filter_id = $(this).attr('id').substr(3, $(this).attr('id').length);
+		$('.top-filter').removeClass('top-filter-active');
+		$(this).addClass('top-filter-active');
+		$('.tpc').hide();
+		$('#tpc-'+top_filter_id).removeClass('hidden');
+		$('#tpc-'+top_filter_id).show();
+		$('.tfc').hide();
+		$('#tfc-'+top_filter_id).removeClass('hidden');
+		$('#tfc-'+top_filter_id).show();
+		$('.top-store').hide();
+		$('#ts-'+top_filter_id).removeClass('hidden');
+		$('#ts-'+top_filter_id).show();
+		$(".top-coupon-description:visible, .popular-coupon-description:visible").dotdotdot({
+			ellipsis: '... ',
+	 		wrap: 'letter',
+	 		fallbackToLetter: true,
+	 		after: null,
+	 		watch: false,
+			height: null,
+			tolerance: 0,
+			callback: function( isTruncated, orgContent ) {
+				$(this).addClass('truncated');
+			},
+		});
+	});
+	
+	// redirecting to merchant page when user clicks on merchant logo on "top coupons" page
+	$('.mlink').click(function() {
+		merchant_url = $(this).attr('data-href');
+		window.location = merchant_url;
+		return false;
+	});
+	
+	// truncating coupon description for "top coupons" page coupons
+	$(".top-coupon-description:visible, .popular-coupon-description:visible").dotdotdot({
+		ellipsis: '... ',
+ 		wrap: 'letter',
+ 		fallbackToLetter: true,
+ 		after: null,
+ 		watch: false,
+		height: null,
+		tolerance: 0,
+		callback: function( isTruncated, orgContent ) {
+			$(this).addClass('truncated');
+		},
+	});
+	
+	$('.fdescription').each(function() {
+		if ($(this).text().length > 7) {
+			$(this).removeClass('fdescription');
+			$(this).addClass('fdescription-mid');
+		}
 	});
 });
 
@@ -978,30 +1011,20 @@ function expandable_callback(event) {
 	if ($(this).parent().hasClass('ordering-select')) {
 		sorting = $(this).attr('id');
 	}
-	if ($(this).parent().hasClass('coupon-type-select') || $(this).parent().hasClass('ordering-select')) {
-		fetch_items(reset_items=true);
+	
+	if ($('.mobile-popular-labels').length > 0) {
+		var top_filter_id = $(this).attr('id');
+		$('.mtc').hide();
+		$('#mtc-'+top_filter_id).removeClass('hidden');
+		$('#mtc-'+top_filter_id).show();
+		$('.mfc').hide();
+		$('#mfc-'+top_filter_id).removeClass('hidden');
+		$('#mfc-'+top_filter_id).show();
+		$('.mts').hide();
+		$('#mts-'+top_filter_id).removeClass('hidden');
+		$('#mts-'+top_filter_id).show();
 	}
-		
-	if ($('.mobile-index-labels').length > 0) {
-		var top_coupon_type = $(this).attr('id');
-		var coupon_type = $('.mobile-index-labels').find('.active').attr('id');
-		if (coupon_type == 'most-popular') {
-			$('.menu-popular-coupon').hide();
-			$('#mpc-'+top_coupon_type).show();
-			$('#mpc-'+top_coupon_type).removeClass('hidden');
-		}
-		else if (coupon_type == 'featured-coupons') {
-			$('.menu-featured-coupon').hide();
-			$('#mfc-'+top_coupon_type).show();
-			$('#mfc-'+top_coupon_type).removeClass('hidden');
-			$('#mfc-'+top_coupon_type).find('.coupon-container').show();
-		}
-		else if (coupon_type == 'stores') {
-			$('.top-menu-store').hide();
-			$('#mst-'+top_coupon_type).show();
-			$('#mst-'+top_coupon_type).removeClass('hidden');
-		}
-	}
+	
 	$(this).parent().find('li:not(.selected)').hide();
 	event.stopPropagation();
 	$(this).off('click');
@@ -1019,6 +1042,7 @@ function merchant_button_callback() {
 	var merchant_url = $(this).attr('data-href');
 	track_click(merchant_url, redirect=false);
 }
+
 function track_click(url, redirect) {
 	var view_url = window.location.pathname;
 	var coupon_id = $.url().param('c');

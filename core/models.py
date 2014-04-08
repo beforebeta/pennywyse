@@ -448,6 +448,7 @@ class Coupon(models.Model):
     percent         = models.IntegerField(default=0)
     image           = models.TextField(blank=True, null=True)
     s3_image        = models.TextField(blank=True, null=True)
+    background_image = models.ImageField(upload_to='/static/img/top_coupons/', blank=True, null=True, max_length=255)
     short_desc      = models.CharField(max_length=50, default="COUPON")
     desc_slug       = models.CharField(max_length=175, default="COUPON")
     is_featured     = models.BooleanField('Featured', blank=True, default=False)
@@ -598,12 +599,16 @@ class Coupon(models.Model):
         return category in [c.code for c in self.categories.all()]
 
     def local_path(self):
-        return "/coupons/%s/?c=%s" % (self.merchant.name_slug, self.id)
+        if self.merchant:
+            return "/coupons/%s/?c=%s" % (self.merchant.name_slug, self.id)
+        return
 
     def success_path(self):
-        return reverse('web.views.main.coupon_success_page', kwargs={'company_name': self.merchant.name_slug,
+        if self.merchant:
+            return reverse('web.views.main.coupon_success_page', kwargs={'company_name': self.merchant.name_slug,
                                                                      'coupon_label': self.desc_slug,
                                                                      'coupon_id': self.id})
+        return
 
     def page_description(self):
         return "{0} | {1}".format(self.get_description(), self.merchant.page_description())

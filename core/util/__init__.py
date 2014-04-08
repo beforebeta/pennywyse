@@ -157,6 +157,15 @@ class CustomModelAdmin(admin.ModelAdmin):
         cache.clear()
 
 
+class CouponModelAdmin(admin.ModelAdmin):
+
+    def save_model(self, request, obj, form, change):
+        from tracking.utils import generate_skimlinks_url
+        super(CouponModelAdmin, self).save_model(request, obj, form, change)
+        if not obj.skimlinks:
+            obj.skimlinks = generate_skimlinks_url(obj.directlink)
+            obj.save()
+
 def _upload_file(*args):
     from core.models import Coupon, Merchant
     try:

@@ -68,6 +68,7 @@
 					</div>
 				</div>
 			</div>
+			<!-- mobile hamburger menu -->
 			<div class="header-container header hidden-md hidden-lg">
 					<div class="mobile-row">
 						    <button type="button" class="navbar-toggle" id="mobile-menu">
@@ -126,6 +127,7 @@
 						<div class="mobile-logo"><a href="{% url 'web.views.main.index' %}"><img src="/static/img/Pushpenny-respMobile-logo.png"></a></div>
 					</div>
 			</div>
+			<!-- end of mobile hamburger menu -->
 			<div class="header-container header hidden visible-md visible-lg">
 					<div class="row">
 						<div class="logo"><a href="{% url 'web.views.main.index' %}"><img src="/static/img/logo.png"></a>
@@ -145,7 +147,7 @@
 				<div class="row">
 					<ul class="menu">
 						<li class="menu-item category-item">
-							<a href="#" class="menu-link tc-link">Top Coupons</a>
+							<a href="{% url 'web.views.main.top_coupons' %}" class="menu-link tc-link">Top Coupons</a>
 							<ul class="row dropdown-row stores-row"><li>
 								<div class="main-dropdown-row">
 									<div class="top-coupons-row">	
@@ -183,7 +185,7 @@
 											<b>Featured coupons</b>
 											{% for top_coupon in top_coupons %}
 												<div class="top-featured-section {% if not forloop.first %}hidden{% endif %}" id="fc-{{ top_coupon.id }}">
-												{% for featured_coupon in top_coupon.featured.all %}
+												{% for featured_coupon in top_coupon.featured.all|slice:":3" %}
 													<div class="top-featured-coupon {% if foorloop.first %}first-coupon{% elif forloop.last %}last-coupon{% endif %}">
 														<div class="featured-image">
 															<a href="{{ featured_coupon.merchant.local_path }}">
@@ -203,8 +205,8 @@
 										<div class="top-coupons popular-merchants">
 											<b>Stores</b>
 											{% for top_coupon in top_coupons %}
-											<ul class="top-store{% if not forloop.first %} hidden{% endif %}" id="st-{{ top_coupon.id }}">
-												{% for merchant in top_coupon.stores.all %}
+											<ul class="top-menu-store{% if not forloop.first %} hidden{% endif %}" id="st-{{ top_coupon.id }}">
+												{% for merchant in top_coupon.stores.all|slice:":8" %}
 													<li>
 														<a href="{{ merchant.local_path }}"><img src="{{ merchant.s3_image }}"></a>
 													</li>
