@@ -2224,10 +2224,13 @@ hr {
 	height: 264px;
 	color: #fff;
 	line-height: 20px;
-	margin-left: 30px;
+	margin-left: 20px;
 	padding-left: 17px;
 	padding-right: 17px;
 	background: rgba(60, 181, 181, 0.9);
+	border-radius: 2px;
+	float: left;
+	margin-right: 20px;
 }
 .top-left-container .advantages-list {
 	height: 200px;
@@ -2352,7 +2355,7 @@ hr {
 .top-popular-containers {
 	margin-top: 120px;
 }
-.top-popular-containers h4, .top-featured-containers h4, .top-stores h4, .top-mobile-coupons h4 {
+.top-popular-containers h4, .top-featured-containers h4, .top-stores h4, .top-mobile-coupons h4, .new-coupons h4 {
 	margin: 0;
 	padding: 0;
 	margin-bottom: 10px;
@@ -2480,6 +2483,10 @@ hr {
 }
 .top-stores {
 	margin-bottom: 20px;
+}
+.top-stores h4 {
+	float: left;
+	margin-bottom: 0 !important;
 }
 .top-featured-container {
 	width: 285px;
@@ -2644,4 +2651,7 @@ hr {
 	.top-stores {
 		width: 280px;
 	}
+}
+.top-landing-container {
+	margin-top: 10px;
 }

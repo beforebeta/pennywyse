@@ -224,6 +224,8 @@
 				</div>
 				<div class="top-stores">
 					<h4>Stores</h4>
+					<a href="{% url 'web.views.main.stores' %}" class="all-stores">See all stores &#187;</a>
+					<br clear="both">
 					{% for top_coupon in top_coupons %}
 						<ul class="top-popular-store {% if not forloop.first %}hidden{% endif %}" id="ts-{{ top_coupon.id }}">
 							{% for merchant in top_coupon.stores.all %}
@@ -234,8 +236,10 @@
 						</ul>
 					{% endfor %}
 					<br clear="both">
-					<a href="{% url 'web.views.main.stores' %}" class="all-stores">See all stores &#187;</a>
-					<br clear="both">
+					
+				</div>
+				<div class="new-coupons">
+					<h4>New Coupons</h4>
 				</div>
 				<div class="load-coupons coupons more-coupons"></div>
 			</div>
