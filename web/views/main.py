@@ -264,6 +264,14 @@ def redirect_to_affiliate_url(request, coupon_id):
     affiliate_url = get_visitor_tag(coupon.skimlinks, request.session['visitor_id'])
     return redirect(affiliate_url)
 
+def redirect_to_merchant_url(request, company_id):
+    try:
+        merchant = Merchant.objects.get(id=company_id)
+    except Merchant.DoesNotExist:
+        raise Http404
+    affiliate_url = get_visitor_tag(merchant.skimlinks, request.session['visitor_id'])
+    return redirect(affiliate_url)
+
 @ensure_csrf_cookie
 @cache_page(60 * 60 * 24)
 def categories(request):

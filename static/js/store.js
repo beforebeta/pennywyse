@@ -433,6 +433,13 @@ $(function() {
 		return false;
 	});
 	
+	$('.top-merchant-link').click(function() {
+		var merchant_id = $(this).attr('id');
+        setTimeout(function() {
+        	window.location = '/m/' + merchant_id + '/';
+        }, 1);
+	});
+	
 	// truncating coupon description for "top coupons" page coupons
 	$(".top-coupon-description:visible, .popular-coupon-description:visible").dotdotdot({
 		ellipsis: '... ',
