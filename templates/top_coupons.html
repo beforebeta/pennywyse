@@ -35,7 +35,7 @@
 										<div class="top-coupon-middle">
 											<div class="top-coupon-body">
 												<div class="top-short-description"><h2>{{ coupon.short_desc }} </h2>at 
-													<span class="mlink" data-href="{% url 'web.views.main.coupons_for_company' company_name=coupon.merchant.name_slug company_id=coupon.merchant.id %}">
+													<span class="lmlink" data-href="{% url 'web.views.main.coupons_for_company' company_name=coupon.merchant.name_slug company_id=coupon.merchant.id %}">
 														{{ coupon.merchant.name }}
 													</span>
 												</div>
@@ -230,7 +230,7 @@
 						<ul class="top-popular-store {% if not forloop.first %}hidden{% endif %}" id="ts-{{ top_coupon.id }}">
 							{% for merchant in top_coupon.stores.all %}
 								<li>
-									<a href="{{ merchant.local_path }}" target="_blank"><img src="{{ merchant.s3_image }}"></a>
+									<a id="{{ merchant.id }}" href="{{ merchant.local_path }}" target="_blank" class="top-merchant-link"><img src="{{ merchant.s3_image }}"></a>
 								</li>
 							{% endfor %}
 						</ul>
