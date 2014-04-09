@@ -39,7 +39,7 @@
 				{% with top_coupons.0 as top_coupon %}
 
 							{% for coupon in top_coupon.popular.all|slice:":2"  %}
-								<div class="top-popular-container {% if forloop.counter|divisibleby:"3" %}no-right-margin{% endif %}" {% if coupon.background_image %}style="background-image: url('{{ coupon.background_image.url }}');"{% endif %}>
+								<div class="top-popular-container {% if forloop.counter|divisibleby:"2" %}no-right-margin{% endif %}" {% if coupon.background_image %}style="background-image: url('{{ coupon.background_image.url }}');"{% endif %}>
 									<a class="new-use-link" id="{{ coupon.id }}" href="{{ coupon.full_success_path }}" target="_blank">
 										<div class="top-coupon-middle">
 											<div class="top-coupon-body">
@@ -86,6 +86,24 @@
 								<div class="top-featured-container {% if forloop.counter|divisibleby:"4" %}no-right-margin{% endif %}">
 									<a class="new-use-link" id="{{ coupon.id }}" href="{{ coupon.full_success_path }}" target="_blank">
 										<div class="top-coupon-body">
+											<div class="coupon-header">
+												<div class="coupon-left-label">
+													{% if coupon.coupon_type == 'free_shipping' %}
+														<img src="/static/img/free_shipping_icon.png">Free Shipping
+													{% elif coupon.coupon_type == 'onsale' %}
+														<img src="/static/img/on_sale_icon.png">On Sale
+													{% elif coupon.coupon_type == 'groceries' %}
+														<img src="/static/img/groceries_icon.png">Groceries
+													{% elif coupon.coupon_type == 'coupon_code' %}
+														<img src="/static/img/coupon_code_icon.png">Coupon
+													{% elif coupon.coupon_type == 'printable' %}
+														<img src="/static/img/printable_icon.png">Printables
+													{% elif coupon.coupon_type == 'freebies' %}
+														<img src="/static/img/freebies_icon.png">Freebies
+													{% endif %}
+												</div>
+											</div>
+											<hr class="landing-separator">
 											<div class="featured-left-body">
 												<div class="top-short-description"><h2 class="fdescription">{{ coupon.short_desc }}</h2></div>
 												<span class="mlink" data-href="{% url 'web.views.main.coupons_for_company' company_name=coupon.merchant.name_slug company_id=coupon.merchant.id %}">
@@ -127,9 +145,11 @@
 					{% with top_coupons.0 as top_coupon %}
 						<ul class="top-popular-store" id="ts-{{ top_coupon.id }}">
 							{% for merchant in top_coupon.stores.all %}
-								<li>
-									<a href="{{ merchant.local_path }}" target="_blank"><img src="{{ merchant.s3_image }}"></a>
-								</li>
+								<a id="{{ merchant.id }}" href="{{ merchant.local_path }}" target="_blank" class="top-merchant-link">
+									<li>
+										<img src="{{ merchant.s3_image }}">
+									</li>
+								</a>
 							{% endfor %}
 						</ul>
 					{% endwith %}
