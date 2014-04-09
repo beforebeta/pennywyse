@@ -229,9 +229,11 @@
 					{% for top_coupon in top_coupons %}
 						<ul class="top-popular-store {% if not forloop.first %}hidden{% endif %}" id="ts-{{ top_coupon.id }}">
 							{% for merchant in top_coupon.stores.all %}
-								<li>
-									<a id="{{ merchant.id }}" href="{{ merchant.local_path }}" target="_blank" class="top-merchant-link"><img src="{{ merchant.s3_image }}"></a>
-								</li>
+								<a id="{{ merchant.id }}" href="{{ merchant.local_path }}" target="_blank" class="top-merchant-link">
+									<li>
+										<img src="{{ merchant.s3_image }}">
+									</li>
+								</a>
 							{% endfor %}
 						</ul>
 					{% endfor %}
