@@ -108,6 +108,7 @@
 					    </div>	
 						<div class="top-stores">
 							<h4>Stores</h4>
+							<br clear="both">
 							{% for top_coupon in top_coupons %}
 								<ul class="top-popular-store mts{% if not forloop.first %} hidden{% endif %}" id="mts-{{ top_coupon.id }}">
 									{% for merchant in top_coupon.stores.all %}

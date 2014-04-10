@@ -128,7 +128,7 @@
 					</div>
 			</div>
 			<!-- end of mobile hamburger menu -->
-			<div class="header-container header hidden visible-md visible-lg">
+			<div class="header-container header top-search sticky visible-md visible-lg">
 					<div class="row">
 						<div class="logo"><a href="{% url 'web.views.main.index' %}"><img src="/static/img/logo.png"></a>
 						</div>
@@ -143,7 +143,7 @@
 						</div>
 					</div>
 			</div>
-			<div class="header-container menu-row main-dropdown-section sticky visible-md visible-lg">
+			<div class="header-container menu-row main-dropdown-section top-menu bottom-shadow sticky visible-md visible-lg">
 				<div class="row">
 					<ul class="menu">
 						<li class="menu-item category-item">
@@ -194,7 +194,7 @@
 														</div>
 														<div class="featured-description">
 															<a href="{{ featured_coupon.full_success_path }}" class="top-use-coupon" id="{{ featured_coupon.id }}" target="_blank">
-																{{ featured_coupon.description|safe }}
+																{{ featured_coupon.description|safe|truncatechars:100 }}
 															</a>
 														</div><br clear="both">
 													</div>
@@ -206,7 +206,7 @@
 											<b>Stores</b>
 											{% for top_coupon in top_coupons %}
 											<ul class="top-menu-store{% if not forloop.first %} hidden{% endif %}" id="st-{{ top_coupon.id }}">
-												{% for merchant in top_coupon.stores.all|slice:":8" %}
+												{% for merchant in top_coupon.stores.all|slice:":6" %}
 													<li>
 														<a href="{{ merchant.local_path }}"><img src="{{ merchant.s3_image }}"></a>
 													</li>
@@ -297,27 +297,6 @@
 				</div>
 			</div>
 		{% endcache %}
-		<div class="header-container header prescroll-header bottom-shadow">
-				<div class="row top-row">
-					<div class="top-left-container">
-						<div class="advantages-header">What Makes PushPenny<br>So Great?</div>
-						<div class="advantages-list">
-							<ul>
-								<li class="al1">One of the largest sources of verified coupon codes</li>
-								<li class="al2">Backed by the PushPenny promise</li>
-								<li class="al3">PushPenny Magazine is the ultimate guide to frugal living</li>
-								<li class="al4">Huge Database of local deals and offers</li>
-							</ul>
-						</div>
-					</div>
-					<div class="search-container top-container">
-						<a href="{% url 'web.views.main.index' %}"></a>
-						<form action="/search/" id="search_form">
-						<input name="q" type="text" placeholder="Search over 50,000+ coupons from 6,000+ stores" class="search" value="{{ query }}"><input type="submit" value="search">
-						</form>
-					</div>
-				</div>
-		</div>
 		<div class="subscription-popup">
 			<div class="main-row">
 				<div class="subscription-row">
