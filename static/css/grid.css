@@ -1668,7 +1668,12 @@ hr {
 	width: auto !important;
 	margin: 0px !important;
 	padding: 5px !important;
-	
+}
+@media (max-width: 321px) {
+	.mobile-index-rail {
+		width: 280px !important;
+		margin: 0 auto !important;
+	}
 }
 .mobile-index-rail .top-pagination a, .mobile-merchants-label{
 	font-family: 'Montserrat', sans-serif !important;
@@ -2220,7 +2225,7 @@ hr {
 	cursor: pointer;
 }
 .top-left-container {
-	width: 250px;
+	width: 320px;
 	height: 264px;
 	color: #fff;
 	line-height: 20px;
@@ -2230,7 +2235,7 @@ hr {
 	background: rgba(60, 181, 181, 0.9);
 	border-radius: 2px;
 	float: left;
-	margin-right: 65px;
+	margin-right: 32.5px;
 }
 .top-left-container .advantages-list {
 	height: 200px;
@@ -2355,7 +2360,7 @@ hr {
 .top-popular-containers {
 	margin-top: 120px;
 }
-.top-popular-containers h4, .top-featured-containers h4, .top-stores h4, .top-mobile-coupons h4, .new-coupons h4, .landing-rail h4 {
+.top-popular-containers h4, .top-featured-containers h4, .top-stores h4, .top-mobile-coupons h4, .new-coupons h4, .landing-rail h4, .mobile-top-coupons h4 {
 	margin: 0;
 	padding: 0;
 	margin-bottom: 10px;
@@ -2370,6 +2375,7 @@ hr {
 	border-radius: 2px;
 	float: left;
 	background-color: #fff;
+	background-repeat: no-repeat;
 	margin-bottom: 15px;
 }
 .top-coupon-bottom {
@@ -2650,6 +2656,7 @@ hr {
 	}
 	.top-stores {
 		width: 280px;
+		margin: 0 auto !important;
 	}
 }
 .top-landing-container {
@@ -2657,7 +2664,7 @@ hr {
 }
 .top-landing-container .top-popular-container {
 	height: 264px !important;
-	margin-right: 65px;
+	margin-right: 32.5px;
 }
 .top-landing-container .top-coupon-middle {
 	height: 228px !important;
@@ -2685,4 +2692,27 @@ hr {
 .landing-separator {
 	margin-top: 10px !important;
 	margin-bottom: 0 !important;
+}
+
+.mobile-top-coupons {
+	margin-top: 10px;
+}
+.mobile-top-coupons .top-popular-container {
+	margin-bottom: 20px !important;
+}
+.mobile-top-coupons .top-left-container {
+	width: 280px !important;
+	float: none !important;
+	margin: 0 auto !important;
+	margin-bottom: 20px !important;
+}
+.mfc {
+	width: 280px !important;
+	margin: 0 auto !important;
+}
+@media (max-width: 321px) {
+	.landing-rail .coupons {
+		width: 280px !important;
+		margin: 0 auto !important;
+	}
 }

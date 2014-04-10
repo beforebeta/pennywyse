@@ -27,23 +27,6 @@ $(function() {
 	// removing pagination block, to be displayed with disabled JS only 
 	$('.pagination').remove();
 	
-	// enabling sticky header only on landing page and only for desktop pages
-	if ($('.landing-container').length > 0 && $(window).width() >= 992) {
-		is_sticky = true;
-		init_sticky_header();
-	}
-	else {
-		if ($('.index-container').length == 0 && $(window).width() < 992) {
-			$('.header').addClass('fixed-container');
-			$('.menu-row').addClass('top-menu');
-			$('.menu-row').addClass('bottom-shadow');
-			$('.menu-row').addClass('fixed-container');
-			$('.menu-row').removeClass('sticky');
-			$('.top-header').removeClass('sticky');
-			$('.top-header').addClass('fixed-container');			
-		}
-	}
-	
 	// automatically displaying subscription popup if #subscribe hash provided
 	if (window.location.hash == '#subscribe') {
 		$('.subscription-popup').show();
@@ -603,7 +586,6 @@ function render_coupons(data, reset_items) {
 			$(this).addClass('truncated');
 		},
 	});
-	init_sticky_header();
 }
 
 function render_merchants(data) {
