@@ -1232,8 +1232,8 @@ hr {
 }
 .top-featured-coupon {
 	border-bottom: 1px solid #d9d9d7 !important;
-	padding-bottom: 15px;
-	padding-top: 10px;
+	padding-bottom: 15px !important;
+	padding-top: 15px !important;
 }
 .top-featured-coupon img{
 	max-width: 80px;

@@ -54,6 +54,9 @@ $(function() {
 	else if (is_touch) {
 		$('.use-coupon').addClass('fixed-use-coupon');
 	}
+	else {
+		$('.search-container').find('.search').focus();
+	}
 	
 	$('.expandable').on('click', expandable_select_callback);
 	
