@@ -2301,7 +2301,7 @@ hr {
 	margin: 0 auto;
 	padding-top: 30px;
 }
-.new-use-coupon {
+.old-use-coupon {
 	display: none;
 }
 .top-filters {
@@ -2715,4 +2715,7 @@ hr {
 		width: 280px !important;
 		margin: 0 auto !important;
 	}
+}
+.items-page {
+	margin-top: 119px;
 }

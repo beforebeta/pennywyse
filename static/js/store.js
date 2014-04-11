@@ -11,19 +11,8 @@ var deal_type_filters_active = false;
 var current_url = window.location.href;
 var is_mobile = false;
 var base_url = window.location.pathname;
-var new_use_button = false;
-var optimizely_event = 'old_use_coupon_click';
-window['optimizely'] = window['optimizely'] || [];
 
 $(function() {
-	// determining whether to display new version of "use coupon" button, or old one
-	if ($('.top-header').hasClass('new-use-button')) {
-		new_use_button = true;
-		optimizely_event = 'new_use_coupon_click';
-		$('.old-use-coupon').hide();
-		$('.new-use-coupon').show();
-	}
-	
 	// removing pagination block, to be displayed with disabled JS only 
 	$('.pagination').remove();
 	
@@ -144,19 +133,6 @@ $(function() {
 		$(this).find('.close-category').remove();
 		fetch_items(reset_items=true);
 	});
-	if (!new_use_button) {
-		$('.coupon-container').live('mouseover', function() {
-			if (!$(this).hasClass('coupon-banner')) {
-				$(this).find('.use-coupon').addClass('use-coupon-visible');
-			}
-		});
-		
-		$('.coupon-container').live('mouseout', function() {
-			if (!$(this).hasClass('coupon-banner')) {
-				$(this).find('.use-coupon').removeClass('use-coupon-visible');
-			}
-		});
-	}
 	$('#mobile-categories').click(function() {
 		if ($('.mobile-category :visible').length > 0) {
 			$('.mobile-category').hide();
@@ -403,13 +379,13 @@ $(function() {
 	});
 	
 	// redirecting to merchant page when user clicks on merchant logo on "top coupons" page
-	$('.mlink').click(function() {
+	$('.mlink').live('click', function() {
 		merchant_url = $(this).attr('data-href');
 		window.location = merchant_url;
 		return false;
 	});
 	
-	$('.top-merchant-link').click(function() {
+	$('.top-merchant-link, a.merchant-link').click(function() {
 		var merchant_id = $(this).attr('id');
         setTimeout(function() {
         	window.location = '/m/' + merchant_id + '/';
@@ -513,33 +489,22 @@ function render_coupons(data, reset_items) {
 						</a> \
 						{{^ is_mobile }} \
 							<div class="coupon-bottom"> \
-								{{^ new_use_button }} \
-									<div class="coupon-right-bottom"> \
-										<span>Share</span> \
-										<a href="{{ facebook_share_url }}" class="facebook-share-url"><img src="/static/img/facebook_share_icon.png"></a> \
-										<a href="{{ twitter_share_url }}""><img src="/static/img/twitter_share_icon.png"></a> \
-										<a href="mailto:?body={{ email_share_url }}"><img src="/static/img/email_share_icon.png"></a> \
-									</div> \
-								{{/new_use_button}} \
-								{{# new_use_button }} \
-									<div class="coupon-left-bottom"> \
-										<a href="{{ facebook_share_url }}" class="facebook-share-url"><img src="/static/img/facebook_share_icon.png"></a> \
-										<a href="{{ twitter_share_url }}""><img src="/static/img/twitter_share_icon.png"></a> \
-										<a href="mailto:?body={{ email_share_url }}"><img src="/static/img/email_share_icon.png"></a> \
-									</div> \
-									<div class="coupon-use-coupon-bottom"> \
-										<a class="new-use-link" id="{{ id }}" href="{{ full_success_path}}" target="_blank"> \
-											Use Coupon \
-										</a>\
-									</div> \
-								{{/new_use_button}} \
+								<div class="coupon-left-bottom"> \
+									<a href="{{ facebook_share_url }}" class="facebook-share-url"><img src="/static/img/facebook_share_icon.png"></a> \
+									<a href="{{ twitter_share_url }}""><img src="/static/img/twitter_share_icon.png"></a> \
+									<a href="mailto:?body={{ email_share_url }}"><img src="/static/img/email_share_icon.png"></a> \
+								</div> \
+								<div class="coupon-use-coupon-bottom"> \
+									<a class="new-use-link" id="{{ id }}" href="{{ full_success_path}}" target="_blank"> \
+										Use Coupon \
+									</a>\
+								</div> \
 							</div> \
 						{{/is_mobile}} \
 					</div> \
 				{{/items}}<br clear="both">';
    	data.is_mobile = is_mobile;
    	data.is_company_coupon = $('.coupons').hasClass('company-coupons');
-   	data.new_use_button = new_use_button;
    	data.facebook_share_url = function() {
    		return 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(this.full_success_path);
    	};
