@@ -72,7 +72,8 @@ def index(request, current_page=None):
                         'full_success_path': c.full_success_path(),
                         'image': c.merchant.s3_image,
                         'twitter_share_url': c.twitter_share_url,
-                        'merchant_link': c.merchant.local_path()}
+                        'merchant_link': c.merchant.local_path(),
+                        'merchant_id': c.merchant.id}
                 data.append(item)
         except EmptyPage:
             raise Http404
@@ -346,7 +347,8 @@ def category(request, category_code, current_page=None, category_ids=-1):
                         'full_success_path': c.full_success_path(),
                         'image': c.merchant.s3_image,
                         'twitter_share_url': c.twitter_share_url,
-                        'merchant_link': c.merchant.local_path()}
+                        'merchant_link': c.merchant.local_path(),
+                        'merchant_id': c.merchant.id}
                 data.append(item)
         except EmptyPage:
             raise Http404
