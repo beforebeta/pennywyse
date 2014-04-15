@@ -242,11 +242,11 @@ BROKER_URL = 'amqp://pennywyse:pennywyse@localhost:5672/pennywyse'
 CELERYBEAT_SCHEDULE = {
     'daily-coupons-update': {
         'task': 'core.tasks.load_coupons',
-        'schedule': crontab(hour=23),
+        'schedule': crontab(hour=15, minute=30),
     },
     'daily-skimlinks-commissions-update': {
         'task': 'core.tasks.load_skimlinks_commissions',
-        'schedule': crontab(hour=23),
+        'schedule': crontab(minute='*/30'),
     },
     'daily-sqootload-shortcycle': {
         'task': 'core.tasks.run_sqootload_shortcycle',
@@ -258,7 +258,7 @@ CELERYBEAT_SCHEDULE = {
     },
     'daily-aggregate-visitor-data': {
         'task': 'core.tasks.process_visitor_data',
-        'schedule': crontab(hour=23),
+        'schedule': crontab(minute='*/30'),
     },
     'daily-build-sitemap': {
         'task': 'core.tasks.build_sitemap',
