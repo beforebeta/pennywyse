@@ -20,3 +20,12 @@ HAYSTACK_CONNECTIONS = {
     },
 }
 
+DEBUG = True
+COMPRESS_ENABLED = False
+BASE_URL_NO_APPENDED_SLASH = "http://localhost:8000"
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    }
+}
+
