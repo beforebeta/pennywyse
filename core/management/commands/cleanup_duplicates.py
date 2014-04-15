@@ -1,12 +1,8 @@
-from BeautifulSoup import BeautifulStoneSoup
-import datetime
-from lxml import etree
 from optparse import make_option
-from urlparse import urlparse, parse_qs
 
 from django.core.management.base import BaseCommand
-from django.conf import settings
-from core.models import Category, Country, Coupon, DealType, Merchant, MerchantAffiliateData
+from core.models import Coupon, Merchant
+from tracking.models import ClickTrack
 from django.db.models import Count
 
 class Command(BaseCommand):
@@ -49,11 +45,5 @@ class Command(BaseCommand):
                     print 'Removed duplicated coupon ID - %s, ref_id - %s' % (duplicated_coupon.id, duplicated_coupon.ref_id)
                     if ClickTrack.objects.filter(coupon=duplicated_coupon).count() > 0:
                         print 'updated clicktracks %s' % ClickTrack.objects.filter(coupon=duplicated_coupon).update(coupon=coupon)
-                   if FeaturedCoupon.objects.filter(coupon=duplicated_coupon).count() > 0:
-                        print 'updated featured coupons %s' % FeaturedCoupon.objects.filter(coupon=duplicated_coupon).update(coupon=coupon)
-                    if NewCoupon.objects.filter(coupon=duplicated_coupon).count() > 0:
-                        print 'updated new coupons %s' % NewCoupon.objects.filter(coupon=duplicated_coupon).update(coupon=coupon)
-                    if PopularCoupon.objects.filter(coupon=duplicated_coupon).count() > 0:
-                        print 'updated popular coupons %s' % PopularCoupon.objects.filter(coupon=duplicated_coupon).update(coupon=coupon)
                 ids = [c.id for c in coupons[1:]]
                 print Coupon.objects.filter(id__in=ids).delete()
