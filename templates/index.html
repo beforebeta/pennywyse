@@ -98,9 +98,9 @@
 											</div>
 										</div>
 									</a>
-									<div class="use-coupon top-use-coupon" id="{{ coupon.id }}">
+									<a class="use-coupon top-use-coupon" id="{{ coupon.id }}" href="{{ coupon.full_success_path }}" target="_blank">
 										Use Coupon
-									</div>
+									</a>
 								</div>
 								{% endfor %}
 			
@@ -151,9 +151,9 @@
 													<img src="{{ coupon.merchant.s3_image }}">
 												</a>
 											</div>
-											<div class="use-coupon" id="{{ coupon.id }}">
+											<a class="use-coupon" id="{{ coupon.id }}" href="{{ coupon.full_success_path }}" target="_blank">
 												Use Coupon
-											</div>
+											</a>
 											<div class="coupon-bottom">
 												<div class="coupon-right-bottom">
 													Share
