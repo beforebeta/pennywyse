@@ -77,6 +77,6 @@ DATABASES = {
         'HOST': '192.241.162.96',
         'PORT': '',
         'DEFAULT_STORAGE_ENGINE': 'MyISAM',
-        'OPTIONS': { 'init_command': 'SET storage_engine=MYISAM' },
+        'OPTIONS': { 'SET foreign_key_checks = 0;init_command': 'SET storage_engine=MYISAM' },
     }
 }
