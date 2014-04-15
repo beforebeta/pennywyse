@@ -275,7 +275,6 @@ $(function() {
 	});
 	
 	$('.use-coupon, .coupon-top-body, .new-use-link, .top-use-coupon').live('click', function(e) {
-		window['optimizely'].push(["trackEvent", optimizely_event]);
 		var coupon_id = $(this).attr('id');
         setTimeout(function() {
         	window.location = '/s/' + coupon_id + '/';
